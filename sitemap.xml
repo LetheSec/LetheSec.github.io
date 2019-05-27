@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://lethe.site/2019/05/21/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CWeb/</loc>
+    <loc>https://lethe.site/2019/05/21/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CWeb/</loc>
     
-    <lastmod>2019-05-20T17:36:42.896Z</lastmod>
+    <lastmod>2019-05-27T15:47:25.313Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://lethe.site/2019/05/20/first_blog/</loc>
+    <loc>https://lethe.site/2019/05/20/first_blog/</loc>
     
-    <lastmod>2019-05-20T10:16:28.033Z</lastmod>
+    <lastmod>2019-05-27T15:47:22.381Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://lethe.site/about/index.html</loc>
+    
+    <lastmod>2019-05-27T14:53:21.141Z</lastmod>
     
   </url>
   
