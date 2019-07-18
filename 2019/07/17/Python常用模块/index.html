@@ -229,6 +229,37 @@ print(os.path.samefile(&#39;os.path_test.py&#39;, &#39;./os.path_test.py&#39;)) 
 <li>os.fchmod(fd, mode)：改变一个文件的访问权限，该文件由文件描述符 fd 指定。该函数的功能与 os.chmod() 函数的功能相似，只是该函数使用 fd 代表文件。</li>
 <li>os.fchown(fd, uid, gid)：改变文件的所有者，该文件由文件描述符 fd 指定。该函数的功能与 os.chown() 函数的功能相似，只是该函数使用 fd 代表文件。</li>
 </ul>
+<h6 id="（4）os模块与进程相关的函数"><a href="#（4）os模块与进程相关的函数" class="headerlink" title="（4）os模块与进程相关的函数"></a>（4）os模块与进程相关的函数</h6><ul>
+<li><strong>os.name</strong>：返回导入依赖模块的操作系统名称，通常可返回 ‘posix’、’nt’、 ‘java’ 等值其中之一。</li>
+<li>os.environ：返回在当前系统上所有环境变量组成的字典。</li>
+<li><strong>os.fsencode(filename)</strong>：该函数对类路径（path-like）的文件名进行编码。</li>
+<li><strong>os.fsdecode(filename)</strong>：该函数对类路径（path-like）的文件名进行解码。</li>
+<li><strong>os.PathLike</strong>：这是一个类，代表一个类路径（path-like）对象。</li>
+<li><strong>os.getenv(key, default=None）</strong>：获取指定环境变量的值。</li>
+<li><strong>os.getlogin()</strong>：返回当前系统的登录用户名。与该函数对应的还有 os.getuid()、os.getgroups()、os.getgid() 等函数，用于获取用户 ID、用户组、组 ID 等，这些函数通常只在 UNIX 系统上有效。</li>
+<li><strong>os.getpid()</strong>：获取当前进程 ID。</li>
+<li><strong>os.getppid()</strong>：获取当前进程的<strong>父进程</strong> ID。</li>
+<li><strong>os.putenv(key, value)</strong>：该函数用于设置环境变量。</li>
+<li><strong>os.cpu_count()</strong>：返回当前系统的 CPU 数量。</li>
+<li><strong>os.sep</strong>：返回路径分隔符。</li>
+<li><strong>os.pathsep</strong>：返回当前系统上多条路径之间的分隔符。一般在 Windows 系统上多条路径之间的分隔符是英文分号（;）；在 UNIX 及类 UNIX 系统（如 Linux、Mac os X）上多条路径之间的分隔符是英文冒号（:）。</li>
+<li><strong>os.linesep</strong>：返回当前系统的换行符。一般在 Windows 系统上换行符是“\r\n”：在 UNIX 系统上换行符是“\n”；在 Mac os X 系统上换行符是“\r”。</li>
+<li><strong>os.urandom(size)</strong>：返回适合作为加密使用的、最多由 N 个字节组成的 bytes 对象。该函数通过操作系统特定的随机性来源返回随机字节，该随机字节通常是不可预测的，因此适用于绝大部分加密场景。</li>
+</ul>
+<p>在 os 模块下与<strong>进程管理</strong>相关的函数如下：</p>
+<ul>
+<li><strong>os.abort()</strong>：生成一个 SIGABRT 信号给当前进程。在 UNIX 系统上，默认行为是生成内核转储；在 Windows 系统上，进程立即返回退出代码 3。</li>
+<li><p><strong>os.execl(path, arg0, arg1, …）</strong>：该函数还有一系列功能类似的函数，比如 os.execle()、os.execlp() 等，这些函数都是使用参数列表 arg0, arg1,…来执行 path 所代表的执行文件的。<br><code>由于 os.exec*() 函数都是 PosIX 系统的直接映射，因此如采使用该命令来执行 Python 程序，传入的 arg0 参数没有什么作用。os._exit(n) 用于强制退出 Python 解释器。将其放在 try 决中可以阻止 finally 块的执行。</code></p>
+</li>
+<li><p><strong>os.forkpty()</strong>：fork一个子进程。</p>
+</li>
+<li><strong>os.kill(pid, sig)</strong>：将 sig 信号发送到 pid 对应的过程，用于结束该进程。</li>
+<li><strong>os.killpg(pgid, sig)</strong>：将 sig 信号发送到 pgid 对应的进程组。</li>
+<li><strong>os.popen(cmd, mode=’r’, buffering=-1)</strong>：用于向 cmd 命令打开读写管道（当 mode 为 r 时为只读管道，当 mode 为 rw 时为读写管道），buffering 缓冲参数与内置的 open() 函数有相同的含义。该函数返回的文件对象用于读写字符串，而不是字节。</li>
+<li><strong>os.spawnl(mode, path, …)</strong>：该函数还有一系列功能类似的函数，比如 os.spawnle()、os.spawnlp() 等，这些函数都用于在新进程中执行新程序。</li>
+<li><strong>os.startfile(path[,operation])</strong>：对指定文件使用该文件关联的工具执行 operation 对应的操作。如果不指定 operation 操作，则默认执行打开（open）操作。operation 参数必须是有效的命令行操作项目，比如 open（打开）、edit（编辑）、print（打印）等。</li>
+<li><strong>os.system(command)</strong>：运行操作系统上的指定命令。</li>
+</ul>
 <p><br></p>
 <h4 id="三、random-—-生成伪随机数"><a href="#三、random-—-生成伪随机数" class="headerlink" title="三、random —  生成伪随机数"></a>三、random —  生成伪随机数</h4><p>random模块官方文档：<a href="https://docs.python.org/3/library/random.html" target="_blank" rel="noopener">https://docs.python.org/3/library/random.html</a></p>
 <p>在 random 模块下提供了如下常用函数：</p>
