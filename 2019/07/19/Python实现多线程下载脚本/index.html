@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="Lethe&#39;s Blog">
+    <meta name="author" content="Lethe">
+    <meta name="keywords" content="Lethe&#39;s Blog">
+    <title>Python实现多线程下载脚本 ~ Lethe | 忘川</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>Lethe | 忘川</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/about/">About</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/img/2.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">Python实现多线程下载脚本</p>
+            <br>
+            
+            <p>Friday, July 19th 2019, 3:09 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <h3 id="0x01-分析"><a href="#0x01-分析" class="headerlink" title="0x01 分析"></a>0x01 分析</h3><p>一个简单的多线程下载资源的Python脚本，主要实现部分包含两个类：</p>
+<ul>
+<li><p>Download类：包含<code>download()</code>和<code>get_complete_rate()</code>两种方法。</p>
+<ul>
+<li>download()方法种首先用 urlopen() 方法打开远程资源并通过 Content-Length获取资源的大小，然后计算每个线程应该下载网络资源的大小及对应部分，最后依次创建并启动多个线程来下载网络资源的指定部分。</li>
+<li>get_complete_rate()则是用来返回已下载的部分占全部资源大小的比例，用来回显进度。</li>
+</ul>
+</li>
+<li><p>ThreadDownload类：该线程类继承了threading.Thread类，包含了一个<code>run()</code>方法。</p>
+<ul>
+<li>run()方法主要负责每个线程读取网络数据并写入本地。</li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<h3 id="0x02-代码"><a href="#0x02-代码" class="headerlink" title="0x02 代码"></a>0x02 代码</h3><h6 id="ThreadDownload-py"><a href="#ThreadDownload-py" class="headerlink" title="ThreadDownload.py:"></a>ThreadDownload.py:</h6><pre><code class="python">import threading
+from urllib.request import *
+
+
+class Download:
+    def __init__(self, link, file_path, thread_num):
+        # 下载路径
+        self.link = link
+        # 保存位置
+        self.file_path = file_path
+        # 使用多少线程
+        self.thread_num = thread_num
+        # 初始化threads数组
+        self.threads = []
+
+    def download(self):
+        req = Request(url=self.link, method=&#39;GET&#39;)
+        req.add_header(&#39;Accept&#39;, &#39;*/*&#39;)
+        req.add_header(&#39;Charset&#39;, &#39;UTF-8&#39;)
+        req.add_header(&#39;Connection&#39;, &#39;Keep-Alive&#39;)
+        f = urlopen(req)
+        # 获取要下载的文件的大小
+        self.file_size = int(dict(f.headers).get(&#39;Content-Length&#39;, 0))
+        f.close()
+        # 计算每个线程要下载的资源的大小
+        current_part_size = self.file_size // self.thread_num + 1
+        for i in range(self.thread_num):
+            # 计算每个线程下载的开始位置
+            start_pos = i * current_part_size
+            # 每个线程使用一个wb模式打开的文件进行下载
+            t = open(self.file_path, &#39;wb&#39;)
+            t.seek(start_pos, 0)
+            # 创建下载线程
+            td = ThreadDownload(self.link, start_pos, current_part_size, t)
+            self.threads.append(td)
+            td.start()
+
+    # 获下载的完成百分比
+    def get_complete_rate(self):
+        sum_size = 0
+        for i in range(self.thread_num):
+            sum_size += self.threads[i].length
+        return sum_size / self.file_size
+
+class ThreadDownload(threading.Thread):
+    def __init__(self, link, start_pos, current_part_size, current_part):
+        super().__init__() 
+        # 下载路径
+        self.link = link
+        # 当前线程的下载位置
+        self.start_pos = start_pos
+        # 定义当前线程负责下载的文件大小
+        self.current_part_size = current_part_size
+        # 当前文件需要下载的文件快
+        self.current_part = current_part
+        # 定义该线程已经下载的字节数
+        self.length = 0
+
+    def run(self):
+        req = Request(url = self.link, method=&#39;GET&#39;)
+        req.add_header(&#39;Accept&#39;, &#39;*/*&#39;)
+        req.add_header(&#39;Charset&#39;, &#39;UTF-8&#39;)
+        req.add_header(&#39;Connection&#39;, &#39;Keep-Alive&#39;)
+
+        f = urlopen(req)
+        # 跳过self.start_pos个字节，表明该线程只负责下载自己负责的那部分内容
+        for i in range(self.start_pos):
+            f.read(1)
+        # 读取网络数据，并写入本地
+        while self.length &lt; self.current_part_size:
+            data = f.read(1024)
+            if data is None or len(data) &lt;= 0:
+                break
+            self.current_part.write(data)
+            # 累计该线程下载的总大小
+            self.length += len(data)
+        self.current_part.close()
+        f.close()
+
+</code></pre>
+<h6 id="thread-download-master-py"><a href="#thread-download-master-py" class="headerlink" title="thread_download-master.py:"></a>thread_download-master.py:</h6><pre><code class="python">#!/usr/bin/env python 
+# -*- coding: utf-8 -*- 
+
+import sys
+import time
+
+from ThreadDownload import *
+
+
+def show_process(dl):
+    while dl.get_complete_rate() &lt; 1:
+        complete_rate = int(dl.get_complete_rate()*100)  
+        print(&#39;\r&#39; + &#39;下载中···（已下载&#39; + str(complete_rate) + &#39;%）&#39;, end=&#39;&#39;, flush=True)
+        time.sleep(0.01)
+
+
+def main():
+    try:   
+        Link = input(&#39;[+]&#39; + &#39;Link: &#39;)
+        file_path = input(&#39;[+]&#39; + &#39;File Path: &#39;)
+        thread_number = input(&#39;[+]&#39; + &#39;Thread Number: &#39;)
+        thread_number = int(thread_number)
+        dl = Download(Link, file_path, thread_number)
+        dl.download()
+        print(&#39;\n开始下载!&#39;)
+        show_process(dl)
+        print(&#39;\r&#39; + &#39;下载中···（已下载&#39; + &#39;100%)&#39;, end=&#39;&#39;, flush=True)
+        print(&#39;\n下载完成!&#39;)
+    except Exception:
+            print(&#39;Parameter Setting Error&#39;)
+            sys.exit(1)
+
+if __name__==&#39;__main__&#39;:
+        main()
+
+</code></pre>
+<p> <br></p>
+<h3 id="0x03-运行结果"><a href="#0x03-运行结果" class="headerlink" title="0x03 运行结果"></a>0x03 运行结果</h3><p>下载歌曲《男孩》为例，下载到<code>./Download/</code>目录下并命名为<code>男孩.mp3</code>，设置5个线程：</p>
+<p><img src="/2019/07/19/Python实现多线程下载脚本/20190719150546671.jpg" alt="在这里插入图片描述"></p>
+<p><img src="/2019/07/19/Python实现多线程下载脚本/20190719150552968.jpg" alt="在这里插入图片描述"></p>
+<p>下载成功：</p>
+<p><img src="/2019/07/19/Python实现多线程下载脚本/20190719150711111.png" alt="在这里插入图片描述"></p>
+
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;Python</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+                    <p class="note note-warning">原创文章，转载请注明出处！</p>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+
+    
+    <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>               
+        var disqus_shortname = '';
+        var disqus_config = function () {
+            this.page.url = 'https://lethe.site/2019/07/19/Python实现多线程下载脚本/'; 
+            this.page.identifier = '/2019/07/19/Python实现多线程下载脚本/';
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//'+disqus_shortname+'.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>                                
+</div>
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>
