@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="Lethe&#39;s Blog">
+    <meta name="author" content="Lethe">
+    <meta name="keywords" content="Lethe&#39;s Blog">
+    <title>MVC架构实现简易留言管理系统 ~ Lethe | 忘川</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>Lethe | 忘川</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/about/">About</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/img/2.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">MVC架构实现简易留言管理系统</p>
+            <br>
+            
+            <p>Sunday, July 28th 2019, 6:05 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <h3 id="0x01-总体设计"><a href="#0x01-总体设计" class="headerlink" title="0x01 总体设计"></a>0x01 总体设计</h3><p>留言模块主要包括以下几个子模块：</p>
+<ul>
+<li>模型模块（Model）：模型类中封装好用户操作数据库的各种方法，供控制器调用。</li>
+<li>视图模块（View）:Web视图页面收集用户留言。</li>
+<li>控制器模块（Controller）：控制器处理Web视图页面收集的数据。</li>
+</ul>
+<p><br></p>
+<h3 id="0x02-详细设计"><a href="#0x02-详细设计" class="headerlink" title="0x02 详细设计"></a>0x02 详细设计</h3><h5 id="（1）查看留言记录"><a href="#（1）查看留言记录" class="headerlink" title="（1）查看留言记录"></a>（1）查看留言记录</h5><ul>
+<li>在控制器的selete()方法中，调用模型类中封装的getSelete()方法查询数据表中所有的数据，并显示到前端。</li>
+<li>在Web页面中循环遍历返回的索引数组，即可显示留言列表。<h5 id="（2）添加留言记录"><a href="#（2）添加留言记录" class="headerlink" title="（2）添加留言记录"></a>（2）添加留言记录</h5></li>
+<li>在前端页面的form表单中获取用户输入的数据。</li>
+<li>在控制器的add()方法中，调用模型类中封装的getInsert()方法向数据表中添加数据。</li>
+<li>前端页面跳转到留言列表中。<h5 id="（3）修改留言记录"><a href="#（3）修改留言记录" class="headerlink" title="（3）修改留言记录"></a>（3）修改留言记录</h5></li>
+<li>当要修改数据时，先查找要修改的内容，把查找到的数据放到表单中。</li>
+<li>在控制器的update()方法中，调用模型类中封装的getUpdate()方法对留言数据进行修改。<h5 id="（4）删除留言记录"><a href="#（4）删除留言记录" class="headerlink" title="（4）删除留言记录"></a>（4）删除留言记录</h5></li>
+<li>在Web页面点击“删除”，进入控制器的delete()方法。</li>
+<li>在控制器的delete()方法中，调用模型类中封装的getDelete()方法，删除指定的留言数据。</li>
+<li>删除成功后页面跳转到留言列表页。</li>
+</ul>
+<p><br></p>
+<h3 id="0x03-MVC目录结构"><a href="#0x03-MVC目录结构" class="headerlink" title="0x03 MVC目录结构"></a>0x03 MVC目录结构</h3><pre><code>MVC
+|-- controller   //控制器目录
+|-- model        //模型目录
+|-- view         //视图目录
+|-- core         //核心目录
+||--- MVCFunction.class.php  //核心文件
+||--- DB.class.php           //操作数据库核心文件
+|-- index.php    //入口文件
+|-- conf.php     //连接数据库配置文件
+</code></pre><p>  <br></p>
+<h3 id="0x04-数据表设计"><a href="#0x04-数据表设计" class="headerlink" title="0x04 数据表设计"></a>0x04 数据表设计</h3><p>创建数据表messages的sql代码如下：</p>
+<pre><code class="sql">CREATE TABLE `messages`(
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(30) NOT NULL DEFAULT &#39;&#39;,
+    `email` VARCHAR(35) NOT NULL DEFAULT &#39;&#39;,
+    `content` VARCHAR(200) NOT NULL DEFAULT &#39;&#39;,
+    `message_time` DATETIME DEFAULT NULL,
+    PRIMARY KEY(`id`)
+)ENGINE=MyISAM DEFAULT CHARSET=utf8;
+</code></pre>
+<p>结构如下：<br><img src="/2019/07/28/MVC架构实现简易留言管理系统/20190728144058875.png" alt="在这里插入图片描述"></p>
+<h3 id="0x05-MVC配置部署"><a href="#0x05-MVC配置部署" class="headerlink" title="0x05 MVC配置部署"></a>0x05 MVC配置部署</h3><p>（1）先对数据库连接文件进行配置，即conf.php文件：</p>
+<pre><code class="php">&lt;?php
+    define(&#39;DB_HOST&#39;,&#39;localhost&#39;);
+    define(&#39;DB_USER&#39;,&#39;root&#39;);
+    define(&#39;DB_PASS&#39;,&#39;&#39;);   //your password
+    define(&#39;DB_NAME&#39;,&#39;messages_board&#39;);
+?&gt;
+</code></pre>
+<p>（2）控制器部署</p>
+<p>在controller控制器目录下创建MessageController.class.php控制器文件，并在其中创建MessageController控制器类，代码如下：</p>
+<pre><code class="php">&lt;?php
+    class MessageController{
+        //code...
+    }
+?&gt;
+</code></pre>
+<p>（3）模型部署</p>
+<p>在model模型目录下创建MessageModel.class.php控制器文件，并在其中创建MessageModel模型类，代码如下：</p>
+<pre><code class="php">&lt;?php
+    class MessageModel{
+        //code...
+    }
+?&gt;
+</code></pre>
+<p>（4）视图部署</p>
+<p>在view视图目录下创建MessageView.class.php控制器文件，并在其中创建MessageView视图类，代码如下：</p>
+<pre><code class="php">&lt;?php
+    class MessageView{
+        //code...
+    }
+?&gt;
+</code></pre>
+<p>实现上述部署后，当前目录状态如下：</p>
+<pre><code>MVC
+|-- controller   //控制器目录
+||--- MessageController.class.php    //留言板控制器
+|-- model        //模型目录
+||--- MessageModel.class.php        //留言板模型
+|-- view         //视图目录
+||--- MessageView.class.php        //留言板视图
+|-- core         //核心目录
+||--- MVCFunction.class.php  //核心文件
+||--- DB.class.php           //操作数据库核心文件
+|-- index.php    //入口文件
+|-- conf.php     //连接数据库配置文件
+</code></pre><p><br></p>
+<h3 id="0x06-代码实现"><a href="#0x06-代码实现" class="headerlink" title="0x06 代码实现"></a>0x06 代码实现</h3><p>完整代码已上传到github：<a href="https://github.com/LetheSec/MVC_MessageBoard" target="_blank" rel="noopener">https://github.com/LetheSec/MVC_MessageBoard</a></p>
+<p><br></p>
+<h3 id="0x07-结果展示"><a href="#0x07-结果展示" class="headerlink" title="0x07 结果展示"></a>0x07 结果展示</h3><p><strong>初始页面：</strong><br><img src="/2019/07/28/MVC架构实现简易留言管理系统/20190728174050237.png" alt="在这里插入图片描述"></p>
+<p><strong>点击添加留言即可开始留言：</strong><br><img src="/2019/07/28/MVC架构实现简易留言管理系统/20190728174115298.png" alt="在这里插入图片描述"></p>
+<p>可对留言进行修改或删除：<br><img src="/2019/07/28/MVC架构实现简易留言管理系统/20190728174203383.png" alt="在这里插入图片描述"></p>
+
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;PHP</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+                    <p class="note note-warning">原创文章，转载请注明出处！</p>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+
+    
+    <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>               
+        var disqus_shortname = '';
+        var disqus_config = function () {
+            this.page.url = 'https://lethe.site/2019/07/28/MVC架构实现简易留言管理系统/'; 
+            this.page.identifier = '/2019/07/28/MVC架构实现简易留言管理系统/';
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//'+disqus_shortname+'.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>                                
+</div>
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>
