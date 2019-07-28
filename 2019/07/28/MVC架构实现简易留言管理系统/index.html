@@ -83,27 +83,33 @@
     <div class="row">
         <div class="col-md-8 offset-md-2 ">
             <div class="post-content py-5 z-depth-3 main">
-                <h3 id="0x01-总体设计"><a href="#0x01-总体设计" class="headerlink" title="0x01 总体设计"></a>0x01 总体设计</h3><p>留言模块主要包括以下几个子模块：</p>
+                <h4 id="0x01-总体设计"><a href="#0x01-总体设计" class="headerlink" title="0x01 总体设计"></a>0x01 总体设计</h4><p>留言模块主要包括以下几个子模块：</p>
 <ul>
 <li>模型模块（Model）：模型类中封装好用户操作数据库的各种方法，供控制器调用。</li>
 <li>视图模块（View）:Web视图页面收集用户留言。</li>
 <li>控制器模块（Controller）：控制器处理Web视图页面收集的数据。</li>
 </ul>
 <p><br></p>
-<h3 id="0x02-详细设计"><a href="#0x02-详细设计" class="headerlink" title="0x02 详细设计"></a>0x02 详细设计</h3><h5 id="（1）查看留言记录"><a href="#（1）查看留言记录" class="headerlink" title="（1）查看留言记录"></a>（1）查看留言记录</h5><ul>
+<h4 id="0x02-详细设计"><a href="#0x02-详细设计" class="headerlink" title="0x02 详细设计"></a>0x02 详细设计</h4><h6 id="（1）查看留言记录"><a href="#（1）查看留言记录" class="headerlink" title="（1）查看留言记录"></a>（1）查看留言记录</h6><ul>
 <li>在控制器的selete()方法中，调用模型类中封装的getSelete()方法查询数据表中所有的数据，并显示到前端。</li>
-<li>在Web页面中循环遍历返回的索引数组，即可显示留言列表。<h5 id="（2）添加留言记录"><a href="#（2）添加留言记录" class="headerlink" title="（2）添加留言记录"></a>（2）添加留言记录</h5></li>
+<li>在Web页面中循环遍历返回的索引数组，即可显示留言列表。</li>
+</ul>
+<h6 id="（2）添加留言记录"><a href="#（2）添加留言记录" class="headerlink" title="（2）添加留言记录"></a>（2）添加留言记录</h6><ul>
 <li>在前端页面的form表单中获取用户输入的数据。</li>
 <li>在控制器的add()方法中，调用模型类中封装的getInsert()方法向数据表中添加数据。</li>
-<li>前端页面跳转到留言列表中。<h5 id="（3）修改留言记录"><a href="#（3）修改留言记录" class="headerlink" title="（3）修改留言记录"></a>（3）修改留言记录</h5></li>
+<li>前端页面跳转到留言列表中。</li>
+</ul>
+<h6 id="（3）修改留言记录"><a href="#（3）修改留言记录" class="headerlink" title="（3）修改留言记录"></a>（3）修改留言记录</h6><ul>
 <li>当要修改数据时，先查找要修改的内容，把查找到的数据放到表单中。</li>
-<li>在控制器的update()方法中，调用模型类中封装的getUpdate()方法对留言数据进行修改。<h5 id="（4）删除留言记录"><a href="#（4）删除留言记录" class="headerlink" title="（4）删除留言记录"></a>（4）删除留言记录</h5></li>
+<li>在控制器的update()方法中，调用模型类中封装的getUpdate()方法对留言数据进行修改。</li>
+</ul>
+<h6 id="（4）删除留言记录"><a href="#（4）删除留言记录" class="headerlink" title="（4）删除留言记录"></a>（4）删除留言记录</h6><ul>
 <li>在Web页面点击“删除”，进入控制器的delete()方法。</li>
 <li>在控制器的delete()方法中，调用模型类中封装的getDelete()方法，删除指定的留言数据。</li>
 <li>删除成功后页面跳转到留言列表页。</li>
 </ul>
 <p><br></p>
-<h3 id="0x03-MVC目录结构"><a href="#0x03-MVC目录结构" class="headerlink" title="0x03 MVC目录结构"></a>0x03 MVC目录结构</h3><pre><code>MVC
+<h4 id="0x03-MVC目录结构"><a href="#0x03-MVC目录结构" class="headerlink" title="0x03 MVC目录结构"></a>0x03 MVC目录结构</h4><pre><code>MVC
 |-- controller   //控制器目录
 |-- model        //模型目录
 |-- view         //视图目录
@@ -113,7 +119,7 @@
 |-- index.php    //入口文件
 |-- conf.php     //连接数据库配置文件
 </code></pre><p>  <br></p>
-<h3 id="0x04-数据表设计"><a href="#0x04-数据表设计" class="headerlink" title="0x04 数据表设计"></a>0x04 数据表设计</h3><p>创建数据表messages的sql代码如下：</p>
+<h4 id="0x04-数据表设计"><a href="#0x04-数据表设计" class="headerlink" title="0x04 数据表设计"></a>0x04 数据表设计</h4><p>创建数据表messages的sql代码如下：</p>
 <pre><code class="sql">CREATE TABLE `messages`(
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(30) NOT NULL DEFAULT &#39;&#39;,
@@ -123,8 +129,10 @@
     PRIMARY KEY(`id`)
 )ENGINE=MyISAM DEFAULT CHARSET=utf8;
 </code></pre>
-<p>结构如下：<br><img src="/2019/07/28/MVC架构实现简易留言管理系统/20190728144058875.png" alt="在这里插入图片描述"></p>
-<h3 id="0x05-MVC配置部署"><a href="#0x05-MVC配置部署" class="headerlink" title="0x05 MVC配置部署"></a>0x05 MVC配置部署</h3><p>（1）先对数据库连接文件进行配置，即conf.php文件：</p>
+<p>结构如下：</p>
+<p><img src="/2019/07/28/MVC架构实现简易留言管理系统/20190728144058875.png" alt="在这里插入图片描述"></p>
+<p>  <br></p>
+<h4 id="0x05-MVC配置部署"><a href="#0x05-MVC配置部署" class="headerlink" title="0x05 MVC配置部署"></a>0x05 MVC配置部署</h4><p>（1）先对数据库连接文件进行配置，即conf.php文件：</p>
 <pre><code class="php">&lt;?php
     define(&#39;DB_HOST&#39;,&#39;localhost&#39;);
     define(&#39;DB_USER&#39;,&#39;root&#39;);
@@ -170,9 +178,9 @@
 |-- index.php    //入口文件
 |-- conf.php     //连接数据库配置文件
 </code></pre><p><br></p>
-<h3 id="0x06-代码实现"><a href="#0x06-代码实现" class="headerlink" title="0x06 代码实现"></a>0x06 代码实现</h3><p>完整代码已上传到github：<a href="https://github.com/LetheSec/MVC_MessageBoard" target="_blank" rel="noopener">https://github.com/LetheSec/MVC_MessageBoard</a></p>
+<h4 id="0x06-代码实现"><a href="#0x06-代码实现" class="headerlink" title="0x06 代码实现"></a>0x06 代码实现</h4><p>完整代码已上传到github：<a href="https://github.com/LetheSec/MVC_MessageBoard" target="_blank" rel="noopener">https://github.com/LetheSec/MVC_MessageBoard</a></p>
 <p><br></p>
-<h3 id="0x07-结果展示"><a href="#0x07-结果展示" class="headerlink" title="0x07 结果展示"></a>0x07 结果展示</h3><p><strong>初始页面：</strong><br><img src="/2019/07/28/MVC架构实现简易留言管理系统/20190728174050237.png" alt="在这里插入图片描述"></p>
+<h4 id="0x07-结果展示"><a href="#0x07-结果展示" class="headerlink" title="0x07 结果展示"></a>0x07 结果展示</h4><p><strong>初始页面：</strong><br><img src="/2019/07/28/MVC架构实现简易留言管理系统/20190728174050237.png" alt="在这里插入图片描述"></p>
 <p><strong>点击添加留言即可开始留言：</strong><br><img src="/2019/07/28/MVC架构实现简易留言管理系统/20190728174115298.png" alt="在这里插入图片描述"></p>
 <p>可对留言进行修改或删除：<br><img src="/2019/07/28/MVC架构实现简易留言管理系统/20190728174203383.png" alt="在这里插入图片描述"></p>
 
