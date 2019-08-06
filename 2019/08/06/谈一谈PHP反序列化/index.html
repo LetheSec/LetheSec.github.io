@@ -620,6 +620,7 @@ echo serialize($a);
 </tr>
 </tbody>
 </table>
+<p><br></p>
 <p>即若设置如下Session:</p>
 <pre><code class="php">&lt;?php
     session_start();
@@ -654,6 +655,7 @@ echo serialize($a);
 </tr>
 </tbody>
 </table>
+<p><br></p>
 <p>问题就在，如果 PHP 在反序列化和序列化Session时使用不同的处理器，可能会导致数据无法正确反序列化，经过构造甚至可以执行代码。</p>
 <p>例子如下，有两个页面：</p>
 <pre><code class="php">//test1.php
