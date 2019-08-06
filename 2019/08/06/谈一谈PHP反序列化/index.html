@@ -697,7 +697,7 @@ echo serialize($a);
 <pre><code>a:1:{s:4:&quot;name&quot;;s:42:&quot;|O:1:&quot;A&quot;:1:{s:4:&quot;test&quot;;s:10:&quot;phpinfo();&quot;;}&quot;;}
 </code></pre><p>但是在<code>test1.php</code>中是使用的<code>php</code>处理器，由它们的区别我们可以知道：在被<code>php</code>处理器反序列化的时候，会以<code>|</code>来分割为键值对。</p>
 <p>这样当带着上面上述Session去访问<code>test1.php</code>时，<code>|</code>后面的值，也就是我们构造的序列化字符串就会被成功的反序列化并执行了。</p>
-<h6 id="CTF实例"><a href="#CTF实例" class="headerlink" title="CTF实例"></a>CTF实例</h6><p>题目连接：<a href="http://web.jarvisoj.com:32784" target="_blank" rel="noopener">http://web.jarvisoj.com:32784</a></p>
+<h6 id="（2）CTF实例"><a href="#（2）CTF实例" class="headerlink" title="（2）CTF实例"></a>（2）CTF实例</h6><p>题目连接：<a href="http://web.jarvisoj.com:32784" target="_blank" rel="noopener">http://web.jarvisoj.com:32784</a></p>
 <p>给了源码如下：</p>
 <pre><code class="php">&lt;?php
 //A webshell is wait for you
@@ -728,7 +728,7 @@ else
 </code></pre>
 <p>可以看到这里用了<code>ini_set(&#39;session.serialize_handler&#39;, &#39;php&#39;);</code>，那么我们只要传入构造好的session，就可以进行反序列化攻击了。</p>
 <p>根据题目，先看一下<code>phpinfo()</code>的信息，发现<code>session.upload_progress.enabled</code>是on的，而session.upload_progress.cleanup所以可以通过上传文件，从而在session文件中写入数据。</p>
-<h6 id="关于session-upload-progress（php-gt-5-4）"><a href="#关于session-upload-progress（php-gt-5-4）" class="headerlink" title="关于session.upload_progress（php&gt;=5.4）"></a>关于session.upload_progress（php&gt;=5.4）</h6><p>在php.ini有以下几个默认选项：</p>
+<h6 id="（3）关于session-upload-progress（php-gt-5-4）"><a href="#（3）关于session-upload-progress（php-gt-5-4）" class="headerlink" title="（3）关于session.upload_progress（php&gt;=5.4）"></a>（3）关于session.upload_progress（php&gt;=5.4）</h6><p>在php.ini有以下几个默认选项：</p>
 <pre><code>session.upload_progress.enabled = on
 session.upload_progress.cleanup = on
 session.upload_progress.prefix = &quot;upload_progress_&quot;
