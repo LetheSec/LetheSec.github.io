@@ -564,7 +564,7 @@ class Flag{
 <li>发现在<strong>Handle</strong>类的<code>__destruct()</code>方法中调用了，所以只需要将<code>$handle</code>实例化为<strong>Flag</strong>类的对象，然后创建<code>Handle</code>类的对象就行了，该对象销毁时就会自动调用<code>__destruct()</code>。</li>
 </ul>
 <p>这样调用的思路就清楚了，但是和例1不同的是，这里还有两个地方需要绕过。</p>
-<p>① 在<strong>Handle</strong>类的<code>__wakeup()</code>方法中，使用了<code>get_object_vars($this)</code>进行迭代来将类中的所有属性都赋值为null，这就意味着无论我们怎么构造，只要到<code>unserialize()</code>那里就会调用<code>__wakeup()</code>把属性都给情况，这样肯定就不会成功了。<br>这里需要通过CVE-2016-7124来绕过，即“<strong>序列化字符串中表示对象属性个数的值大于真实的属性个数时会跳过__wakeup的执行</strong>”。</p>
+<p>① 在<strong>Handle</strong>类的<code>__wakeup()</code>方法中，使用了<code>get_object_vars($this)</code>进行迭代来将类中的所有属性都赋值为null，这就意味着无论我们怎么构造，只要到<code>unserialize()</code>那里就会调用<code>__wakeup()</code>把属性都给清空，这样肯定就不会成功了。<br>这里需要通过CVE-2016-7124来绕过，即“<strong>序列化字符串中表示对象属性个数的值大于真实的属性个数时会跳过__wakeup的执行</strong>”。</p>
 <p>前面我们介绍了序列化的格式，所以只需要在序列化字符串构造完成后，将属性的个数修改的比实际大就可以了。</p>
 <p>② 在你终于成功调用到了<code>getFlag()</code>方法后，还必须满足<code>$this-&gt;token === $this-&gt;token_flag</code>的验证，而<br><code>token_flag</code>是每次随机生成的，怎么样才能使<code>$token</code>和它相等呢？</p>
 <p>其实我们可以在构造的时候把<code>$token</code>声明为<code>$token_flag</code>的引用，如果不知道什么是引用，得好好补一下编程知识了，这样实际上<code>$token</code>与<code>$token_flag</code>就是同一个东西了，当然可以绕过验证。</p>
