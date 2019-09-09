@@ -148,11 +148,46 @@ public SoapClient :: SoapC</div>
             <i class="iconfont icon-riqi2"></i>&nbsp;2019-09-06&nbsp;&nbsp;
           
           
+            <i class="iconfont icon-inbox"></i>
+            
+              <a href="/categories/CTF">CTF</a>&nbsp;
+            &nbsp;
+          
           
             <i class="iconfont icon-tag"></i>
             
               <a href="/tags/CTF">CTF</a>&nbsp;
             
+          
+        </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/09/01/SUCTF-2019-部分复现/">
+        <p class="h4 index-header"></p>
+        <div class="index-excerpt">
+          
+            <div class="index-text mb-1">
+title: SUCTF_2019_部分复现date: 2019-08-26 17:59:07tags: Writeupindex_img: /post_img/SUCTF_2019.png
+categories: WriteupCheckIn1、进入题目后是一个简单的上传页面：先尝试上传普通的图片马，发现会显示&lt;? in contents!，过滤了&lt;?，可以使用&lt;script language=&#39;php&#39;&gt;&lt;/scrip&gt;绕过。
+修改后再次上传发现显示exif_imagetype:not image!，还用了exif_imagetype()进行检验，可以加上GIF89a进行绕过。但是后缀正则过滤了php字符，想直接绕过是没戏了。
+2、于是考虑解析漏洞，发现服务端不是Apache而是Nginx，所以常见的上传.hatcess文件不可行。
+参考这篇文章：user.ini文件构成的PHP后门
+php.ini一定很熟悉了，是php中的配置文件，其中提到了.user.ini文件:
+链接：https://www.php.net/manual/</div>
+          
+        </div>
+      </a>
+
+        <div>
+          
+            <i class="iconfont icon-riqi2"></i>&nbsp;2019-09-01&nbsp;&nbsp;
+          
+          
           
         </div>
     </div>
@@ -205,44 +240,10 @@ public SoapClient :: SoapC</div>
             <i class="iconfont icon-riqi2"></i>&nbsp;2019-09-01&nbsp;&nbsp;
           
           
-          
-            <i class="iconfont icon-tag"></i>
+            <i class="iconfont icon-inbox"></i>
             
-              <a href="/tags/Writeup">Writeup</a>&nbsp;
-            
-          
-        </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/08/26/SUCTF-2019-部分复现/" style="background-image: url(/post_img/SUCTF_2019.png);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/08/26/SUCTF-2019-部分复现/">
-        <p class="h4 index-header">SUCTF_2019_部分复现</p>
-        <div class="index-excerpt">
-          
-            <div class="index-text mb-1">CheckIn1、进入题目后是一个简单的上传页面：先尝试上传普通的图片马，发现会显示&lt;? in contents!，过滤了&lt;?，可以使用&lt;script language=&#39;php&#39;&gt;&lt;/scrip&gt;绕过。
-修改后再次上传发现显示exif_imagetype:not image!，还用了exif_imagetype()进行检验，可以加上GIF89a进行绕过。但是后缀正则过滤了php字符，想直接绕过是没戏了。
-2、于是考虑解析漏洞，发现服务端不是Apache而是Nginx，所以常见的上传.hatcess文件不可行。
-参考这篇文章：user.ini文件构成的PHP后门
-php.ini一定很熟悉了，是php中的配置文件，其中提到了.user.ini文件:
-链接：https://www.php.net/manual/zh/configuration.changes.modes.php
-再看一下文档对于.user.ini文件的解释：
-链接：https://www.php.net/manual/zh/configuration.file.per-u</div>
-          
-        </div>
-      </a>
-
-        <div>
-          
-            <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-26&nbsp;&nbsp;
-          
+              <a href="/categories/Writeup">Writeup</a>&nbsp;
+            &nbsp;
           
           
             <i class="iconfont icon-tag"></i>
@@ -328,6 +329,11 @@ XML 以 LF 存储换行
             <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-15&nbsp;&nbsp;
           
           
+            <i class="iconfont icon-inbox"></i>
+            
+              <a href="/categories/CTF">CTF</a>&nbsp;
+            &nbsp;
+          
           
             <i class="iconfont icon-tag"></i>
             
@@ -368,6 +374,11 @@ XML 以 LF 存储换行
           
             <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-13&nbsp;&nbsp;
           
+          
+            <i class="iconfont icon-inbox"></i>
+            
+              <a href="/categories/CTF">CTF</a>&nbsp;
+            &nbsp;
           
           
             <i class="iconfont icon-tag"></i>
@@ -424,6 +435,11 @@ PHP反序列化漏洞：如果代码中使用了反序列化 unserialize()函数
             <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-06&nbsp;&nbsp;
           
           
+            <i class="iconfont icon-inbox"></i>
+            
+              <a href="/categories/CTF">CTF</a>&nbsp;
+            &nbsp;
+          
           
             <i class="iconfont icon-tag"></i>
             
@@ -462,6 +478,11 @@ PHP反序列化漏洞：如果代码中使用了反序列化 unserialize()函数
           
             <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-30&nbsp;&nbsp;
           
+          
+            <i class="iconfont icon-inbox"></i>
+            
+              <a href="/categories/CTF">CTF</a>&nbsp;
+            &nbsp;
           
           
             <i class="iconfont icon-tag"></i>
@@ -517,6 +538,11 @@ PHP反序列化漏洞：如果代码中使用了反序列化 unserialize()函数
             <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-28&nbsp;&nbsp;
           
           
+            <i class="iconfont icon-inbox"></i>
+            
+              <a href="/categories/PHP">PHP</a>&nbsp;
+            &nbsp;
+          
           
             <i class="iconfont icon-tag"></i>
             
@@ -553,6 +579,11 @@ PHP反序列化漏洞：如果代码中使用了反序列化 unserialize()函数
           
             <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-26&nbsp;&nbsp;
           
+          
+            <i class="iconfont icon-inbox"></i>
+            
+              <a href="/categories/CTF">CTF</a>&nbsp;
+            &nbsp;
           
           
             <i class="iconfont icon-tag"></i>
@@ -595,6 +626,11 @@ server_target() 函数作为线程的执行体，采用循环不断地从socket�
             <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-19&nbsp;&nbsp;
           
           
+            <i class="iconfont icon-inbox"></i>
+            
+              <a href="/categories/Python">Python</a>&nbsp;
+            &nbsp;
+          
           
             <i class="iconfont icon-tag"></i>
             
@@ -612,7 +648,7 @@ server_target() 函数作为线程的执行体，采用循环不断地从socket�
       
       
         <li class="page-item">
-          <a class="page-link" href="/page/2/">下一页</a>
+          <a class="page-link" href="/page/2/">Next</a>
         </li>
       
     </ul>
@@ -631,7 +667,7 @@ server_target() 函数作为线程的执行体，采用循环不断地从socket�
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -639,7 +675,7 @@ server_target() 函数作为线程的执行体，采用循环不断地从socket�
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
