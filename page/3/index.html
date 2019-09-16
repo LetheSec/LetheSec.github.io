@@ -115,6 +115,57 @@
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/" style="background-image: url(/post_img/dvwa.png);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/">
+        <p class="h4 index-header">以dvwa为例学习简单sql布尔盲注的详细脚本</p>
+        <div class="index-excerpt">
+          
+            <div class="index-text mb-1">0x01 前置知识
+1.SQL注入与SQL盲注SQL注入：
+
+执行SQL注入攻击时，服务器会响应来自数据库服务器的错误信息，信息提示SQL语法不正确等
+一般在页面上直接就会显示执行sql语句的结果
+
+SQL盲注：
+
+一般情况，执行SQL盲注，服务器不会直接返回具体的数据库错误or语法错误，而是会返回程序开发所设置的特定信息（也有特例，如基于报错的盲注）
+一般在页面上不会直接显示sql执行的结果
+有可能出现不确定sql是否执行的情况
+
+
+2.SQL盲注分类根据页面不同的响应方式，SQL盲注分为：基于布尔的盲注、基于时间的盲注、基于报错的盲注
+（1）对于基于布尔的盲注，可通过构造真or假判断条件（数据库各项信息取值的大小比较，如：字段长度、版本数值、字段名、字段名各组成部分在不同位置对应的字符ASCII码…），将构造的sql语句提交到服务器，然后根据服务器对不同的请求返回不同的页面结果（True、False）；然后不断调整判断条件中的数值以逼近真实值，特别是需要关注响应从TrueFalse发生变化的转折点。（2）对于基于时间的盲注，通过构造真or假判断条件的sql语句，且sql语句中根据需</div>
+          
+        </div>
+      </a>
+
+        <div>
+          
+            <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-02&nbsp;&nbsp;
+          
+          
+            <i class="iconfont icon-inbox"></i>
+            
+              <a href="/categories/CTF">CTF</a>&nbsp;
+            &nbsp;
+          
+          
+            <i class="iconfont icon-tag"></i>
+            
+              <a href="/tags/CTF">CTF</a>&nbsp;
+            
+          
+        </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2019/02/13/文件包含漏洞总结/" style="background-image: url(/post_img/file_include.jpg);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
       </div>
     
