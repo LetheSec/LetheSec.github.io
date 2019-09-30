@@ -115,6 +115,55 @@
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/" style="background-image: url(/post_img/cumtctf.png);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/">
+        <p class="h4 index-header">CumtCTF2019Ⅱ——Writeup（Web详解）</p>
+        <div class="index-excerpt">
+          
+            <div class="index-text mb-1">Web1：签到题1、打开题目，源码直接显示在网页上。
+2、发现构造0ver、0ver1、0ver2即可，下面就进行代码审计：
+（1）首先构造 0ver，有以下三个条件：① ereg(&quot;^[0-9]+$&quot;, $a) === FALSE)，即要进行一次或多次 0-9 数字正则表达式匹配② in_array($a,$white_list)，即0ver 中要有 range（0，9）③ strlen($a)&gt;1，即0ver 的长度要大于 1
+一开始以为要考ereg()截断漏洞，其实是in_array()松散比较，即
+var_dump(in_array(&#39;b&#39;, array(&#39;a&#39;=&gt;true))); 
+返回值:true
+
+var_dump(in_array(&#39;01&#39;,array(&#39;1&#39;)));
+返回值也是:true
+
+为什么是这样呢？
+
+in_array(&#39;b&#39;, array(&#39;a&#39;=&gt;true))  实质上是&#39;b&#39;==true 这样的类型比较，b</div>
+          
+        </div>
+      </a>
+
+        <div>
+          
+            <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-03&nbsp;&nbsp;
+          
+          
+            <i class="iconfont icon-inbox"></i>
+            
+              <a href="/categories/Writeup">Writeup</a>&nbsp;
+            &nbsp;
+          
+          
+            <i class="iconfont icon-tag"></i>
+            
+              <a href="/tags/Writeup">Writeup</a>&nbsp;
+            
+          
+        </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/" style="background-image: url(/post_img/dvwa.png);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
       </div>
     
