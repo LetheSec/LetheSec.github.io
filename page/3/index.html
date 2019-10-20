@@ -115,6 +115,56 @@
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/03/07/BugkuCTF-Writeup——Web/" style="background-image: url(/post_img/bugku.png);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/07/BugkuCTF-Writeup——Web/">
+        <p class="h4 index-header">BugkuCTF_Web_Writeup</p>
+        <div class="index-excerpt">
+          
+            <div class="index-text mb-1">web2直接查看F12查看源码即可得flag。
+
+计算器简单计算题，但输入框限制输入长度，直接改改输入框的前端代码，输入计算结果，得到flag。
+
+web基础$_GET代码审计，GET方法传入what变量的值为’flag’即可得flag。payload：?what=flag
+
+web基础$_POST遇上一题类似，只不过是以POST方式传参，在Firefox浏览器中的Hackbar中传入：what=flag
+
+*矛盾代码审计，要求传入的$num即不能是数字，又要等于1，才能输出flag。这不是矛盾吗？我这里提供两种绕过思路构造$num（1） 在php里可以用.来连接字符串，所以当构造num=1.&#39; &#39;时，num就被当做了字符串，但由于后面连接的字符串为空，在弱比较的时候仍然会判断与1相等。（2）可以想到用科学计数法表示数字1，例如：1E+0.1既不是纯数字，其实际值又等于1。
+所以payload为?num=1.&#39; &#39; 或 ?1E+0.1
+
+web3查看源代码发现一串Unicode编码，在线解码网站解码即得flag
+
+域名解析把flag.bugku.com </div>
+          
+        </div>
+      </a>
+
+        <div>
+          
+            <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-07&nbsp;&nbsp;
+          
+          
+            <i class="iconfont icon-inbox"></i>
+            
+              <a href="/categories/Writeup">Writeup</a>&nbsp;
+            &nbsp;
+          
+          
+            <i class="iconfont icon-tag"></i>
+            
+              <a href="/tags/Writeup">Writeup</a>&nbsp;
+            
+          
+        </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/" style="background-image: url(/post_img/cumtctf.png);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
       </div>
     
