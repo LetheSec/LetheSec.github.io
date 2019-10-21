@@ -115,6 +115,47 @@
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/05/21/攻防世界Web/" style="background-image: url(/post_img/ctf.jpg);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/05/21/攻防世界Web/">
+        <p class="h4 index-header">攻防世界Web</p>
+        <div class="index-excerpt">
+          
+            <div class="index-text mb-1">ics-06（XCTF 4th-CyberEarth）题目描述：云平台报表中心收集了设备管理基础服务的数据，但是数据被删除了，只有一处留下了入侵者的痕迹。
+进入题目后，发现访问index.php会被跳转到index.php?id=1 而且还有写送分题，尝试sql注入无果，原来是一道脑洞题。爆破id至id=2333，即得到flag。
+NewsCenter（ XCTF 4th-QCTF-2018）1、进入网站后，有一个搜索栏，抓包得：
+2、怀疑serch为注入点，尝试sql注入。将报文保存下来，用sqlmap跑一下，发现可以直接出结果。
+(1)python2 sqlmap.py -r 1.txt --dbs（2）python2 sqlmap.py -r 2.txt -D &quot;news&quot; -T &quot;secret_table&quot; -C &quot;fl4g,id&quot; --dump疑问：最后爆字段值的时候，如果只想得到fl4g列的字段会报错：python2 sqlmap.py -r 2.txt -D &quot;news&quot; -T &quot;s</div>
+          
+        </div>
+      </a>
+
+        <div>
+          
+            <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-21&nbsp;&nbsp;
+          
+          
+            <i class="iconfont icon-inbox"></i>
+            
+              <a href="/categories/Writeup">Writeup</a>&nbsp;
+            &nbsp;
+          
+          
+            <i class="iconfont icon-tag"></i>
+            
+              <a href="/tags/Writeup">Writeup</a>&nbsp;
+            
+          
+        </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2019/03/07/BugkuCTF-Writeup——Web/" style="background-image: url(/post_img/bugku.png);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
       </div>
     
@@ -321,7 +362,7 @@ include_once()与require()_once()，如果文件已包含，则不会包含，�
     <ul class="pagination pg-blue justify-content-center mt-5">
       
         <li class="page-item">
-          <a class="page-link" href="/page/2/">Previous</a>
+          <a class="page-link" href="/page/2/">上一页</a>
         </li>
       
       
@@ -341,7 +382,7 @@ include_once()与require()_once()，如果文件已包含，则不会包含，�
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -349,7 +390,7 @@ include_once()与require()_once()，如果文件已包含，则不会包含，�
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
