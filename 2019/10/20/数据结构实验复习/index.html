@@ -514,7 +514,53 @@ tma()
 prtf(&quot;Hi&quot;);
 }
 </code></pre><h5 id="提示-1"><a href="#提示-1" class="headerlink" title="提示"></a>提示</h5><p>注:将字符串中的In、IN、iN、in删除。</p>
-<h5 id="思路-7"><a href="#思路-7" class="headerlink" title="思路"></a>思路</h5><h5 id="代码-7"><a href="#代码-7" class="headerlink" title="代码"></a>代码</h5><pre><code class="cpp">
+<h5 id="思路-7"><a href="#思路-7" class="headerlink" title="思路"></a>思路</h5><p>使用了几个函数：</p>
+<ul>
+<li><code>tolower()</code>：将字符转换为小写</li>
+<li><code>string.find(str,index)</code>：在string里面查找str子串，index指定开始查找的位置，若找到,返回该字串的位置；若未找到，返回<code>string::npos</code></li>
+<li><code>string.erase(index,length)</code>：从index开始删除string中长度为length的子串</li>
+</ul>
+<p>知道了上面函数的使用方法后，思路上也就没什么难的了，注意比较前要先都转换为小写（题中不区分大小写）。</p>
+<h5 id="代码-7"><a href="#代码-7" class="headerlink" title="代码"></a>代码</h5><pre><code class="cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;cctype&gt;
+using namespace std;
+int main()
+{
+    string del, rep, lrep;
+    int index, k;
+    getline(cin, del);
+    for (int i = 0; i &lt; del.length(); i++)
+    {
+        del[i] = tolower(del[i]);
+    }
+    while (getline(cin, rep))
+    {
+        lrep = &quot;&quot;;
+        index = 0;
+        for (int i = 0; i &lt; rep.length(); i++)
+        {
+            lrep += tolower(rep[i]);
+        }
+        while (lrep.find(del, index) != string::npos)
+        {
+            k = lrep.find(del, index);
+            lrep.erase(k, del.length());
+            rep.erase(k, del.length());
+            index = k;
+        }
+        index = 0;
+        while (lrep.find(&quot; &quot;, index) != string::npos)
+        {
+            k = lrep.find(&quot; &quot;, index);
+            lrep.erase(k, 1);
+            rep.erase(k, 1);
+            index = k;
+        }
+        cout &lt;&lt; rep &lt;&lt; endl;
+    }
+    return 0;
+}
 </code></pre>
 <p><br></p>
 <h3 id="问题-I-后缀子串排序"><a href="#问题-I-后缀子串排序" class="headerlink" title="问题 I: 后缀子串排序"></a>问题 I: 后缀子串排序</h3><h5 id="题目描述-8"><a href="#题目描述-8" class="headerlink" title="题目描述"></a>题目描述</h5><p>对于一个字符串，将其后缀子串进行排序，例如grain<br>其子串有：<br>grain<br>rain<br>ain<br>in<br>n<br>然后对各子串按字典顺序排序，即：<br>ain,grain,in,n,rain</p>
@@ -533,47 +579,36 @@ anana
 banana
 na
 nana
-</code></pre><h5 id="思路-8"><a href="#思路-8" class="headerlink" title="思路"></a>思路</h5><p>使用了几个函数：</p>
-<ul>
-<li><code>tolower()</code>：将字符转换为小写</li>
-<li><code>string.find(str,index)</code>：在string里面查找str子串，index指定开始查找的位置，若找到,返回该字串的位置；若未找到，返回<code>string::npos</code></li>
-<li><code>string.erase(index,length)</code>：从index开始删除string中长度为length的子串</li>
-</ul>
-<p>知道了上面函数的使用方法后，思路上也就没什么难的了，注意比较前要先都转换为小写（题中不区分大小写）。</p>
+</code></pre><h5 id="思路-8"><a href="#思路-8" class="headerlink" title="思路"></a>思路</h5><p>双重循环，外层循环遍历字符串中每一个字符作为当前子串的首字符，内层循环从该首字符一直取到字符串结束，将所有的子串存到数组里，最后用<code>sort()</code>排序后输出即得到字典序。</p>
 <h5 id="代码-8"><a href="#代码-8" class="headerlink" title="代码"></a>代码</h5><pre><code class="cpp">#include&lt;iostream&gt;
 #include&lt;string&gt;
-#include&lt;cctype&gt;
+#include&lt;algorithm&gt;
 using namespace std;
+bool cmp(string a, string b)
+{
+    return a &lt; b;
+}
+
 int main()
 {
-    string del, rep,lrep;
-    int index, k;
-    getline(cin, del);
-    for (int i = 0; i &lt; del.length(); i++) {
-        del[i] = tolower(del[i]);
-    }
-    while (getline(cin, rep)) 
+    string str;
+    int len;
+    while (cin &gt;&gt; str)
     {
-        lrep = &quot;&quot;;
-        index = 0;
-        for (int i = 0; i &lt; rep.length(); i++)
-            lrep += tolower(rep[i]);
-        while (lrep.find(del, index) != string::npos)
-        {
-            k = lrep.find(del, index);
-            lrep.erase(k, del.length());
-            rep.erase(k, del.length());
-            index = k;
+        len = str.length();
+        string *s = new string[len];
+        for (int i = 0; i &lt; len; i++)
+        {    
+            string temp = &quot;&quot;;
+            for (int j = i; j &lt; len; j++)
+                temp += str[j];
+            s[i] = temp;
         }
-        index = 0;
-        while (lrep.find(&quot; &quot;, index) != string::npos)
+        sort(s, s+len, cmp);
+        for (int i = 0; i &lt; len; i++)
         {
-            k = lrep.find(&quot; &quot;, index);
-            lrep.erase(k, 1);
-            rep.erase(k, 1);
-            index = k;
+            cout &lt;&lt; s[i] &lt;&lt; endl;
         }
-        cout &lt;&lt; rep &lt;&lt; endl;
     }
     return 0;
 }
