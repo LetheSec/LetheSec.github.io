@@ -115,6 +115,54 @@
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/10/25/Web安全测试个人赛练习/" style="background-image: url(/post_img/web测试个人赛.png);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/10/25/Web安全测试个人赛练习/">
+        <p class="h4 index-header">Web安全测试个人赛练习</p>
+        <div class="index-excerpt">
+          
+            <div class="index-text mb-1">报了一个Web安全测试个人赛，提供了赛前的练习，做一下就当准备了吧…
+简单的md5查看源代码：
+数组绕过即可，post：data1[]=a&amp;data2[]=b
+
+md5同样是一道md5绕过，不过这里没法绕过，只能老老实实去找md5碰撞，google还是挺好找的
+post:
+data1=M%C9h%FF%0E%E3%5C%20%95r%D4w%7Br%15%87%D3o%A7%B2%1B%DCV%B7J%3D%C0x%3E%7B%95%18%AF%BF%A2%00%A8%28K%F3n%8EKU%B3_Bu%93%D8Igm%A0%D1U%5D%83%60%FB_%07%FE%A2&amp;data2=M%C9h%FF%0E%E3%5C%20%95r%D4w%7Br%15%87%D3o%A7%B2%1B%DCV%B7J%3D%C0x%3E%7B%95%18%AF%BF%A2%02%A8%28K%F3n%8EKU%B3_Bu%93%D8Igm%A0%D1%D5%5D%83%60%FB_%07%FE%A2
+
+
+奇怪的恐龙特性代码审计题：
+&lt;?php
+highlight_file</div>
+          
+        </div>
+      </a>
+
+        <div>
+          
+            <i class="iconfont icon-riqi2"></i>&nbsp;2019-10-25&nbsp;&nbsp;
+          
+          
+            <i class="iconfont icon-inbox"></i>
+            
+              <a href="/categories/Writeup">Writeup</a>&nbsp;
+            &nbsp;
+          
+          
+            <i class="iconfont icon-tag"></i>
+            
+              <a href="/tags/Writeup">Writeup</a>&nbsp;
+            
+          
+        </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2019/10/21/RoarCTF-Web-Writeup/" style="background-image: url(/post_img/RoarCTF2019.png);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
       </div>
     
@@ -591,66 +639,6 @@ XML 以 LF 存储换行
         <div>
           
             <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-13&nbsp;&nbsp;
-          
-          
-            <i class="iconfont icon-inbox"></i>
-            
-              <a href="/categories/CTF">CTF</a>&nbsp;
-            &nbsp;
-          
-          
-            <i class="iconfont icon-tag"></i>
-            
-              <a href="/tags/CTF">CTF</a>&nbsp;
-            
-          
-        </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/08/06/谈一谈PHP反序列化/" style="background-image: url(/post_img/谈一谈PHP反序列化.jpg);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/08/06/谈一谈PHP反序列化/">
-        <p class="h4 index-header">谈一谈PHP反序列化</p>
-        <div class="index-excerpt">
-          
-            <div class="index-text mb-1">0x01 基础知识
-PHP序列化：php为了方便进行数据的传输，允许把复杂的数据结构，压缩到一个字符串中，使用serialize()函数。
-
-
-PHP反序列化：将被压缩为字符串的复杂数据结构，重新恢复，使用unserialize()函数。
-
-PHP反序列化漏洞：如果代码中使用了反序列化 unserialize()函数，并且参数可控，且程序没有对用户输入的反序列化字符串进行校验，那么可以通过在本地构造序列化字符串，同时利用PHP中的一系列魔术方法来达到想要实现的目的，如控制对象内部的变量甚至是函数。
-
-
-
-0x02 序列化格式例子如下：
-&lt;?php
-    class A {
-        public $x;
-        private $y;
-
-        public function __construct($x, $y)
-        {
-            $this-&gt;x = $x;
-            $this-&gt;y = $y;
-        }
-    }
-    $number = 10;
-    $str = &#39;Le</div>
-          
-        </div>
-      </a>
-
-        <div>
-          
-            <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-06&nbsp;&nbsp;
           
           
             <i class="iconfont icon-inbox"></i>

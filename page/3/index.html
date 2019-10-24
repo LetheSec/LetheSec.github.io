@@ -115,6 +115,79 @@
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/05/27/对Kali Linux进行SSH远程控制/" style="background-image: url(/post_img/ssh.jpg);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/05/27/对Kali Linux进行SSH远程控制/">
+        <p class="h4 index-header">对Kali Linux进行SSH远程控制</p>
+        <div class="index-excerpt">
+          
+            <div class="index-text mb-1">默认情况下，Kali Linux2并没有开始SSH服务，如果要远程使用SSH服务连接到Kali还需要一定的设置。
+
+1、首先打开SSH所在目录，命令如下：
+cd /etc/ssh/
+
+
+2、在这个文件夹中创建一个备份文件夹keys_backup，用来保存默认的密钥：
+mkdir keys_backup
+
+
+3、使用如下命令将默认的密钥移动到keys_backup文件夹中。
+mv ssh_host_* keys_backup
+
+
+4、使用如下命令重新创建一个新的密钥。
+dpkg-reconfigure openssh-server
+
+
+
+5、修改sshd_config文件，该文件位于/etc/ssh/sshd_config，如下图：
+gedit sshd_config
+
+
+
+6、接下来，在终端启动SSH服务，命令如下：
+/etc/init.d/ssh start
+
+如果像查看SSH服务运行状态，可以使用如下命令：
+netstat -antp
+
+可以看到SSH服务已经在22端口上运行起来了。
+
+7、查看自己kali的ip地址。
+ifconfig
+
+
+8、最后可以使用PuTTY来完成远程登陆</div>
+          
+        </div>
+      </a>
+
+        <div>
+          
+            <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-27&nbsp;&nbsp;
+          
+          
+            <i class="iconfont icon-inbox"></i>
+            
+              <a href="/categories/Kali">Kali</a>&nbsp;
+            &nbsp;
+          
+          
+            <i class="iconfont icon-tag"></i>
+            
+              <a href="/tags/Kali">Kali</a>&nbsp;
+            
+          
+        </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2019/05/21/攻防世界Web/" style="background-image: url(/post_img/ctf.jpg);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
       </div>
     

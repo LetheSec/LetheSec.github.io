@@ -115,6 +115,66 @@
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/08/06/谈一谈PHP反序列化/" style="background-image: url(/post_img/谈一谈PHP反序列化.jpg);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/08/06/谈一谈PHP反序列化/">
+        <p class="h4 index-header">谈一谈PHP反序列化</p>
+        <div class="index-excerpt">
+          
+            <div class="index-text mb-1">0x01 基础知识
+PHP序列化：php为了方便进行数据的传输，允许把复杂的数据结构，压缩到一个字符串中，使用serialize()函数。
+
+
+PHP反序列化：将被压缩为字符串的复杂数据结构，重新恢复，使用unserialize()函数。
+
+PHP反序列化漏洞：如果代码中使用了反序列化 unserialize()函数，并且参数可控，且程序没有对用户输入的反序列化字符串进行校验，那么可以通过在本地构造序列化字符串，同时利用PHP中的一系列魔术方法来达到想要实现的目的，如控制对象内部的变量甚至是函数。
+
+
+
+0x02 序列化格式例子如下：
+&lt;?php
+    class A {
+        public $x;
+        private $y;
+
+        public function __construct($x, $y)
+        {
+            $this-&gt;x = $x;
+            $this-&gt;y = $y;
+        }
+    }
+    $number = 10;
+    $str = &#39;Le</div>
+          
+        </div>
+      </a>
+
+        <div>
+          
+            <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-06&nbsp;&nbsp;
+          
+          
+            <i class="iconfont icon-inbox"></i>
+            
+              <a href="/categories/CTF">CTF</a>&nbsp;
+            &nbsp;
+          
+          
+            <i class="iconfont icon-tag"></i>
+            
+              <a href="/tags/CTF">CTF</a>&nbsp;
+            
+          
+        </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2019/07/30/XSS刷题之旅/" style="background-image: url(/post_img/XSS刷题之旅.jpg);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
       </div>
     
@@ -557,79 +617,6 @@ git reflog 可以查看命令历史，以便确定要回到未来的哪个版本
             <i class="iconfont icon-tag"></i>
             
               <a href="/tags/Code%20Audit">Code Audit</a>&nbsp;
-            
-          
-        </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/05/27/对Kali Linux进行SSH远程控制/" style="background-image: url(/post_img/ssh.jpg);" class="img-fluid rounded z-depth-3 index-thumbnails" target="_self"></a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/05/27/对Kali Linux进行SSH远程控制/">
-        <p class="h4 index-header">对Kali Linux进行SSH远程控制</p>
-        <div class="index-excerpt">
-          
-            <div class="index-text mb-1">默认情况下，Kali Linux2并没有开始SSH服务，如果要远程使用SSH服务连接到Kali还需要一定的设置。
-
-1、首先打开SSH所在目录，命令如下：
-cd /etc/ssh/
-
-
-2、在这个文件夹中创建一个备份文件夹keys_backup，用来保存默认的密钥：
-mkdir keys_backup
-
-
-3、使用如下命令将默认的密钥移动到keys_backup文件夹中。
-mv ssh_host_* keys_backup
-
-
-4、使用如下命令重新创建一个新的密钥。
-dpkg-reconfigure openssh-server
-
-
-
-5、修改sshd_config文件，该文件位于/etc/ssh/sshd_config，如下图：
-gedit sshd_config
-
-
-
-6、接下来，在终端启动SSH服务，命令如下：
-/etc/init.d/ssh start
-
-如果像查看SSH服务运行状态，可以使用如下命令：
-netstat -antp
-
-可以看到SSH服务已经在22端口上运行起来了。
-
-7、查看自己kali的ip地址。
-ifconfig
-
-
-8、最后可以使用PuTTY来完成远程登陆</div>
-          
-        </div>
-      </a>
-
-        <div>
-          
-            <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-27&nbsp;&nbsp;
-          
-          
-            <i class="iconfont icon-inbox"></i>
-            
-              <a href="/categories/Kali">Kali</a>&nbsp;
-            &nbsp;
-          
-          
-            <i class="iconfont icon-tag"></i>
-            
-              <a href="/tags/Kali">Kali</a>&nbsp;
             
           
         </div>
