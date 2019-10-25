@@ -33,7 +33,7 @@
 	$(".menu-container").jSideMenu({
 	    jSidePosition: "position-right",
 	    jSideSticky: true,
-	    jSideSkin: "between-clouds",
+	    jSideSkin: "moonlit",
 	     });
 	}); 
 	</script>
@@ -61,6 +61,11 @@
     <div class="lx-entry padding">
       <div>
         <!-- <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">1.</span> <span class="post-toc-text">Web1：签到题</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">2.</span> <span class="post-toc-text">Web2：SimpleUpload签到</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">3.</span> <span class="post-toc-text">Web3：小型线上赌场</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">4.</span> <span class="post-toc-text">Web4：SimpleSQLi</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">5.</span> <span class="post-toc-text">Web5：真的简单。。</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">6.</span> <span class="post-toc-text">Web6：SimpleSQLi2</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">7.</span> <span class="post-toc-text">Web7：文件管理系统</span></a></li></ol> -->
+        <!-- <!-- 
+<div id="toc">
+    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">Web1：签到题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">Web2：SimpleUpload签到</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">Web3：小型线上赌场</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">Web4：SimpleSQLi</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">Web5：真的简单。。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">Web6：SimpleSQLi2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">Web7：文件管理系统</span></a></li></ol>
+</div>
+ --> -->
         <h4><span id="web1签到题">Web1：签到题</span></h4><p>1、打开题目，源码直接显示在网页上。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302192458801.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="web1"></p>
 <p>2、发现构造0ver、0ver1、0ver2即可，下面就进行代码审计：</p>
 <p>（1）首先构造 0ver，有以下三个条件：<br>① <code>ereg(&quot;^[0-9]+$&quot;, $a) === FALSE)</code>，即要进行一次或多次 0-9 数字正则表达式匹配<br>② <code>in_array($a,$white_list)</code>，即0ver 中要有 range（0，9）<br>③ <code>strlen($a)&gt;1</code>，即0ver 的长度要大于 1</p>
@@ -207,7 +212,7 @@ $newname = webshell.jpg
 <div class="comment"><div id="comments"></div></div>
 <footer>
   <div>
-  Copyright &copy; 2019.<a href="/">Lethe | 忘川</a><br>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme <a href="https://lx.blleng.cn" target="_blank">Lx</a><br>
+  Copyright &copy; 2019.<a href="/">Lethe | 忘川</a>
   </div>
 </footer>
 </div>

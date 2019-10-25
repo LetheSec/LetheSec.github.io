@@ -367,11 +367,13 @@ blockquote div {
 .MathJax_SVG_Display {
   overflow: auto;
 }
-.toc {
+#toc {
   float: right;
-  margin-left: 40px;
-  padding: 10px 20px;
-  background: #f1f1f1;
-  border-radius: 10px;
-  box-shadow: 0 0 3px #bbb;
+  background-color: #eee;
+  font-size: 0.8em;
+  color: color-link;
+  margin: 5px;
+}
+#toc .toc {
+  list-style: none;
 }
