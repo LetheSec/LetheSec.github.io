@@ -60,9 +60,10 @@
   <div class="lx-post">
     <div class="lx-entry padding">
       <div>
+        <!-- <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">1.</span> <span class="post-toc-text">0x01 什么是Soap</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">2.</span> <span class="post-toc-text">0x02 PHP中的SoapClient类</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">3.</span> <span class="post-toc-text">0x03 CRLF Injection</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">4.</span> <span class="post-toc-text">0x04 SSRF+CRLF攻击内网</span></a></li></ol> -->
         <p>前一段时间在De1CTF中的ShellShellShell以及SUCTF的Upload labs2都涉及到了利用PHP的SoapClient类进行SSRF，因此在这里记录下。</p>
 <p><br></p>
-<h1 id="0x01-什么是Soap"><a href="#0x01-什么是Soap" class="headerlink" title="0x01 什么是Soap"></a>0x01 什么是Soap</h1><p>SOAP是webService三要素（SOAP、WSDL、UDDI）之一：</p>
+<h1><span id="0x01-什么是soap">0x01 什么是Soap</span></h1><p>SOAP是webService三要素（SOAP、WSDL、UDDI）之一：</p>
 <ul>
 <li><p>WSDL 用来描述如何访问具体的接口。</p>
 </li>
@@ -72,7 +73,7 @@
 </li>
 </ul>
 <p><br></p>
-<h1 id="0x02-PHP中的SoapClient类"><a href="#0x02-PHP中的SoapClient类" class="headerlink" title="0x02 PHP中的SoapClient类"></a>0x02 PHP中的SoapClient类</h1><p>参考链接：<a href="https://www.php.net/manual/zh/soapclient.soapclient.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/soapclient.soapclient.php</a></p>
+<h1><span id="0x02-php中的soapclient类">0x02 PHP中的SoapClient类</span></h1><p>参考链接：<a href="https://www.php.net/manual/zh/soapclient.soapclient.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/soapclient.soapclient.php</a></p>
 <p>PHP 的 SOAP 扩展可以用来提供和使用 Web Services，这个扩展实现了6个类，其中的SoapClient类是用来创建soap数据报文，与wsdl接口进行交互的，同时这个类下也是有反序列化中常常用到的__call()魔术方法。</p>
 <p>该类的构造函数如下：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> SoapClient :: SoapClient （mixed $wsdl [，<span class="keyword">array</span> $options ]）</span><br></pre></td></tr></table></figure>
@@ -84,10 +85,10 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a = <span class="keyword">new</span> SoapClient(<span class="keyword">null</span>, <span class="keyword">array</span>(<span class="string">'location'</span> =&gt; <span class="string">"http://xxx.xxx.xxx"</span>,</span><br><span class="line">                                     <span class="string">'uri'</span>      =&gt; <span class="string">"123"</span>));</span><br><span class="line"><span class="keyword">echo</span> serialize($a);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>当把上述脚本得到的序列化串进行反序列化（unserialize），并执行一个SoapClient没有的成员函数时，会自动调用该类的<code>__Call</code>方法，然后向<code>target_url</code>发送一个soap请求，并且<code>uri</code>选项是我们可控的地方。</p>
 <p><br></p>
-<h1 id="0x03-CRLF-Injection"><a href="#0x03-CRLF-Injection" class="headerlink" title="0x03 CRLF Injection"></a>0x03 CRLF Injection</h1><p>CRLF是”回车 + 换行”<code>(\r\n)</code>的简称。在HTTP协议中，HTTP Header与HTTP Body是用两个CRLF分隔的，浏览器就是根据这两个CRLF来取出HTTP 内容并显示出来。所以，一旦我们能够控制HTTP 消息头中的字符，注入一些恶意的换行，这样我们就能注入一些会话Cookie或者HTML代码，所以CRLF Injection又叫HTTP Response Splitting，简称HRS。</p>
+<h1><span id="0x03-crlf-injection">0x03 CRLF Injection</span></h1><p>CRLF是”回车 + 换行”<code>(\r\n)</code>的简称。在HTTP协议中，HTTP Header与HTTP Body是用两个CRLF分隔的，浏览器就是根据这两个CRLF来取出HTTP 内容并显示出来。所以，一旦我们能够控制HTTP 消息头中的字符，注入一些恶意的换行，这样我们就能注入一些会话Cookie或者HTML代码，所以CRLF Injection又叫HTTP Response Splitting，简称HRS。</p>
 <p>参考链接：<br><a href="https://wooyun.js.org/drops/CRLF%20Injection%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A8%E4%B8%8E%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90.html" target="_blank" rel="noopener">CRLF Injection漏洞的利用与实例分析</a></p>
 <p><br></p>
-<h1 id="0x04-SSRF-CRLF攻击内网"><a href="#0x04-SSRF-CRLF攻击内网" class="headerlink" title="0x04 SSRF+CRLF攻击内网"></a>0x04 SSRF+CRLF攻击内网</h1><p>实际上很多时候都需要这两个漏洞配合在一起使用，当我们我们可以从外网调用到soap的api，而攻击目标是在内网，那么就可以利用SoapClient进行SSRF攻击内网，然后配合CRLF构造POST请求增加我们的攻击面。</p>
+<h1><span id="0x04-ssrfcrlf攻击内网">0x04 SSRF+CRLF攻击内网</span></h1><p>实际上很多时候都需要这两个漏洞配合在一起使用，当我们我们可以从外网调用到soap的api，而攻击目标是在内网，那么就可以利用SoapClient进行SSRF攻击内网，然后配合CRLF构造POST请求增加我们的攻击面。</p>
 <p>那么为什么在用SoapClient类进行SSRF的时候会有CRLF注入的问题呢？如下：</p>
 <p><img src="/2019/09/06/利用SoapClient类进行SSRF-CRLF攻击/20190906003122388.png" alt="在这里插入图片描述"></p>
 <p>可以看到options参数中还有一个选项为<code>user_agent</code>，运行我们自己设置<code>User-Agent</code>的值。</p>
