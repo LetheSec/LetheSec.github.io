@@ -60,12 +60,6 @@
   <div class="lx-post">
     <div class="lx-entry padding">
       <div>
-        <!-- <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">1.</span> <span class="post-toc-text">CheckIn</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">2.</span> <span class="post-toc-text">EasyPHP</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">3.</span> <span class="post-toc-text">Pythonginx</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">4.</span> <span class="post-toc-text">Easysql</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#undefined"><span class="post-toc-number">5.</span> <span class="post-toc-text">upload labs2</span></a></li></ol> -->
-        <!-- <!-- 
-<div id="toc">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-text">CheckIn</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-text">EasyPHP</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-text">Pythonginx</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-text">Easysql</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-text">upload labs2</span></a></li></ol>
-</div>
- --> -->
         <h1><span id="checkin">CheckIn</span></h1><p>1、进入题目后是一个简单的上传页面：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819172654291.png" alt="在这里插入图片描述"><br>先尝试上传普通的图片马，发现会显示<code>&lt;? in contents!</code>，过滤了<code>&lt;?</code>，可以使用<code>&lt;script language=&#39;php&#39;&gt;&lt;/scrip&gt;</code>绕过。</p>
 <p>修改后再次上传发现显示<code>exif_imagetype:not image!</code>，还用了<code>exif_imagetype()</code>进行检验，可以加上GIF89a进行绕过。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819173405352.png" alt="在这里插入图片描述"><br>但是后缀正则过滤了<code>php</code>字符，想直接绕过是没戏了。</p>
 <p>2、于是考虑解析漏洞，发现服务端不是Apache而是Nginx，所以常见的上传<code>.hatcess</code>文件不可行。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819173804810.png" alt="在这里插入图片描述"></p>
