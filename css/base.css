@@ -1,9 +1,31 @@
 /*----------
 Font
 ----------*/
-/*
-$font = 'Montserrat' , 'Noto Serif SC' , sans-serif
-$code-font = 'Montserrat' , 'Noto Serif SC' , sans-serif
+/*--------
+$font-family-chinese      = Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei";
+
+$font-family-base         = $font-family-chinese, sans-serif
+
+
+$font-family-logo         = $font-family-base
+$font-family-logo         = get_font_family('logo'), $font-family-base if get_font_family('logo')
+
+$font-family-headings     = $font-family-base
+
+
+$font-family-posts        = $font-family-base
+
+
+$font-family-monospace    = Menlo, consolas, $font-family-chinese, monospace
+
+
+$font-family-icons        = 'FontAwesome'
+
+$font-size-base           = 16px
+$table-font-size          = 15px
+$font-size-headings-base  = 22px
+$code-font-size           = 14px
+$line-height-code-block   = 1.6
 */
 /*----------
 Color
