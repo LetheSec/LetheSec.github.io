@@ -1,195 +1,794 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
+
+
+
+
+
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Lethe | 忘川</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="Lethe&#39;s Blog">
   <meta name="author" content="Lethe">
-  <meta name="keywords" content="Lethe's Blog">
-  <meta name="description" content="Lethe's Blog">
-  <script id="hexo-configurations">
-  var CONFIG = {
-    root: '/',
-    theme: 'lx',
-    version: '1.4.5',
-    localsearch:{
-      "enable": false,
-      "trigger": "auto",
-      "top_n_per_article": 1,
-      "unescape": false,
-      "preload": false
-      },
-    path: '-'
-  };
-</script>
-
-  <link rel="shortcut icon" href="/hacker.png">
-  <link rel="stylesheet" href="/css/main.css">
-  <script src="/js/jquery.min.js"></script>
-  <script src="/js/jquery.jside.menu.js"></script>
-	<script>
-	$(document).ready(function(){
-	$(".menu-container").jSideMenu({
-	    jSidePosition: "position-right",
-	    jSideSticky: true,
-	    jSideSkin: "moonlit",
-	     });
-	}); 
-	</script>
+  <meta name="keywords" content="Lethe&#39;s Blog">
+  <title>Lethe | 忘川</title>
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css">
+  <link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css">
+  <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
   
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300|Noto+Serif+SC&amp;display=swap">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  
+  <link rel="stylesheet" href="/css/main.css">
+
+  
 </head>
+
+
 <body>
-<div id="page">
-<div id="lx-aside" style="background-image: url(/images/cover.jpg)">
-  <div class="overlay">
-  <div class="featured">
-    <div class="avatar"><a href="/"><img src="/images/2.jpg"></a></div>
-    <span>Lethe</span>
-    <h2>Lethe | 忘川</h2>
-    <span>——Life is a struggle</span>
-    <div class="social-links">
-<a href="https://github.com/LetheSec" target="_blank"><i class="fa fa-github fa-fw"></i></a><a href="mailto:1013579926@qq.com"><i class="fa fa-envelope fa-fw"></i></a>
-</div>
-  </div>
-  </div>
-</div>
-<div id="lx-main-content">
-  <div class="lx-post"> 
+  <header style="height: 100vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe | 忘川</strong>&nbsp;</a>
 
-  <div class="lx-entry padding">
-    <div>
-      <h2><a href="/2019/08/06/谈一谈PHP反序列化/">谈一谈PHP反序列化</a></h2>
-      <span class="lx-post-detail"><i class="fa fa-calendar-o"></i> 2019-08-06 | <i class="fa fa-folder-o"></i> <a class="category-link" href="/categories/CTF/">CTF</a></span>
-      <p></p>
-    </div>
-  </div>
-  <div class="lx-entry padding">
-    <div>
-      <h2><a href="/2019/07/30/XSS刷题之旅/">XSS刷题之旅</a></h2>
-      <span class="lx-post-detail"><i class="fa fa-calendar-o"></i> 2019-07-30 | <i class="fa fa-folder-o"></i> <a class="category-link" href="/categories/CTF/">CTF</a></span>
-      <p></p>
-    </div>
-  </div>
-  <div class="lx-entry padding">
-    <div>
-      <h2><a href="/2019/07/28/MVC_Simple_Message_Board/">MVC架构实现简易留言管理系统</a></h2>
-      <span class="lx-post-detail"><i class="fa fa-calendar-o"></i> 2019-07-28 | <i class="fa fa-folder-o"></i> <a class="category-link" href="/categories/PHP/">PHP</a></span>
-      <p></p>
-    </div>
-  </div>
-  <div class="lx-entry padding">
-    <div>
-      <h2><a href="/2019/07/26/SQLi-Labs通关笔记/">SQLi-Labs通关笔记</a></h2>
-      <span class="lx-post-detail"><i class="fa fa-calendar-o"></i> 2019-07-26 | <i class="fa fa-folder-o"></i> <a class="category-link" href="/categories/CTF/">CTF</a></span>
-      <p></p>
-    </div>
-  </div>
-  <div class="lx-entry padding">
-    <div>
-      <h2><a href="/2019/07/19/Python多线程socket模拟C-S多人聊天室/">Python多线程socket模拟C/S多人聊天室</a></h2>
-      <span class="lx-post-detail"><i class="fa fa-calendar-o"></i> 2019-07-19 | <i class="fa fa-folder-o"></i> <a class="category-link" href="/categories/Python/">Python</a></span>
-      <p></p>
-    </div>
-  </div>
-  <div class="lx-entry padding">
-    <div>
-      <h2><a href="/2019/07/19/Python实现多线程下载脚本/">Python实现多线程下载脚本</a></h2>
-      <span class="lx-post-detail"><i class="fa fa-calendar-o"></i> 2019-07-19 | <i class="fa fa-folder-o"></i> <a class="category-link" href="/categories/Python/">Python</a></span>
-      <p></p>
-    </div>
-  </div>
-  <div class="lx-entry padding">
-    <div>
-      <h2><a href="/2019/07/17/Python常用模块/">Python常用模块</a></h2>
-      <span class="lx-post-detail"><i class="fa fa-calendar-o"></i> 2019-07-17 | <i class="fa fa-folder-o"></i> <a class="category-link" href="/categories/Python/">Python</a></span>
-      <p></p>
-    </div>
-  </div>
-  <div class="lx-entry padding">
-    <div>
-      <h2><a href="/2019/07/16/SQL注入总结/">SQL注入总结</a></h2>
-      <span class="lx-post-detail"><i class="fa fa-calendar-o"></i> 2019-07-16 | <i class="fa fa-folder-o"></i> <a class="category-link" href="/categories/CTF/">CTF</a></span>
-      <p></p>
-    </div>
-  </div>
-  <div class="lx-entry padding">
-    <div>
-      <h2><a href="/2019/07/14/Git_Learning/">Git学习小结</a></h2>
-      <span class="lx-post-detail"><i class="fa fa-calendar-o"></i> 2019-07-14 | <i class="fa fa-folder-o"></i> <a class="category-link" href="/categories/Git/">Git</a></span>
-      <p></p>
-    </div>
-  </div>
-  <div class="lx-entry padding">
-    <div>
-      <h2><a href="/2019/06/05/php代码审计入门读书小结/">php代码审计入门读书小结</a></h2>
-      <span class="lx-post-detail"><i class="fa fa-calendar-o"></i> 2019-06-05 | <i class="fa fa-folder-o"></i> <a class="category-link" href="/categories/Code-Audit/">Code Audit</a></span>
-      <p></p>
-    </div>
-  </div>
- 
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
 
-<div id="pagination">
-  <a class="extend prev" rel="prev" href="/"><i class="fa fa-chevron-left" aria-label="accessibility.prev_page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-chevron-right" aria-label="accessibility.next_page"></i></a>
-</div>
-<footer>
-  <div>
-  Copyright &copy; 2019.<a href="/">Lethe | 忘川</a>
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">Archives</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">Categories</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">Tags</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
   </div>
-</footer>
-  </div>
-</div>
-</div>
 
-<button class="menu-trigger"></button>
-<div class="menu">
-  <div class="menu-head">
-    <span class="layer">
-      <div class="col">
-        <div class="row for-pic">
-          <div class="profile-pic">
-            <a href="/"><img src="/images/2.jpg" alt="Lethe"></a>
+
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/1.jpg')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
           </div>
-        </div>
-        <div class="row for-name">
-          <p>Lethe</p>
-          <span class="tagline">Hello, World!</span>
+
+          
+            <div class="scroll-down-bar">
+              <i class="fa fa-angle-down scroll-down-arrow"></i>
+            </div>
+          
         </div>
       </div>
-    </span>
-  </div>
-  <nav class="menu-container">
-  <ul class="menu-items">
-    <li><a href="/"><i class="fa fa-home fa-fw"></i>首页</a></li>
-    <li><a href="/archives/"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-    <li class="has-sub"><span class="dropdown-heading">
-      <i class="fa fa-bookmark fa-fw"></i>页面</span>
-        <ul>
-          <li><a href="/about">关于</a></li>
-        </ul>
-    </li>
-    <li class="has-sub"><span class="dropdown-heading">
-      <i class="fa fa-link fa-fw"></i>友链</span>
-        <ul>
-          <li> <a href="https://hiworldalice.github.io/" target="_blank">Tunt</a></li>
-        <li> <a href="https://3nd.xyz" target="_blank">3ND</a></li>
-        </ul>
-    </li>
-  </ul>
-  </nav>
-</div>
+    </div>
+  </header>
 
-<div class="gototop js-top">
-  <a href="#" class="js-gotop"><i class="fa fa-arrow-up"></i></a>
+  <main>
+    
+      <div class="container nopadding-md">
+        <div class="py-5 z-depth-3" id="board">
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/08/06/谈一谈PHP反序列化/" target="_self">
+          <img src="/post_img/谈一谈PHP反序列化.jpg" srcset="/img/loading.gif" alt="谈一谈PHP反序列化" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/08/06/谈一谈PHP反序列化/">
+        <p class="h4 index-header">谈一谈PHP反序列化</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">0x01 基础知识
+PHP序列化：php为了方便进行数据的传输，允许把复杂的数据结构，压缩到一个字符串中，使用serialize()函数。
+
+
+PHP反序列化：将被压缩为字符串的复杂数据结构，重新恢复，使用unserialize()函数。
+
+PHP反序列化漏洞：如果代码中使用了反序列化 unserialize()函数，并且参数可控，且程序没有对用户输入的反序列化字符串进行校验，那么可以通过在本地构造序列化字符串，同时利用PHP中的一系列魔术方法来达到想要实现的目的，如控制对象内部的变量甚至是函数。
+
+
+
+0x02 序列化格式例子如下：12345678910111213141516171819202122232425&lt;?php    class A &#123;        public $x;        private $y;        public function __construct($x, $y)        &#123;            $this-&gt;x = $x;            $this-&gt;y = $y;        &#1</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-06&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/CTF">CTF</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/CTF">CTF</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/07/30/XSS刷题之旅/" target="_self">
+          <img src="/post_img/XSS刷题之旅.jpg" srcset="/img/loading.gif" alt="XSS刷题之旅" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/07/30/XSS刷题之旅/">
+        <p class="h4 index-header">XSS刷题之旅</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">0x01 一些资源或文章：XSS小结XSS总结那些年我们没能bypass的xss filterXSS Filter Evasion Cheat Sheet 中文版XSS攻击手段&amp;在CTF中的运用
+
+0x02 常用Payload（慢慢积累…）123&lt;img src=&quot;x&quot; onerror=alert(1)&gt;&lt;img src=&quot;1&quot; onerror=eval(&quot;alert(&apos;xss&apos;)&quot;)&gt;&lt;img src=1 onmouseover=alert(&apos;xss&apos;)&gt;
+12345678910111213&lt;a href=&quot;javascript:alert(&apos;xss&apos;)&quot;&gt;aa&lt;/a&gt;&lt;a href=javascript:eval(alert(&apos;xss&apos;))&gt;aa&lt;/a&gt;&lt;a href=&quot;javascript:aaa&quot; onm</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-30&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/CTF">CTF</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/CTF">CTF</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/07/28/MVC_Simple_Message_Board/" target="_self">
+          <img src="/post_img/MVC架构实现简易留言管理系统.png" srcset="/img/loading.gif" alt="MVC架构实现简易留言管理系统" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/07/28/MVC_Simple_Message_Board/">
+        <p class="h4 index-header">MVC架构实现简易留言管理系统</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">0x01 总体设计留言模块主要包括以下几个子模块：
+
+模型模块（Model）：模型类中封装好用户操作数据库的各种方法，供控制器调用。
+视图模块（View）:Web视图页面收集用户留言。
+控制器模块（Controller）：控制器处理Web视图页面收集的数据。
+
+
+0x02 详细设计（1）查看留言记录
+在控制器的selete()方法中，调用模型类中封装的getSelete()方法查询数据表中所有的数据，并显示到前端。
+在Web页面中循环遍历返回的索引数组，即可显示留言列表。
+
+（2）添加留言记录
+在前端页面的form表单中获取用户输入的数据。
+在控制器的add()方法中，调用模型类中封装的getInsert()方法向数据表中添加数据。
+前端页面跳转到留言列表中。
+
+（3）修改留言记录
+当要修改数据时，先查找要修改的内容，把查找到的数据放到表单中。
+在控制器的update()方法中，调用模型类中封装的getUpdate()方法对留言数据进行修改。
+
+（4）删除留言记录
+在Web页面点击“删除”，进入控制器的delete()方法。
+在控制器的delete()方法中，调用模型类中封装的getD</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-28&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/PHP">PHP</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/PHP">PHP</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/07/26/SQLi-Labs通关笔记/" target="_self">
+          <img src="/post_img/SQLi-Labs通关笔记.jpg" srcset="/img/loading.gif" alt="SQLi-Labs通关笔记" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/07/26/SQLi-Labs通关笔记/">
+        <p class="h4 index-header">SQLi-Labs通关笔记</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">Less-1?id=1&#39; 单引号报错，存在注入
+?id=1&#39; order by 4 %23&#39;报错，存在三列
+?id=-1&#39; union select 1,2,3%23 发现2和3的位置可以回显，于是进行注入
+?id=-1&#39; union select 1,(select group_concat(table_name) from information_schema.tables where table_schema=database()),3 %23得到当前库下所有表名
+?id=-1&#39; union select 1,(select group_concat(column_name) from information_schema.columns where table_name=&#39;users&#39;),3%23得到users表下的所有列名
+?id=-1&#39; union select 1,(select group_concat(username) from users),(select group_concat(passw</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-26&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/CTF">CTF</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/CTF">CTF</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/07/19/Python多线程socket模拟C-S多人聊天室/" target="_self">
+          <img src="/post_img/PythonSocket.png" srcset="/img/loading.gif" alt="Python多线程socket模拟C/S多人聊天室" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/07/19/Python多线程socket模拟C-S多人聊天室/">
+        <p class="h4 index-header">Python多线程socket模拟C/S多人聊天室</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">0x01 分析1. 原理（1）在服务端，由于 socket 的 recv() 方法在成功读取到数据之前，线程会被阻塞，程序无法继续执行，因此需要为每个 socket 单独启动一个线程，每个线程负责与一个客户端进行通信。
+（2）在客户端，从服务段读取数据的线程同样也会被阻塞，因此也需要单独启动一个线程，专门负责从服务端读取数据。
+2. 实现（1）服务端
+包含多个线程，每个socket对用一个线程，负责从socket中读取数据，打印出来并广播给所有建立通信的客户端，因此需要一个 socket_list 来保存所有建立连接的客户端。
+read_client() 函数用来不断读取客户端发送的数据，同时捕获异常。
+server_target() 函数作为线程的执行体，采用循环不断地从socket中读取客户端发送过来的数据，然后遍历 socket_list 向每个客户端进行广播。
+主线程则负责建立通信，同时每当与一个客户端建立通信，就将其加入到 socket_list 中，并启动一个线程为其服务。
+
+（2）客户端
+每个客户端需要两个线程，子线程的执行体read_server() 函数负责不断的读取</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-19&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python">Python</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Python">Python</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/07/19/Python实现多线程下载脚本/" target="_self">
+          <img src="/post_img/PythonThreading.png" srcset="/img/loading.gif" alt="Python实现多线程下载脚本" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/07/19/Python实现多线程下载脚本/">
+        <p class="h4 index-header">Python实现多线程下载脚本</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">0x01 分析一个简单的多线程下载资源的Python脚本，主要实现部分包含两个类：
+
+Download类：包含download()和get_complete_rate()两种方法。
+
+download()方法种首先用 urlopen() 方法打开远程资源并通过 Content-Length获取资源的大小，然后计算每个线程应该下载网络资源的大小及对应部分，最后依次创建并启动多个线程来下载网络资源的指定部分。
+get_complete_rate()则是用来返回已下载的部分占全部资源大小的比例，用来回显进度。
+
+
+ThreadDownload类：该线程类继承了threading.Thread类，包含了一个run()方法。
+
+run()方法主要负责每个线程读取网络数据并写入本地。
+
+
+
+
+0x02 代码ThreadDownload.py:1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-19&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python">Python</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Python">Python</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/07/17/Python常用模块/" target="_self">
+          <img src="/post_img/Python.jpg" srcset="/img/loading.gif" alt="Python常用模块" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/07/17/Python常用模块/">
+        <p class="h4 index-header">Python常用模块</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、sys — 系统相关的参数和函数sys模块官方文档： https://docs.python.org/3/library/sys.html
+
+sys.argv：获取运行 Python 程序的命令行参数。其中 sys.argv[0] 通常就是指该 Python 程序，sys.argv[1] 代表为 Python 程序提供的第一个参数，sys.argv[2] 代表为 Python 程序提供的第二个参数……依此类推。
+sys.byteorder：显示本地字节序的指示符。如果本地字节序是大端模式，则该属性返回 big；否则返回 little。
+sys.copyright：该属性返回与 Python 解释器有关的版权信息。
+sys.executable：该属性返回 Python 解释器在磁盘上的存储路径。
+sys.exit()：通过引发 SystemExit 异常来退出程序。将其放在 try 块中不能阻止 finally 块的执行。
+sys.flags：该只读属性返回运行 Python 命令时指定的旗标。
+sys.getfilesystemencoding()：返回在当前系统中保存文件所用的</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-17&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python">Python</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Python">Python</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/07/16/SQL注入总结/" target="_self">
+          <img src="/post_img/SQL注入总结.jpg" srcset="/img/loading.gif" alt="SQL注入总结" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/07/16/SQL注入总结/">
+        <p class="h4 index-header">SQL注入总结</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">自己的总结加上搜集网上各路大牛的方法，应该还算比较全了。p0desta‘s Blog
+一、基本知识1、常用函数（1）查看当前数据库版本
+version()
+@@version
+@@global.version
+
+（2）查看当前登陆用户
+user()
+current_user()
+system_user()
+session_user()
+
+（3）当前使用的数据库
+database()
+schema()
+
+（4）路径查询
+@@basedir ——mysql安装路径 
+@@slave_load_tampdir ——临时文件夹路径
+@@datadir ——数据存储路径
+@@character_sets_dir ——字符集设置文件路径
+@@log_error ——错误日志文件路径
+@@pid_file ——pid-file文件路径
+
+（5）字符串连接函数
+group_concat() ——返回一个字符串结果，该结果由分组中的值连接组合而成。group_concat([DISTINCT] 要连接的字段[Order BY ASC/DESC 排序字段] [Separator &#39;分隔符&#39;</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-16&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/CTF">CTF</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/CTF">CTF</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/07/14/Git_Learning/" target="_self">
+          <img src="/post_img/git学习小结.png" srcset="/img/loading.gif" alt="Git学习小结" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/07/14/Git_Learning/">
+        <p class="h4 index-header">Git学习小结</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">学习自https://www.liaoxuefeng.com/wiki/896043488029600
+一、创建版本库（1） git init 初始化一个Git仓库
+（2）添加文件到Git仓库，分两步：git add &lt;file&gt; 将工作区中修改提交到暂存区，可反复多次使用，添加多个文件git commit -m &lt;message&gt; 将在暂存区中修改提交到分支
+
+二、时光穿梭机git status 可以查看工作区的状态
+如果git status发现有文件被修改过，用git diff可以查看修改内容。
+（1）版本回退
+
+HEAD指向的版本就是当前版本，git reset --hard HEAD^即回退到上一版本
+git reset --hard commit_id 可以回退到历史中任何一个版本，只要知道其版本号
+git log 可以查看提交历史，以便确定要回退到哪个版本。
+
+git reflog 可以查看命令历史，以便确定要回到未来的哪个版本
+
+
+（2）工作区和暂存区把文件往Git版本库里添加的时候，是分两步执行的：
+第一步是用git add把文件添加进去，实际上</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-14&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Git">Git</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Git">Git</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/06/05/php代码审计入门读书小结/" target="_self">
+          <img src="/post_img/php代码审计小结.png" srcset="/img/loading.gif" alt="php代码审计入门读书小结" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/06/05/php代码审计入门读书小结/">
+        <p class="h4 index-header">php代码审计入门读书小结</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">由于看到不少讲web安全的地方都会推荐一本书叫 《代码审计：企业级web代码安全架构》，于是从图书馆找来这本书读了一下，虽然有些内容可能有点老了，但整体上还是挺不错的，下面做一点总结。
+一、通用代码审计思路常见的代码审计思路有以下四种：
+1、根据敏感关键词（敏感函数）回溯参数传递过程。
+2、查找可控变量，正向追踪变量传递过程。
+3、寻找敏感功能点，通读功能点代码。（1）文件上传功能：文件上传漏洞、文件名SQL注入漏洞（2）文件管理功能：任意文件操作漏洞、XSS漏洞（3）登陆认证功能：任意用户登陆漏洞、越权漏洞（4）找回密码功能
+4、直接通读全文代码
+  通读全文代码时，首先应看程序的代码结构，如主目录有哪些文件，模块目录有哪些文件，插件目录有哪些文件，除了关注有哪些文件，还要注意文件的大小、创建时间。在看程序目录结构时候，注意以下几个文件：  （1）函数集文件：通常命名中包含functions或者common等关键字，一般可以在index.php或者一些功能性文件的头部可以找到。  （2）配置文件：通常命名中包含config关键字，配置文件包括web程序运行必须的功能性配置选项以及数据</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-05&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Code%20Audit">Code Audit</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Code%20Audit">Code Audit</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+
+
+  <nav aria-label="index posts navigation">
+    <ul class="pagination pg-blue justify-content-center mt-5">
+      
+        <li class="page-item">
+          <a class="page-link" href="/#board">Previous</a>
+        </li>
+      
+      
+        <li class="page-item">
+          <a class="page-link" href="/page/3/#board">Next</a>
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
 </div>
-<script src="/js/jquery.easing.min.js"></script>
-<script src="/js/jquery.waypoints.min.js"></script>
-<script src="/js/jquery.stellar.min.js"></script>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/popper/popper.min.js"></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
+  <script src="/js/lazyload.js"></script>
 
+
+
+  <script src="/lib/prettify/prettify.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+  <script src="/lib/typed/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Life is a struggle&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+  <script src="/lib/anchor/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+      icon: "§"
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script>
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) || (/Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent))) {
+      $("#background").css("background-attachment", "scroll");
+    }
+  </script>
 
 </body>
 </html>
