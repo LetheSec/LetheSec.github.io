@@ -142,8 +142,27 @@
 <li><strong>sys.version</strong>：返回当前 Python 解释器的版本信息。</li>
 <li><strong>sys.winver</strong>：返回当前 Python 解释器的主版本号。</li>
 </ul>
-<p>例:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> argv</span><br><span class="line"><span class="comment"># 输出argv列表的长度</span></span><br><span class="line">print(len(argv))</span><br><span class="line"><span class="comment"># 遍历argv列表的每个元素</span></span><br><span class="line"><span class="keyword">for</span> arg <span class="keyword">in</span> argv:</span><br><span class="line">   print(arg)</span><br><span class="line"></span><br><span class="line">如果使用python3 test.py Lethe Python 命令运行该脚本，则结果为：</span><br><span class="line"><span class="number">3</span></span><br><span class="line">test.py</span><br><span class="line">Lethe</span><br><span class="line">Python</span><br></pre></td></tr></table></figure></p>
-<p>sys.path 也是很有用的一个属性，它可用于在程序运行时为 Python 动态修改模块加载路径。例如，如下程序在运行时动态指定加载 <code>E:\Lethe</code>目录下的模块：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="comment"># 动态添加g:\fk_ext路径作为模块加载路径</span></span><br><span class="line">sys.path.append(<span class="string">'E:\\Lethe'</span>)</span><br><span class="line"><span class="comment"># 加载g:\fk_ext路径下的hello模块</span></span><br><span class="line"><span class="keyword">import</span> hello</span><br></pre></td></tr></table></figure></p>
+<p>例:</p>
+<pre><code class="python">from sys import argv
+# 输出argv列表的长度
+print(len(argv))
+# 遍历argv列表的每个元素
+for arg in argv:
+   print(arg)
+
+如果使用python3 test.py Lethe Python 命令运行该脚本，则结果为：
+3
+test.py
+Lethe
+Python
+</code></pre>
+<p>sys.path 也是很有用的一个属性，它可用于在程序运行时为 Python 动态修改模块加载路径。例如，如下程序在运行时动态指定加载 <code>E:\Lethe</code>目录下的模块：</p>
+<pre><code class="python">import sys
+# 动态添加g:\fk_ext路径作为模块加载路径
+sys.path.append(&#39;E:\\Lethe&#39;)
+# 加载g:\fk_ext路径下的hello模块
+import hello
+</code></pre>
 <p><br></p>
 <h4><span id="二-os-操作系统接口模块">二、os — 操作系统接口模块</span></h4><p>os模块官方文档：<a href="https://docs.python.org/3/library/os.html。" target="_blank" rel="noopener">https://docs.python.org/3/library/os.html。</a></p>
 <h6><span id="1os模块与目录相关的函数如下">（1）os模块与目录相关的函数如下:</span></h6><ul>
@@ -160,7 +179,33 @@
 <li><strong>os.renames(old, new)</strong>：对文件或目录进行递归重命名。其功能类似于 rename()，但该函数可以递归重命名 abc/xyz/wawa 目录，它会从 wawa 子目录开始重命名，然后重命名 xyz 子目录，最后重命名 abc 目录。</li>
 </ul>
 <p>除此之外，<strong>os.path</strong> 模块下提供了一些操作目录的方法，这些函数可以操作系统的目录本身。</p>
-<h6><span id="ospath模块下的操作目录的常见函数的功能和用法">os.path模块下的操作目录的常见函数的功能和用法：</span></h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="comment"># 获取绝对路径</span></span><br><span class="line">print(os.path.abspath(<span class="string">"abc.txt"</span>)) <span class="comment"># G:\publish\codes\12\12.2\abc.txt</span></span><br><span class="line"><span class="comment"># 获取共同前缀</span></span><br><span class="line">print(os.path.commonprefix([<span class="string">'/usr/lib'</span>, <span class="string">'/usr/local/lib'</span>])) <span class="comment"># /usr/l</span></span><br><span class="line"><span class="comment"># 获取共同路径</span></span><br><span class="line">print(os.path.commonpath([<span class="string">'/usr/lib'</span>, <span class="string">'/usr/local/lib'</span>])) <span class="comment"># \usr</span></span><br><span class="line"><span class="comment"># 获取目录</span></span><br><span class="line">print(os.path.dirname(<span class="string">'abc/xyz/README.txt'</span>)) <span class="comment">#abc/xyz</span></span><br><span class="line"><span class="comment"># 判断指定目录是否存在</span></span><br><span class="line">print(os.path.exists(<span class="string">'abc/xyz/README.txt'</span>)) <span class="comment"># False</span></span><br><span class="line"><span class="comment"># 获取最近一次访问时间</span></span><br><span class="line">print(time.ctime(os.path.getatime(<span class="string">'os.path_test.py'</span>)))</span><br><span class="line"><span class="comment"># 获取最后一次修改时间</span></span><br><span class="line">print(time.ctime(os.path.getmtime(<span class="string">'os.path_test.py'</span>)))</span><br><span class="line"><span class="comment"># 获取创建时间</span></span><br><span class="line">print(time.ctime(os.path.getctime(<span class="string">'os.path_test.py'</span>)))</span><br><span class="line"><span class="comment"># 获取文件大小</span></span><br><span class="line">print(os.path.getsize(<span class="string">'os.path_test.py'</span>))</span><br><span class="line"><span class="comment"># 判断是否为文件</span></span><br><span class="line">print(os.path.isfile(<span class="string">'os.path_test.py'</span>)) <span class="comment"># True</span></span><br><span class="line"><span class="comment"># 判断是否为目录</span></span><br><span class="line">print(os.path.isdir(<span class="string">'os.path_test.py'</span>)) <span class="comment"># False</span></span><br><span class="line"><span class="comment"># 判断是否为同一个文件</span></span><br><span class="line">print(os.path.samefile(<span class="string">'os.path_test.py'</span>, <span class="string">'./os.path_test.py'</span>)) <span class="comment"># True</span></span><br></pre></td></tr></table></figure>
+<h6><span id="ospath模块下的操作目录的常见函数的功能和用法">os.path模块下的操作目录的常见函数的功能和用法：</span></h6><pre><code class="python">import os
+import time
+# 获取绝对路径
+print(os.path.abspath(&quot;abc.txt&quot;)) # G:\publish\codes\12\12.2\abc.txt
+# 获取共同前缀
+print(os.path.commonprefix([&#39;/usr/lib&#39;, &#39;/usr/local/lib&#39;])) # /usr/l
+# 获取共同路径
+print(os.path.commonpath([&#39;/usr/lib&#39;, &#39;/usr/local/lib&#39;])) # \usr
+# 获取目录
+print(os.path.dirname(&#39;abc/xyz/README.txt&#39;)) #abc/xyz
+# 判断指定目录是否存在
+print(os.path.exists(&#39;abc/xyz/README.txt&#39;)) # False
+# 获取最近一次访问时间
+print(time.ctime(os.path.getatime(&#39;os.path_test.py&#39;)))
+# 获取最后一次修改时间
+print(time.ctime(os.path.getmtime(&#39;os.path_test.py&#39;)))
+# 获取创建时间
+print(time.ctime(os.path.getctime(&#39;os.path_test.py&#39;)))
+# 获取文件大小
+print(os.path.getsize(&#39;os.path_test.py&#39;))
+# 判断是否为文件
+print(os.path.isfile(&#39;os.path_test.py&#39;)) # True
+# 判断是否为目录
+print(os.path.isdir(&#39;os.path_test.py&#39;)) # False
+# 判断是否为同一个文件
+print(os.path.samefile(&#39;os.path_test.py&#39;, &#39;./os.path_test.py&#39;)) # True
+</code></pre>
 <h6><span id="2os模块与文件访问相关的函数如下">（2）os模块与文件访问相关的函数如下:</span></h6><ul>
 <li><strong>os.open(file, flags[, mode])</strong>：打开一个文件，并且设置打开选项，mode 参数是可选的。该函数返回文件描述符。其中 flags 代表打开文件的旗标，它支持如下一个或多个选项：<ul>
 <li>os.O_RDONLY：以只读的方式打开。</li>
@@ -266,7 +311,27 @@
 <li><strong>random.uniform(a, b)</strong>：生成一个范围为 a≤N≤b 的随机数。</li>
 <li><strong>random.expovariate(lambd)</strong>：生成呈指数分布的随机数。其中 lambd 参数(其实应该是 lambda，只是 lambda 是 Python 关键字，所以简写成 lambd）为 1 除以期望平均值。如果 lambd 是正值，则返回的随机数是从 0 到正无穷大；如果 lambd 为负值，则返回的随机数是从负无穷大到 0。</li>
 </ul>
-<p>例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="comment">#生成范围为0.0≤x&lt;1.0 的伪随机浮点数</span></span><br><span class="line"><span class="keyword">print</span> (random.random())</span><br><span class="line"><span class="comment">#生成范围为2.5≤x&lt;10.0 的伪随机浮点数</span></span><br><span class="line"><span class="keyword">print</span> (random.uniform(<span class="number">2.5</span>, <span class="number">10.0</span>))</span><br><span class="line"><span class="comment">#生成呈指数分布的伪随机浮点数</span></span><br><span class="line"><span class="keyword">print</span> (random.expovariate(<span class="number">1</span>/<span class="number">5</span>))</span><br><span class="line"><span class="comment">#生成从0 到9 的伪随机整数</span></span><br><span class="line">print(random.randrange(<span class="number">10</span>))</span><br><span class="line"><span class="comment">#生成从0 到100 的随机偶数</span></span><br><span class="line"><span class="keyword">print</span> (random.randrange(<span class="number">0</span>, <span class="number">101</span> , <span class="number">2</span>))</span><br><span class="line"><span class="comment">#随机抽取一个元素</span></span><br><span class="line"><span class="keyword">print</span> (random.choice ([<span class="string">'Python'</span>,<span class="string">'Swift'</span>,<span class="string">'Kotlin'</span>]))</span><br><span class="line">book_list = [<span class="string">'Python'</span>,<span class="string">'Swift'</span>,<span class="string">'Kotlin'</span>]</span><br><span class="line"><span class="comment">#对列表元素进行随机排列</span></span><br><span class="line">random.shuffle (book_list)</span><br><span class="line"><span class="keyword">print</span> (book_list)</span><br><span class="line"><span class="comment">#随机抽取4 个独立的元素</span></span><br><span class="line"><span class="keyword">print</span> (random.sample([<span class="number">10</span>, <span class="number">20</span> , <span class="number">30</span> , <span class="number">40</span> , <span class="number">50</span>], k=<span class="number">4</span>))</span><br></pre></td></tr></table></figure></p>
+<p>例：</p>
+<pre><code class="python">import random
+#生成范围为0.0≤x&lt;1.0 的伪随机浮点数
+print (random.random())
+#生成范围为2.5≤x&lt;10.0 的伪随机浮点数
+print (random.uniform(2.5, 10.0))
+#生成呈指数分布的伪随机浮点数
+print (random.expovariate(1/5))
+#生成从0 到9 的伪随机整数
+print(random.randrange(10))
+#生成从0 到100 的随机偶数
+print (random.randrange(0, 101 , 2))
+#随机抽取一个元素
+print (random.choice ([&#39;Python&#39;,&#39;Swift&#39;,&#39;Kotlin&#39;]))
+book_list = [&#39;Python&#39;,&#39;Swift&#39;,&#39;Kotlin&#39;]
+#对列表元素进行随机排列
+random.shuffle (book_list)
+print (book_list)
+#随机抽取4 个独立的元素
+print (random.sample([10, 20 , 30 , 40 , 50], k=4))
+</code></pre>
 <p><br></p>
 <h4><span id="四-time-时间的访问和转换">四、time — 时间的访问和转换</span></h4><p>time模块官方文档：<a href="https://docs.python.org/zh-cn/3/library/time.html#module-time" target="_blank" rel="noopener">https://docs.python.org/zh-cn/3/library/time.html#module-time</a></p>
 <p>在日期、时间模块内常用的功能函数如下：</p>
@@ -287,7 +352,39 @@
 <li><strong>time.timezone</strong>：返回本地时区的时间偏移，以秒为单位。</li>
 <li><strong>time.tzname</strong>：返回本地时区的名字。</li>
 </ul>
-<p>例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="comment"># 将当前时间转换为时间字符串</span></span><br><span class="line">print(time.asctime())</span><br><span class="line"><span class="comment"># 将指定时间转换时间字符串，时间元组的后面3个元素没有设置</span></span><br><span class="line">print(time.asctime((<span class="number">2018</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">11</span>, <span class="number">8</span>, <span class="number">23</span>, <span class="number">0</span>, <span class="number">0</span> ,<span class="number">0</span>))) <span class="comment"># Mon Feb  4 11:08:23 2018</span></span><br><span class="line"><span class="comment"># 将以秒数为代表的时间转换为时间字符串</span></span><br><span class="line">print(time.ctime(<span class="number">30</span>)) <span class="comment"># Thu Jan  1 08:00:30 1970</span></span><br><span class="line"><span class="comment"># 将以秒数为代表的时间转换为struct_time对象。</span></span><br><span class="line">print(time.gmtime(<span class="number">30</span>))</span><br><span class="line"><span class="comment"># 将当前时间转换为struct_time对象。</span></span><br><span class="line">print(time.gmtime())</span><br><span class="line"><span class="comment"># 将以秒数为代表的时间转换为代表当前时间的struct_time对象</span></span><br><span class="line">print(time.localtime(<span class="number">30</span>))</span><br><span class="line"><span class="comment"># 将元组格式的时间转换为秒数代表的时间</span></span><br><span class="line">print(time.mktime((<span class="number">2018</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">11</span>, <span class="number">8</span>, <span class="number">23</span>, <span class="number">0</span>, <span class="number">0</span> ,<span class="number">0</span>))) <span class="comment"># 1517713703.0</span></span><br><span class="line"><span class="comment"># 返回性能计数器的值</span></span><br><span class="line">print(time.perf_counter())</span><br><span class="line"><span class="comment"># 返回当前进程使用CPU的时间</span></span><br><span class="line">print(time.process_time())</span><br><span class="line"></span><br><span class="line">time.sleep(<span class="number">10</span>)	<span class="comment"># 暂停10s</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将当前时间转换为指定格式的字符串</span></span><br><span class="line">print(time.strftime(<span class="string">'%Y-%m-%d %H:%M:%S'</span>))</span><br><span class="line">st = <span class="string">'2018年3月20日'</span></span><br><span class="line"><span class="comment"># 将指定时间字符串恢复成struct_time对象。</span></span><br><span class="line">print(time.strptime(st, <span class="string">'%Y年%m月%d日'</span>))</span><br><span class="line"><span class="comment"># 返回从1970年1970年1月1日0点整到现在过了多少秒。</span></span><br><span class="line">print(time.time())</span><br><span class="line"><span class="comment"># 返回本地时区的时间偏移，以秒为单位</span></span><br><span class="line">print(time.timezone) <span class="comment"># 在国内东八区输出-28800</span></span><br></pre></td></tr></table></figure></p>
+<p>例：</p>
+<pre><code class="python">import time
+# 将当前时间转换为时间字符串
+print(time.asctime())
+# 将指定时间转换时间字符串，时间元组的后面3个元素没有设置
+print(time.asctime((2018, 2, 4, 11, 8, 23, 0, 0 ,0))) # Mon Feb  4 11:08:23 2018
+# 将以秒数为代表的时间转换为时间字符串
+print(time.ctime(30)) # Thu Jan  1 08:00:30 1970
+# 将以秒数为代表的时间转换为struct_time对象。
+print(time.gmtime(30))
+# 将当前时间转换为struct_time对象。
+print(time.gmtime())
+# 将以秒数为代表的时间转换为代表当前时间的struct_time对象
+print(time.localtime(30))
+# 将元组格式的时间转换为秒数代表的时间
+print(time.mktime((2018, 2, 4, 11, 8, 23, 0, 0 ,0))) # 1517713703.0
+# 返回性能计数器的值
+print(time.perf_counter())
+# 返回当前进程使用CPU的时间
+print(time.process_time())
+
+time.sleep(10)    # 暂停10s
+
+# 将当前时间转换为指定格式的字符串
+print(time.strftime(&#39;%Y-%m-%d %H:%M:%S&#39;))
+st = &#39;2018年3月20日&#39;
+# 将指定时间字符串恢复成struct_time对象。
+print(time.strptime(st, &#39;%Y年%m月%d日&#39;))
+# 返回从1970年1970年1月1日0点整到现在过了多少秒。
+print(time.time())
+# 返回本地时区的时间偏移，以秒为单位
+print(time.timezone) # 在国内东八区输出-28800
+</code></pre>
 <p><br></p>
 <h4><span id="五-json-json-编码和解码器">五、json — JSON 编码和解码器</span></h4><p>json模块官方文档：<a href="https://docs.python.org/zh-cn/3/library/json.html#module-json" target="_blank" rel="noopener">https://docs.python.org/zh-cn/3/library/json.html#module-json</a></p>
 <p>JSON 类型转换Python 类型的对应关系：<br><img src="/2019/07/17/Python常用模块/2019071715493289.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
@@ -298,9 +395,58 @@
 <li><strong>json.load(fp, <em>, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, \</em>*kw)</strong>：从 fp 流读取 JSON 字符串，将其恢复成 JSON 对象，其中 fp 是一个支持 write() 方法的类文件对象。</li>
 <li><strong>json.loads(s, <em>, encoding=None, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, \</em>*kw)</strong>：将 JSON 字符串 s 恢复成 JSON 对象。<br><img src="/2019/07/17/Python常用模块/20190717155333993.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></li>
 </ul>
-<p>dumps() 和 dump() 函数的 encode 操作（将 Python 对象转换成 JSON 字符串）：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="comment"># 将Python对象转JSON字符串（元组会当成数组）</span></span><br><span class="line">s = json.dumps([<span class="string">'yeeku'</span>, &#123;<span class="string">'favorite'</span>: (<span class="string">'coding'</span>, <span class="literal">None</span>, <span class="string">'game'</span>, <span class="number">25</span>)&#125;])</span><br><span class="line">print(s) <span class="comment"># ["yeeku", &#123;"favorite": ["coding", null, "game", 25]&#125;]</span></span><br><span class="line"><span class="comment"># 简单的Python字符串转JSON</span></span><br><span class="line">s2 = json.dumps(<span class="string">"\"foo\bar"</span>)</span><br><span class="line">print(s2) <span class="comment">#"\"foo\bar"</span></span><br><span class="line"><span class="comment"># 简单的Python字符串转JSON</span></span><br><span class="line">s3 = json.dumps(<span class="string">'\\'</span>)</span><br><span class="line">print(s3) <span class="comment">#"\\"</span></span><br><span class="line"><span class="comment"># Python的dict对象转JSON，并对key排序</span></span><br><span class="line">s4 = json.dumps(&#123;<span class="string">"c"</span>: <span class="number">0</span>, <span class="string">"b"</span>: <span class="number">0</span>, <span class="string">"a"</span>: <span class="number">0</span>&#125;, sort_keys=<span class="literal">True</span>)</span><br><span class="line">print(s4) <span class="comment">#&#123;"a": 0, "b": 0, "c": 0&#125;</span></span><br><span class="line"><span class="comment"># 将Python列表转JSON，</span></span><br><span class="line"><span class="comment"># 并指定JSON分隔符：逗号和冒号之后没有空格（默认有空格）</span></span><br><span class="line">s5 = json.dumps([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, &#123;<span class="string">'x'</span>: <span class="number">5</span>, <span class="string">'y'</span>: <span class="number">7</span>&#125;], separators=(<span class="string">','</span>, <span class="string">':'</span>))</span><br><span class="line"><span class="comment"># 输出的JSON字符串中逗号和冒号之后没有空格</span></span><br><span class="line">print(s5) <span class="comment"># '[1,2,3,&#123;"4":5,"6":7&#125;]'</span></span><br><span class="line"><span class="comment"># 指定indent为4，意味着转换的JSON字符串有缩进</span></span><br><span class="line">s6 = json.dumps(&#123;<span class="string">'Python'</span>: <span class="number">5</span>, <span class="string">'Kotlin'</span>: <span class="number">7</span>&#125;, sort_keys=<span class="literal">True</span>, indent=<span class="number">4</span>)</span><br><span class="line">print(s6)</span><br><span class="line"><span class="comment"># 使用JSONEncoder的encode方法将Python转JSON</span></span><br><span class="line">s7 = json.JSONEncoder().encode(&#123;<span class="string">"names"</span>: (<span class="string">"孙悟空"</span>, <span class="string">"齐天大圣"</span>)&#125;)</span><br><span class="line">print(s7) <span class="comment"># &#123;"names": ["\u5b59\u609f\u7a7a", "\u9f50\u5929\u5927\u5723"]&#125;</span></span><br><span class="line">f = open(<span class="string">'a.json'</span>, <span class="string">'w'</span>)</span><br><span class="line"><span class="comment"># 使用dump()函数将转换得到JSON字符串输出到文件</span></span><br><span class="line">json.dump([<span class="string">'Kotlin'</span>, &#123;<span class="string">'Python'</span>: <span class="string">'excellent'</span>&#125;], f)</span><br></pre></td></tr></table></figure></p>
+<p>dumps() 和 dump() 函数的 encode 操作（将 Python 对象转换成 JSON 字符串）：</p>
+<pre><code class="python">import json
+# 将Python对象转JSON字符串（元组会当成数组）
+s = json.dumps([&#39;yeeku&#39;, {&#39;favorite&#39;: (&#39;coding&#39;, None, &#39;game&#39;, 25)}])
+print(s) # [&quot;yeeku&quot;, {&quot;favorite&quot;: [&quot;coding&quot;, null, &quot;game&quot;, 25]}]
+# 简单的Python字符串转JSON
+s2 = json.dumps(&quot;\&quot;foo\bar&quot;)
+print(s2) #&quot;\&quot;foo\bar&quot;
+# 简单的Python字符串转JSON
+s3 = json.dumps(&#39;\\&#39;)
+print(s3) #&quot;\\&quot;
+# Python的dict对象转JSON，并对key排序
+s4 = json.dumps({&quot;c&quot;: 0, &quot;b&quot;: 0, &quot;a&quot;: 0}, sort_keys=True)
+print(s4) #{&quot;a&quot;: 0, &quot;b&quot;: 0, &quot;c&quot;: 0}
+# 将Python列表转JSON，
+# 并指定JSON分隔符：逗号和冒号之后没有空格（默认有空格）
+s5 = json.dumps([1, 2, 3, {&#39;x&#39;: 5, &#39;y&#39;: 7}], separators=(&#39;,&#39;, &#39;:&#39;))
+# 输出的JSON字符串中逗号和冒号之后没有空格
+print(s5) # &#39;[1,2,3,{&quot;4&quot;:5,&quot;6&quot;:7}]&#39;
+# 指定indent为4，意味着转换的JSON字符串有缩进
+s6 = json.dumps({&#39;Python&#39;: 5, &#39;Kotlin&#39;: 7}, sort_keys=True, indent=4)
+print(s6)
+# 使用JSONEncoder的encode方法将Python转JSON
+s7 = json.JSONEncoder().encode({&quot;names&quot;: (&quot;孙悟空&quot;, &quot;齐天大圣&quot;)})
+print(s7) # {&quot;names&quot;: [&quot;\u5b59\u609f\u7a7a&quot;, &quot;\u9f50\u5929\u5927\u5723&quot;]}
+f = open(&#39;a.json&#39;, &#39;w&#39;)
+# 使用dump()函数将转换得到JSON字符串输出到文件
+json.dump([&#39;Kotlin&#39;, {&#39;Python&#39;: &#39;excellent&#39;}], f)
+</code></pre>
 <p> loads() 和 load() 函数的 decode 操作（将 JSON 字符串转换成 Python 对象）：</p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="comment"># 将JSON字符串恢复成Python列表</span></span><br><span class="line">result1 = json.loads(<span class="string">'["yeeku", &#123;"favorite": ["coding", null, "game", 25]&#125;]'</span>)</span><br><span class="line">print(result1) <span class="comment"># ['yeeku', &#123;'favorite': ['coding', None, 'game', 25]&#125;]</span></span><br><span class="line"><span class="comment"># 将JSON字符串恢复成Python字符串</span></span><br><span class="line">result2 = json.loads(<span class="string">'"\\"foo\\"bar"'</span>)</span><br><span class="line">print(result2) <span class="comment"># "foo"bar</span></span><br><span class="line"><span class="comment"># 定义一个自定义的转化函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">as_complex</span><span class="params">(dct)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">'__complex__'</span> <span class="keyword">in</span> dct:</span><br><span class="line">        <span class="keyword">return</span> complex(dct[<span class="string">'real'</span>], dct[<span class="string">'imag'</span>])</span><br><span class="line">    <span class="keyword">return</span> dct</span><br><span class="line"><span class="comment"># 使用自定义的恢复函数</span></span><br><span class="line"><span class="comment"># 自定义回复函数将real数据转成复数的实部，将imag转成复数的虚部</span></span><br><span class="line">result3 = json.loads(<span class="string">'&#123;"__complex__": true, "real": 1, "imag": 2&#125;'</span>,\</span><br><span class="line">    object_hook=as_complex)</span><br><span class="line">print(result3) <span class="comment"># (1+2j)</span></span><br><span class="line">f = open(<span class="string">'a.json'</span>)</span><br><span class="line"><span class="comment"># 从文件流恢复JSON列表</span></span><br><span class="line">result4 = json.load(f)</span><br><span class="line">print(result4) <span class="comment"># ['Kotlin', &#123;'Python': 'excellent'&#125;]</span></span><br></pre></td></tr></table></figure>
+<pre><code class="python">import json
+# 将JSON字符串恢复成Python列表
+result1 = json.loads(&#39;[&quot;yeeku&quot;, {&quot;favorite&quot;: [&quot;coding&quot;, null, &quot;game&quot;, 25]}]&#39;)
+print(result1) # [&#39;yeeku&#39;, {&#39;favorite&#39;: [&#39;coding&#39;, None, &#39;game&#39;, 25]}]
+# 将JSON字符串恢复成Python字符串
+result2 = json.loads(&#39;&quot;\\&quot;foo\\&quot;bar&quot;&#39;)
+print(result2) # &quot;foo&quot;bar
+# 定义一个自定义的转化函数
+def as_complex(dct):
+    if &#39;__complex__&#39; in dct:
+        return complex(dct[&#39;real&#39;], dct[&#39;imag&#39;])
+    return dct
+# 使用自定义的恢复函数
+# 自定义回复函数将real数据转成复数的实部，将imag转成复数的虚部
+result3 = json.loads(&#39;{&quot;__complex__&quot;: true, &quot;real&quot;: 1, &quot;imag&quot;: 2}&#39;,\
+    object_hook=as_complex)
+print(result3) # (1+2j)
+f = open(&#39;a.json&#39;)
+# 从文件流恢复JSON列表
+result4 = json.load(f)
+print(result4) # [&#39;Kotlin&#39;, {&#39;Python&#39;: &#39;excellent&#39;}]
+</code></pre>
 <p><br></p>
 <h4><span id="六-re-正则表达式操作">六、re — 正则表达式操作</span></h4><p>re模块官方文档：<a href="https://docs.python.org/zh-cn/3/library/re.html#module-re" target="_blank" rel="noopener">https://docs.python.org/zh-cn/3/library/re.html#module-re</a></p>
 <ul>
@@ -308,7 +454,28 @@
 <li><strong>re.match(pattern, string, flags=0)</strong>：尝试从字符串的开始位置来匹配正则表达式，如果从开始位置匹配不成功，match() 函数就返回 None 。其中 pattern 参数代表正则表达式；string 代表被匹配的字符串；flags 则代表正则表达式的匹配旗标。该函数返回 _sre.SRE_Match 对象，该对象包含的 span(n) 方法用于获取第 n+1 个组的匹配位置，group(n) 方法用于获取第 n+1 个组所匹配的子串</li>
 <li><strong>re.search(pattern, string, flags=0)</strong>：扫描整个字符串，并返回字符串中第一处匹配 pattern 的匹配对象。其中 pattern 参数代表正则表达式；string 代表被匹配的字符串；flags 则代表正则表达式的匹配旗标。该函数也返回 _sre.SRE_Match 对象。</li>
 </ul>
-<p>match() 与 search() 的区别在于，match() 必须从字符串开始处就匹配，但 search() 可以搜索整个字符串。例如如下程序：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line">m1 = re.match(<span class="string">'www'</span>, <span class="string">'www.lethe.site'</span>)<span class="comment"># 开始位置可以匹配</span></span><br><span class="line">print(m1.span())  <span class="comment"># span返回匹配的位置</span></span><br><span class="line">print(m1.group()) <span class="comment"># group返回匹配的组</span></span><br><span class="line">print(re.match(<span class="string">'lethe'</span>, <span class="string">'www.lethe.site'</span>)) <span class="comment"># 开始位置匹配不到，返回None</span></span><br><span class="line">m2 = re.search(<span class="string">'www'</span>, <span class="string">'www.lethe.site'</span>) <span class="comment"># 开始位置可以匹配</span></span><br><span class="line">print(m2.span())</span><br><span class="line">print(m2.group())</span><br><span class="line">m3 = re.search(<span class="string">'lethe'</span>, <span class="string">'www.lethe.site'</span>) <span class="comment"># 中间位置可以匹配，返回Match对象</span></span><br><span class="line">print(m3.span())</span><br><span class="line">print(m3.group())</span><br><span class="line"></span><br><span class="line">运行结果：</span><br><span class="line">(<span class="number">0</span>, <span class="number">3</span>)</span><br><span class="line">www</span><br><span class="line"><span class="literal">None</span></span><br><span class="line">(<span class="number">0</span>, <span class="number">3</span>)</span><br><span class="line">www</span><br><span class="line">(<span class="number">4</span>, <span class="number">9</span>)</span><br><span class="line">lethe</span><br></pre></td></tr></table></figure></p>
+<p>match() 与 search() 的区别在于，match() 必须从字符串开始处就匹配，但 search() 可以搜索整个字符串。例如如下程序：</p>
+<pre><code class="python">import re
+m1 = re.match(&#39;www&#39;, &#39;www.lethe.site&#39;)# 开始位置可以匹配
+print(m1.span())  # span返回匹配的位置
+print(m1.group()) # group返回匹配的组
+print(re.match(&#39;lethe&#39;, &#39;www.lethe.site&#39;)) # 开始位置匹配不到，返回None
+m2 = re.search(&#39;www&#39;, &#39;www.lethe.site&#39;) # 开始位置可以匹配
+print(m2.span())
+print(m2.group())
+m3 = re.search(&#39;lethe&#39;, &#39;www.lethe.site&#39;) # 中间位置可以匹配，返回Match对象
+print(m3.span())
+print(m3.group())
+
+运行结果：
+(0, 3)
+www
+None
+(0, 3)
+www
+(4, 9)
+lethe
+</code></pre>
 <ul>
 <li><strong>re.findall(pattern, string, flags=0)</strong>：扫描整个字符串，并返回字符串中所有匹配 pattern 的子串组成的<strong>列表</strong>。其中 pattern 参数代表正则表达式；string 代表被匹配的宇符串；flags 则代表正则表达式的匹配旗标。</li>
 <li><strong>re.finditer(pattern, string, flags=0)</strong>：扫描整个字符串，并返回字符串中所有匹配 pattern 的子串组成的<strong>迭代器</strong>，迭代器的元素是 _sre.SRE_Match 对象。其中 pattern 参数代表正则表达式；string 代表被匹配的字符串；flags 则代表正则表达式的匹配旗标。</li>

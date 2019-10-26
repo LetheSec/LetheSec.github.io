@@ -147,7 +147,20 @@ PHP反序列化漏洞：如果代码中使用了反序列化 unserialize()函数
 
 
 
-0x02 序列化格式例子如下：12345678910111213141516171819202122232425&lt;?php    class A &#123;        public $x;        private $y;        public function __construct($x, $y)        &#123;            $this-&gt;x = $x;            $this-&gt;y = $y;        &#1</div>
+0x02 序列化格式例子如下：
+&lt;?php
+    class A {
+        public $x;
+        private $y;
+
+        public function __construct($x, $y)
+        {
+            $this-&gt;x = $x;
+            $this-&gt;y = $y;
+        }
+    }
+    $number = 10;
+    $str = &#39;Le</div>
         </div>
       </a>
 
@@ -190,8 +203,12 @@ PHP反序列化漏洞：如果代码中使用了反序列化 unserialize()函数
         <div class="index-excerpt">
           <div class="index-text mb-1">0x01 一些资源或文章：XSS小结XSS总结那些年我们没能bypass的xss filterXSS Filter Evasion Cheat Sheet 中文版XSS攻击手段&amp;在CTF中的运用
 
-0x02 常用Payload（慢慢积累…）123&lt;img src=&quot;x&quot; onerror=alert(1)&gt;&lt;img src=&quot;1&quot; onerror=eval(&quot;alert(&apos;xss&apos;)&quot;)&gt;&lt;img src=1 onmouseover=alert(&apos;xss&apos;)&gt;
-12345678910111213&lt;a href=&quot;javascript:alert(&apos;xss&apos;)&quot;&gt;aa&lt;/a&gt;&lt;a href=javascript:eval(alert(&apos;xss&apos;))&gt;aa&lt;/a&gt;&lt;a href=&quot;javascript:aaa&quot; onm</div>
+0x02 常用Payload（慢慢积累…）&lt;img src=&quot;x&quot; onerror=alert(1)&gt;
+&lt;img src=&quot;1&quot; onerror=eval(&quot;alert(&#39;xss&#39;)&quot;)&gt;
+&lt;img src=1 onmouseover=alert(&#39;xss&#39;)&gt;
+&lt;a href=&quot;javascript:alert(&#39;xss&#39;)&quot;&gt;aa&lt;/a&gt;
+&lt;a href=javascript:eval(alert(&#39;xss&#39;))&gt;aa&lt;/a&gt;
+&lt;a href=&quot;javascript:aaa&quot; onmouseover=&quot;alert(/xs</div>
         </div>
       </a>
 
@@ -406,7 +423,13 @@ run()方法主要负责每个线程读取网络数据并写入本地。
 
 
 
-0x02 代码ThreadDownload.py:1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697</div>
+0x02 代码ThreadDownload.py:import threading
+from urllib.request import *
+
+
+class Download:
+    def __init__(self, link, file_path, thread_num):
+        # 下载路</div>
         </div>
       </a>
 

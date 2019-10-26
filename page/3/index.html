@@ -140,27 +140,40 @@
           <div class="index-text mb-1">默认情况下，Kali Linux2并没有开始SSH服务，如果要远程使用SSH服务连接到Kali还需要一定的设置。
 
 1、首先打开SSH所在目录，命令如下：
-1cd /etc/ssh/
+cd /etc/ssh/
+
 
 2、在这个文件夹中创建一个备份文件夹keys_backup，用来保存默认的密钥：
-1mkdir keys_backup
-
-3、使用如下命令将默认的密钥移动到keys_backup文件夹中。1mv ssh_host_* keys_backup
-
-4、使用如下命令重新创建一个新的密钥。1dpkg-reconfigure openssh-server
+mkdir keys_backup
 
 
-5、修改sshd_config文件，该文件位于/etc/ssh/sshd_config，如下图：1gedit sshd_config
+3、使用如下命令将默认的密钥移动到keys_backup文件夹中。
+mv ssh_host_* keys_backup
 
 
-6、接下来，在终端启动SSH服务，命令如下：1/etc/init.d/ssh start
-如果像查看SSH服务运行状态，可以使用如下命令：1netstat -antp
+4、使用如下命令重新创建一个新的密钥。
+dpkg-reconfigure openssh-server
+
+
+
+5、修改sshd_config文件，该文件位于/etc/ssh/sshd_config，如下图：
+gedit sshd_config
+
+
+
+6、接下来，在终端启动SSH服务，命令如下：
+/etc/init.d/ssh start
+
+如果像查看SSH服务运行状态，可以使用如下命令：
+netstat -antp
+
 可以看到SSH服务已经在22端口上运行起来了。
 
-7、查看自己kali的ip地址。1ifconfig
+7、查看自己kali的ip地址。
+ifconfig
 
-8、最后可以使用PuTTY来完成远程登陆。
-输入账号</div>
+
+8、最后可以使用PuTTY来完成远程登陆</div>
         </div>
       </a>
 
@@ -303,10 +316,16 @@ web3查看源代码发现一串Unicode编码，在线解码网站解码即得fla
           <div class="index-text mb-1">Web1：签到题1、打开题目，源码直接显示在网页上。
 2、发现构造0ver、0ver1、0ver2即可，下面就进行代码审计：
 （1）首先构造 0ver，有以下三个条件：① ereg(&quot;^[0-9]+$&quot;, $a) === FALSE)，即要进行一次或多次 0-9 数字正则表达式匹配② in_array($a,$white_list)，即0ver 中要有 range（0，9）③ strlen($a)&gt;1，即0ver 的长度要大于 1
-一开始以为要考ereg()截断漏洞，其实是in_array()松散比较，即12345var_dump(in_array('b', array('a'=&gt;true))); 返回值:true var_dump(in_array('01',array('1')));返回值也是:true
+一开始以为要考ereg()截断漏洞，其实是in_array()松散比较，即
+var_dump(in_array(&#39;b&#39;, array(&#39;a&#39;=&gt;true))); 
+返回值:true
+
+var_dump(in_array(&#39;01&#39;,array(&#39;1&#39;)));
+返回值也是:true
+
 为什么是这样呢？
 
-in_array(&#39;b&#39;, array(&#39;a&#39;=&gt;true))  实质上是&#39;b&#39;==true 这样的类型比较，b 是变量或者一个字符串string，和bool 类型比较，结果是</div>
+in_array(&#39;b&#39;, array(&#39;a&#39;=&gt;true))  实质上是&#39;b&#39;==true 这样的类型比较，b</div>
         </div>
       </a>
 

