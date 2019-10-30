@@ -120,8 +120,8 @@
         <div class="post-content mx-auto">
           <div class="markdown-body">
             <h1><span id="递归与分支">递归与分支</span></h1><p><br></p>
-<h3><span id="内部收益率">内部收益率</span></h3><h5><span id="题目描述">题目描述</span></h5><p><img src="/2019/10/28/algorithm-experiment-review/20191021155812690.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<h5><span id="输入">输入</span></h5><p><img src="/2019/10/28/algorithm-experiment-review/20191021155824338.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h3><span id="内部收益率">内部收益率</span></h3><h5><span id="题目描述">题目描述</span></h5><p><img src="/2019/10/28/algorithm-experiment-review/20191021155812690.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<h5><span id="输入">输入</span></h5><p><img src="/2019/10/28/algorithm-experiment-review/20191021155824338.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
 <h5><span id="输出">输出</span></h5><p>对于每组数据，输出仅一行，即项目的IRR，四舍五入保留小数点后两位。</p>
 <h5><span id="样例输入">样例输入</span></h5><pre><code>1
 -1 2
@@ -350,7 +350,7 @@ abcd mnp
 </code></pre><h5><span id="样例输出">样例输出</span></h5><pre><code>4
 2
 0
-</code></pre><h5><span id="思路">思路</span></h5><p><img src="/2019/10/28/algorithm-experiment-review/20191024213255532.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="/2019/10/28/algorithm-experiment-review/2019102421330565.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+</code></pre><h5><span id="思路">思路</span></h5><p><img src="/2019/10/28/algorithm-experiment-review/20191024213255532.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br><img src="/2019/10/28/algorithm-experiment-review/2019102421330565.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
 <h5><span id="代码">代码</span></h5><pre><code class="cpp">#include&lt;iostream&gt;
 #include&lt;string.h&gt;
 using namespace std;
@@ -399,7 +399,7 @@ ACB
 ABC
 </code></pre><h5><span id="样例输出">样例输出</span></h5><pre><code>7500
 MengMengDa
-</code></pre><h5><span id="思路">思路</span></h5><p>矩阵连乘递归式：<br><img src="/2019/10/28/algorithm-experiment-review/20191025205818292.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>矩阵连乘的部分不是很复杂，一个函数即可完成，主要的代码量集中在数据的输入和转换上。</p>
+</code></pre><h5><span id="思路">思路</span></h5><p>矩阵连乘递归式：<br><img src="/2019/10/28/algorithm-experiment-review/20191025205818292.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>矩阵连乘的部分不是很复杂，一个函数即可完成，主要的代码量集中在数据的输入和转换上。</p>
 <ul>
 <li>用结构体Matrix表示矩阵的行和列</li>
 <li>再map存储名字和对应的矩阵</li>
@@ -505,7 +505,7 @@ int main()
 5 4
 4 6
 </code></pre><h5><span id="样例输出">样例输出</span></h5><pre><code>15
-</code></pre><h5><span id="思路">思路</span></h5><p><code>m(i,j)</code>表示背包容量为<code>j</code>，可选物品为<code>i,i+1,...,n</code>时的最优解。<br><img src="/2019/10/28/algorithm-experiment-review/20191026112843341.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>这一题不知道为什么用cin\cout就会报错，用<code>scanf</code>和<code>printf</code>则正确…</p>
+</code></pre><h5><span id="思路">思路</span></h5><p><code>m(i,j)</code>表示背包容量为<code>j</code>，可选物品为<code>i,i+1,...,n</code>时的最优解。<br><img src="/2019/10/28/algorithm-experiment-review/20191026112843341.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>这一题不知道为什么用cin\cout就会报错，用<code>scanf</code>和<code>printf</code>则正确…</p>
 <h5><span id="代码">代码</span></h5><pre><code class="cpp">#include &lt;iostream&gt;
 using namespace std;
 typedef long long ll;
@@ -559,7 +559,7 @@ int main()
 2 -11 4 13 -1 2
 </code></pre><h5><span id="样例输出">样例输出</span></h5><pre><code>18
 </code></pre><h5><span id="提示">提示</span></h5><p>子段可为空集，答案为0</p>
-<h5><span id="思路">思路</span></h5><p><img src="/2019/10/28/algorithm-experiment-review/20191026151635622.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>递归方程如下，<code>b[j]</code>表示1到j的最大字段和：<br><img src="/2019/10/28/algorithm-experiment-review/20191026151717337.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h5><span id="思路">思路</span></h5><p><img src="/2019/10/28/algorithm-experiment-review/20191026151635622.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>递归方程如下，<code>b[j]</code>表示1到j的最大字段和：<br><img src="/2019/10/28/algorithm-experiment-review/20191026151717337.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
 <h5><span id="代码">代码</span></h5><pre><code class="cpp">#include&lt;bits/stdc++.h&gt;
 using namespace std;
 const int maxn = 100005;
@@ -1182,9 +1182,9 @@ int main()
 <h3><span id="问题-b-午夜歌剧元歌">问题 B: 午夜歌剧——元歌</span></h3><h5><span id="题目描述">题目描述</span></h5><p>元歌是王者峡谷里的刺客。何谓至高机关之美呢？唯有以至高权力的手令太古奇迹重现人世，方能称得上啊。</p>
 <p>是的，元歌擅长操控，所做傀儡能起到以假乱真的作用，今天元歌的傀儡变成你的初中数学老师，给你出个数学题：给你一个数字x，让你求出k7、k6、k5、k4、k3、k2、k1、k0（0&lt;=ki&lt;=9），使得以下等式1成立，最后根据等式2求出最终ans值。</p>
 <p>等式1：</p>
-<p><img src="/2019/10/28/algorithm-experiment-review/20191027213057986.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/10/28/algorithm-experiment-review/20191027213057986.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
 <p>等式2：</p>
-<p><img src="/2019/10/28/algorithm-experiment-review/20191027213105615.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/10/28/algorithm-experiment-review/20191027213105615.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
 <h5><span id="输入">输入</span></h5><p>多组测试用例。</p>
 <p>第一行输入包含一个整数T（1&lt;=T&lt;=1000），代表测试用例个数。</p>
 <p>接下来T行，每一行包含一个整数x（1&lt;=x&lt;=1500000）。</p>
@@ -1413,7 +1413,7 @@ int main()
     <div class="d-none d-lg-block col-lg-2 toc-container">
       
   <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
     <div id="tocbot"></div>
   </div>
 
@@ -1467,7 +1467,7 @@ int main()
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -1475,7 +1475,7 @@ int main()
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>

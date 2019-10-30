@@ -387,13 +387,13 @@ print(time.timezone) # 在国内东八区输出-28800
 </code></pre>
 <p><br></p>
 <h4><span id="五-json-json-编码和解码器">五、json — JSON 编码和解码器</span></h4><p>json模块官方文档：<a href="https://docs.python.org/zh-cn/3/library/json.html#module-json" target="_blank" rel="noopener">https://docs.python.org/zh-cn/3/library/json.html#module-json</a></p>
-<p>JSON 类型转换Python 类型的对应关系：<br><img src="/2019/07/17/Python常用模块/2019071715493289.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<p> Python 类型转换 JSON 类型的对应关系：<br><img src="/2019/07/17/Python常用模块/20190717155051629.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>json 模块中常用的函数和类的功能如下：</p>
+<p>JSON 类型转换Python 类型的对应关系：<br><img src="/2019/07/17/Python常用模块/2019071715493289.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p> Python 类型转换 JSON 类型的对应关系：<br><img src="/2019/07/17/Python常用模块/20190717155051629.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>json 模块中常用的函数和类的功能如下：</p>
 <ul>
 <li><strong>json.dump(obj, fp, <em>, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, default=None, sort_keys=False, \</em>*kw)</strong>：将 obj 对象转换成 JSON 字符串输出到 fp 流中，fp 是一个支持 write() 方法的类文件对象。</li>
 <li><strong>json.dumps(obj, <em>, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan= True, cls=None, indent=None, separators=None, default=None, sort_keys=False, \</em>*kw)</strong>：将 obj 对象转换为 JSON 字符串，并返回该JSON 字符串。</li>
 <li><strong>json.load(fp, <em>, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, \</em>*kw)</strong>：从 fp 流读取 JSON 字符串，将其恢复成 JSON 对象，其中 fp 是一个支持 write() 方法的类文件对象。</li>
-<li><strong>json.loads(s, <em>, encoding=None, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, \</em>*kw)</strong>：将 JSON 字符串 s 恢复成 JSON 对象。<br><img src="/2019/07/17/Python常用模块/20190717155333993.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></li>
+<li><strong>json.loads(s, <em>, encoding=None, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, \</em>*kw)</strong>：将 JSON 字符串 s 恢复成 JSON 对象。<br><img src="/2019/07/17/Python常用模块/20190717155333993.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></li>
 </ul>
 <p>dumps() 和 dump() 函数的 encode 操作（将 Python 对象转换成 JSON 字符串）：</p>
 <pre><code class="python">import json
@@ -529,7 +529,7 @@ lethe
     <div class="d-none d-lg-block col-lg-2 toc-container">
       
   <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
     <div id="tocbot"></div>
   </div>
 
@@ -583,7 +583,7 @@ lethe
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -591,7 +591,7 @@ lethe
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>

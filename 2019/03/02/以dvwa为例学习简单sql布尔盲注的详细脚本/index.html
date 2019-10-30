@@ -148,7 +148,7 @@
 <h4><span id="4requests库的使用">4.Requests库的使用</span></h4><p>在CTF中里，python脚本中最基本的就是requests库的使用，本文不过多介绍其使用方法，可参考以下官方文档，讲的很详细：<a href="http://docs.python-requests.org/zh_CN/latest/user/quickstart.html" target="_blank" rel="noopener">快速上手——requests</a>以及<a href="http://docs.python-requests.org/zh_CN/latest/user/advanced.html#advanced" target="_blank" rel="noopener">高级用法——request</a></p>
 <p><br></p>
 <h2><span id="0x02-前置工作">0x02 前置工作</span></h2><p><br></p>
-<p>1.为了更贴近CTF比赛的模式，因此在dvwa的数据库中加入了flag，最终脚本的结果也是爆出flag<br>2.加了两个flag是为了更好体现脚本的功能<br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302141221969.png" srcset="/img/loading.gif" alt="dvwa库中的表"><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302141308470.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>1.为了更贴近CTF比赛的模式，因此在dvwa的数据库中加入了flag，最终脚本的结果也是爆出flag<br>2.加了两个flag是为了更好体现脚本的功能<br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302141221969.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="dvwa库中的表"><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302141308470.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h2><span id="0x03-low-sql-injection-blind">0x03 Low SQL Injection (Blind)</span></h2><p><br></p>
 <h4><span id="1测试分析">1.测试分析</span></h4><p>经过简单的测试之后发现，页面只会出现两种回显，即</p>
@@ -299,7 +299,7 @@ for j in range(0,tableNum):
                         table_name += n
             print(&#39;table&#39;+str(j+1)+&#39;_name: &#39;+table_name)
 </code></pre>
-<p><strong>脚本一的运行结果如下：</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302171115839.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="script1"></p>
+<p><strong>脚本一的运行结果如下：</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302171115839.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="script1"></p>
 <p><strong>（2）脚本二：爆列名</strong><br>由脚本一得到的结果，很显然flag应该在‘flagishere’表中，因此脚本二只是针对此表来跑出其中所有的列名。</p>
 <pre><code class="python">#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
@@ -342,7 +342,7 @@ for j in range(0,columnNum):
                         column_name += n
             print(&#39;column&#39;+str(j+1)+&#39;_name: &#39;+column_name)
 </code></pre>
-<p><strong>脚本二运行结果如下：</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302171725965.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="script2"></p>
+<p><strong>脚本二运行结果如下：</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302171725965.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="script2"></p>
 <p><strong>（3）脚本三：爆字段内容</strong><br>由脚本二的结果得知，真正的flag应该在’flagishere’表中的’flag’列下，所有脚本三就跑出该列下每条记录的值，也就是最终的flag(这里为了展示脚本可以爆多条记录的功能，所以自己设置了两个flag)</p>
 <pre><code class="python">#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
@@ -388,7 +388,7 @@ for j in range(0,rowNum+1):
                         rowContent += n  
             print(&#39;row&#39;+str(j+1)+&#39;_content: &#39;+rowContent)  
 </code></pre>
-<p><strong>脚本三运行结果如下:</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302172239513.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="script3"></p>
+<p><strong>脚本三运行结果如下:</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302172239513.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="script3"></p>
 <p><br></p>
 <h1><span id="0x04-总结">0x04 总结</span></h1><p>由于是刚入门的小白，各方面都在起步之中，还有许多需要继续努学习的，尤其要提高自己的代码编写能力，关于sql注入的学习也还会继续。</p>
 
@@ -421,7 +421,7 @@ for j in range(0,rowNum+1):
     <div class="d-none d-lg-block col-lg-2 toc-container">
       
   <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
     <div id="tocbot"></div>
   </div>
 
@@ -475,7 +475,7 @@ for j in range(0,rowNum+1):
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -483,7 +483,7 @@ for j in range(0,rowNum+1):
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
