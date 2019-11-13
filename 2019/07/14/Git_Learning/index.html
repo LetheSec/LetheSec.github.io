@@ -134,7 +134,7 @@
 <li><p><code>git reflog</code> 可以查看命令历史，以便确定要回到未来的哪个版本</p>
 </li>
 </ul>
-<p>（2）工作区和暂存区<br><img src="/2019/07/14/Git_Learning/Git学习小结/1.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>把文件往Git版本库里添加的时候，是分两步执行的：</p>
+<p>（2）工作区和暂存区<br><img src="/2019/07/14/Git_Learning/Git学习小结/1.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>把文件往Git版本库里添加的时候，是分两步执行的：</p>
 <p>第一步是用<code>git add</code>把文件添加进去，实际上就是把文件修改添加到暂存区；</p>
 <p>第二步是用<code>git commit</code>提交更改，实际上就是把暂存区的所有内容提交到当前分支。</p>
 <p>因为我们创建Git版本库时，Git自动为我们创建了唯一一个<code>master</code>分支，所以，现在，<code>git commit</code>就是往<code>master</code>分支上提交更改。</p>
@@ -179,7 +179,7 @@
 <p>（3）分支管理策略</p>
 <p>实际开发中，我们应该按照几个基本原则进行分支管理：<br>① 首先，<code>master</code>分支应该是非常稳定的，也就是仅用来发布新版本，平时不能在上面干活；</p>
 <p>② 干活都在<code>dev</code>分支上，也就是说，<code>dev</code>分支是不稳定的，到某个时候，比如1.0版本发布时，再把<code>dev</code>分支合并到<code>master</code>上，在<code>master</code>分支发布1.0版本；</p>
-<p>③ 每个人都在<code>dev</code>分支上干活，每个人都有自己的分支，时不时地往<code>dev</code>分支上合并就可以了。<br><img src="/2019/07/14/Git_Learning/Git学习小结/2.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>合并分支时，加上<code>--no-ff</code>参数就可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并，而默认的<code>fast forward</code>合并就看不出来曾经做过合并。</p>
+<p>③ 每个人都在<code>dev</code>分支上干活，每个人都有自己的分支，时不时地往<code>dev</code>分支上合并就可以了。<br><img src="/2019/07/14/Git_Learning/Git学习小结/2.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>合并分支时，加上<code>--no-ff</code>参数就可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并，而默认的<code>fast forward</code>合并就看不出来曾经做过合并。</p>
 <p>（4）Bug分支</p>
 <p>修复bug时，我们会通过创建新的bug分支进行修复，然后合并，最后删除</p>
 <p>当手头工作没有完成时，可以先暂存当前工作现场，修复完后在恢复：</p>
@@ -245,7 +245,7 @@
 </li>
 </ul>
 <p><br><br><br></p>
-<p>最后附一张git命令表：<br><img src="/2019/07/14/Git_Learning/Git学习小结/3.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p>最后附一张git命令表：<br><img src="/2019/07/14/Git_Learning/Git学习小结/3.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 
             <hr>
           </div>
@@ -276,7 +276,7 @@
     <div class="d-none d-lg-block col-lg-2 toc-container">
       
   <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
     <div id="tocbot"></div>
   </div>
 
@@ -330,7 +330,7 @@
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -338,7 +338,7 @@
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>

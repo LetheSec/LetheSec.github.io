@@ -191,7 +191,7 @@
 &lt;/book&gt;
 &lt;/bookstore&gt;
 </code></pre>
-<p>XML 文档中的元素形成了一棵文档树。这棵树从根部开始，并扩展到树的最底端，上述实例可以用下图表示：<br><img src="/2019/08/15/XML实体注入攻击/20190815210141912.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p>XML 文档中的元素形成了一棵文档树。这棵树从根部开始，并扩展到树的最底端，上述实例可以用下图表示：<br><img src="/2019/08/15/XML实体注入攻击/20190815210141912.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p><strong>5、XML实体引用</strong></p>
 <p>在 XML 中，一些字符拥有特殊的意义。如果把字符 <code>&lt;</code> 放在 XML 元素中，会发生错误，这是因为解析器会把它当作新元素的开始。</p>
 <p>这样会产生 XML 错误：</p>
@@ -200,7 +200,7 @@
 <p>为了避免这个错误，用实体引用来代替 <code>&lt;</code> 字符：</p>
 <pre><code class="xml">&lt;message&gt;if salary &lt; 1000 then&lt;/message&gt;
 </code></pre>
-<p>在 XML 中，有 5 个预定义的实体引用：<br><img src="/2019/08/15/XML实体注入攻击/20190815210615212.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br><br></p>
+<p>在 XML 中，有 5 个预定义的实体引用：<br><img src="/2019/08/15/XML实体注入攻击/20190815210615212.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br><br></p>
 <h5><span id="二-dtd">二、DTD</span></h5><p><a href="https://www.w3school.com.cn/dtd/index.asp" target="_blank" rel="noopener">DTD教程</a></p>
 <p><strong>1、什么是DTD?</strong></p>
 <ul>
@@ -570,7 +570,7 @@ dbf.setExpandEntityReferences(false);
     <div class="d-none d-lg-block col-lg-2 toc-container">
       
   <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
     <div id="tocbot"></div>
   </div>
 
@@ -624,7 +624,7 @@ dbf.setExpandEntityReferences(false);
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -632,7 +632,7 @@ dbf.setExpandEntityReferences(false);
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>

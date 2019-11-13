@@ -550,7 +550,7 @@ echo serialize($a);
 </code></pre>
 <p>输出结果：<br><code>O:8:&quot;start_gg&quot;:1:{s:4:&quot;mod1&quot;;O:4:&quot;Call&quot;:1:{s:4:&quot;mod1&quot;;O:5:&quot;funct&quot;:1:{s:4:&quot;mod1&quot;;O:4:&quot;func&quot;:1:{s:4:&quot;mod1&quot;;O:7:&quot;string1&quot;:1:{s:4:&quot;str1&quot;;O:7:&quot;GetFlag&quot;:0:{}}}}}}</code></p>
 <p>题目是用Get传参进去，我这里直接将上述构造好的序列化字符串传进去，成功输出flag：</p>
-<p><img src="/2019/08/06/谈一谈PHP反序列化/20190806234240441.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/06/谈一谈PHP反序列化/20190806234240441.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h5><span id="例2第十二届全国大学生信息安全竞赛-justsoso">例2：第十二届全国大学生信息安全竞赛 JustSoso</span></h5><h6><span id="1题目">（1）题目</span></h6><p>本题要先用文件包含得到源码<code>index.php</code>和<code>hint.php</code>，在这里我就只讲关于反序列化的部分了。</p>
 <p><code>index.php</code>包含了<code>hint.php</code>，其中有<code>$payload = unserialize($payload);</code>进行了反序列化，而<code>$payload</code>是我们可控的参数。</p>
@@ -805,12 +805,12 @@ echo serialize($a);
 ?&gt;
 </code></pre>
 <p>利用写好的表单随意上传文件，然后抓包，修改文件内容，因为我提交的是index页面所以直接看到结果：</p>
-<p><img src="/2019/08/06/谈一谈PHP反序列化/20190807042442277.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/06/谈一谈PHP反序列化/20190807042442277.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p>知道了flag的文件名，之后修改payload脚本的就可以代码执行了。</p>
 <p>下面先读一下当前文件的目录位置：</p>
-<p><img src="/2019/08/06/谈一谈PHP反序列化/2019080704552478.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/06/谈一谈PHP反序列化/2019080704552478.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 <p>最后读出flag即可：</p>
-<p><img src="/2019/08/06/谈一谈PHP反序列化/20190807045831366.png" srcset="https://s2.ax1x.com/2019/10/31/K5aqhQ.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/06/谈一谈PHP反序列化/20190807045831366.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
 
             <hr>
           </div>
@@ -841,7 +841,7 @@ echo serialize($a);
     <div class="d-none d-lg-block col-lg-2 toc-container">
       
   <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
     <div id="tocbot"></div>
   </div>
 
@@ -895,7 +895,7 @@ echo serialize($a);
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -903,7 +903,7 @@ echo serialize($a);
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
