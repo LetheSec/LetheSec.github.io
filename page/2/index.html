@@ -124,6 +124,54 @@
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/08/26/SUCTF-2019-部分复现/" target="_self">
+          <img src="https://s2.ax1x.com/2019/10/30/K5aVw8.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="SUCTF_2019_部分复现" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/08/26/SUCTF-2019-部分复现/">
+        <p class="h4 index-header">SUCTF_2019_部分复现</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">CheckIn1、进入题目后是一个简单的上传页面：先尝试上传普通的图片马，发现会显示&lt;? in contents!，过滤了&lt;?，可以使用&lt;script language=&#39;php&#39;&gt;&lt;/scrip&gt;绕过。
+修改后再次上传发现显示exif_imagetype:not image!，还用了exif_imagetype()进行检验，可以加上GIF89a进行绕过。但是后缀正则过滤了php字符，想直接绕过是没戏了。
+2、于是考虑解析漏洞，发现服务端不是Apache而是Nginx，所以常见的上传.hatcess文件不可行。
+参考这篇文章：user.ini文件构成的PHP后门
+php.ini一定很熟悉了，是php中的配置文件，其中提到了.user.ini文件:
+链接：https://www.php.net/manual/zh/configuration.changes.modes.php
+再看一下文档对于.user.ini文件的解释：
+链接：https://www.php.net/manual/zh/configuration.file.per-u</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-26&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Writeup">Writeup</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Writeup">Writeup</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2019/08/15/XML实体注入攻击/" target="_self">
           <img src="https://s2.ax1x.com/2019/10/30/K5t2fs.jpg" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="XML实体注入攻击" class="img-fluid rounded z-depth-3 index-thumbnails">
         </a>
@@ -639,72 +687,6 @@ sys.getfilesystemencoding()：返回在当前系统中保存文件所用的</div
           <i class="iconfont icon-tag"></i>
           
             <a href="/tags/Python">Python</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/07/16/SQL注入总结/" target="_self">
-          <img src="https://s2.ax1x.com/2019/10/30/K5tImT.jpg" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="SQL注入总结" class="img-fluid rounded z-depth-3 index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/07/16/SQL注入总结/">
-        <p class="h4 index-header">SQL注入总结</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">自己的总结加上搜集网上各路大牛的方法，应该还算比较全了。p0desta‘s Blog
-一、基本知识1、常用函数（1）查看当前数据库版本
-version()
-@@version
-@@global.version
-
-（2）查看当前登陆用户
-user()
-current_user()
-system_user()
-session_user()
-
-（3）当前使用的数据库
-database()
-schema()
-
-（4）路径查询
-@@basedir ——mysql安装路径 
-@@slave_load_tampdir ——临时文件夹路径
-@@datadir ——数据存储路径
-@@character_sets_dir ——字符集设置文件路径
-@@log_error ——错误日志文件路径
-@@pid_file ——pid-file文件路径
-
-（5）字符串连接函数
-group_concat() ——返回一个字符串结果，该结果由分组中的值连接组合而成。group_concat([DISTINCT] 要连接的字段[Order BY ASC/DESC 排序字段] [Separator &#39;分隔符&#39;</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-16&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/CTF">CTF</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/CTF">CTF</a>&nbsp;
           
         
       </div>
