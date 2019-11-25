@@ -124,6 +124,66 @@
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/11/25/LHB-Writeup/" target="_self">
+          <img src="https://s2.ax1x.com/2019/11/25/MxZ8AJ.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="LHB_Writeup" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/11/25/LHB-Writeup/">
+        <p class="h4 index-header">LHB_Writeup</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">编码解码V2VsY29tZXRvdGhlUGlsb3RDdXA=
+签到题，base64解码一下得到：
+WelcometothePilotCup
+
+取证分析给了一个pacp.pcap，CTF Wiki里面收录过这一道例题…
+wireshark 打开发现全部为DNS协议,查询名为大量字符串xxxxx.skullseclabs.org
+好像是BSides San Francisco CTF 2017原题，参考这篇文章：https://volatilevirus.home.blog/2018/12/30/bsidessf17-ctf-dnscap-write-up/
+先用下面命令进行提取：
+tshark -r pacp.pcap -T fields -e dns.qry.name &gt; hex
+然后用如下脚本得到flag.png:
+from scapy.all import *
+
+r = rdpcap(&quot;pacp.pcap&quot;)
+
+a = &quot;&quot;
+
+b = &quot;&quot;
+c = &quot;&quot;
+new = &quot;&quot;
+</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-11-25&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Writeup">Writeup</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Writeup">Writeup</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2019/11/19/Python-unserialize-vulnerability/" target="_self">
           <img src="https://s1.ax1x.com/2019/11/19/MRSpdg.jpg" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="浅谈python反序列化漏洞" class="img-fluid rounded z-depth-3 index-thumbnails">
         </a>
@@ -620,72 +680,6 @@ public SoapClient :: SoapC</div>
           <i class="iconfont icon-tag"></i>
           
             <a href="/tags/CTF">CTF</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/09/01/第五空间Writeup-Web/" target="_self">
-          <img src="https://s2.ax1x.com/2019/10/30/K5tgYj.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="第五空间Writeup_Web" class="img-fluid rounded z-depth-3 index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/09/01/第五空间Writeup-Web/">
-        <p class="h4 index-header">第五空间Writeup_Web</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">空相（1）进入页面，提示了参数id 
-
-（2）尝试一下：?id=1‘
-（3）访问该文件，并加上队伍的token作为参数即可，
-
-五叶（1）进入后，是一个登陆界面
-（2）这一题比较脑洞，实际上是用万能密码来进行登陆admin账号。
-
-经过测试：过滤了*、=、and、or、from、select、union、insert、update等，单引号加括号闭合。
-
-猜测后台sql语句可能为：select * form xxx where password = (‘$password’);
-
-于是构造密码为：1’) || username like ‘admin’--（最后有个空格）
-
-拼接后为： ….  where password =(‘1’) || username=&#39;admin&#39; --
-
-
-
-
-六尘（非预期）（1）扫目录得到/log/
-
-（2）访问如下，可以直接看到access.log的内容：
-
-（3）在access.log日志中搜索关键词flag，发现存在flagishere目录，访问里面的文件，并替换token即可。
-
-预期解：通过SSRF扫描端口 + gopher协议</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-09-01&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Writeup">Writeup</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Writeup">Writeup</a>&nbsp;
           
         
       </div>

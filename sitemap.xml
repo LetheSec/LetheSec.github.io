@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lethe.site/2019/11/25/LHB-Writeup/</loc>
+    
+    <lastmod>2019-11-25T15:17:33.514Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lethe.site/2019/11/19/Python-unserialize-vulnerability/</loc>
     
     <lastmod>2019-11-19T13:31:49.471Z</lastmod>
