@@ -124,6 +124,67 @@
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2020/01/01/AnhengMonthMatch2020-1-Writeup/" target="_self">
+          <img src="https://s2.ax1x.com/2020/01/01/lJVn0I.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="安恒月赛2020元旦场Writeup" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2020/01/01/AnhengMonthMatch2020-1-Writeup/">
+        <p class="h4 index-header">安恒月赛2020元旦场Writeup</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">正在复习密码学，突然发现今天有月赛了…于是做了一下，很简单的一次题目。。
+
+Web1进入后是一个JS的游戏，在index.js里修改一下destroyed的增加设置大一些，如下：
+
+然后随便玩一下就能得到flag了：
+
+
+Web2题目名字叫地图，进入后发现实际上没什么功能，只有index.php一个页面，
+点击发现url中存在page=index，于是尝试文件包含，正常的base64编码的payload会返回not base，应该是过滤了base，使用rot13编码读取，先读index.php可以发现flag在根目录，payload如下：
+/index.php/?page=php://filter/read=string.toupper|string.rot13/resource=/flag
+
+rot13解码得到flag。
+
+Crypto1题目如下给了3个png和一个加密脚本如下：
+
+from itertools import *
+from key import key
+
+ki= cycle(key)
+
+fr1 = open(&quot;flag.png&quot;,&quot;rb&</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-01-01&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Writeup">Writeup</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Writeup">Writeup</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2019/11/25/LHB-Writeup/" target="_self">
           <img src="https://s2.ax1x.com/2019/11/25/MxZ8AJ.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="领航杯部分Writeup" class="img-fluid rounded z-depth-3 index-thumbnails">
         </a>
@@ -621,62 +682,6 @@ AJAX 是一种用于创建快速动态网页的技术。
           <i class="iconfont icon-tag"></i>
           
             <a href="/tags/Writeup">Writeup</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/09/06/利用SoapClient类进行SSRF-CRLF攻击/" target="_self">
-          <img src="https://s2.ax1x.com/2019/10/30/K5to0U.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="利用SoapClient类进行SSRF+CRLF攻击" class="img-fluid rounded z-depth-3 index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/09/06/利用SoapClient类进行SSRF-CRLF攻击/">
-        <p class="h4 index-header">利用SoapClient类进行SSRF+CRLF攻击</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">前一段时间在De1CTF中的ShellShellShell以及SUCTF的Upload labs2都涉及到了利用PHP的SoapClient类进行SSRF，因此在这里记录下。
-
-0x01 什么是SoapSOAP是webService三要素（SOAP、WSDL、UDDI）之一：
-
-WSDL 用来描述如何访问具体的接口。
-
-UDDI用来管理，分发，查询webService。
-
-SOAP（简单对象访问协议）是连接或Web服务或客户端和Web服务之间的接口。其采用HTTP作为底层通讯协议，XML作为数据传送的格式。
-
-
-
-0x02 PHP中的SoapClient类参考链接：https://www.php.net/manual/zh/soapclient.soapclient.php
-PHP 的 SOAP 扩展可以用来提供和使用 Web Services，这个扩展实现了6个类，其中的SoapClient类是用来创建soap数据报文，与wsdl接口进行交互的，同时这个类下也是有反序列化中常常用到的__call()魔术方法。
-该类的构造函数如下：
-public SoapClient :: SoapC</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-09-06&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/CTF">CTF</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/CTF">CTF</a>&nbsp;
           
         
       </div>
