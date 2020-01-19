@@ -11,21 +11,27 @@
   <link rel="icon" type="image/png" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
   <meta name="description" content="Lethe&#39;s Blog">
   <meta name="author" content="Lethe">
   <meta name="keywords" content="Lethe&#39;s Blog">
-  <title>利用SoapClient类进行SSRF+CRLF攻击 ~ Lethe | 忘川</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/font-awesome/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/mdbootstrap/css/mdb.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/github-markdown/github-markdown.min.css">
-  <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
-  
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/prettify/tomorrow-night-eighties.min.css">
-  
-  <link rel="stylesheet" href="/css/main.css">
+  <title>利用SoapClient类进行SSRF+CRLF攻击 ~ Lethe&#39;s Blog</title>
 
-  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.10.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.8.9/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
 </head>
 
 
@@ -33,7 +39,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe | 忘川</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe's Blog</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -45,10 +51,14 @@
         
           
           
+          
+          
           <li class="nav-item">
             <a class="nav-link" href="/">Home</a>
           </li>
         
+          
+          
           
           
           <li class="nav-item">
@@ -57,16 +67,22 @@
         
           
           
+          
+          
           <li class="nav-item">
             <a class="nav-link" href="/categories/">Categories</a>
           </li>
         
           
           
+          
+          
           <li class="nav-item">
             <a class="nav-link" href="/tags/">Tags</a>
           </li>
         
+          
+          
           
           
           <li class="nav-item">
@@ -81,8 +97,6 @@
       </ul>
     </div>
   </div>
-
-
 </nav>
 
     <div class="view intro-2" id="background"
@@ -98,7 +112,39 @@
 
             
               <br>
-              <p class="mt-3">Friday, September 6th 2019, 12:50 am</p>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  Friday, September 6th 2019, 12:50 am
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    966 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      4 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
             
           </div>
 
@@ -117,7 +163,7 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="py-5 z-depth-3" id="board">
-        <div class="post-content mx-auto">
+        <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
             <p>前一段时间在De1CTF中的ShellShellShell以及SUCTF的Upload labs2都涉及到了利用PHP的SoapClient类进行SSRF，因此在这里记录下。</p>
 <p><br></p>
@@ -138,7 +184,7 @@
 </code></pre>
 <p>第一个参数是用来指明是否是wsdl模式。</p>
 <p>第二个参数为一个数组，如果在wsdl模式下，此参数可选；如果在非wsdl模式下，则必须设置<code>location</code>和<code>uri</code>选项，其中<code>location</code>是要将请求发送到的SOAP服务器的URL，而uri 是SOAP服务的目标命名空间。</p>
-<p><img src="/2019/09/06/利用SoapClient类进行SSRF-CRLF攻击/20190906000607209.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/06/利用SoapClient类进行SSRF-CRLF攻击/20190906000607209.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>知道上述两个参数的含义后，就很容易构造出SSRF的利用payload了。</p>
 <p>我们可以设置第一个参数为<code>null</code>，然后第二个参数的<code>location</code>选项设置为<code>target_url</code>，如下</p>
 <pre><code class="php">&lt;?php
@@ -154,7 +200,7 @@ echo serialize($a);
 <p><br></p>
 <h1><span id="0x04-ssrfcrlf攻击内网">0x04 SSRF+CRLF攻击内网</span></h1><p>实际上很多时候都需要这两个漏洞配合在一起使用，当我们我们可以从外网调用到soap的api，而攻击目标是在内网，那么就可以利用SoapClient进行SSRF攻击内网，然后配合CRLF构造POST请求增加我们的攻击面。</p>
 <p>那么为什么在用SoapClient类进行SSRF的时候会有CRLF注入的问题呢？如下：</p>
-<p><img src="/2019/09/06/利用SoapClient类进行SSRF-CRLF攻击/20190906003122388.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/06/利用SoapClient类进行SSRF-CRLF攻击/20190906003122388.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>可以看到options参数中还有一个选项为<code>user_agent</code>，运行我们自己设置<code>User-Agent</code>的值。</p>
 <p>当我们可以控制<code>User-Agent</code>的值时，也就意味着我们完全可以构造一个POST请求，因为<code>Content-Type</code>为和<code>Content-Length</code>都在<code>User-Agent</code>之下，而控制这两个是利用CRLF发送post请求最关键的地方。</p>
 <p>最后给出wupco师傅的生成任意POST报文的POC:</p>
@@ -183,20 +229,24 @@ echo $aaa;
           </div>
           <br>
           <div>
+            <p>
             
-              <p>
+              <span>
                 <i class="iconfont icon-inbox"></i>
                 
                   <a class="hover-with-bg" href="/categories/CTF">CTF</a>
                   &nbsp;
                 
-              </p>
+              </span>&nbsp;&nbsp;
             
-            <p>
-              <i class="iconfont icon-tag"></i>
-              
-                <a class="hover-with-bg" href="/tags/CTF">CTF</a>
-              
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/CTF">CTF</a>
+                
+              </span>
+            
             </p>
             
               <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
@@ -225,25 +275,28 @@ echo $aaa;
     
       <br><br>
       
-      <div class="disqus" style="width:100%">
-  <div id="disqus_thread"></div>
-  <script>
-    var disqus_shortname = 'Lethe';
-    var disqus_config = function () {
-      this.page.url = 'https://lethe.site/2019/09/06/利用SoapClient类进行SSRF-CRLF攻击/';
-      this.page.identifier = '/2019/09/06/利用SoapClient类进行SSRF-CRLF攻击/';
-    };
-    (function () {
-      var d = document, s = d.createElement('script');
-      s.type = 'text/javascript';
-      s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', +new Date());
-      (d.head || d.body).appendChild(s);
-    })();
-  </script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
-      powered by Disqus.</a></noscript>
-</div>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://lethe.site/2019/09/06/利用SoapClient类进行SSRF-CRLF攻击/';
+        this.page.identifier = '/2019/09/06/利用SoapClient类进行SSRF-CRLF攻击/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'Lethe' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
     
   </div>
 </div>
@@ -281,41 +334,101 @@ echo $aaa;
 
   <footer class="mt-5">
   <div class="text-center py-3">
-    <!-- <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
     <i class="iconfont icon-love"></i>
-    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a> -->
-    <b>Copyright &copy; 2019.</b><a href="/"><b>Lethe</b></a>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
     <br>
+
     
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
   </div>
 </footer>
 
 <!-- SCRIPTS -->
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/jquery/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/popper/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/bootstrap/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/mdbootstrap/js/mdb.min.js"></script>
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.8.9/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
+
 
   <script src="/js/lazyload.js"></script>
 
 
+
   
-    <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/tocbot/tocbot.min.js"></script>
+    <script src="https://cdn.staticfile.org/tocbot/4.8.0/tocbot.min.js"></script>
   
   <script src="/js/post.js"></script>
 
 
-  <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/prettify/prettify.min.js"></script>
+
+  <script src="https://cdn.staticfile.org/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?99792b18d5c4379d7bc5cf4bced8a563";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/r298/prettify.min.js"></script>
   <script>
     $(document).ready(function () {
-      $('pre').addClass('prettyprint linenums');
+      $('pre').addClass('prettyprint  ');
       prettyPrint();
     })
   </script>
 
 
-  <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/typed/typed.min.js"></script>
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.10/typed.min.js"></script>
   <script>
     var typed = new Typed('#subtitle', {
       strings: [
@@ -334,7 +447,8 @@ echo $aaa;
   </script>
 
 
-  <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/anchor/anchor.min.js"></script>
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.0/anchor.min.js"></script>
   <script>
     anchors.options = {
       placement: "right",
@@ -365,11 +479,27 @@ echo $aaa;
 
 
 
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
   <script>
-    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) || (/Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent))) {
-      $("#background").css("background-attachment", "scroll");
-    }
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
   </script>
+
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>

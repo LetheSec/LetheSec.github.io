@@ -11,21 +11,27 @@
   <link rel="icon" type="image/png" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
   <meta name="description" content="Lethe&#39;s Blog">
   <meta name="author" content="Lethe">
   <meta name="keywords" content="Lethe&#39;s Blog">
-  <title>phar反序列化小结 ~ Lethe | 忘川</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/font-awesome/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/mdbootstrap/css/mdb.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/github-markdown/github-markdown.min.css">
-  <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
-  
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/prettify/tomorrow-night-eighties.min.css">
-  
-  <link rel="stylesheet" href="/css/main.css">
+  <title>phar反序列化小结 ~ Lethe&#39;s Blog</title>
 
-  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.10.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.8.9/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
 </head>
 
 
@@ -33,7 +39,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe | 忘川</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe's Blog</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -45,10 +51,14 @@
         
           
           
+          
+          
           <li class="nav-item">
             <a class="nav-link" href="/">Home</a>
           </li>
         
+          
+          
           
           
           <li class="nav-item">
@@ -57,16 +67,22 @@
         
           
           
+          
+          
           <li class="nav-item">
             <a class="nav-link" href="/categories/">Categories</a>
           </li>
         
           
           
+          
+          
           <li class="nav-item">
             <a class="nav-link" href="/tags/">Tags</a>
           </li>
         
+          
+          
           
           
           <li class="nav-item">
@@ -81,8 +97,6 @@
       </ul>
     </div>
   </div>
-
-
 </nav>
 
     <div class="view intro-2" id="background"
@@ -98,7 +112,39 @@
 
             
               <br>
-              <p class="mt-3">Wednesday, November 13th 2019, 1:55 pm</p>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  Wednesday, November 13th 2019, 1:55 pm
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    2.6k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      12 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
             
           </div>
 
@@ -117,7 +163,7 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="py-5 z-depth-3" id="board">
-        <div class="post-content mx-auto">
+        <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
             <h1><span id="0x00-phar反序列化">0x00  phar反序列化</span></h1><p>phar反序列化即在文件系统函数（<code>file_exists()</code>、<code>is_dir()</code>等）参数可控的情况下，配合<code>phar://伪协议</code>，可以不依赖<code>unserialize()</code>直接进行反序列化操作。</p>
 <p>关于其他反序列化的总结，可以看我的<a href="https://lethe.site/2019/08/06/%E8%B0%88%E4%B8%80%E8%B0%88PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">这篇文章</a><br><br></p>
@@ -126,7 +172,7 @@
 <li><p>a <strong>stub</strong>：可以理解为一个标志，格式为<code>xxx&lt;?php xxx; __HALT_COMPILER();?&gt;</code>，前面内容不限，但必须以<code>__HALT_COMPILER();?&gt;</code>来结尾，否则phar扩展将无法识别这个文件为phar文件。</p>
 </li>
 <li><p>a <strong>manifest</strong> describing the contents：phar文件本质上是一种压缩文件，其中每个被压缩文件的权限、属性等信息都放在这部分。这部分还会以序列化的形式存储用户自定义的<strong>meta-data</strong>，这是上述攻击手法最核心的地方。</p>
-<p><img src="/2019/11/13/phar-unserialize/20190918175817516.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/11/13/phar-unserialize/20190918175817516.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 </li>
 <li><p>the file <strong>contents</strong>：被压缩文件的内容。</p>
 </li>
@@ -149,10 +195,10 @@
 ?&gt;
 </code></pre>
 <p>可以看到meta-data是以序列化的形式存储的：</p>
-<p><img src="/2019/11/13/phar-unserialize/20190918182831137.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/11/13/phar-unserialize/20190918182831137.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1><span id="0x03-影响的函数">0x03 影响的函数</span></h1><p>知道创宇的seaii 更为我们指出了所有文件函数均可使用：</p>
-<p><img src="/2019/11/13/phar-unserialize/20190918183243195.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/11/13/phar-unserialize/20190918183243195.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>但实际上只要调用了<code>php_stream_open_wrapper</code>的函数，都存在这样的问题。</p>
 <p>因此还有如下函数：</p>
 <p><strong>exif</strong></p>
@@ -248,13 +294,13 @@ secure_file_priv=&quot;&quot;
 ?&gt;
 </code></pre>
 <p>可以看到加了GIF89a文件头，从而使其伪装成gif文件：</p>
-<p><img src="/2019/11/13/phar-unserialize/20190918193823420.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/11/13/phar-unserialize/20190918193823420.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <h1><span id="0x05-实例分析">0x05 实例分析</span></h1><h5><span id="ciscn2019-dropbox">CISCN2019 Dropbox</span></h5><p>进入题目后，注册一个账号并登录，发现是一个网盘界面，限制了只能上传图片后缀，并能进行下载、删除操作：</p>
-<p><img src="/2019/11/13/phar-unserialize/20191113111214787.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/11/13/phar-unserialize/20191113111214787.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>没有其他什么利用点，我们抓一下下载的包：</p>
-<p><img src="/2019/11/13/phar-unserialize/20191113111237768.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/11/13/phar-unserialize/20191113111237768.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>发现可以成功读取到文件的内容，于是尝试任意文件下载：</p>
-<p><img src="/2019/11/13/phar-unserialize/20191113111359877.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/11/13/phar-unserialize/20191113111359877.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>确认存在任意文件下载，<code>upload.php</code>、<code>class.php</code>、<code>download.php</code>、<code>index.php</code>、<code>login.php</code>、<code>register.php</code>均可以下载得到源码，下面就是进行代码审计了。</p>
 <pre><code class="php">//download.php
 &lt;?php
@@ -533,9 +579,9 @@ $phar-&gt;addFromString(&quot;test.txt&quot;, &quot;test&quot;); //添加要压�
 $phar-&gt;stopBuffering();
 </code></pre>
 <p>运行得到<code>shell.phar</code>，改后缀为png上传：</p>
-<p><img src="/2019/11/13/phar-unserialize/20191113134929979.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/11/13/phar-unserialize/20191113134929979.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>在删除的时候抓包，并加上<code>phar://</code>伪协议，然后发包即可成功读到flag：</p>
-<p><img src="/2019/11/13/phar-unserialize/20191113135143952.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/11/13/phar-unserialize/20191113135143952.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <p><br></p>
 <p>本篇文章以总结为主，所以部分内容参考了下列文章：<br><a href="https://paper.seebug.org/680/" target="_blank" rel="noopener">https://paper.seebug.org/680/</a><br><a href="https://blog.zsxsoft.com/post/38" target="_blank" rel="noopener">https://blog.zsxsoft.com/post/38</a><br><a href="https://xz.aliyun.com/t/6057" target="_blank" rel="noopener">https://xz.aliyun.com/t/6057</a></p>
@@ -544,20 +590,24 @@ $phar-&gt;stopBuffering();
           </div>
           <br>
           <div>
+            <p>
             
-              <p>
+              <span>
                 <i class="iconfont icon-inbox"></i>
                 
                   <a class="hover-with-bg" href="/categories/CTF">CTF</a>
                   &nbsp;
                 
-              </p>
+              </span>&nbsp;&nbsp;
             
-            <p>
-              <i class="iconfont icon-tag"></i>
-              
-                <a class="hover-with-bg" href="/tags/CTF">CTF</a>
-              
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/CTF">CTF</a>
+                
+              </span>
+            
             </p>
             
               <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
@@ -586,25 +636,28 @@ $phar-&gt;stopBuffering();
     
       <br><br>
       
-      <div class="disqus" style="width:100%">
-  <div id="disqus_thread"></div>
-  <script>
-    var disqus_shortname = 'Lethe';
-    var disqus_config = function () {
-      this.page.url = 'https://lethe.site/2019/11/13/phar-unserialize/';
-      this.page.identifier = '/2019/11/13/phar-unserialize/';
-    };
-    (function () {
-      var d = document, s = d.createElement('script');
-      s.type = 'text/javascript';
-      s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', +new Date());
-      (d.head || d.body).appendChild(s);
-    })();
-  </script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
-      powered by Disqus.</a></noscript>
-</div>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://lethe.site/2019/11/13/phar-unserialize/';
+        this.page.identifier = '/2019/11/13/phar-unserialize/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'Lethe' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
     
   </div>
 </div>
@@ -642,41 +695,101 @@ $phar-&gt;stopBuffering();
 
   <footer class="mt-5">
   <div class="text-center py-3">
-    <!-- <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
     <i class="iconfont icon-love"></i>
-    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a> -->
-    <b>Copyright &copy; 2019.</b><a href="/"><b>Lethe</b></a>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
     <br>
+
     
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
   </div>
 </footer>
 
 <!-- SCRIPTS -->
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/jquery/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/popper/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/bootstrap/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/mdbootstrap/js/mdb.min.js"></script>
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.8.9/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
+
 
   <script src="/js/lazyload.js"></script>
 
 
+
   
-    <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/tocbot/tocbot.min.js"></script>
+    <script src="https://cdn.staticfile.org/tocbot/4.8.0/tocbot.min.js"></script>
   
   <script src="/js/post.js"></script>
 
 
-  <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/prettify/prettify.min.js"></script>
+
+  <script src="https://cdn.staticfile.org/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?99792b18d5c4379d7bc5cf4bced8a563";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/r298/prettify.min.js"></script>
   <script>
     $(document).ready(function () {
-      $('pre').addClass('prettyprint linenums');
+      $('pre').addClass('prettyprint  ');
       prettyPrint();
     })
   </script>
 
 
-  <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/typed/typed.min.js"></script>
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.10/typed.min.js"></script>
   <script>
     var typed = new Typed('#subtitle', {
       strings: [
@@ -695,7 +808,8 @@ $phar-&gt;stopBuffering();
   </script>
 
 
-  <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/anchor/anchor.min.js"></script>
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.0/anchor.min.js"></script>
   <script>
     anchors.options = {
       placement: "right",
@@ -726,11 +840,27 @@ $phar-&gt;stopBuffering();
 
 
 
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
   <script>
-    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) || (/Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent))) {
-      $("#background").css("background-attachment", "scroll");
-    }
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
   </script>
+
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>

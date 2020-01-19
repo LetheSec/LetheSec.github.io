@@ -11,21 +11,27 @@
   <link rel="icon" type="image/png" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
   <meta name="description" content="Lethe&#39;s Blog">
   <meta name="author" content="Lethe">
   <meta name="keywords" content="Lethe&#39;s Blog">
-  <title>XSS刷题之旅 ~ Lethe | 忘川</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/font-awesome/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/mdbootstrap/css/mdb.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/github-markdown/github-markdown.min.css">
-  <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
-  
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/prettify/tomorrow-night-eighties.min.css">
-  
-  <link rel="stylesheet" href="/css/main.css">
+  <title>XSS刷题之旅 ~ Lethe&#39;s Blog</title>
 
-  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.10.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.8.9/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
 </head>
 
 
@@ -33,7 +39,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe | 忘川</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe's Blog</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -45,10 +51,14 @@
         
           
           
+          
+          
           <li class="nav-item">
             <a class="nav-link" href="/">Home</a>
           </li>
         
+          
+          
           
           
           <li class="nav-item">
@@ -57,16 +67,22 @@
         
           
           
+          
+          
           <li class="nav-item">
             <a class="nav-link" href="/categories/">Categories</a>
           </li>
         
           
           
+          
+          
           <li class="nav-item">
             <a class="nav-link" href="/tags/">Tags</a>
           </li>
         
+          
+          
           
           
           <li class="nav-item">
@@ -81,8 +97,6 @@
       </ul>
     </div>
   </div>
-
-
 </nav>
 
     <div class="view intro-2" id="background"
@@ -98,7 +112,39 @@
 
             
               <br>
-              <p class="mt-3">Tuesday, July 30th 2019, 9:39 pm</p>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  Tuesday, July 30th 2019, 9:39 pm
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    4.8k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      22 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
             
           </div>
 
@@ -117,7 +163,7 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="py-5 z-depth-3" id="board">
-        <div class="post-content mx-auto">
+        <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
             <h3><span id="0x01-一些资源或文章">0x01 一些资源或文章：</span></h3><p><a href="https://xz.aliyun.com/t/2936" target="_blank" rel="noopener">XSS小结</a><br><a href="https://xz.aliyun.com/t/4067" target="_blank" rel="noopener">XSS总结</a><br><a href="https://www.leavesongs.com/PENETRATION/xss-collect.html" target="_blank" rel="noopener">那些年我们没能bypass的xss filter</a><br><a href="https://www.zybuluo.com/laodao/note/9592" target="_blank" rel="noopener">XSS Filter Evasion Cheat Sheet 中文版</a><br><a href="https://v0w.top/2018/08/18/XSS%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5&amp;%E5%9C%A8CTF%E4%B8%AD%E7%9A%84%E8%BF%90%E7%94%A8/#%E5%88%9D%E6%8E%A2XSS-Payload" target="_blank" rel="noopener">XSS攻击手段&amp;在CTF中的运用</a></p>
 <p><br></p>
@@ -596,55 +642,55 @@ function escape (s) {
 <p>所以直接在构造的语句最后加上<code>http://</code>绕过检测，再注释掉即可。</p>
 <p>payload：<br><code>java&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;:alert(1)//http://</code><br><br></p>
 <h5><span id="level-10">Level 10</span></h5><p>这题没有输入框，url上给了一个keyword参数，尝试闭合再构造，虽然回显的内容没有过滤，但是却不会弹窗，查看源码，发现还有一个隐藏的form表单，看看能否利用。</p>
-<p><img src="/2019/07/30/XSS刷题之旅/20190730195539277.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/07/30/XSS刷题之旅/20190730195539277.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>尝试<code>?t_link=Lethe&amp;t_history=Lethe&amp;t_sort=Lethe</code></p>
 <p>发现<code>t_sort</code>参数可以利用</p>
-<p><img src="/2019/07/30/XSS刷题之旅/20190730195830826.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/07/30/XSS刷题之旅/20190730195830826.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>于是进行构造，发现尖括号被过滤了，于是利用事件进行弹窗。</p>
 <p>payload:<br><code>?t_sort=&quot; type=image src=x onerror=alert(1)//</code></p>
 <p><br></p>
 <h5><span id="level-11">Level 11</span></h5><p>和上一关一样有一个隐藏的表单，也是<code>t_sort</code>参数可以利用</p>
-<p><img src="/2019/07/30/XSS刷题之旅/2019073020054445.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/07/30/XSS刷题之旅/2019073020054445.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>用上一关的payload进行测试，发现双引号也被过滤了，应该又要换个思路了。</p>
 <p>重新打开页面观察源码，看到一个可疑的地方，那新增的一个参数不是白加的，当你从第10关跳到第11关时，<code>t_ref</code>的value值是页面的Referer的值。</p>
-<p><img src="/2019/07/30/XSS刷题之旅/20190730201235164.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/07/30/XSS刷题之旅/20190730201235164.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>于是在跳转的时候抓包修改Referer的值为<code>&quot; type=text onclick=&quot;alert(1)</code>，如下：</p>
-<p><img src="/2019/07/30/XSS刷题之旅/20190730201950407.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/07/30/XSS刷题之旅/20190730201950407.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>然后在Target界面Forward，回到闯关页面发现已成功注，点击输入框即可弹窗。</p>
-<p><img src="/2019/07/30/XSS刷题之旅/20190730202044406.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/07/30/XSS刷题之旅/20190730202044406.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h5><span id="level-12">Level 12</span></h5><p>与上一关类似，不过这里是利用User-Agent:</p>
-<p><img src="/2019/07/30/XSS刷题之旅/20190730202249699.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/07/30/XSS刷题之旅/20190730202249699.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>同样抓包修改User-Agent的值进行构造</p>
-<p><img src="/2019/07/30/XSS刷题之旅/20190730202431311.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/07/30/XSS刷题之旅/20190730202431311.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>payload:<br><code>&quot; type=text onclick=&quot;alert(1)</code></p>
 <p><br></p>
 <h5><span id="level-13">Level 13</span></h5><p>与前两关相同，只不过这一关是利用Cookie进行注入。</p>
-<p><img src="/2019/07/30/XSS刷题之旅/20190730202710641.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/07/30/XSS刷题之旅/20190730202710641.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>抓包修改Cookie为：<code>user=&quot; type=text onclick=&quot;alert(1)</code>即可</p>
-<p><img src="/2019/07/30/XSS刷题之旅/2019073020292078.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/07/30/XSS刷题之旅/2019073020292078.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h5><span id="level-14">Level 14</span></h5><p>进入14关，没有输入框，url中没有参数，查看源码，发现使用了<code>&lt;iframe&gt;</code>标签引入了<code>http://www.exifviewer.org/</code></p>
 <p>但是我这边一直打不开<code>http://www.exifviewer.org/</code>，根据网上的题解，上传一个含有xss代码的图片触发xss，关于exif xss这一题的解法，可参考:<a href="https://xz.aliyun.com/t/1206" target="_blank" rel="noopener">https://xz.aliyun.com/t/1206</a></p>
 <p><br></p>
 <h5><span id="level-15">Level 15</span></h5><p>页面什么都没有，那么直接看源码</p>
-<p><img src="/2019/07/30/XSS刷题之旅/20190730204024883.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/07/30/XSS刷题之旅/20190730204024883.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>第一眼看貌似也没什么，实际上还是因为我对js不是很熟悉…搜索得到，这里使用了AngularJS框架的 <code>ng-include</code> 指令，可参考：<a href="https://www.runoob.com/angularjs/ng-ng-include.html" target="_blank" rel="noopener">https://www.runoob.com/angularjs/ng-ng-include.html</a></p>
 <p>其实就是可以利用 <code>ng-include</code> 指令来包含文件&gt;</p>
 <p>有两默认情况下，包含的文件需要包含在同一个域名下，也就是符合SOP。</p>
 <p>所以网上大多方法是包含了第一关的代码，如下payload：<code>?src=&#39;level1.php?name=test&lt;img src=1 onerror=alert(1)&gt;&#39;</code></p>
 <p>但是我在做的过程中发现，引用的名字会直接出现在源码上:</p>
-<p><img src="/2019/07/30/XSS刷题之旅/20190730210141438.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/07/30/XSS刷题之旅/20190730210141438.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>那么理论上通过闭合也是可以的</p>
 <p>于是尝试payload:<br><code>?src=&quot;&gt;&lt;img src=&quot;x&quot; onerror=alert(1)&gt;</code></p>
 <p>发现真的是可以的..</p>
-<p><img src="/2019/07/30/XSS刷题之旅/2019073021103933.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/07/30/XSS刷题之旅/2019073021103933.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h5><span id="level-16">Level 16</span></h5><p>输入点包含在<code>&lt;center&gt;</code>标签内，过滤了空格，可以用<code>%0a</code>代替空格进行绕过。</p>
 <p>payload:<br><code>?keyword=&lt;img%0asrc=x%0aonerror=alert(1)&gt;</code><br><br></p>
 <h5><span id="level-17">Level 17</span></h5><p>进入之后会看到一个关于flash的什么东西，暂时先不管，做xss先找输入输出点。</p>
 <p>url中有<code>arg01</code>和<code>arg02</code>两个参数，应该是输入点，查看源码发现在<code>&lt;embed&gt;</code>标签的<code>src</code>中会输出这两个参数的值，如下：</p>
-<p><img src="/2019/07/30/XSS刷题之旅/20190730211932413.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/07/30/XSS刷题之旅/20190730211932413.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>先试试闭合，发现过滤了尖括号，可以考虑用<code>onerror</code>弹窗。</p>
 <p>payload：<br><code>?arg01=&amp;arg02= onmouseover=alert(1)</code></p>
 <p><br></p>
@@ -659,20 +705,24 @@ function escape (s) {
           </div>
           <br>
           <div>
+            <p>
             
-              <p>
+              <span>
                 <i class="iconfont icon-inbox"></i>
                 
                   <a class="hover-with-bg" href="/categories/CTF">CTF</a>
                   &nbsp;
                 
-              </p>
+              </span>&nbsp;&nbsp;
             
-            <p>
-              <i class="iconfont icon-tag"></i>
-              
-                <a class="hover-with-bg" href="/tags/CTF">CTF</a>
-              
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/CTF">CTF</a>
+                
+              </span>
+            
             </p>
             
               <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
@@ -701,25 +751,28 @@ function escape (s) {
     
       <br><br>
       
-      <div class="disqus" style="width:100%">
-  <div id="disqus_thread"></div>
-  <script>
-    var disqus_shortname = 'Lethe';
-    var disqus_config = function () {
-      this.page.url = 'https://lethe.site/2019/07/30/XSS刷题之旅/';
-      this.page.identifier = '/2019/07/30/XSS刷题之旅/';
-    };
-    (function () {
-      var d = document, s = d.createElement('script');
-      s.type = 'text/javascript';
-      s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', +new Date());
-      (d.head || d.body).appendChild(s);
-    })();
-  </script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
-      powered by Disqus.</a></noscript>
-</div>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://lethe.site/2019/07/30/XSS刷题之旅/';
+        this.page.identifier = '/2019/07/30/XSS刷题之旅/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'Lethe' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
     
   </div>
 </div>
@@ -757,41 +810,101 @@ function escape (s) {
 
   <footer class="mt-5">
   <div class="text-center py-3">
-    <!-- <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
     <i class="iconfont icon-love"></i>
-    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a> -->
-    <b>Copyright &copy; 2019.</b><a href="/"><b>Lethe</b></a>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
     <br>
+
     
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
   </div>
 </footer>
 
 <!-- SCRIPTS -->
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/jquery/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/popper/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/bootstrap/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/mdbootstrap/js/mdb.min.js"></script>
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.8.9/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
+
 
   <script src="/js/lazyload.js"></script>
 
 
+
   
-    <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/tocbot/tocbot.min.js"></script>
+    <script src="https://cdn.staticfile.org/tocbot/4.8.0/tocbot.min.js"></script>
   
   <script src="/js/post.js"></script>
 
 
-  <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/prettify/prettify.min.js"></script>
+
+  <script src="https://cdn.staticfile.org/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?99792b18d5c4379d7bc5cf4bced8a563";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/r298/prettify.min.js"></script>
   <script>
     $(document).ready(function () {
-      $('pre').addClass('prettyprint linenums');
+      $('pre').addClass('prettyprint  ');
       prettyPrint();
     })
   </script>
 
 
-  <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/typed/typed.min.js"></script>
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.10/typed.min.js"></script>
   <script>
     var typed = new Typed('#subtitle', {
       strings: [
@@ -810,7 +923,8 @@ function escape (s) {
   </script>
 
 
-  <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/anchor/anchor.min.js"></script>
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.0/anchor.min.js"></script>
   <script>
     anchors.options = {
       placement: "right",
@@ -841,11 +955,27 @@ function escape (s) {
 
 
 
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
   <script>
-    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) || (/Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent))) {
-      $("#background").css("background-attachment", "scroll");
-    }
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
   </script>
+
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>

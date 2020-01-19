@@ -11,21 +11,27 @@
   <link rel="icon" type="image/png" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
   <meta name="description" content="Lethe&#39;s Blog">
   <meta name="author" content="Lethe">
   <meta name="keywords" content="Lethe&#39;s Blog">
-  <title>SQL注入总结 ~ Lethe | 忘川</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/font-awesome/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/mdbootstrap/css/mdb.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/github-markdown/github-markdown.min.css">
-  <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
-  
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/prettify/tomorrow-night-eighties.min.css">
-  
-  <link rel="stylesheet" href="/css/main.css">
+  <title>SQL注入总结 ~ Lethe&#39;s Blog</title>
 
-  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.10.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.8.9/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
 </head>
 
 
@@ -33,7 +39,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe | 忘川</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe's Blog</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -45,10 +51,14 @@
         
           
           
+          
+          
           <li class="nav-item">
             <a class="nav-link" href="/">Home</a>
           </li>
         
+          
+          
           
           
           <li class="nav-item">
@@ -57,16 +67,22 @@
         
           
           
+          
+          
           <li class="nav-item">
             <a class="nav-link" href="/categories/">Categories</a>
           </li>
         
           
           
+          
+          
           <li class="nav-item">
             <a class="nav-link" href="/tags/">Tags</a>
           </li>
         
+          
+          
           
           
           <li class="nav-item">
@@ -81,8 +97,6 @@
       </ul>
     </div>
   </div>
-
-
 </nav>
 
     <div class="view intro-2" id="background"
@@ -98,7 +112,39 @@
 
             
               <br>
-              <p class="mt-3">Tuesday, July 16th 2019, 4:36 pm</p>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  Tuesday, July 16th 2019, 4:36 pm
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    3k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      13 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
             
           </div>
 
@@ -117,7 +163,7 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="py-5 z-depth-3" id="board">
-        <div class="post-content mx-auto">
+        <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
             <p>自己的总结加上搜集网上各路大牛的方法，应该还算比较全了。<br><a href="http://p0desta.com/" target="_blank" rel="noopener">p0desta‘s Blog</a><br><br></p>
 <h2><span id="一-基本知识">一、基本知识</span></h2><h3><span id="1-常用函数">1、常用函数</span></h3><h6><span id="1查看当前数据库版本">（1）查看当前数据库版本</span></h6><ul>
@@ -233,7 +279,7 @@ SELECT SLEEP(25) #
 UNION SELECT IF(SUBSTR((SELECT GROUP_CONCAT(schema_name SEPARATOR 0x3c62723e) FROM INFORMATION_SCHEMA.SCHEMATA),i,1) &lt; j,SLEEP(10),0)
 </code></pre><p><br></p>
 <h5><span id="5insert-update注入">（5）Insert / Update注入</span></h5><p>insert和update一般使用报错注入，如果没有错误回显，insert可以使用延时注入，update可以使用bool盲注和延时盲注。</p>
-<p>如果存在<code>insert</code>或者<code>update</code>，更新后的数据是可见的话,那么利用mysql的隐式类型转换，其实就是当字符串与整数相加时，会当作整数来解释，如下：<br><img src="/2019/07/16/SQL注入总结/1.png" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p>如果存在<code>insert</code>或者<code>update</code>，更新后的数据是可见的话,那么利用mysql的隐式类型转换，其实就是当字符串与整数相加时，会当作整数来解释，如下：<br><img src="/2019/07/16/SQL注入总结/1.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>那么我们可以利用查询的数据转化为<strong>10进制</strong>,然后进行运算,拿到我们计算的结果,在进行转化回去即可。<br>（可参考RCTF 2015 upload一题）</p>
 <pre><code class="mysql">mysql&gt; update users set password=&#39;&#39;+conv(hex(substr(user(),1 + (1-1) * 8, 6)), 16, 10);
 Query OK, 1 row affected (0.00 sec)
@@ -264,7 +310,7 @@ echo &quot;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt
 var_dump(mysql_fetch_array(mysql_query(&quot;$sql&quot;)));
 echo mysql_error();
 </code></pre>
-<p><img src="/2019/07/16/SQL注入总结/2.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>shop_users 后面的两个<code></code>,做了shop_users 表的别名,所以无影响。<br>这时候desc的语句为,</p>
+<p><img src="/2019/07/16/SQL注入总结/2.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>shop_users 后面的两个<code></code>,做了shop_users 表的别名,所以无影响。<br>这时候desc的语句为,</p>
 <pre><code>desc `shop_users` `where updatexml(1,concat(0x5e24,(select user()),0x5e24),1)#`
 </code></pre><h6><span id="表名不完全可控且desc的表名不含identifier-quoteselect的表名含有identifier-quote">表名不完全可控且DESC的表名不含identifier quote,SELECT的表名含有identifier quote</span></h6><pre><code class="php">mysql_connect(&quot;localhost&quot;,&quot;root&quot;,&quot;root&quot;);
 mysql_query(&quot;use b2cshop&quot;);
@@ -276,22 +322,22 @@ echo &quot;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt
 var_dump(mysql_fetch_array(mysql_query(&quot;$sql&quot;)));
 echo mysql_error();
 </code></pre>
-<p><img src="/2019/07/16/SQL注入总结/3.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br><br></p>
+<p><img src="/2019/07/16/SQL注入总结/3.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
 <h5><span id="7无列名注入">（7）无列名注入</span></h5><h6><span id="别名">别名</span></h6><pre><code>union (select 1,2,c from (select 1,2 c union select * from flag)b) limit 1,1
-</code></pre><p><img src="/2019/07/16/SQL注入总结/4.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>或者</p>
+</code></pre><p><img src="/2019/07/16/SQL注入总结/4.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>或者</p>
 <pre><code>union (select 1,2,c from (select 1,2 as c union select * from flag) as b) limit 1,1
-</code></pre><p><img src="/2019/07/16/SQL注入总结/5.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+</code></pre><p><img src="/2019/07/16/SQL注入总结/5.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <h6><span id="绕过逗号">绕过逗号</span></h6><pre><code>select c from (select * from (select 1 `a`)m join (select 0 `i`)o join (select 2 `b`)n join (select 3 `c`)t where 0 union select * from flag)x;
 </code></pre><p><br></p>
 <h5><span id="8可报错时爆表名-字段名-库名">（8）可报错时爆表名、字段名、库名</span></h5><h6><span id="字段名">字段名</span></h6><p>上文介绍可以使用无列明注入，但是如果再进行限制,不允许使用union 该怎么破呢？</p>
 <pre><code>select * from admin where id=1 and (select * from (select * from admin as a join admin as b) as c)
-</code></pre><p><img src="/2019/07/16/SQL注入总结/6.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"><br>把当前表第一个字段成功爆出来了。</p>
+</code></pre><p><img src="/2019/07/16/SQL注入总结/6.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>把当前表第一个字段成功爆出来了。</p>
 <p>这个的原理就是在使用别名的时候，表中不能出现相同的字段名，于是我们就利用join把表扩充成两份，在最后别名c的时候 查询到重复字段，就成功报错。</p>
-<p>同时，可以利用using爆其他字段：<br><img src="/2019/07/16/SQL注入总结/7.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p>同时，可以利用using爆其他字段：<br><img src="/2019/07/16/SQL注入总结/7.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <h6><span id="表名">表名</span></h6><p>翻阅mysql的文档发现了一个非常好玩的函数</p>
 <p>Polygon(ls1, ls2, …)</p>
 <p>Polygon从多个LineString或WKB LineString参数 构造一个值 。如果任何参数不表示LinearRing（也就是说，不是一个封闭和简单的LineString），返回值就是NULL</p>
-<p>如果传参不是linestring的话，就会爆错，而当如果我们传入的是存在的字段的话，就会爆出已知库、表、列。<br><img src="/2019/07/16/SQL注入总结/8.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="https://s2.ax1x.com/2019/10/30/K5JVXT.gif" alt="在这里插入图片描述"></p>
+<p>如果传参不是linestring的话，就会爆错，而当如果我们传入的是存在的字段的话，就会爆出已知库、表、列。<br><img src="/2019/07/16/SQL注入总结/8.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <h6><span id="库名">库名</span></h6><p>上面的方法已经可以爆出库名了，提供另一个方法</p>
 <pre><code>select * from admin where id =1-a()
 </code></pre><p><br></p>
@@ -347,20 +393,24 @@ values(&#39;100&#39;,&#39;new&#39;,&#39;new&#39;);
           </div>
           <br>
           <div>
+            <p>
             
-              <p>
+              <span>
                 <i class="iconfont icon-inbox"></i>
                 
                   <a class="hover-with-bg" href="/categories/CTF">CTF</a>
                   &nbsp;
                 
-              </p>
+              </span>&nbsp;&nbsp;
             
-            <p>
-              <i class="iconfont icon-tag"></i>
-              
-                <a class="hover-with-bg" href="/tags/CTF">CTF</a>
-              
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/CTF">CTF</a>
+                
+              </span>
+            
             </p>
             
               <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
@@ -389,25 +439,28 @@ values(&#39;100&#39;,&#39;new&#39;,&#39;new&#39;);
     
       <br><br>
       
-      <div class="disqus" style="width:100%">
-  <div id="disqus_thread"></div>
-  <script>
-    var disqus_shortname = 'Lethe';
-    var disqus_config = function () {
-      this.page.url = 'https://lethe.site/2019/07/16/SQL注入总结/';
-      this.page.identifier = '/2019/07/16/SQL注入总结/';
-    };
-    (function () {
-      var d = document, s = d.createElement('script');
-      s.type = 'text/javascript';
-      s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', +new Date());
-      (d.head || d.body).appendChild(s);
-    })();
-  </script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
-      powered by Disqus.</a></noscript>
-</div>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://lethe.site/2019/07/16/SQL注入总结/';
+        this.page.identifier = '/2019/07/16/SQL注入总结/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'Lethe' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
     
   </div>
 </div>
@@ -445,41 +498,101 @@ values(&#39;100&#39;,&#39;new&#39;,&#39;new&#39;);
 
   <footer class="mt-5">
   <div class="text-center py-3">
-    <!-- <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
     <i class="iconfont icon-love"></i>
-    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a> -->
-    <b>Copyright &copy; 2019.</b><a href="/"><b>Lethe</b></a>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
     <br>
+
     
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
   </div>
 </footer>
 
 <!-- SCRIPTS -->
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/jquery/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/popper/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/bootstrap/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/mdbootstrap/js/mdb.min.js"></script>
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.8.9/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
+
 
   <script src="/js/lazyload.js"></script>
 
 
+
   
-    <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/tocbot/tocbot.min.js"></script>
+    <script src="https://cdn.staticfile.org/tocbot/4.8.0/tocbot.min.js"></script>
   
   <script src="/js/post.js"></script>
 
 
-  <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/prettify/prettify.min.js"></script>
+
+  <script src="https://cdn.staticfile.org/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?99792b18d5c4379d7bc5cf4bced8a563";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/r298/prettify.min.js"></script>
   <script>
     $(document).ready(function () {
-      $('pre').addClass('prettyprint linenums');
+      $('pre').addClass('prettyprint  ');
       prettyPrint();
     })
   </script>
 
 
-  <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/typed/typed.min.js"></script>
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.10/typed.min.js"></script>
   <script>
     var typed = new Typed('#subtitle', {
       strings: [
@@ -498,7 +611,8 @@ values(&#39;100&#39;,&#39;new&#39;,&#39;new&#39;);
   </script>
 
 
-  <script src="https://cdn.jsdelivr.net/gh/fluid-dev/hexo-theme-fluid@1.5.1/source/lib/anchor/anchor.min.js"></script>
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.0/anchor.min.js"></script>
   <script>
     anchors.options = {
       placement: "right",
@@ -529,11 +643,27 @@ values(&#39;100&#39;,&#39;new&#39;,&#39;new&#39;);
 
 
 
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
   <script>
-    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) || (/Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent))) {
-      $("#background").css("background-attachment", "scroll");
-    }
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
   </script>
+
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>
