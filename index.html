@@ -54,7 +54,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">Home</a>
           </li>
         
           
@@ -62,7 +62,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">Archives</a>
           </li>
         
           
@@ -70,7 +70,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">Categories</a>
           </li>
         
           
@@ -78,7 +78,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">Tags</a>
           </li>
         
           
@@ -86,7 +86,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">About</a>
           </li>
         
         
@@ -137,31 +137,6 @@
   <div class="row mb-4 mx-auto">
     
     
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2020/03/15/GXYCTF2019-GWCTF2019——Writeup/">
-        <p class="h4 index-header"></p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1"></div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-03-15&nbsp;&nbsp;
-        
-        
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
       <div class="col-12 col-md-4 m-auto">
         <a href="/2020/03/06/GYCTF2020-Writeup/" target="_self">
           <img src="https://s1.ax1x.com/2020/03/15/83h1IJ.png" srcset="/img/loading.gif" alt="GYCTF2020_Writeup" class="img-fluid rounded z-depth-3 index-thumbnails">
@@ -193,6 +168,60 @@ boo</div>
       <div>
         
           <i class="iconfont icon-riqi2"></i>&nbsp;2020-03-06&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Writeup">Writeup</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Writeup">Writeup</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/" target="_self">
+          <img src="https://s1.ax1x.com/2020/03/15/83h1IJ.png" srcset="/img/loading.gif" alt="GXYCTF2019&amp;GWCTF2019——Writeup" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/">
+        <p class="h4 index-header">GXYCTF2019&amp;GWCTF2019——Writeup</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">GXYCTF 2019Ping Ping Ping进入题目后，提示了  /?ip=，于是加上参数 ?ip=1试试看，发现是执行了ping命令：然后尝试：
+?ip=;ls
+发现成功执行了命令，但是当读取 flag.php 时，发现过了空格，尝试下面两种绕过方式
+${IFS}
+$IFS$9 
+使用第二个$IFS$9代替空格成功绕过，执行 ?ip=;cat$IFS$9flag.php，发现 flag 也被过滤了，且通配符 * 同样被过滤了，那我们先读一下 index.php：可以看到源码，的确过滤了一些特殊符号、空格和flag，下面有两种方式可以绕过：
+（1）可以使用变量的方式来绕过，只要 f、l、a、g 四个字母不按照顺序即可，payload如下：
+?ip=;z=g;cat$IFS$9fla$z.php
+（2）我们发现代码中没有过滤反引号，那么可以内联执行命令，即用反引号内执行的输出作为另一个命令的输入执行，payload如下：
+?ip=;cat$IFS$9`ls`
+flag在源码中：
+禁止套娃扫目录发现.git泄露，利用GitHack得到index.php源码如下：
+&lt;?php
+i</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-03-03&nbsp;&nbsp;
         
         
           <i class="iconfont icon-inbox"></i>
@@ -703,7 +732,7 @@ string Judge(int x, int y, int z)
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -711,7 +740,7 @@ string Judge(int x, int y, int z)
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
