@@ -347,10 +347,10 @@ def get_user(id):
 <h1><span id="0x02-模板">0x02 模板</span></h1><h3><span id="一-jinja2模板引擎">一、Jinja2模板引擎</span></h3><h5><span id="11-变量">1.1 变量</span></h5><p>默认情况下，Flask 在应用目录中的 template 子目录中寻找模板。</p>
 <p>在模板中使用 {{}} 结构来表示一个变量，是一种特殊的占位符，告诉模板引擎这个位置的值从渲染模板时使用的数据中获取。</p>
 <p>index.html：</p>
-<pre><code class="javascript">&lt;h1&gt;Hello World!&lt;/h1&gt;
+<pre><code class="python">&lt;h1&gt;Hello World!&lt;/h1&gt;
 </code></pre>
 <p>user.html：</p>
-<pre><code class="javascript">&lt;h1&gt;Hello, {{ name }}!&lt;/h1&gt;
+<pre><code class="python">&lt;h1&gt;Hello, {{ name }}!&lt;/h1&gt;
 </code></pre>
 <p>hello.py</p>
 <pre><code class="python">from flask import Flask, render_template
@@ -365,7 +365,7 @@ def user(name):
     return render_template(&#39;user.html&#39;, name=name)
 </code></pre>
 <p>Jinja2 能识别所有类型的变量，甚至是一些复杂的类型，例如列表、字典和对象。下面是在模板中使用变量的一些示例:</p>
-<pre><code class="javascript">&lt;p&gt;A value from a dictionary: {{ mydict['key'] }}.&lt;/p&gt;
+<pre><code class="python">&lt;p&gt;A value from a dictionary: {{ mydict['key'] }}.&lt;/p&gt;
 &lt;p&gt;A value from a list: {{ mylist[3] }}.&lt;/p&gt;
 &lt;p&gt;A value from a list, with a variable index: {{ mylist[myintvar] }}.&lt;/p&gt;
 &lt;p&gt;A value from an object&#39;s method: {{ myobj.somemethod() }}.&lt;/p&gt;
@@ -411,14 +411,14 @@ def user(name):
 </tbody>
 </table>
 <h5><span id="12-控制结构">1.2 控制结构</span></h5><p>（1）条件判断语句</p>
-<pre><code class="javascript">{% if user %}
+<pre><code class="python">{% if user %}
 	Hello, {{ user }}!
 {% else %}
 	Hello, Stranger!
 {% endif %}
 </code></pre>
 <p>（2）for循环语句</p>
-<pre><code class="javascript">&lt;ul&gt;
+<pre><code class="python">&lt;ul&gt;
     {% for comment in comments %}
 		<li>{{ comment }}</li>
 	{% endfor %}
@@ -426,7 +426,7 @@ def user(name):
 </code></pre>
 <p>（3）宏</p>
 <p>Jinja2支持宏，类似于函数的作用，例如：</p>
-<pre><code class="javascript">{% macro render_comment(comment) %}
+<pre><code class="python">{% macro render_comment(comment) %}
 <li>{{ comment }}</li>
 {% endmacro %}
 &lt;ul&gt;
@@ -438,13 +438,13 @@ def user(name):
 </code></pre>
 <p>还可以把宏保存在单独文件中，然后重复使用，如</p>
 <p>macors.html：</p>
-<pre><code class="javascript">{% macro render_comment(comment) %}
+<pre><code class="python">{% macro render_comment(comment) %}
 <li>{{ comment }}</li>
 {% endmacro %}
 &lt;ul&gt;
 </code></pre>
 <p>然后再需要用到宏的模板中使用 <code>import</code> 语句导入：</p>
-<pre><code class="javascript">{% import 'macros.html' as macros %}
+<pre><code class="python">{% import 'macros.html' as macros %}
 &lt;ul&gt;
     {% for comment in comments %}
 		{{ macros.render_comment(comment) }}
@@ -453,10 +453,10 @@ def user(name):
 </code></pre>
 <p>（4）模板</p>
 <p>需要在多处重复使用的模板代码片段可以写入单独的文件，再引入所有模板中，以以避免重复：</p>
-<pre><code class="javascript">{% include 'common.html' %}
+<pre><code class="python">{% include 'common.html' %}
 </code></pre>
 <p>模板也是可以<strong>继承</strong>的，先创建一个基模板 <code>base.html</code> 如下：</p>
-<pre><code class="javascript">&lt;html&gt;
+<pre><code class="python">&lt;html&gt;
     &lt;head&gt;
         {% block head %}
         <title>{% block title %}{% endblock %} - My Application&lt;/title&gt;
@@ -469,7 +469,7 @@ def user(name):
 &lt;/html&gt;
 </title></code></pre>
 <p>上面 <code>block</code> 和<code>endblock</code> 定义的区块中内容可以在衍生模板中覆盖，如下：</p>
-<pre><code class="javascript">{% extends "base.html" %}
+<pre><code class="python">{% extends "base.html" %}
 {% block title%}Index{% endblock %}
 {% block head %}
     {{ super() }}
@@ -488,7 +488,7 @@ def user(name):
 bootstrap = Bootstrap(app)
 </code></pre>
 <p>然后可以直接继承提供的 <code>bootstrap/base.html</code> 模板，其是一个包含了Bootstrap 文件和一般结构的基模板，衍生模板 <code>user.html</code>如下：</p>
-<pre><code class="javascript">{% extends "bootstrap/base.html" %}
+<pre><code class="python">{% extends "bootstrap/base.html" %}
 {% block title %}Flasky{% endblock %}
 {% block navbar %}
 <div class="navbar navbar-inverse" role="navigation">
@@ -593,7 +593,7 @@ def user(name):
 </tbody>
 </table>
 <p>若要在衍生模块中添加新的JavaScript文件，为了防止覆盖掉原有的引入Bootstrap的内容，需要使用 <code>super()</code> 函数：</p>
-<pre><code class="javascript">{% block scripts %}
+<pre><code class="python">{% block scripts %}
 {{ super() }}
 <script type="text/javascript" src="my-script.js"></script>
 {% endblock %}
@@ -615,7 +615,7 @@ def internal_server_error(e):
 </code></pre>
 <p>为了减少代码重复，我们可以在上面的基础上改进一下 <code>base.html</code>，使其成为继承了 <code>bootstrap/base.html</code> 的二级基模板，也可以被其他模板继承。</p>
 <p>二级模板 templates/base.html：</p>
-<pre><code class="javascript">{% extends "bootstrap/base.html" %}
+<pre><code class="python">{% extends "bootstrap/base.html" %}
 
 {% block title %}Flasky{% endblock %}
 
@@ -648,7 +648,7 @@ def internal_server_error(e):
 </div></code></pre>
 <p>这样，应用中的模板继承自这个模板即可。</p>
 <p>templates/404.html</p>
-<pre><code class="javascript">{% extends "base.html" %}
+<pre><code class="python">{% extends "base.html" %}
 
 {% block title %}Flasky - Page Not Found{% endblock %}
 
@@ -659,7 +659,7 @@ def internal_server_error(e):
 {% endblock %}
 </code></pre>
 <p>上面的 user.html 也可以继承改模板来简化：</p>
-<pre><code class="javascript">{% extends "base.html" %}
+<pre><code class="python">{% extends "base.html" %}
 
 {% block title %}Flasky{% endblock %}
 
@@ -733,7 +733,7 @@ def index():
 </code></pre>
 <p>然后在index.html 中渲染模板变量 current_time</p>
 <p>templates/index.html</p>
-<pre><code class="javascript">{% extends "base.html" %}
+<pre><code class="python">{% extends "base.html" %}
 
 {% block title %}Flasky{% endblock %}
 
@@ -937,7 +937,7 @@ class NameForm(FlaskForm):
 </table>
 <p><br></p>
 <h3><span id="三-表单渲染">三、表单渲染</span></h3><p>表单字段是可调用的，在模板中调用后会渲染成HTML。假设视图函数通过 <code>form</code> 参数把上面的 NameForm 实例传入模板，在模板中可以生成一个简单的HTML表单，如下：</p>
-<pre><code class="javascript">&lt;form method=&quot;POST&quot;&gt;
+<pre><code class="python">&lt;form method=&quot;POST&quot;&gt;
     {{ form.hidden_tag() }}
     {{ form.name.label }} {{ form.name() }}
     {{ form.submit() }}
@@ -945,7 +945,7 @@ class NameForm(FlaskForm):
 </code></pre>
 <p>这里的 <code>form.hidden_tag()</code> 元素生成一个隐藏的字段，用于 CSRF 防护。</p>
 <p>在调用字段的时候，传入的关键词参数将转换为字段的<strong>HTML属性</strong>。 如下，指定id或class属性，从而可以定义CSS样式：</p>
-<pre><code class="javascript">&lt;form method=&quot;POST&quot;&gt;
+<pre><code class="python">&lt;form method=&quot;POST&quot;&gt;
     {{ form.hidden_tag() }}
     {{ form.name.label }} {{ form.name(id='my-text-field') }}
     {{ form.submit() }}
@@ -957,7 +957,7 @@ class NameForm(FlaskForm):
 </code></pre>
 <p>使用 import 导入 <code>bootstrap/wtf.html</code> 文件，其中定义了一个用默认Bootstrap 样式渲染的 Flask-WTF 表单对象的辅助函数  <code>wtf.quick_form()</code> ，参数为Flask-WTF 表单对象。</p>
 <p>使用Flask-WTF 和 Flask-Bootstrap渲染表单，templates/index.html：</p>
-<pre><code class="javascript">{% extends "base.html" %}
+<pre><code class="python">{% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}Flasky{% endblock %}
@@ -1056,7 +1056,7 @@ def index():
 <li>仅调用 flash() 函数不能将消息显示出来，还需要经过模板的渲染。最好在基模板中渲染闪现消息，这样继承自它的所有页面都能显示要闪现的消息。</li>
 </ul>
 <p>Flask中用 <code>get_flashed_message()</code> 函数在模板中获取并渲染闪现消息，如下修改emplates/base.html中的 content 块：</p>
-<pre><code class="javascript">{% block content %}
+<pre><code class="python">{% block content %}
 <div class="container">
     {% for message in get_flashed_message() %}
     <div class="alert alert-warning">
@@ -1770,7 +1770,7 @@ def index():
                            message=session.get(&#39;message&#39;))
 </code></pre>
 <p>（4）再修该一下tempates/index.html，使其能够显示定制消息：</p>
-<pre><code class="javascript">{% extends "base.html" %}
+<pre><code class="python">{% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}Flasky{% endblock %}
@@ -1947,10 +1947,10 @@ def index():
                            message=session.get(&#39;message&#39;))
 </code></pre>
 <p>templates/mai/new_user.txt：</p>
-<pre><code class="javascript">User {{ user.username }} has joined.
+<pre><code class="python">User {{ user.username }} has joined.
 </code></pre>
 <p>templates/mai/new_user.html：</p>
-<pre><code class="javascript">User &lt;b&gt;{{ user.username }}&lt;/b&gt; has joined.
+<pre><code class="python">User &lt;b&gt;{{ user.username }}&lt;/b&gt; has joined.
 </code></pre>
 <ul>
 <li>电子邮件的收件人地址保存在环境变量 FLASKY_ADMIN 中，启动前需要导入此环境变量，方法和前面的相同。</li>
