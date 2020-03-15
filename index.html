@@ -137,6 +137,82 @@
   <div class="row mb-4 mx-auto">
     
     
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2020/03/15/GXYCTF2019-GWCTF2019——Writeup/">
+        <p class="h4 index-header"></p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1"></div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-03-15&nbsp;&nbsp;
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2020/03/06/GYCTF2020-Writeup/" target="_self">
+          <img src="https://s1.ax1x.com/2020/03/15/83feBD.png" srcset="/img/loading.gif" alt="GYCTF2020_Writeup" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2020/03/06/GYCTF2020-Writeup/">
+        <p class="h4 index-header">GYCTF2020_Writeup</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">Blacklist一到注入题，和2019强网杯的随便住基本一致，但是多过滤了set、prepare、alter、rename：
+return preg_match(&quot;/set|prepare|alter|rename|select|update|delete|drop|insert|where|\./i&quot;,$inject);
+获取表名和列名的方式与原题一致，而获取数据可以参考这篇文章：https://xz.aliyun.com/t/7169#toc-47，使用handler语句进行查询。
+
+mysql除可使用select查询表中的数据，也可使用handler语句，这条语句使我们能够一行一行的浏览一个表中的数据，不过handler语句并不具备select语句的所有功能。它是mysql专用的语句，并没有包含到SQL标准中。所以可以构造payload如下：
+?inject=-1&#39;;handler FlagHere open;handler FlagHere read first%23
+
+
+
+Ezsqli看名字就是一道sql注入的题目，经测试总共有四种回显：
+boo</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-03-06&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Writeup">Writeup</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Writeup">Writeup</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
       <div class="col-12 col-md-4 m-auto">
         <a href="/2020/01/01/AnhengMonthMatch2020-1-Writeup/" target="_self">
           <img src="https://s2.ax1x.com/2020/03/11/8AVheP.png" srcset="/img/loading.gif" alt="安恒月赛2020元旦场Writeup" class="img-fluid rounded z-depth-3 index-thumbnails">
@@ -586,116 +662,6 @@ string Judge(int x, int y, int z)
           <i class="iconfont icon-tag"></i>
           
             <a href="/tags/Study%20Notes">Study Notes</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/09/19/学一下Ajax/" target="_self">
-          <img src="https://s2.ax1x.com/2020/03/11/8kJ5hn.jpg" srcset="/img/loading.gif" alt="学一下Ajax" class="img-fluid rounded z-depth-3 index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/09/19/学一下Ajax/">
-        <p class="h4 index-header">学一下Ajax</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">0x01 Axaj简介（1）概述AJAX = 异步 JavaScript 和 XML。
-AJAX 是一种用于创建快速动态网页的技术。
-通过在后台与服务器进行少量数据交换，AJAX 可以使网页实现异步更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。
-（2）Ajax的执行过程使用Ajax技术通常包括以下几个步骤：
-
-创建一个Ajax对象。
-在此对象的基础上根据HTTP协议的规范向服务器发送HTTP请求。
-服务器接收到Ajax请求后会响应此请求，并根据事先约定的格式返回相应的数据集。
-浏览器接收到服务器的响应，获取返回数据集，更新部分网页内容。
-
-用一句话概括，即Ajax通过XMLHttpRequest对象向服务器发出HTTP请求，当获取到服务器返回的数据后进行相应的页面数据的渲染处理。
-
-0x02 XHR对象创建Ajax的核心是XMLHttpRequest对象（简称为XHR对象）的使用，XMLHttpRequest对象作为浏览器请求服务器的一个接口，可以使用异步的方式通过浏览器向服务器发送请求并解析服务器的响应。
-使用Ajax服务器发送HTTP请求的首要任务是创建一</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-09-19&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/JavaScript">JavaScript</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/JavaScript">JavaScript</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/" target="_self">
-          <img src="https://s2.ax1x.com/2020/03/11/8kYwuT.jpg" srcset="/img/loading.gif" alt="ByteCTF_2019&amp;XNUCA_2019部分web题复现" class="img-fluid rounded z-depth-3 index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/09/11/ByteCTF-2019-XNUCA-2019部分web题复现/">
-        <p class="h4 index-header">ByteCTF_2019&amp;XNUCA_2019部分web题复现</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">XNUCA 2019 EasyPHP&lt;?php
-    $files = scandir(&#39;./&#39;); 
-    foreach($files as $file) {
-        if(is_file($file)){
-            if ($file !== &quot;index.php&quot;) {
-                unlink($file);
-            }
-        }
-    }
-    include_once(&quot;fl3g.php&quot;);
-    if(!isset($_GET[&#39;content&#39;]) || !isset($_GET[&#39;filename&#39;])) {
-        highlight_file(__FILE__);
-        die();
-    }
-    $content = $_GET[&#39;content&#39;];
-    if(stristr($content,&#39;on&#39;) || stristr(</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-09-11&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Writeup">Writeup</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Writeup">Writeup</a>&nbsp;
           
         
       </div>

