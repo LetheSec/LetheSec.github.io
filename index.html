@@ -54,7 +54,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="/">ホーム</a>
           </li>
         
           
@@ -62,7 +62,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">Archives</a>
+            <a class="nav-link" href="/archives/">アーカイブ</a>
           </li>
         
           
@@ -70,7 +70,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">Categories</a>
+            <a class="nav-link" href="/categories/">カテゴリー</a>
           </li>
         
           
@@ -78,7 +78,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">Tags</a>
+            <a class="nav-link" href="/tags/">タグ</a>
           </li>
         
           
@@ -86,7 +86,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/about/">About</a>
+            <a class="nav-link" href="/about/">本ブログ情報　</a>
           </li>
         
         
@@ -233,6 +233,60 @@ i</div>
           <i class="iconfont icon-tag"></i>
           
             <a href="/tags/Writeup">Writeup</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2020/02/01/Flask-Notes/" target="_self">
+          <img src="https://s1.ax1x.com/2020/03/15/83XvTI.jpg" srcset="/img/loading.gif" alt="Flask-Notes" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2020/02/01/Flask-Notes/">
+        <p class="h4 index-header">Flask-Notes</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">0x01 环境与应用的基本结构一、虚拟环境配置1.1 创建虚拟环境Python 3 和 Python 2 解释器创建虚拟环境的方法有所不同。在 Python 3中，虚拟环境由 Python 标准库中的 venv 包原生支持。
+使用如下命令创建虚拟环境：
+python -m venv virtual-environment-name
+
+-m venv 选项的作用是以独立的脚本运行标准库中的 venv 包，后面的参数为虚拟环境的名称。
+例如，如下命令创建了一个名称为venv的虚拟环境：
+python -m venv venv
+
+命令执行完毕后，当前目录中会出现一个名为 venv 的子目录，这里就是一个全新的虚拟环境，包含这个项目专用的 Python 解释器。
+1.2 激活虚拟环境在Windows下，可以通过如下命令激活虚拟环境：
+venv/Scripts/aivate
+
+虚拟环境激活后，命令行的路径前会有(venv)，此时在命令行中输入python，将调用虚拟环境中的解释器，而不是全局解释器。如果打开了多个命令提示符窗口，则在每个窗口中都要激活虚拟环境。
+在命令提示符中输入deactiva</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-01&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python">Python</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Python">Python</a>&nbsp;
           
         
       </div>
@@ -637,66 +691,6 @@ TE-CL
     </div>
   </div>
 
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/10/20/数据结构实验复习/" target="_self">
-          <img src="https://s2.ax1x.com/2020/03/11/8kJdTH.jpg" srcset="/img/loading.gif" alt="数据结构实验复习" class="img-fluid rounded z-depth-3 index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/10/20/数据结构实验复习/">
-        <p class="h4 index-header">数据结构实验复习</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">为了复习数据结构实验考试，将OJ题目再过一遍吧…不要问我为什么大三才考这个，这就是转专业的魅力~~
-实验一问题 A: 判断三角形形状题目描述给你三角形的三条边，你能告诉我它是哪种三角形吗？如果是直角三角形，请输出“good”。如果是等腰三角形，请输出“perfect”。否则，请输出“just a triangle”。题目保证输入数据合法。
-输入输入的第一行为一个整数t，表示测试样例的数量。每组样例包含了三个整数a,b,c，代表了三角形的三条边的长度。（0&lt;a,b,c&lt;300）
-输出对于每组样例，输出结果，每组结果占一行。样例输入
-4
-3 4 5
-2 2 3 
-1 4 4
-4 6 3
-样例输出good
-perfect
-perfect
-just a triangle
-思路没啥好说的，基础题
-代码#include&lt;iostream&gt;
-#include&lt;string&gt;
-using namespace std;
-string Judge(int x, int y, int z)
-{
-    string type = &quot;just a triangle</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-10-20&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Study%20Notes">Study Notes</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Study%20Notes">Study Notes</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
 
 
   <nav aria-label="index posts navigation">
@@ -732,7 +726,7 @@ string Judge(int x, int y, int z)
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <h4 class="modal-title w-100 font-weight-bold">検索</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -740,7 +734,7 @@ string Judge(int x, int y, int z)
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+          <label data-error="x" data-success="v" for="local-search-input">キーワード</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>

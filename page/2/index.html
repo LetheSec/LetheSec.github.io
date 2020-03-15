@@ -54,7 +54,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="/">ホーム</a>
           </li>
         
           
@@ -62,7 +62,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">Archives</a>
+            <a class="nav-link" href="/archives/">アーカイブ</a>
           </li>
         
           
@@ -70,7 +70,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">Categories</a>
+            <a class="nav-link" href="/categories/">カテゴリー</a>
           </li>
         
           
@@ -78,7 +78,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">Tags</a>
+            <a class="nav-link" href="/tags/">タグ</a>
           </li>
         
           
@@ -86,7 +86,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/about/">About</a>
+            <a class="nav-link" href="/about/">本ブログ情報　</a>
           </li>
         
         
@@ -133,6 +133,66 @@
               <div class="col-12 col-md-10 m-auto">
                 
 
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/10/20/数据结构实验复习/" target="_self">
+          <img src="https://s2.ax1x.com/2020/03/11/8kJdTH.jpg" srcset="/img/loading.gif" alt="数据结构实验复习" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/10/20/数据结构实验复习/">
+        <p class="h4 index-header">数据结构实验复习</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">为了复习数据结构实验考试，将OJ题目再过一遍吧…不要问我为什么大三才考这个，这就是转专业的魅力~~
+实验一问题 A: 判断三角形形状题目描述给你三角形的三条边，你能告诉我它是哪种三角形吗？如果是直角三角形，请输出“good”。如果是等腰三角形，请输出“perfect”。否则，请输出“just a triangle”。题目保证输入数据合法。
+输入输入的第一行为一个整数t，表示测试样例的数量。每组样例包含了三个整数a,b,c，代表了三角形的三条边的长度。（0&lt;a,b,c&lt;300）
+输出对于每组样例，输出结果，每组结果占一行。样例输入
+4
+3 4 5
+2 2 3 
+1 4 4
+4 6 3
+样例输出good
+perfect
+perfect
+just a triangle
+思路没啥好说的，基础题
+代码#include&lt;iostream&gt;
+#include&lt;string&gt;
+using namespace std;
+string Judge(int x, int y, int z)
+{
+    string type = &quot;just a triangle</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-10-20&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Study%20Notes">Study Notes</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Study%20Notes">Study Notes</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
 
   <div class="row mb-4 mx-auto">
     
@@ -669,69 +729,6 @@ PHP反序列化漏洞：如果代码中使用了反序列化 unserialize()函数
     </div>
   </div>
 
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/07/28/MVC_Simple_Message_Board/" target="_self">
-          <img src="https://s2.ax1x.com/2020/03/11/8ktp5j.png" srcset="/img/loading.gif" alt="MVC架构实现简易留言管理系统" class="img-fluid rounded z-depth-3 index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/07/28/MVC_Simple_Message_Board/">
-        <p class="h4 index-header">MVC架构实现简易留言管理系统</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">0x01 总体设计留言模块主要包括以下几个子模块：
-
-模型模块（Model）：模型类中封装好用户操作数据库的各种方法，供控制器调用。
-视图模块（View）:Web视图页面收集用户留言。
-控制器模块（Controller）：控制器处理Web视图页面收集的数据。
-
-
-0x02 详细设计（1）查看留言记录
-在控制器的selete()方法中，调用模型类中封装的getSelete()方法查询数据表中所有的数据，并显示到前端。
-在Web页面中循环遍历返回的索引数组，即可显示留言列表。
-
-（2）添加留言记录
-在前端页面的form表单中获取用户输入的数据。
-在控制器的add()方法中，调用模型类中封装的getInsert()方法向数据表中添加数据。
-前端页面跳转到留言列表中。
-
-（3）修改留言记录
-当要修改数据时，先查找要修改的内容，把查找到的数据放到表单中。
-在控制器的update()方法中，调用模型类中封装的getUpdate()方法对留言数据进行修改。
-
-（4）删除留言记录
-在Web页面点击“删除”，进入控制器的delete()方法。
-在控制器的delete()方法中，调用模型类中封装的getD</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-28&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/PHP">PHP</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/PHP">PHP</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
 
 
   <nav aria-label="index posts navigation">
@@ -767,7 +764,7 @@ PHP反序列化漏洞：如果代码中使用了反序列化 unserialize()函数
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <h4 class="modal-title w-100 font-weight-bold">検索</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -775,7 +772,7 @@ PHP反序列化漏洞：如果代码中使用了反序列化 unserialize()函数
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+          <label data-error="x" data-success="v" for="local-search-input">キーワード</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
