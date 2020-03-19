@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lethe.site/2020/03/19/test-post/</loc>
+    
+    <lastmod>2020-03-19T01:24:50.336Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lethe.site/2020/02/01/Flask-Notes/</loc>
     
     <lastmod>2020-03-15T11:45:04.095Z</lastmod>
