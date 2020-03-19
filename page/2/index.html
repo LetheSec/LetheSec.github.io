@@ -138,56 +138,6 @@
     
     
       <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/10/21/RoarCTF-Web-Writeup/" target="_self">
-          <img src="https://s2.ax1x.com/2020/03/11/8AVOLq.png" srcset="/img/loading.gif" alt="RoarCTF_Web_Writeup" class="img-fluid rounded z-depth-3 index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/10/21/RoarCTF-Web-Writeup/">
-        <p class="h4 index-header">RoarCTF_Web_Writeup</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">周末有点事，BUUCTF上复现一下…
-easy_calc这一题和国赛的lova_math一题看起来有点像…源码中提示了这题加了waf，我们访问calc.php，看到源码如下num传入表达式，然后用eval()计算并输出，因为加了waf所以num中如果有字母，会直接返回403，所以第一步就是绕过它。
-比较简单的方式就是直接在查询参数前面加个空格，即将?num=改为? num=即可绕过。
-可以参考这篇文章：利用PHP的字符串解析特性Bypass
-当然，如果你觉得上面的方法不够高端，不能凸显你的技术，下面这篇文章提到的方法同样可以绕过。
-利用HTTP请求走私来绕过，关于该漏洞可参考这篇文章：协议层的攻击——HTTP请求走私
-随便测试文中提到的TE-CL方式，发现可以绕过，原理已经在文中说的很清楚，这里就不赘述。
-TE-CL
-下面就是如何绕过black_list来拿flag了，思路和国赛那题差不多，也是利用一些数学函数和内置函数来构造。
-用scandir读取目录时，首要问题是要构造/，可利用hex2bin(dechex(47))，将/的ascii码进制转为16进制，再转为字符串：然后其他的就是</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-10-21&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Writeup">Writeup</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Writeup">Writeup</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
         <a href="/2019/10/20/数据结构实验复习/" target="_self">
           <img src="https://s2.ax1x.com/2020/03/11/8kJdTH.jpg" srcset="/img/loading.gif" alt="数据结构实验复习" class="img-fluid rounded z-depth-3 index-thumbnails">
         </a>
@@ -714,6 +664,54 @@ PHP反序列化漏洞：如果代码中使用了反序列化 unserialize()函数
       <div>
         
           <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-06&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/CTF">CTF</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/CTF">CTF</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/07/30/XSS刷题之旅/" target="_self">
+          <img src="https://s2.ax1x.com/2020/03/11/8AeEcj.jpg" srcset="/img/loading.gif" alt="XSS刷题之旅" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/07/30/XSS刷题之旅/">
+        <p class="h4 index-header">XSS刷题之旅</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">0x01 一些资源或文章：XSS小结XSS总结那些年我们没能bypass的xss filterXSS Filter Evasion Cheat Sheet 中文版XSS攻击手段&amp;在CTF中的运用
+
+0x02 常用Payload（慢慢积累…）&lt;img src=&quot;x&quot; onerror=alert(1)&gt;
+&lt;img src=&quot;1&quot; onerror=eval(&quot;alert(&#39;xss&#39;)&quot;)&gt;
+&lt;img src=1 onmouseover=alert(&#39;xss&#39;)&gt;
+&lt;a href=&quot;javascript:alert(&#39;xss&#39;)&quot;&gt;aa&lt;/a&gt;
+&lt;a href=javascript:eval(alert(&#39;xss&#39;))&gt;aa&lt;/a&gt;
+&lt;a href=&quot;javascript:aaa&quot; onmouseover=&quot;alert(/xs</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-30&nbsp;&nbsp;
         
         
           <i class="iconfont icon-inbox"></i>
