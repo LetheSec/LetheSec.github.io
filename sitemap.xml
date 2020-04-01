@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lethe.site/2020/03/24/bypass-apostrophe-ctf-sqli-learn/</loc>
+    
+    <lastmod>2020-04-01T16:22:53.171Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://lethe.site/2020/03/30/YBL-CTF-Writeup/</loc>
+    
+    <lastmod>2020-04-01T16:22:20.882Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lethe.site/2019/08/15/XML%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB/</loc>
     
     <lastmod>2020-03-28T12:15:23.239Z</lastmod>

