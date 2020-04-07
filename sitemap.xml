@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lethe.site/about/about.html</loc>
+    
+    <lastmod>2020-04-07T01:16:08.887Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lethe.site/2020/03/30/YLB-CTF-Writeup/</loc>
     
     <lastmod>2020-04-04T03:21:17.403Z</lastmod>
@@ -250,13 +257,6 @@
     <loc>https://lethe.site/2019/09/01/%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4Writeup-Web/</loc>
     
     <lastmod>2020-03-11T03:05:03.686Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://lethe.site/about/about.html</loc>
-    
-    <lastmod>2019-12-05T11:12:05.959Z</lastmod>
     
   </url>
   
