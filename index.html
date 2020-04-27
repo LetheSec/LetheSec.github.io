@@ -139,6 +139,68 @@
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2020/04/26/ThinkPHPv6-0-unserialize/" target="_self">
+          <img src="https://s1.ax1x.com/2020/04/27/JfFTMt.png" srcset="/img/loading.gif" alt="ThinkPHP v6.0.x 反序列化" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2020/04/26/ThinkPHPv6-0-unserialize/">
+        <p class="h4 index-header">ThinkPHP v6.0.x 反序列化</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">0x01 环境搭建使用composer进行安装：
+composer create-project topthink/think=6.0.x-dev TPv6.0
+cd TPv6.0
+php think run
+
+定义入口文件app\controller\Index.php：
+&lt;?php
+namespace app\controller;
+
+use app\BaseController;
+
+class Index extends BaseController
+{
+    public function index($payload=&#39;&#39;)
+    {   
+        //echo $payload;
+        unserialize($payload);   
+    }
+}
+
+
+0x02 __destruct链分析（1）寻找__destruct()反序列化POP链的起点通常是__destruct()函数，这次漏洞的触发点位于vendor\topthink\think-orm\src\Model.php中Model类的__destruct析构函数：当满足</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-26&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Code%20Audit">Code Audit</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Code%20Audit">Code Audit</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2020/03/30/YLB-CTF-Writeup/" target="_self">
           <img src="https://s1.ax1x.com/2020/04/02/G8LH29.jpg" srcset="/img/loading.gif" alt="YLB-CTF-Writeup" class="img-fluid rounded z-depth-3 index-thumbnails">
         </a>
@@ -620,73 +682,6 @@ the file contents：被压缩文件的内容。
           <i class="iconfont icon-tag"></i>
           
             <a href="/tags/CTF">CTF</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/10/28/algorithm-experiment-review/" target="_self">
-          <img src="https://s2.ax1x.com/2020/03/11/8kJ7cV.jpg" srcset="/img/loading.gif" alt="算法实验考试复习" class="img-fluid rounded z-depth-3 index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/10/28/algorithm-experiment-review/">
-        <p class="h4 index-header">算法实验考试复习</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">递归与分支
-内部收益率题目描述
-输入
-输出对于每组数据，输出仅一行，即项目的IRR，四舍五入保留小数点后两位。
-样例输入1
--1 2
-2
--8 6 9
-0
-样例输出1.00
-0.50
-代码#include&lt;iostream&gt;
-#include &lt;iomanip&gt;
-using namespace std;
-int main()
-{
-    int n, f, CF[12];
-    while (cin&gt;&gt;n &amp;&amp; n != 0)
-    {
-        cin &gt;&gt; f;
-        double mid, high = 10000, low = -1, r, k, sum;
-        for (int i = 0; i &lt; n; i++)
-            cin &gt;&gt; CF[i];
-        while (high - low &gt; 1.0e-6)    
-        {
-            mid = (high + low) / 2; 
-           </div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-10-28&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Study%20Notes">Study Notes</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Study%20Notes">Study Notes</a>&nbsp;
           
         
       </div>

@@ -139,6 +139,73 @@
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2019/10/28/algorithm-experiment-review/" target="_self">
+          <img src="https://s2.ax1x.com/2020/03/11/8kJ7cV.jpg" srcset="/img/loading.gif" alt="算法实验考试复习" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/10/28/algorithm-experiment-review/">
+        <p class="h4 index-header">算法实验考试复习</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">递归与分支
+内部收益率题目描述
+输入
+输出对于每组数据，输出仅一行，即项目的IRR，四舍五入保留小数点后两位。
+样例输入1
+-1 2
+2
+-8 6 9
+0
+样例输出1.00
+0.50
+代码#include&lt;iostream&gt;
+#include &lt;iomanip&gt;
+using namespace std;
+int main()
+{
+    int n, f, CF[12];
+    while (cin&gt;&gt;n &amp;&amp; n != 0)
+    {
+        cin &gt;&gt; f;
+        double mid, high = 10000, low = -1, r, k, sum;
+        for (int i = 0; i &lt; n; i++)
+            cin &gt;&gt; CF[i];
+        while (high - low &gt; 1.0e-6)    
+        {
+            mid = (high + low) / 2; 
+           </div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-10-28&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Study%20Notes">Study Notes</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Study%20Notes">Study Notes</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2019/10/25/Web安全测试个人赛练习/" target="_self">
           <img src="https://s2.ax1x.com/2020/03/11/8AZjcd.png" srcset="/img/loading.gif" alt="Web安全测试个人赛练习" class="img-fluid rounded z-depth-3 index-thumbnails">
         </a>
@@ -653,56 +720,6 @@ XML 以 LF 存储换行
       <div>
         
           <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-15&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/CTF">CTF</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/CTF">CTF</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/08/13/python沙盒逃逸/" target="_self">
-          <img src="https://s2.ax1x.com/2020/03/11/8ktrsf.jpg" srcset="/img/loading.gif" alt="python沙盒逃逸" class="img-fluid rounded z-depth-3 index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/08/13/python沙盒逃逸/">
-        <p class="h4 index-header">python沙盒逃逸</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">0x01 简单介绍python沙盒逃逸就是通过绕过种种过滤和限制，拿到本不应获取的一些“危险函数”，或者绕过Python终端达到命令执行的效果。
-
-0x02 常用备忘录（1）func_globals用法：function.func_globals
-作用：返回包含函数全局变量的字典的引用——定义函数的模块的全局命名空间。
-&gt;&gt;&gt; def test():pass
-...
-&gt;&gt;&gt; test.func_globals
-{&#39;__builtins__&#39;: &lt;module &#39;__builtin__&#39; (built-in)&gt;, &#39;__name__&#39;: &#39;__main__&#39;, &#39;test&#39;: &lt;function test at 0x000000000392DAC8&gt;, &#39;__doc__&#39;: None, &#39;__package__&#39;: None}
-
-（2）__getattribute__用法：object.__getattribute__</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-13&nbsp;&nbsp;
         
         
           <i class="iconfont icon-inbox"></i>
