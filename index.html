@@ -139,6 +139,96 @@
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2020/05/13/0daySec-HeapDebug/" target="_self">
+          <img src="https://s1.ax1x.com/2020/06/26/NrTs0A.png" srcset="/img/loading.gif" alt="《0day安全》中的堆溢出利用调试" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2020/05/13/0daySec-HeapDebug/">
+        <p class="h4 index-header">《0day安全》中的堆溢出利用调试</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">0x01 堆的工作原理实验环境:
+
+
+
+
+推荐使用环境
+备注
+
+
+
+
+操作系统
+Windows20000虚拟机
+分配策略对操作系统非常敏感
+
+
+编译器
+Visual C++ 6.0
+默认编译选项
+
+
+编译选项
+默认编译选项
+VS2003/VS2005的GS选项将导致实验失败
+
+
+build 版本
+release
+VS2003/VS2005的GS选项将导致实验失败
+
+
+调试器
+Ollydbg
+需要配置Make OllyDbg just-in-time debugger选项
+
+
+
+调试代码如下：
+#include &lt;windows.h&gt;
+
+main()
+{
+    HLOCAL h1,h2,h3,h4,h5,h6;
+    HANDLE hp;
+    hp = HeapCreate(0,0x1000,0x10000);
+    __asm int 3
+
+    h1 = HeapAlloc(hp,HEAP_ZERO_MEMORY,3);
+    h2 = HeapAlloc(hp,HEAP_ZERO_MEMORY,5);
+    h3 = HeapAlloc(hp,HEAP_</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-05-13&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6">二进制</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/%E4%BA%8C%E8%BF%9B%E5%88%B6">二进制</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2020/04/26/ThinkPHPv6-0-unserialize/" target="_self">
           <img src="https://s1.ax1x.com/2020/04/27/JfFTMt.png" srcset="/img/loading.gif" alt="ThinkPHP v6.0.x 反序列化" class="img-fluid rounded z-depth-3 index-thumbnails">
         </a>
@@ -619,58 +709,6 @@ with open(</div>
       <div>
         
           <i class="iconfont icon-riqi2"></i>&nbsp;2019-11-19&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/CTF">CTF</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/CTF">CTF</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/11/13/phar-unserialize/" target="_self">
-          <img src="https://s2.ax1x.com/2020/03/11/8ktFx0.png" srcset="/img/loading.gif" alt="phar反序列化小结" class="img-fluid rounded z-depth-3 index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/11/13/phar-unserialize/">
-        <p class="h4 index-header">phar反序列化小结</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">0x00  phar反序列化phar反序列化即在文件系统函数（file_exists()、is_dir()等）参数可控的情况下，配合phar://伪协议，可以不依赖unserialize()直接进行反序列化操作。
-关于其他反序列化的总结，可以看我的这篇文章
-0x01 原理首先了解一下phar文件的结构，一个phar文件由四部分构成：
-
-a stub：可以理解为一个标志，格式为xxx&lt;?php xxx; __HALT_COMPILER();?&gt;，前面内容不限，但必须以__HALT_COMPILER();?&gt;来结尾，否则phar扩展将无法识别这个文件为phar文件。
-
-a manifest describing the contents：phar文件本质上是一种压缩文件，其中每个被压缩文件的权限、属性等信息都放在这部分。这部分还会以序列化的形式存储用户自定义的meta-data，这是上述攻击手法最核心的地方。
-
-
-the file contents：被压缩文件的内容。
-
-[optional] a signature for verifying Phar integrity</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-11-13&nbsp;&nbsp;
         
         
           <i class="iconfont icon-inbox"></i>
