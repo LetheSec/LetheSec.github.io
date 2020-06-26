@@ -55,7 +55,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="/">首页</a>
           </li>
         
           
@@ -63,7 +63,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">Archives</a>
+            <a class="nav-link" href="/archives/">归档</a>
           </li>
         
           
@@ -71,7 +71,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">Categories</a>
+            <a class="nav-link" href="/categories/">分类</a>
           </li>
         
           
@@ -79,7 +79,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">Tags</a>
+            <a class="nav-link" href="/tags/">标签</a>
           </li>
         
           
@@ -87,7 +87,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/about/">About</a>
+            <a class="nav-link" href="/about/">关于</a>
           </li>
         
         
@@ -250,7 +250,55 @@ main()
 <li>初始状态下，快表和空表为空，不存在精确分配。所以将使用次优块分配，即尾块</li>
 <li>由于次优分配，尾块会被陆续切走一些小块，它的块首中的 size 信息会改变，并且 freelist[0] 会指向新的尾块位置</li>
 </ul>
-<p>所以对于我们程序中的前 6 次连续的内存请求，实际分配情况如下：<br>|堆句柄|请求字节数|实际分配（堆单位）|实际分配（字节）|<br>| – | – | – | – |<br>|H1 |3 |2 |16|<br>|H2| 5 |2 |16|<br>|H3 |6 |2 |16|<br>|H4 |8 |2 |16|<br>|H5 |19 |4 |32|<br>|H6 |24 |4 |32|</p>
+<p>所以对于我们程序中的前 6 次连续的内存请求，实际分配情况如下：</p>
+<table>
+<thead>
+<tr>
+<th>堆句柄</th>
+<th>请求字节数</th>
+<th>实际分配（堆单位）</th>
+<th>实际分配（字节）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H1</td>
+<td>3</td>
+<td>2</td>
+<td>16</td>
+</tr>
+<tr>
+<td>H2</td>
+<td>5</td>
+<td>2</td>
+<td>16</td>
+</tr>
+<tr>
+<td>H3</td>
+<td>6</td>
+<td>2</td>
+<td>16</td>
+</tr>
+<tr>
+<td>H4</td>
+<td>8</td>
+<td>2</td>
+<td>16</td>
+</tr>
+<tr>
+<td>H5</td>
+<td>19</td>
+<td>4</td>
+<td>32</td>
+</tr>
+<tr>
+<td>H6</td>
+<td>24</td>
+<td>4</td>
+<td>32</td>
+</tr>
+</tbody>
+</table>
 <p>在CPU窗口，命令F8单步执行程序到地址：0x0040102B处，这时我们执行完了</p>
 <pre><code class="c">h1 = HeapAlloc(hp, HEAP_ZERO_MEMORY, 3)
 </code></pre>
@@ -418,7 +466,7 @@ int main()
     <div class="d-none d-lg-block col-lg-2 toc-container">
       
   <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
     <div id="tocbot"></div>
   </div>
 
@@ -475,7 +523,7 @@ int main()
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -483,7 +531,7 @@ int main()
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
