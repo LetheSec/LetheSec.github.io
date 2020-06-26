@@ -182,6 +182,68 @@ AbstractWith the advent of the era of big data, the acquisition and retrieval of
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2020/06/09/YXJCMS/" target="_self">
+          <img src="https://s1.ax1x.com/2020/06/26/Nsksxg.jpg" srcset="/img/loading.gif" alt="YXJCMS:一个集成十种漏洞的Web应用系统" class="img-fluid rounded z-depth-3 index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2020/06/09/YXJCMS/">
+        <p class="h4 index-header">YXJCMS:一个集成十种漏洞的Web应用系统</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">1 开发过程1.1 需求分析基于Linux系统，使用Docker容器，并从PHP、Java、Python中选择一门语言并应用开发框架进行开发。所开发的Web应用系统需内置典型的Web漏洞，其中必须包含：
+
+SQL注入
+
+XSS
+
+文件上传
+
+文件包含
+
+命令执行
+
+XXE
+
+反序列化
+
+
+部署方式使用Docker容器进行一键部署，方便环境的迁移与搭建，并需要完成对内置典型漏洞的攻击过程。最后还需要对漏洞页面进行修复，并进行验证。
+根据需求，进行如下分析：
+（1）目前市面上使用PHP进行开发的Web应用系统占据很大一部分，并且国人开发的PHP开发框架ThinkPHP上手简单、文档详细，也被使用的越来越广泛。
+（2）除此之外，使用PHP语言来进行内置漏洞的开发时，可以最大程度上覆盖所有类型的漏洞，实现代码也较为经典。而如果使用Java或者Python语言，由于语言本身的特性，对于某些漏洞可能会比较难以实现。
+（3）本次Web应用系统包含Web服务、数据库服务等不止一种服务，在使用Docker进行部署时，可以使用Docker Compose，避免对每一个微服务单独编写dockerfile和进</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-06-09&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/PHP">PHP</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/PHP">PHP</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2020/05/13/0daySec-HeapDebug/" target="_self">
           <img src="https://s1.ax1x.com/2020/06/26/NrTs0A.png" srcset="/img/loading.gif" alt="《0day安全》中的堆溢出利用调试" class="img-fluid rounded z-depth-3 index-thumbnails">
         </a>
@@ -636,63 +698,6 @@ fr1 = open(&quot;flag.png&quot;,&quot;rb&</div>
       <div>
         
           <i class="iconfont icon-riqi2"></i>&nbsp;2020-01-01&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Writeup">Writeup</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Writeup">Writeup</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2019/11/25/LHB-Writeup/" target="_self">
-          <img src="https://s2.ax1x.com/2020/03/11/8kYT5d.png" srcset="/img/loading.gif" alt="领航杯部分Writeup" class="img-fluid rounded z-depth-3 index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/11/25/LHB-Writeup/">
-        <p class="h4 index-header">领航杯部分Writeup</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">编码解码V2VsY29tZXRvdGhlUGlsb3RDdXA=
-签到题，base64解码一下得到：
-WelcometothePilotCup
-
-取证分析给了一个pacp.pcap，CTF Wiki里面收录过这一道例题…
-wireshark 打开发现全部为DNS协议,查询名为大量字符串xxxxx.skullseclabs.org
-好像是BSides San Francisco CTF 2017原题，参考这篇文章：https://volatilevirus.home.blog/2018/12/30/bsidessf17-ctf-dnscap-write-up/
-先用下面命令进行提取：
-tshark -r pacp.pcap -T fields -e dns.qry.name &gt; hex
-然后用如下脚本得到flag.png:
-from scapy.all import *
-
-                                                 r = rdpcap(&quot;pacp.pcap&quot;)
-
-a = &quot;&quot;
-
-b = </div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-11-25&nbsp;&nbsp;
         
         
           <i class="iconfont icon-inbox"></i>
