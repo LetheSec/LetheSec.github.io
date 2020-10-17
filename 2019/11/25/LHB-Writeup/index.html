@@ -166,11 +166,11 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h1><span id="编码解码">编码解码</span></h1><pre><code>V2VsY29tZXRvdGhlUGlsb3RDdXA=
+            <h1 id="编码解码"><a href="#编码解码" class="headerlink" title="编码解码"></a>编码解码</h1><pre><code>V2VsY29tZXRvdGhlUGlsb3RDdXA=
 </code></pre><p>签到题，base64解码一下得到：</p>
 <pre><code>WelcometothePilotCup
 </code></pre><p><br></p>
-<h1><span id="取证分析">取证分析</span></h1><p>给了一个pacp.pcap，CTF Wiki里面收录过这一道例题…</p>
+<h1 id="取证分析"><a href="#取证分析" class="headerlink" title="取证分析"></a>取证分析</h1><p>给了一个pacp.pcap，CTF Wiki里面收录过这一道例题…</p>
 <p>wireshark 打开发现全部为DNS协议,查询名为大量字符串<code>xxxxx.skullseclabs.org</code></p>
 <p>好像是BSides San Francisco CTF 2017原题，参考这篇文章：<a href="https://volatilevirus.home.blog/2018/12/30/bsidessf17-ctf-dnscap-write-up/" target="_blank" rel="noopener">https://volatilevirus.home.blog/2018/12/30/bsidessf17-ctf-dnscap-write-up/</a></p>
 <p>先用下面命令进行提取：</p>
@@ -208,10 +208,10 @@ f.close()
 </code></pre>
 <p>直接打不开，用010 Editor看一下：<br><img src="/2019/11/25/LHB-Writeup/20191122191914979.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>删掉上面选中的部分，再打开，得到flag：b91011fc<img src="/2019/11/25/LHB-Writeup/201911221919373.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1><span id="lsb">lsb</span></h1><p>给了下面这张图片：<br><img src="/2019/11/25/LHB-Writeup/20191122192053275.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h1 id="lsb"><a href="#lsb" class="headerlink" title="lsb"></a>lsb</h1><p>给了下面这张图片：<br><img src="/2019/11/25/LHB-Writeup/20191122192053275.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>根据题目名字lsb，用Stegsolve打开，移位到下面位置得到flag：ONPGRAMBCICM<br><img src="/2019/11/25/LHB-Writeup/20191122192250933.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1><span id="恢复与解密">恢复与解密</span></h1><p>题目描述：公安人员在犯罪分子的电脑中发现一些磁盘文件，但是发现关键信息已经被删除，现需要你对磁盘进行恢复，并对恢复出来的一些秘密文件里面的加密信息进行解密。 注意：通过strings获取到的yc4pl0fvjs2k1t7T为假flag，请尝试使用其他正确的做题方式获取flag。</p>
+<h1 id="恢复与解密"><a href="#恢复与解密" class="headerlink" title="恢复与解密"></a>恢复与解密</h1><p>题目描述：公安人员在犯罪分子的电脑中发现一些磁盘文件，但是发现关键信息已经被删除，现需要你对磁盘进行恢复，并对恢复出来的一些秘密文件里面的加密信息进行解密。 注意：通过strings获取到的yc4pl0fvjs2k1t7T为假flag，请尝试使用其他正确的做题方式获取flag。</p>
 <p>所以可以判断这题为磁盘恢复，并且有假flag。</p>
 <p>附件给的是一个xty.img，在kali下面命令进行挂载：</p>
 <pre><code class="bash">mount -o loop xty.img /mnt
@@ -243,28 +243,28 @@ for i in range(0,200):
 </code></pre>
 <p>得到的唯一一个无特殊字符的即为flag：jdr78472Q82jhQ62jaLL3jdr<img src="/2019/11/25/LHB-Writeup/20191122194428814.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1><span id="文件提取">文件提取</span></h1><p>给了一个flag.exe，strings一下可以看到是图片转base64后的字符串：<br><img src="/2019/11/25/LHB-Writeup/20191122195004615.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>随便找个在线网站转回图片如下：</p>
+<h1 id="文件提取"><a href="#文件提取" class="headerlink" title="文件提取"></a>文件提取</h1><p>给了一个flag.exe，strings一下可以看到是图片转base64后的字符串：<br><img src="/2019/11/25/LHB-Writeup/20191122195004615.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>随便找个在线网站转回图片如下：</p>
 <p><img src="/2019/11/25/LHB-Writeup/20191122195200384.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后strings一下这个图片得到flag：flag{068EEF6A7BAD3FDF}<br><img src="/2019/11/25/LHB-Writeup/20191122195251726.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1><span id="forensics">forensics</span></h1><p>给了一个pngdecode.docx：<br><img src="/2019/11/25/LHB-Writeup/20191122195431580.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h1 id="forensics"><a href="#forensics" class="headerlink" title="forensics"></a>forensics</h1><p>给了一个pngdecode.docx：<br><img src="/2019/11/25/LHB-Writeup/20191122195431580.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>一开始分析了好久这个图片，但是无果…然后对整个docx文档foremost提取一下，得到flag：360HA360<br><img src="/2019/11/25/LHB-Writeup/20191122195959283.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1><span id="oldcypher-easy">OldCypher-Easy</span></h1><p>给了密文如下：</p>
+<h1 id="OldCypher-Easy"><a href="#OldCypher-Easy" class="headerlink" title="OldCypher-Easy"></a>OldCypher-Easy</h1><p>给了密文如下：</p>
 <pre><code>Vvr Ifnvaus Bdwokv Gbtrzsa Vkqgofntja rrlznxk eflvkozjcdue rs “mzg oez ff pjkhvtx ok kqzioeg vgfsf.” Zyil au vvykokaeoyrp avuwfnzv, bnl fcry eom ucdgaie mzg qhxiegl dfrguta gh huk wixdf ce oks ijggrtk-dtq uqvketbxkq sulnwsvwbtj. Taw fssoeimaqb sutulwu gbrvlr gp huk towwu hugk htng prke ulwf tbx teglwfvkj th wpoorv sxutsg ifmfmpwpgkihf. Dig iiyilquegghr fqknjryl wpqbsgalkgg zath fgts gnrn mzkg: vz uetdu kvzy mxujoaojml xqf rtjukapu vtkezjkhl, zvcafkehkj fhj glpnrnzapu fktrxl msly, grhlqqbrj fhj cignvnmaeogoeg nkgff, kcevltcaot anuvwbtj agv gzrikihfu, rvmzttd eofn, rnw eqfr. Cztagwh nzkefhvwam ko ijqjvjv a vgodykke vzcfnikekabogofn, pw ychru stq vvnz dowwtb pxppmgifnvyy bfxcybvs mzg ggauy hx oognvmtlkqnr kevzpwdavs ygt grilrbfi rvmzttd kbsuimtlkca, ypsmwog, ntu dbkvfvhltxv eczvlttlkcay rgtapgg guvxjuoeorl tlvopqj. fesi{42s96q9hw73d79v4xf5308t18o8519is10c512u2}
 </code></pre><p>最后一串明显像flag的格式，在这个网站进行维吉尼亚解密：<a href="https://www.guballa.de/vigenere-solver" target="_blank" rel="noopener">https://www.guballa.de/vigenere-solver</a></p>
 <p>得到flag：flag{42e96d9bf73d79c4fd5308f18b8519cb10c512b2}<br><img src="/2019/11/25/LHB-Writeup/20191122200254756.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1><span id="masterofzip-middle">MasterofZip-Middle</span></h1><h4><span id="level1">level1</span></h4><p>给了一个压缩包，和一个Readme.md内容如下：</p>
+<h1 id="MasterofZip-Middle"><a href="#MasterofZip-Middle" class="headerlink" title="MasterofZip-Middle"></a>MasterofZip-Middle</h1><h4 id="level1"><a href="#level1" class="headerlink" title="level1"></a>level1</h4><p>给了一个压缩包，和一个Readme.md内容如下：</p>
 <pre><code>小明喜欢用自己的手机号来加密zip，我们通过社工只查到了他手机号的前三位为199，你能解开这个压缩包吗？(手机号为伪造手机号，请不要试图拨打或社工)
 </code></pre><p>于是爆破199开头的手机号，得到密码：19950453796<br><img src="/2019/11/25/LHB-Writeup/20191122200459667.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<h4><span id="level2">level2</span></h4><p>第一层解压后得到一个压缩包和一个Readme.txt，内容不重要，但是看到level2.zip里面也有一个Readme.txt，所以尝试明文攻击，成功恢复密钥并解压：<br><img src="/2019/11/25/LHB-Writeup/20191122200717183.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<h4><span id="level3">level3</span></h4><p>第二层解压后，只给了一个压缩包，于是尝试伪加密：<br><img src="/2019/11/25/LHB-Writeup/20191122200956572.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>将箭头位置修该为0，成功解压，得到下面这张图片：<br><img src="/2019/11/25/LHB-Writeup/20191122201051790.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后修改发图片高度：<br><img src="/2019/11/25/LHB-Writeup/20191122201106882.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h4 id="level2"><a href="#level2" class="headerlink" title="level2"></a>level2</h4><p>第一层解压后得到一个压缩包和一个Readme.txt，内容不重要，但是看到level2.zip里面也有一个Readme.txt，所以尝试明文攻击，成功恢复密钥并解压：<br><img src="/2019/11/25/LHB-Writeup/20191122200717183.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h4 id="level3"><a href="#level3" class="headerlink" title="level3"></a>level3</h4><p>第二层解压后，只给了一个压缩包，于是尝试伪加密：<br><img src="/2019/11/25/LHB-Writeup/20191122200956572.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>将箭头位置修该为0，成功解压，得到下面这张图片：<br><img src="/2019/11/25/LHB-Writeup/20191122201051790.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后修改发图片高度：<br><img src="/2019/11/25/LHB-Writeup/20191122201106882.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>得到flag：flag{4537ec3bd52ba2b41c4a780db841efc3ddccc4a4}<br><img src="/2019/11/25/LHB-Writeup/20191122201150405.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1><span id="数据包分析-easy">数据包分析-Easy</span></h1><p>题目给了一个http3.pcap，进行流量分析，根据题目描述，直接导出HTTP对象列表，发现flag.php:<br><img src="/2019/11/25/LHB-Writeup/20191122201347715.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h1 id="数据包分析-Easy"><a href="#数据包分析-Easy" class="headerlink" title="数据包分析-Easy"></a>数据包分析-Easy</h1><p>题目给了一个http3.pcap，进行流量分析，根据题目描述，直接导出HTTP对象列表，发现flag.php:<br><img src="/2019/11/25/LHB-Writeup/20191122201347715.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>导出后，即可在里面看到flag：flag{3eyufhnj87}<br><img src="/2019/11/25/LHB-Writeup/20191122201438522.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1><span id="easyrsa">EasyRSA</span></h1><p>题目给了加密脚本如下：</p>
+<h1 id="EasyRSA"><a href="#EasyRSA" class="headerlink" title="EasyRSA"></a>EasyRSA</h1><p>题目给了加密脚本如下：</p>
 <pre><code class="python">from Crypto.Util.number import getPrime, inverse
 flag = &#39;flag{a-z0-9}&#39;
 nbits = 2048
@@ -326,7 +326,7 @@ for i in range(1,65538):
 
 </code></pre>
 <p>运行得到flag：flag{6b85823e6f121a7bb3407ff2e9f5f2f27efcc5a6}</p>
-<p><img src="/2019/11/25/LHB-Writeup/20191122202145663.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/11/25/LHB-Writeup/20191122202145663.png" srcset="/img/loading.gif" alt="在这里插入图片描述"> </p>
 
             <hr>
           </div>

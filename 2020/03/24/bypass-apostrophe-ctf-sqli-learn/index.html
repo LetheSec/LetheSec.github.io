@@ -166,13 +166,13 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h3><span id="0x00-前言">0x00 前言</span></h3><p>通常来说，在进行字符型的SQL注入时，都需要先将前面的引号等（以单引号为例）进行闭合才能执行我们构造的SQL语句，那么如果单引号被过滤了，是否还能够成功的SQL注入呢？</p>
+            <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>通常来说，在进行字符型的SQL注入时，都需要先将前面的引号等（以单引号为例）进行闭合才能执行我们构造的SQL语句，那么如果单引号被过滤了，是否还能够成功的SQL注入呢？</p>
 <p>答案是可以，当你在判断登录时使用的是如下SQL语句：</p>
 <pre><code class="sql">select user from user where user=&#39;$_POST[username]&#39; and password=&#39;$_POST[password]&#39;;
 </code></pre>
 <p>那么即使在过滤的时候将单引号过滤掉了，还是可以进行一定程度上的注入的，下面通过两道CTF题来进行介绍。</p>
 <p><br></p>
-<h3><span id="0x01-bjdctf-2020简单注入">0x01 [BJDCTF 2020]简单注入</span></h3><p>进入题目后就是一个登录框，名字也提示了要注入：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324000045489.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>扫描目录发现hint.txt中的提示：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324000146668.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>告诉了我们登录的sql语句：</p>
+<h3 id="0x01-BJDCTF-2020-简单注入"><a href="#0x01-BJDCTF-2020-简单注入" class="headerlink" title="0x01 [BJDCTF 2020]简单注入"></a>0x01 [BJDCTF 2020]简单注入</h3><p>进入题目后就是一个登录框，名字也提示了要注入：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324000045489.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>扫描目录发现hint.txt中的提示：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324000146668.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>告诉了我们登录的sql语句：</p>
 <pre><code class="sql">select * from users where username=&#39;$_POST[&quot;username&quot;]&#39; and password=&#39;$_POST[&quot;password&quot;]&#39;;
 </code></pre>
 <p>稍微fuzz一下可以发现过滤了<code>&#39;</code>、<code>&quot;</code>、<code>=</code>、<code>-</code>、<code>and</code>、<code>select</code>等关键词，其中关键就是这个单引号，由hint已知这里是需要单引号进行闭合的，而单引号又被过滤了。</p>
@@ -221,7 +221,7 @@ for i in range(1, 100):
 </code></pre>
 <p>运行脚本得到admin的密码：OhyOuFOuNdit，登录即可得到flag。<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/2020032400321152.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h3><span id="0x02-某道ctf入群题">0x02 某道CTF入群题</span></h3><p>同样也是一到登陆题，在<code>check.php</code>中给出了源码如下：</p>
+<h3 id="0x02-某道CTF入群题"><a href="#0x02-某道CTF入群题" class="headerlink" title="0x02 某道CTF入群题"></a>0x02 某道CTF入群题</h3><p>同样也是一到登陆题，在<code>check.php</code>中给出了源码如下：</p>
 <pre><code class="php">&lt;?php 
 include &quot;config.php&quot;;
 error_reporting(0);

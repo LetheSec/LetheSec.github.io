@@ -166,7 +166,7 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h3><span id="0x01-分析">0x01 分析</span></h3><p>一个简单的多线程下载资源的Python脚本，主要实现部分包含两个类：</p>
+            <h3 id="0x01-分析"><a href="#0x01-分析" class="headerlink" title="0x01 分析"></a>0x01 分析</h3><p>一个简单的多线程下载资源的Python脚本，主要实现部分包含两个类：</p>
 <ul>
 <li><p>Download类：包含<code>download()</code>和<code>get_complete_rate()</code>两种方法。</p>
 <ul>
@@ -181,7 +181,7 @@
 </li>
 </ul>
 <p><br></p>
-<h3><span id="0x02-代码">0x02 代码</span></h3><h6><span id="threaddownloadpy">ThreadDownload.py:</span></h6><pre><code class="python">import threading
+<h3 id="0x02-代码"><a href="#0x02-代码" class="headerlink" title="0x02 代码"></a>0x02 代码</h3><h6 id="ThreadDownload-py"><a href="#ThreadDownload-py" class="headerlink" title="ThreadDownload.py:"></a>ThreadDownload.py:</h6><pre><code class="python">import threading
 from urllib.request import *
 
 
@@ -261,7 +261,7 @@ class ThreadDownload(threading.Thread):
         f.close()
 
 </code></pre>
-<h6><span id="thread_download-masterpy">thread_download-master.py:</span></h6><pre><code class="python">#!/usr/bin/env python 
+<h6 id="thread-download-master-py"><a href="#thread-download-master-py" class="headerlink" title="thread_download-master.py:"></a>thread_download-master.py:</h6><pre><code class="python">#!/usr/bin/env python 
 # -*- coding: utf-8 -*- 
 
 import sys
@@ -298,7 +298,7 @@ if __name__==&#39;__main__&#39;:
 
 </code></pre>
 <p> <br></p>
-<h3><span id="0x03-运行结果">0x03 运行结果</span></h3><p>下载歌曲《男孩》为例，下载到<code>./Download/</code>目录下并命名为<code>男孩.mp3</code>，设置5个线程：</p>
+<h3 id="0x03-运行结果"><a href="#0x03-运行结果" class="headerlink" title="0x03 运行结果"></a>0x03 运行结果</h3><p>下载歌曲《男孩》为例，下载到<code>./Download/</code>目录下并命名为<code>男孩.mp3</code>，设置5个线程：</p>
 <p><img src="/2019/07/19/Python实现多线程下载脚本/20190719150546671.jpg" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><img src="/2019/07/19/Python实现多线程下载脚本/20190719150552968.jpg" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>下载成功：</p>

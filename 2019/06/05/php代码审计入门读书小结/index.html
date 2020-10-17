@@ -167,14 +167,14 @@
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
             <p>由于看到不少讲web安全的地方都会推荐一本书叫 <strong>《代码审计：企业级web代码安全架构》</strong>，于是从图书馆找来这本书读了一下，虽然有些内容可能有点老了，但整体上还是挺不错的，下面做一点总结。</p>
-<h4><span id="一-通用代码审计思路">一、通用代码审计思路</span></h4><p>常见的代码审计思路有以下四种：</p>
+<h4 id="一、通用代码审计思路"><a href="#一、通用代码审计思路" class="headerlink" title="一、通用代码审计思路"></a>一、通用代码审计思路</h4><p>常见的代码审计思路有以下四种：</p>
 <p><strong>1、根据敏感关键词（敏感函数）回溯参数传递过程。</strong></p>
 <p><strong>2、查找可控变量，正向追踪变量传递过程。</strong></p>
 <p><strong>3、寻找敏感功能点，通读功能点代码。</strong><br>（1）文件上传功能：文件上传漏洞、文件名SQL注入漏洞<br>（2）文件管理功能：任意文件操作漏洞、XSS漏洞<br>（3）登陆认证功能：任意用户登陆漏洞、越权漏洞<br>（4）找回密码功能</p>
 <p><strong>4、直接通读全文代码</strong></p>
 <p>  通读全文代码时，首先应看程序的代码结构，如主目录有哪些文件，模块目录有哪些文件，插件目录有哪些文件，除了关注有哪些文件，还要注意文件的大小、创建时间。在看程序目录结构时候，注意以下几个文件：<br>  （1）<strong>函数集文件</strong>：通常命名中包含<code>functions</code>或者<code>common</code>等关键字，一般可以在index.php或者一些功能性文件的头部可以找到。<br>  （2）<strong>配置文件</strong>：通常命名中包含<code>config</code>关键字，配置文件包括web程序运行必须的功能性配置选项以及数据库等配置信息。<br>  （3）<strong>安全过滤文件</strong>：通常文件名中包含<code>filter</code>、<code>safe</code>、<code>check</code>等关键字，这类文件主要是对参数进行过滤，关系到我们找到的可疑点能否利用。<br>  （4）<strong>index文件</strong>：index是一个程序的入口文件，通常读一遍index文件就可以大致了解整个程序的架构、运行的流程、包含到的文件，其中核心文件有哪些。</p>
 <p><br></p>
-<h4><span id="二-sql注入漏洞">二、SQL注入漏洞</span></h4><p>1.<strong>普通注入</strong>：int型和string型</p>
+<h4 id="二、SQL注入漏洞"><a href="#二、SQL注入漏洞" class="headerlink" title="二、SQL注入漏洞"></a>二、SQL注入漏洞</h4><p>1.<strong>普通注入</strong>：int型和string型</p>
 <p>2.<strong>编码注入</strong>：宽字节注入和二次urldecode注入</p>
 <p>（1）宽字节注入：<br>当php连接mysql时如果 <code>set character_set_client =gbk</code>时会导致该注入的发生。提交</p>
 <pre><code>`/1.php?id= -1&#39; and 1=1%23`
@@ -187,7 +187,7 @@
 <p>mysql_real_esca## 二、SQL注入漏洞pe_string()、mysql_escape_string()：主要对字符串进行过滤。</p>
 <p>intval()、floatval()等：这类是将string类型转化为int类型的函数，将 <code>1&#39; union select</code>强制转化为1,</p>
 <p><br></p>
-<h4><span id="三-xss漏洞">三、XSS漏洞</span></h4><p>推荐书籍：《XSS跨站脚本攻击剖析与防御》、《Web前端黑客技术揭秘》</p>
+<h4 id="三、XSS漏洞"><a href="#三、XSS漏洞" class="headerlink" title="三、XSS漏洞"></a>三、XSS漏洞</h4><p>推荐书籍：《XSS跨站脚本攻击剖析与防御》、《Web前端黑客技术揭秘》</p>
 <p>1.<strong>分类</strong></p>
 <p>（1）反射型XSS<br>（2）存储型XSS</p>
 <p>2.<strong>防御</strong></p>
@@ -202,12 +202,12 @@
 <li>#号（#）</li>
 </ul>
 <p><br></p>
-<h4><span id="四-csrf漏洞">四、CSRF漏洞</span></h4><p>1.<strong>判断方法</strong></p>
+<h4 id="四、CSRF漏洞"><a href="#四、CSRF漏洞" class="headerlink" title="四、CSRF漏洞"></a>四、CSRF漏洞</h4><p>1.<strong>判断方法</strong></p>
 <p>（1）黑盒<br>在挖掘CSRF的时候可以先搭建好环境，打开几个有非静态操作的页面，抓包看看有没有token，如果没有token的话，在直接请求这个页面，不带referer。如果返回的数据还是一样的，那说明有可能有CSRF漏洞。<br>  （2）白盒<br>看看几个核心文件里面有没有验证token和referer相关的代码。  </p>
 <p>2.<strong>防御</strong></p>
 <p>（1）Token验证<br>（2）验证码验证</p>
 <p><br></p>
-<h4><span id="五-文件操作漏洞">五、文件操作漏洞</span></h4><p>1.<strong>文件包含漏洞</strong></p>
+<h4 id="五、文件操作漏洞"><a href="#五、文件操作漏洞" class="headerlink" title="五、文件操作漏洞"></a>五、文件操作漏洞</h4><p>1.<strong>文件包含漏洞</strong></p>
 <p>文件包含函数: </p>
 <ul>
 <li>include()</li>
@@ -246,7 +246,7 @@
 <p>5.<strong>防御</strong></p>
 <p>（1）对文件操作的权限管理要合理<br>（2）有些文件不需要直接传入文件名<br>（3）过滤掉文件跳转的一些符号<br>（4）文件上传尽量使用白名单过滤扩展名，保存上传的文件时利用时间戳+随机数MD5重命名</p>
 <p><br></p>
-<h4><span id="六-代码执行漏洞">六、代码执行漏洞</span></h4><p>1.<strong>常见函数</strong></p>
+<h4 id="六、代码执行漏洞"><a href="#六、代码执行漏洞" class="headerlink" title="六、代码执行漏洞"></a>六、代码执行漏洞</h4><p>1.<strong>常见函数</strong></p>
 <ul>
 <li>eval()</li>
 <li>assert()</li>
@@ -293,7 +293,7 @@ $_GET[&#39;a&#39;]($GET_[&#39;b&#39;]);
 <p>2.<strong>防御</strong></p>
 <p>采用白名单过滤，或者结合正则表达式来进行白名单限制。</p>
 <p><br></p>
-<h4><span id="七-命令执行漏洞">七、命令执行漏洞</span></h4><p>1.<strong>命令执行函数：</strong></p>
+<h4 id="七、命令执行漏洞"><a href="#七、命令执行漏洞" class="headerlink" title="七、命令执行漏洞"></a>七、命令执行漏洞</h4><p>1.<strong>命令执行函数：</strong></p>
 <ul>
 <li>system()</li>
 <li>exec()</li>
@@ -325,7 +325,7 @@ popen(&#39;whoami &gt;&gt;D://2.txt&#39;, &#39;r&#39;);
 <li>escapeshellarg() 过滤参数，将参数限制在一对双引号里，确保参数为一个字符串，因此它会把双引号替换为空格</li>
 </ul>
 <p><br></p>
-<h4><span id="八-变量覆盖漏洞">八、变量覆盖漏洞</span></h4><p>1.<strong>引发函数：</strong></p>
+<h4 id="八、变量覆盖漏洞"><a href="#八、变量覆盖漏洞" class="headerlink" title="八、变量覆盖漏洞"></a>八、变量覆盖漏洞</h4><p>1.<strong>引发函数：</strong></p>
 <ul>
 <li>extract()</li>
 <li>parse_str()</li>
@@ -355,16 +355,16 @@ print_r($b);
 <p>（4）\$\$ 变量覆盖</p>
 <p>2.<strong>防御</strong><br>（1）使用原始变量<br>（2）验证变量存在</p>
 <p><br></p>
-<h4><span id="九-逻辑处理漏洞">九、逻辑处理漏洞</span></h4><p>1.<strong>等于与存在判断绕过</strong><br>（1）in_array()函数<br>（2）is_numeric函数<br>（3）双等于（==）和三等于（ ===）</p>
+<h4 id="九、逻辑处理漏洞"><a href="#九、逻辑处理漏洞" class="headerlink" title="九、逻辑处理漏洞"></a>九、逻辑处理漏洞</h4><p>1.<strong>等于与存在判断绕过</strong><br>（1）in_array()函数<br>（2）is_numeric函数<br>（3）双等于（==）和三等于（ ===）</p>
 <p>2.<strong>账户体系中的越权漏洞</strong></p>
 <p>3.<strong>未 exit 或 return 引发的安全问题</strong></p>
 <p>4.<strong>常见支付漏洞</strong></p>
 <p>5.<strong>防御</strong><br>（1）深入熟悉业务逻辑<br>（2）熟悉函数的功能和差异</p>
 <p><br></p>
-<h4><span id="十-会话认证漏洞">十、会话认证漏洞</span></h4><p>1.<strong>cookie认证安全</strong><br>（1）cookie的SQL注入<br>（2）伪造cookie</p>
+<h4 id="十、会话认证漏洞"><a href="#十、会话认证漏洞" class="headerlink" title="十、会话认证漏洞"></a>十、会话认证漏洞</h4><p>1.<strong>cookie认证安全</strong><br>（1）cookie的SQL注入<br>（2）伪造cookie</p>
 <p>2.<strong>防御</strong><br>（1）严格限制输入的异常字符已经避免用客户端提交的内容直接操作<br>（2）将cookie与session结合起来使用，并保证客户端不能操作敏感session参数<br>（3）敏感数据不要放在cookie中</p>
 <p><br></p>
-<h4><span id="十一-二次漏洞">十一、二次漏洞</span></h4><p>1.<strong>什么是二次漏洞</strong><br>需要先构造好利用代码写入网站保存，在第二次或多次请求后调用攻击代码触发或者修改配置触发的漏洞叫做而此漏洞。</p>
+<h4 id="十一、二次漏洞"><a href="#十一、二次漏洞" class="headerlink" title="十一、二次漏洞"></a>十一、二次漏洞</h4><p>1.<strong>什么是二次漏洞</strong><br>需要先构造好利用代码写入网站保存，在第二次或多次请求后调用攻击代码触发或者修改配置触发的漏洞叫做而此漏洞。</p>
 <p>（此漏洞较复杂，需之后进一步学习研究）</p>
 
             <hr>

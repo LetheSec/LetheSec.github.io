@@ -166,7 +166,7 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h1><span id="blacklist">Blacklist</span></h1><p>一到注入题，和2019强网杯的随便住基本一致，但是多过滤了<code>set</code>、<code>prepare</code>、<code>alter</code>、<code>rename</code>：</p>
+            <h1 id="Blacklist"><a href="#Blacklist" class="headerlink" title="Blacklist"></a>Blacklist</h1><p>一到注入题，和2019强网杯的随便住基本一致，但是多过滤了<code>set</code>、<code>prepare</code>、<code>alter</code>、<code>rename</code>：</p>
 <pre><code>return preg_match(&quot;/set|prepare|alter|rename|select|update|delete|drop|insert|where|\./i&quot;,$inject);
 </code></pre><p>获取表名和列名的方式与原题一致，而获取数据可以参考这篇文章：<a href="https://xz.aliyun.com/t/7169#toc-47，使用handler语句进行查询。" target="_blank" rel="noopener">https://xz.aliyun.com/t/7169#toc-47，使用handler语句进行查询。</a></p>
 <blockquote>
@@ -175,7 +175,7 @@
 </code></pre><p><img src="/2020/03/06/GYCTF2020-Writeup/20200224115021507.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 </blockquote>
 <p><br></p>
-<h1><span id="ezsqli">Ezsqli</span></h1><p>看名字就是一道sql注入的题目，经测试总共有四种回显：</p>
+<h1 id="Ezsqli"><a href="#Ezsqli" class="headerlink" title="Ezsqli"></a>Ezsqli</h1><p>看名字就是一道sql注入的题目，经测试总共有四种回显：</p>
 <pre><code>bool(false)：查询语句有语法错误，如id=1&#39;
 SQL Injection Checked：含有被过滤的关键词时，包括and、or、union、in、order、group、limit等。
 Nu1L：查询语句返回值为真，如id=1^(1=1)^1#
@@ -242,7 +242,7 @@ for i in range(1, 100):
 <p>即将判断条件修改如下：</p>
 <pre><code>((select 1,concat(&#39;{}~&#39;, cast(0 as json))) &gt; (select * from f1ag_1s_h3r3_hhhhh))
 </code></pre><p>这在我本地的测试环境是可以的，但是在BUU上复现的时候却不行，而回显<code>bool(false)</code>，原因还未知…</p>
-<h1><span id="easyphp">Easyphp</span></h1><p>存在 <a href="http://www.zip" target="_blank" rel="noopener">www.zip</a> 源码泄露，下载下来进行代码审计。</p>
+<h1 id="Easyphp"><a href="#Easyphp" class="headerlink" title="Easyphp"></a>Easyphp</h1><p>存在 <a href="http://www.zip" target="_blank" rel="noopener">www.zip</a> 源码泄露，下载下来进行代码审计。</p>
 <p>这一题需要了解PHP反序列化的字符逃逸的原理，简单来说就是 <strong>“PHP在进行反序列化的时候，只要前面的字符串符合反序列化的规则并能成功反序列化，那么将忽略后面多余的字符串”</strong> ，关于这个知识点可以去搜索0CTF2016-PiaPiaPia一题的相关Writeup。</p>
 <p>下面来看这一道题，首先看一下拿flag的条件，在update.php中：</p>
 <pre><code class="php">&lt;?php
@@ -398,7 +398,7 @@ echo serialize($o);
 <pre><code class="python">age=1&amp;nickname=unionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunion&quot;;s:8:&quot;CtrlCase&quot;;O:12:&quot;UpdateHelper&quot;:1:{s:3:&quot;sql&quot;;O:4:&quot;User&quot;:2:{s:3:&quot;age&quot;;s:70:&quot;select 1,&quot;c4ca4238a0b923820dcc509a6f75849b&quot; from user where username=?&quot;;s:8:&quot;nickname&quot;;O:4:&quot;Info&quot;:1:{s:8:&quot;CtrlCase&quot;;O:6:&quot;dbCtrl&quot;:2:{s:4:&quot;name&quot;;s:5:&quot;admin&quot;;s:8:&quot;password&quot;;s:1:&quot;1&quot;;}}}}}
 </code></pre>
 <p>在update.php以POST传入上面的payload，此时反序列化被执行，在login函数里面已经成功验证了，token被设置为了<code>admin</code>，所以再回到登录界面使用任意密码即可登录admin账户：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200225013210183.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h1><span id="ez_expresss">Ez_Expresss</span></h1><p>存在<a href="http://www.zip源码泄露，可以下载得到源码。" target="_blank" rel="noopener">www.zip源码泄露，可以下载得到源码。</a></p>
+<h1 id="Ez-Expresss"><a href="#Ez-Expresss" class="headerlink" title="Ez_Expresss"></a>Ez_Expresss</h1><p>存在<a href="http://www.zip源码泄露，可以下载得到源码。" target="_blank" rel="noopener">www.zip源码泄露，可以下载得到源码。</a></p>
 <p>在登录界面，有如下提示：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200305234711800.png" srcset="/img/loading.gif" alt><br>这里只支持大写非常的奇怪，查阅资料得到：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200305234811798.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>再查看源码，确实是使用了toUpperCase()进行处理，所以可以利用这个特性来注册<code>admın</code>用户进行绕过：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306000532187.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>可以看到成功了，并且提示flag在/flag目录下。<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306000712785.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>下面就考虑如何读文件或者RCE，再次进行代码审计。</p>
@@ -419,10 +419,10 @@ echo serialize($o);
 </code></pre>
 <p>然后提交<code>/action</code>（即最喜欢的语言）并抓包，然后填入poayload，注意要把Content-Type: 改为plication/json：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306004459451.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后访问<code>/info</code>路由让<code>outputFunctionName</code>拼接到渲染引擎中触发原型链污染，即可得到shell：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306004728516.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1><span id="flaskapp">FlaskApp</span></h1><p>进入页面后，是一个Flask写的base64加解密功能，提示路由的源码中提示了<code>PIN</code>，应该是想说Flask的Debug模式中的PIN码。</p>
+<h1 id="FlaskApp"><a href="#FlaskApp" class="headerlink" title="FlaskApp"></a>FlaskApp</h1><p>进入页面后，是一个Flask写的base64加解密功能，提示路由的源码中提示了<code>PIN</code>，应该是想说Flask的Debug模式中的PIN码。</p>
 <p>在Base64解码的功能中很容易使其报错（如输入1）：<img src="/2020/03/06/GYCTF2020-Writeup/20200306170505781.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>可以看到确实开启了Debug模式，并泄露了decode路由的源码:<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306170602388.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>解码的结果直接拼接到模板中渲染，存在SSTI漏洞，不过经过了<code>waf</code>的处理，我们也并不知道过滤了什么东西。</p>
 <p>那么先试试一下SSTI吧：<br><code>4</code>的base64为<code>e3syKzJ9fQ==</code>，我们进行解码得到4，确认存在SSTI了：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306170927846.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<h4><span id="非预期解利用ssti进行rce">非预期解：利用SSTI进行RCE</span></h4><p>虽然知道出题人的意思是利用PIN码来RCE，不过我还是想试试看能否直接利用SSTI进行RCE。</p>
+<h4 id="非预期解：利用SSTI进行RCE"><a href="#非预期解：利用SSTI进行RCE" class="headerlink" title="非预期解：利用SSTI进行RCE"></a>非预期解：利用SSTI进行RCE</h4><p>虽然知道出题人的意思是利用PIN码来RCE，不过我还是想试试看能否直接利用SSTI进行RCE。</p>
 <p>那么先试试过滤了哪些？</p>
 <p>经过测试，SSTI中常用的一些关键词并没有被过滤(毕竟预期解也需要SSTI来读文件~)：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306171543736.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>而是过滤了<code>system</code>、<code>popen</code>、<code>os</code>、<code>eval</code>、<code>import</code>、<code>flag</code>等RCE需要用到的关键词，但是这个过滤可以使用<strong>拼接字符串</strong>来绕过，这样我们想构造一个payload绕过就并不是很难了：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306172027467.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>所以我们要构造的payload一定不是能是<code>xx.popen()</code>的形式，而是要把被过滤的关键词用字符串的方式调用，这样才能利用拼接或者编码来绕过，实际上这样的payload也很常见，网上能搜到很多。并且本题环境中可以用的类也不少，如下面两个payload均可以RCE：</p>
@@ -432,7 +432,7 @@ echo serialize($o);
 </code></pre>
 <p>将payload进行base64编码，再在题目中解码触发SSTI进行RCE：</p>
 <p><img src="/2020/03/06/GYCTF2020-Writeup/20200306172255728.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<h4><span id="预期解利用pin码进行rce">预期解：利用PIN码进行RCE</span></h4><p>参考这篇文章：<a href="https://www.anquanke.com/post/id/197602" target="_blank" rel="noopener">https://www.anquanke.com/post/id/197602</a></p>
+<h4 id="预期解：利用PIN码进行RCE"><a href="#预期解：利用PIN码进行RCE" class="headerlink" title="预期解：利用PIN码进行RCE"></a>预期解：利用PIN码进行RCE</h4><p>参考这篇文章：<a href="https://www.anquanke.com/post/id/197602" target="_blank" rel="noopener">https://www.anquanke.com/post/id/197602</a></p>
 <p>要想生成PIN码，我们需要获得下面几个信息，这里就不考虑RCE了，所需要的信息均可以通过读文件来获得：</p>
 <p>（1）服务器运行flask所登录的用户名。通过读取/etc/password可知此值为：<code>flaskweb</code><br><img src="/2020/03/06/GYCTF2020-Writeup/20200306182207863.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>（2）modname的值。一般不变就是<code>flask.app</code></p>
 <p>（3） <code>getattr(app, &quot;__name__&quot;, app.__class__.__name__)</code>的结果。就是<code>Flask</code>，也不会变</p>
@@ -491,7 +491,7 @@ print(rv)
 <p>输入PIN后就可以在python终端任意执行代码了：</p>
 <p><img src="/2020/03/06/GYCTF2020-Writeup/202003061846353.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1><span id="easythinking">EasyThinking</span></h1><p>这一题利用的是ThinkPHP6.0任意文件创建漏洞，分析可以参考这篇文章：<a href="https://www.anquanke.com/post/id/197261" target="_blank" rel="noopener">ThinkPHP6.0任意文件创建分析</a></p>
+<h1 id="EasyThinking"><a href="#EasyThinking" class="headerlink" title="EasyThinking"></a>EasyThinking</h1><p>这一题利用的是ThinkPHP6.0任意文件创建漏洞，分析可以参考这篇文章：<a href="https://www.anquanke.com/post/id/197261" target="_blank" rel="noopener">ThinkPHP6.0任意文件创建分析</a></p>
 <p>简单说就是这个漏洞可以通过session来任意创建文件（文件名可控），并且当session里的数据可控的话，我们就可以控制创建的文件的内容，从而getshell。</p>
 <p>扫描发现/<a href="http://www.zip下载源码，除了注册和登录外还有一个搜索功能，通过源码可以看到我们搜索的值会被写入session中，因此利用我们就可以利用这个漏洞任意创建内容可控的文件：" target="_blank" rel="noopener">www.zip下载源码，除了注册和登录外还有一个搜索功能，通过源码可以看到我们搜索的值会被写入session中，因此利用我们就可以利用这个漏洞任意创建内容可控的文件：</a></p>
 <p><img src="/2020/03/06/GYCTF2020-Writeup/20200315115458626.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
@@ -505,7 +505,7 @@ print(rv)
 <p>然后就是bypass disable functions了，直接上传&lt;php7.4的通杀POC执行/readflag即可：</p>
 <p><img src="/2020/03/06/GYCTF2020-Writeup/20200315121416838.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1><span id="node-game">Node Game</span></h1><blockquote>
+<h1 id="Node-Game"><a href="#Node-Game" class="headerlink" title="Node Game"></a>Node Game</h1><blockquote>
 <p>首先放上出题人的<a href="https://blog.5am3.com/2020/02/11/ctf-node1/#%E8%87%AA%E5%B7%B1%E5%87%BA%E7%9A%84-node-game" target="_blank" rel="noopener">writeup。</a></p>
 </blockquote>
 <p>这题给了源码：</p>

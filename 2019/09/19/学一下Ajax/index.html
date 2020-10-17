@@ -166,10 +166,10 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h2><span id="0x01-axaj简介">0x01 Axaj简介</span></h2><h6><span id="1概述">（1）概述</span></h6><p>AJAX = 异步 JavaScript 和 XML。</p>
+            <h2 id="0x01-Axaj简介"><a href="#0x01-Axaj简介" class="headerlink" title="0x01 Axaj简介"></a>0x01 Axaj简介</h2><h6 id="（1）概述"><a href="#（1）概述" class="headerlink" title="（1）概述"></a>（1）概述</h6><p>AJAX = 异步 JavaScript 和 XML。</p>
 <p>AJAX 是一种用于创建快速动态网页的技术。</p>
 <p>通过在后台与服务器进行少量数据交换，AJAX 可以使网页实现异步更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。</p>
-<h6><span id="2ajax的执行过程">（2）Ajax的执行过程</span></h6><p>使用Ajax技术通常包括以下几个步骤：</p>
+<h6 id="（2）Ajax的执行过程"><a href="#（2）Ajax的执行过程" class="headerlink" title="（2）Ajax的执行过程"></a>（2）Ajax的执行过程</h6><p>使用Ajax技术通常包括以下几个步骤：</p>
 <ul>
 <li>创建一个Ajax对象。</li>
 <li>在此对象的基础上根据HTTP协议的规范向服务器发送HTTP请求。</li>
@@ -178,14 +178,14 @@
 </ul>
 <p>用一句话概括，即Ajax通过XMLHttpRequest对象向服务器发出HTTP请求，当获取到服务器返回的数据后进行相应的页面数据的渲染处理。</p>
 <p><br></p>
-<h2><span id="0x02-xhr对象创建">0x02 XHR对象创建</span></h2><p>Ajax的核心是XMLHttpRequest对象（简称为XHR对象）的使用，XMLHttpRequest对象作为浏览器请求服务器的一个接口，可以使用异步的方式通过浏览器向服务器发送请求并解析服务器的响应。</p>
+<h2 id="0x02-XHR对象创建"><a href="#0x02-XHR对象创建" class="headerlink" title="0x02 XHR对象创建"></a>0x02 XHR对象创建</h2><p>Ajax的核心是XMLHttpRequest对象（简称为XHR对象）的使用，XMLHttpRequest对象作为浏览器请求服务器的一个接口，可以使用异步的方式通过浏览器向服务器发送请求并解析服务器的响应。</p>
 <p>使用Ajax服务器发送HTTP请求的首要任务是创建一个XMLHttpRequest对象，也称实例化XHR对象，代码如下：</p>
 <pre><code class="javascript">&lt;script type=&quot;text/javascript&quot;&gt;
     var xhr = new XMLHttpRequest();
 &lt;/script&gt;
 </code></pre>
 <p><br></p>
-<h2><span id="0x03-ajax发送请求">0x03 Ajax发送请求</span></h2><h6><span id="1open-方法">（1）open() 方法</span></h6><p>用法：</p>
+<h2 id="0x03-Ajax发送请求"><a href="#0x03-Ajax发送请求" class="headerlink" title="0x03 Ajax发送请求"></a>0x03 Ajax发送请求</h2><h6 id="（1）open-方法"><a href="#（1）open-方法" class="headerlink" title="（1）open() 方法"></a>（1）open() 方法</h6><p>用法：</p>
 <pre><code>open(method,url,async)
 </code></pre><p>规定请求的类型、URL 以及是否异步处理请求。</p>
 <ul>
@@ -199,7 +199,7 @@
     xhr.open(&quot;get&quot;, &quot;./Ajax/demo_get.php&quot;, true);
 &lt;/script&gt;
 </code></pre>
-<h6><span id="2send-方法">（2）send() 方法</span></h6><p>用法：</p>
+<h6 id="（2）send-方法"><a href="#（2）send-方法" class="headerlink" title="（2）send() 方法"></a>（2）send() 方法</h6><p>用法：</p>
 <pre><code>send(string)
 </code></pre><p>open()方法执行完毕后，调用send()方法通过HTTP协议将请求发送到服务器。</p>
 <p>如果为GET请求，send()方法无参数，默认为<code>null</code>；如果为POST请求，则send()方法的参数为要发送的数据。</p>
@@ -211,7 +211,7 @@
 &lt;/script&gt;
 </code></pre>
 <p><br></p>
-<h2><span id="0x04-ajax接收响应">0x04 Ajax接收响应</span></h2><p>浏览器接收到服务器的响应后，信息可以通过XMLHttpRequest对象的属性和方法使用。在使用XHR对象接收响应的过程中有四个常用的属性，分别为：</p>
+<h2 id="0x04-Ajax接收响应"><a href="#0x04-Ajax接收响应" class="headerlink" title="0x04 Ajax接收响应"></a>0x04 Ajax接收响应</h2><p>浏览器接收到服务器的响应后，信息可以通过XMLHttpRequest对象的属性和方法使用。在使用XHR对象接收响应的过程中有四个常用的属性，分别为：</p>
 <ul>
 <li><code>status</code>：以数字形式返回HTTP响应的状态码。</li>
 <li><code>responseText</code>：以文本形式作为响应主体被返回。</li>
@@ -232,7 +232,7 @@
 &lt;/script&gt;
 </code></pre>
 <p><br></p>
-<h2><span id="0x05-异步ajax">0x05 异步Ajax</span></h2><p>如果设置open()方法的第三个参数值为true，则表示Ajax需要异步处理请求。此时，需要判断服务器响应的数据是否传送完成，检测XHR对象中的readState属性的状态码是否为4.</p>
+<h2 id="0x05-异步Ajax"><a href="#0x05-异步Ajax" class="headerlink" title="0x05 异步Ajax"></a>0x05 异步Ajax</h2><p>如果设置open()方法的第三个参数值为true，则表示Ajax需要异步处理请求。此时，需要判断服务器响应的数据是否传送完成，检测XHR对象中的readState属性的状态码是否为4.</p>
 <p>readySate属性表示请求/响应过程当前的状态，如下表：</p>
 <table>
 <thead>
@@ -309,7 +309,7 @@ xmlhttp.send();
 &lt;/html&gt;
 </code></pre>
 <p><br></p>
-<h2><span id="0x06-json数据传递">0x06 JSON数据传递</span></h2><p>目前Ajax技术进行数据传递时，采用JSON格式的数据进行传递已经成为事实上的标准。相较与XML而言，使用JSON格式的数据传递实现简单且方便。采用JSON格式的数据进行传递时，往往应用于数据量比较多，且需要清晰传递的情况。但是此种方式传递需要将服务器返回的JSON格式字符串先转化为Javascript对象。</p>
+<h2 id="0x06-JSON数据传递"><a href="#0x06-JSON数据传递" class="headerlink" title="0x06 JSON数据传递"></a>0x06 JSON数据传递</h2><p>目前Ajax技术进行数据传递时，采用JSON格式的数据进行传递已经成为事实上的标准。相较与XML而言，使用JSON格式的数据传递实现简单且方便。采用JSON格式的数据进行传递时，往往应用于数据量比较多，且需要清晰传递的情况。但是此种方式传递需要将服务器返回的JSON格式字符串先转化为Javascript对象。</p>
 <p>demo：</p>
 <pre><code class="javascript">&lt;body&gt;
         &lt;input type=&quot;button&quot; onclick=&quot;info();&quot; value=&quot;info&quot;&gt;
@@ -353,7 +353,7 @@ xmlhttp.send();
 </code></pre>
 <p><img src="/2019/09/19/学一下Ajax/20190920010126777.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h2><span id="0x06-查询缓存">0x06 查询缓存</span></h2><p>为了避免缓存带来的影响，可以向URL中添加一个随机数或者时间戳作为请求数据的一部分，发送给服务器，以保证当前的请求始终为首次发送。</p>
+<h2 id="0x06-查询缓存"><a href="#0x06-查询缓存" class="headerlink" title="0x06 查询缓存"></a>0x06 查询缓存</h2><p>为了避免缓存带来的影响，可以向URL中添加一个随机数或者时间戳作为请求数据的一部分，发送给服务器，以保证当前的请求始终为首次发送。</p>
 <pre><code class="javascript">&lt;body&gt;
     &lt;input type=&quot;text&quot; name=&quot;username&quot;&gt;
 &lt;/body&gt;
@@ -374,7 +374,7 @@ xmlhttp.send();
 &lt;/script&gt;
 </code></pre>
 <p><br></p>
-<h2><span id="0x07-ajax函数封装">0x07 Ajax函数封装</span></h2><p>使用Ajax发送HTTP请求通常有如下几个步骤：</p>
+<h2 id="0x07-Ajax函数封装"><a href="#0x07-Ajax函数封装" class="headerlink" title="0x07 Ajax函数封装"></a>0x07 Ajax函数封装</h2><p>使用Ajax发送HTTP请求通常有如下几个步骤：</p>
 <ul>
 <li><p>实例化XMLHttpRequest对象</p>
 </li>

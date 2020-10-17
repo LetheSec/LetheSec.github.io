@@ -166,7 +166,7 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h3><span id="0x01-堆的工作原理">0x01 堆的工作原理</span></h3><p>实验环境:</p>
+            <h3 id="0x01-堆的工作原理"><a href="#0x01-堆的工作原理" class="headerlink" title="0x01 堆的工作原理"></a>0x01 堆的工作原理</h3><p>实验环境:</p>
 <table>
 <thead>
 <tr>
@@ -237,13 +237,13 @@ main()
 <li>为我们代码中创建的堆。<br><img src="/2020/05/13/0daySec-HeapDebug/20200509150319176.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></li>
 </ul>
 <p><br></p>
-<h3><span id="0x02-识别堆表">0x02 识别堆表</span></h3><p>在程序初始化过程中，malloc 使用的堆和进程堆都已经经过了若干次分配和释放操作，里边的堆块相对比较“凌乱”。因此，我们在程序中使用 HeapCreate() 函数创建一个新的堆进行分析。<br>HeapCreate()成功地创建了堆区之后，会把整个堆区的起始地址返回给 EAX，这里是0x00360000：<br><img src="/2020/05/13/0daySec-HeapDebug/20200509150845178.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>通过 Ctrl+G 到 0x00360000 的内存中进行查看， 从 0x00360000 开始，堆表中包含的信息依次是段表索引（Segment List）、虚表索引（Virtual Allocation list）、空表使用标识（freelist usage bitmap）和空表索引区。</p>
+<h3 id="0x02-识别堆表"><a href="#0x02-识别堆表" class="headerlink" title="0x02 识别堆表"></a>0x02 识别堆表</h3><p>在程序初始化过程中，malloc 使用的堆和进程堆都已经经过了若干次分配和释放操作，里边的堆块相对比较“凌乱”。因此，我们在程序中使用 HeapCreate() 函数创建一个新的堆进行分析。<br>HeapCreate()成功地创建了堆区之后，会把整个堆区的起始地址返回给 EAX，这里是0x00360000：<br><img src="/2020/05/13/0daySec-HeapDebug/20200509150845178.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>通过 Ctrl+G 到 0x00360000 的内存中进行查看， 从 0x00360000 开始，堆表中包含的信息依次是段表索引（Segment List）、虚表索引（Virtual Allocation list）、空表使用标识（freelist usage bitmap）和空表索引区。</p>
 <p>我们主要观察偏移 0x178 处的空表索引区，偏移0x00360178即为是空表的头。<br>可以看到：</p>
 <ul>
 <li>freelist[0] 指向目前堆中唯一的一个尾块（0x00360688），共八个字节（前四个字节是前向指针，后四个字节是后向指针）。</li>
 <li>除零号空表索引外，其余各项索引都指向自己，说明这些空闲链表都为空。<br><img src="/2020/05/13/0daySec-HeapDebug/20200509151850157.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>可以看到块尾（0x00360688）的指针同样是指向 freelist[0] 的（0x00360178）：<br><img src="/2020/05/13/0daySec-HeapDebug/20200509155734209.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>块首的具体含义可借鉴下图：<br><img src="/2020/05/13/0daySec-HeapDebug/20200509155549685.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></li>
 </ul>
-<h3><span id="0x03-堆块的分配">0x03 堆块的分配</span></h3><p>堆块的分配细节如下：</p>
+<h3 id="0x03-堆块的分配"><a href="#0x03-堆块的分配" class="headerlink" title="0x03 堆块的分配"></a>0x03 堆块的分配</h3><p>堆块的分配细节如下：</p>
 <ul>
 <li>堆块大小包含块首，故，如果申请32字节，那么实际被认为申请的是40字节（8字节块首＋32 字节块身）</li>
 <li>堆块的单位是8字节，不足8字节将按8字节分配</li>
@@ -307,15 +307,15 @@ main()
 <p>继续单步运行到地址0x00401059，将h1~h6全部分配完，此时查看0x00360178指向了0x00360708:<br><img src="/2020/05/13/0daySec-HeapDebug/20200509155310317.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>查看0x00360708：<br><img src="/2020/05/13/0daySec-HeapDebug/20200509155430679.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>可以发现，如今的尾块长度为0x0120个堆单位。一开始时为0x0130个堆单位，差值为16个堆单位，这恰恰是前六次分配出去的内存之和。</p>
 <p>根据最后一次调用HeapAlloc后EAX中返回的指针，我们可以找到最后一次分配的内存位置：<br><img src="/2020/05/13/0daySec-HeapDebug/20200509155846677.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后再往前搜索，可以发现前5次的分配。在下图中，我们用前6个红框标出了6次分配所得堆块的块首：<br><img src="/2020/05/13/0daySec-HeapDebug/20200509160330717.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>可以看到实际分配的堆单位符合表中的2、2、2、2、4、4。第7个红框标出的是新的尾块的块首，即尾块不断向后移动。</p>
 <p><br></p>
-<h3><span id="0x04-堆块的释放">0x04 堆块的释放</span></h3><p>单步运行至0x00401077处，此时释放了堆块 h1、h3、h5。<br><img src="/2020/05/13/0daySec-HeapDebug/20200509162647422.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>可知：h1、h3分别被释放到 freelist[2] 空表中， h5被释放到了freelist[4]空表中。此时freelistp[2]的前向指针指向关系为：0x00360688→0x00360A88→0x00360188，其他类似。</p>
+<h3 id="0x04-堆块的释放"><a href="#0x04-堆块的释放" class="headerlink" title="0x04 堆块的释放"></a>0x04 堆块的释放</h3><p>单步运行至0x00401077处，此时释放了堆块 h1、h3、h5。<br><img src="/2020/05/13/0daySec-HeapDebug/20200509162647422.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>可知：h1、h3分别被释放到 freelist[2] 空表中， h5被释放到了freelist[4]空表中。此时freelistp[2]的前向指针指向关系为：0x00360688→0x00360A88→0x00360188，其他类似。</p>
 <p><img src="/2020/05/13/0daySec-HeapDebug/20200509162921827.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>由于这三次释放的堆块在内存中不连续，所以不会发生合并。到目前为止，有三个空闲链表上有空闲块，分别是freelist[0]、freelist[2]、freelist[4]。</p>
 <p><br></p>
-<h3><span id="0x05-堆块的合并">0x05 堆块的合并</span></h3><p>继续将程序运行到 0x401080地址处，即执行了如下代码：</p>
+<h3 id="0x05-堆块的合并"><a href="#0x05-堆块的合并" class="headerlink" title="0x05 堆块的合并"></a>0x05 堆块的合并</h3><p>继续将程序运行到 0x401080地址处，即执行了如下代码：</p>
 <pre><code class="c">HeapFree(hp,0,h4); 
 </code></pre>
 <p>当释放h4的时候由于出现了两个连续的空闲块，所以会发生堆块的合并现象。h3、h4、h5彼此相邻，它们合并后是8个堆单位，所以将被链入freelist[8]。<br><img src="/2020/05/13/0daySec-HeapDebug/20200509165043968.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>可以看到原来链接着h1、h3的Freelist[2]现在只剩h1(0x00360688)，而Freelist[8]则链接了合并过后的新块（0x003606A8）。</p>
 <p>我们来看0x003606A8，可以看到合并后的新块大小已经被修改为 0x0008，其空表指针指向 0x005201B8，也就是 freelist[8]的地址。<br><img src="/2020/05/13/0daySec-HeapDebug/2020050916533239.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h3><span id="0x06-快表的使用">0x06 快表的使用</span></h3><p>调试代码如下：</p>
+<h3 id="0x06-快表的使用"><a href="#0x06-快表的使用" class="headerlink" title="0x06 快表的使用"></a>0x06 快表的使用</h3><p>调试代码如下：</p>
 <pre><code class="c">#include &lt;stdio.h&gt;
 #include &lt;windows.h&gt;
 
@@ -348,7 +348,7 @@ void main()
 </code></pre>
 <p>由于h2的再次被申请，而优先从快表中分配，所以lookaside[2]会再次变为空，如下：<br><img src="/2020/05/13/0daySec-HeapDebug/20200509194344395.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h3><span id="0x07-堆溢出利用之dword-shoot">0x07 堆溢出利用之DWORD SHOOT</span></h3><p>调试代码：</p>
+<h3 id="0x07-堆溢出利用之DWORD-SHOOT"><a href="#0x07-堆溢出利用之DWORD-SHOOT" class="headerlink" title="0x07 堆溢出利用之DWORD SHOOT"></a>0x07 堆溢出利用之DWORD SHOOT</h3><p>调试代码：</p>
 <pre><code class="c">#include &lt;windows.h&gt;
 
 main()
@@ -379,7 +379,7 @@ main()
 <p>我们将断点下载执行完六次申请、三次释放后，即将执行最后一次申请前调试状态如下：<br>Freelist[2]前向指针指向0x00360688（即h1）<br><img src="/2020/05/13/0daySec-HeapDebug/2020050920352825.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>继续查看0x00360688，如下<br><img src="/2020/05/13/0daySec-HeapDebug/2020050920374463.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>此时EBP的值为：0x0012FF80<br><img src="/2020/05/13/0daySec-HeapDebug/20200509205020247.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>下面我们的目标是通过 DWORD SHOOT 向EBP所指的栈帧位置写入 0x77777777，我们选中内存区域中 0x003606C8 对应的部分，按空格，将 flink 修改为 payload，将 blink 修改为目标地址，如下：</p>
 <p><img src="/2020/05/13/0daySec-HeapDebug/20200509205346445.png" srcset="/img/loading.gif" alt="在这里插入图片描述">然后将程序继续运行，查看栈帧中 0x0012FF80 的位置，发现已经被成功覆盖为了 0x77777777:<br><img src="/2020/05/13/0daySec-HeapDebug/20200509205748625.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h3><span id="0x08-堆溢出利用之代码植入">0x08 堆溢出利用之代码植入</span></h3><p>以0x7FFDF024处的RtlEnterCriticalSection()指针为目标，练习一下DWORDSHOOT 后，劫持进程、植入代码的全套动作。</p>
+<h3 id="0x08-堆溢出利用之代码植入"><a href="#0x08-堆溢出利用之代码植入" class="headerlink" title="0x08 堆溢出利用之代码植入"></a>0x08 堆溢出利用之代码植入</h3><p>以0x7FFDF024处的RtlEnterCriticalSection()指针为目标，练习一下DWORDSHOOT 后，劫持进程、植入代码的全套动作。</p>
 <p>首先是正常的调试代码如下：</p>
 <pre><code class="c">#include &lt;windows.h&gt;
 

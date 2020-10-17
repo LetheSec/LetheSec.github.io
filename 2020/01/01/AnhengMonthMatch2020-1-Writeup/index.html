@@ -168,18 +168,18 @@
           <div class="markdown-body">
             <p>正在复习密码学，突然发现今天有月赛了…于是做了一下，很简单的一次题目。。</p>
 <p><br></p>
-<h1><span id="web1">Web1</span></h1><p>进入后是一个JS的游戏，在<code>index.js</code>里修改一下<code>destroyed</code>的增加设置大一些，如下：</p>
+<h1 id="Web1"><a href="#Web1" class="headerlink" title="Web1"></a>Web1</h1><p>进入后是一个JS的游戏，在<code>index.js</code>里修改一下<code>destroyed</code>的增加设置大一些，如下：</p>
 <p><img src="/2020/01/01/AnhengMonthMatch2020-1-Writeup/20200101182915730.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>然后随便玩一下就能得到flag了：</p>
 <p><img src="/2020/01/01/AnhengMonthMatch2020-1-Writeup/20200101183118827.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1><span id="web2">Web2</span></h1><p>题目名字叫地图，进入后发现实际上没什么功能，只有<code>index.php</code>一个页面，</p>
+<h1 id="Web2"><a href="#Web2" class="headerlink" title="Web2"></a>Web2</h1><p>题目名字叫地图，进入后发现实际上没什么功能，只有<code>index.php</code>一个页面，</p>
 <p><img src="/2020/01/01/AnhengMonthMatch2020-1-Writeup/20200101183447834.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>点击发现url中存在<code>page=index</code>，于是尝试文件包含，正常的base64编码的payload会返回<code>not base</code>，应该是过滤了base，使用rot13编码读取，先读<code>index.php</code>可以发现flag在根目录，payload如下：</p>
 <pre><code>/index.php/?page=php://filter/read=string.toupper|string.rot13/resource=/flag
 </code></pre><p><img src="/2020/01/01/AnhengMonthMatch2020-1-Writeup/20200101183717300.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>rot13解码得到flag。</p>
 <p><br></p>
-<h1><span id="crypto1">Crypto1</span></h1><p>题目如下给了3个png和一个加密脚本如下：</p>
+<h1 id="Crypto1"><a href="#Crypto1" class="headerlink" title="Crypto1"></a>Crypto1</h1><p>题目如下给了3个png和一个加密脚本如下：</p>
 <p><img src="/2020/01/01/AnhengMonthMatch2020-1-Writeup/20200101185338363.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <pre><code class="python">from itertools import *
 from key import key
@@ -248,7 +248,7 @@ flag_w.close()
 <p>运行得到flag.png:</p>
 <p><img src="/2020/01/01/AnhengMonthMatch2020-1-Writeup/20200101190909765.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1><span id="crypto2">Crypto2</span></h1><p>一道RSA的题目，给的脚本如下：</p>
+<h1 id="Crypto2"><a href="#Crypto2" class="headerlink" title="Crypto2"></a>Crypto2</h1><p>一道RSA的题目，给的脚本如下：</p>
 <pre><code class="python">from Crypto.Util.number import *
 import gmpy2
 import random

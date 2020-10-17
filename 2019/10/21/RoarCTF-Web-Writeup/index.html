@@ -167,7 +167,7 @@
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
             <p>周末有点事，BUUCTF上复现一下…</p>
-<h1><span id="easy_calc">easy_calc</span></h1><p>这一题和国赛的lova_math一题看起来有点像…<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191017233227772.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>源码中提示了这题加了waf，我们访问<code>calc.php</code>，看到源码如下<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191017233459628.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><code>num</code>传入表达式，然后用<code>eval()</code>计算并输出，因为加了waf所以<code>num</code>中如果有字母，会直接返回403，所以第一步就是绕过它。</p>
+<h1 id="easy-calc"><a href="#easy-calc" class="headerlink" title="easy_calc"></a>easy_calc</h1><p>这一题和国赛的lova_math一题看起来有点像…<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191017233227772.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>源码中提示了这题加了waf，我们访问<code>calc.php</code>，看到源码如下<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191017233459628.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><code>num</code>传入表达式，然后用<code>eval()</code>计算并输出，因为加了waf所以<code>num</code>中如果有字母，会直接返回403，所以第一步就是绕过它。</p>
 <p>比较简单的方式就是直接在查询参数前面加个空格，即将<code>?num=</code>改为<code>? num=</code>即可绕过。</p>
 <p>可以参考这篇文章：<a href="https://www.freebuf.com/articles/web/213359.html" target="_blank" rel="noopener">利用PHP的字符串解析特性Bypass</a></p>
 <p><strong>当然，如果你觉得上面的方法不够高端，不能凸显你的技术，下面这篇文章提到的方法同样可以绕过。</strong></p>
@@ -180,7 +180,7 @@
 <p>然后再利用<code>readfile()</code>读取,最终payload：<code>base_convert(2146934604002,10,36)(hex2bin(dechex(47)).base_convert(25254448,10,36))</code></p>
 <p><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018003909946.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1><span id="easy-java">Easy Java</span></h1><p>进入之后是一个登录界面，但其实不关登录的事，点开help，如下：<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018010258912.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h1 id="Easy-Java"><a href="#Easy-Java" class="headerlink" title="Easy Java"></a>Easy Java</h1><p>进入之后是一个登录界面，但其实不关登录的事，点开help，如下：<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018010258912.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>看到<code>Download?filename=help.docx</code>，想到任意文件读取…</p>
 <p>经尝试，将<code>GET</code>改为<code>POST</code>即可读到</p>
 <p><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018010512293.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
@@ -188,8 +188,8 @@
 <p><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018010601497.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>看到了flag的目录，读一下<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018010649707.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>将该base64解码得到flag</p>
 <p><br></p>
-<h1><span id="simple-upload">Simple Upload</span></h1><p>这一题是thinkphp的上传：<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018014235621.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<h5><span id="解法一">解法一</span></h5><p>这里有师傅fuzz出，使用<code>xxx.&lt;&gt;php</code>可以绕过来直接进行上传orz…</p>
+<h1 id="Simple-Upload"><a href="#Simple-Upload" class="headerlink" title="Simple Upload"></a>Simple Upload</h1><p>这一题是thinkphp的上传：<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018014235621.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h5 id="解法一"><a href="#解法一" class="headerlink" title="解法一"></a>解法一</h5><p>这里有师傅fuzz出，使用<code>xxx.&lt;&gt;php</code>可以绕过来直接进行上传orz…</p>
 <pre><code class="python">import requests
 url = &quot;http://27e9c108-617d-42ed-8ad8-afe7e9e4c369.node3.buuoj.cn/index.php/home/index/upload/&quot;
 s = requests.Session()
@@ -199,7 +199,7 @@ print(r.text)
 
 </code></pre>
 <p><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018014519248.png" srcset="/img/loading.gif" alt><br>上传成功，连接即可得到flag.</p>
-<h5><span id="解法二">解法二：</span></h5><p>通过报错信息，我们可以看出这里是使用了ThinkPHP3.2.4<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018114351713.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h5 id="解法二："><a href="#解法二：" class="headerlink" title="解法二："></a>解法二：</h5><p>通过报错信息，我们可以看出这里是使用了ThinkPHP3.2.4<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018114351713.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>于是找个这之前的版本看一下文件上传的部分：<br><img src="/2019/10/21/RoarCTF-Web-Writeup/20191018114633312.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>可以看到，当<code>$files</code>为空时，会默认将<code>$_FILES</code>赋给<code>$file</code>，即会上传<code>$_FILES</code>中的所有文件，而题目中只会过滤<code>$_FILES[&#39;file&#39;]</code>，因此是可以将shell上传成功的，而只要找到其文件名就可以了，不过只会输出允许文件的位置。</p>
 <p>而文件名默认是用<code>uniqid()</code>函数生成的</p>
 <ul>
@@ -231,7 +231,7 @@ while (True):
 </code></pre>
 <p><img src="/2019/10/21/RoarCTF-Web-Writeup/2019102100005589.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1><span id="online-proxy">Online Proxy</span></h1><p>页面的源码里会回显Current IP和Last IP，其实之前做过一道也是回显IP的题，那题是XXF的insert注入，不过那题给了源码，思路比较容易想，且过滤了一些字符，最终是利用了时间盲注。</p>
+<h1 id="Online-Proxy"><a href="#Online-Proxy" class="headerlink" title="Online Proxy"></a>Online Proxy</h1><p>页面的源码里会回显Current IP和Last IP，其实之前做过一道也是回显IP的题，那题是XXF的insert注入，不过那题给了源码，思路比较容易想，且过滤了一些字符，最终是利用了时间盲注。</p>
 <p>这一题也是在X-Forwarded-For字段进行注入，只有后一次ip和前一次ip不相同时，才会更新前一次的ip，既然存在插入ip、更新ip的操作，那么就应该可以利用update或者insert注入或者二次注入。</p>
 <p>一般来说，insert可以使用延时注入，update可以使用bool盲注和延时盲注，但是如果更新后的数据是可见的话，那么就可能存在二次注入，在insert的时候拼接注入语句，将要查询的数据转化为10进制一起插入数据库中，这样实际上我们要查询的数据就已经在数据库里了，再在回显时就可以拿到数据了。</p>
 <p>下面放几张图理解一下：</p>

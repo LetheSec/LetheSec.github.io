@@ -166,7 +166,7 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h3><span id="0x01-基础知识">0x01 基础知识</span></h3><ul>
+            <h3 id="0x01-基础知识"><a href="#0x01-基础知识" class="headerlink" title="0x01 基础知识"></a>0x01 基础知识</h3><ul>
 <li>PHP序列化：php为了方便进行数据的传输，允许把复杂的数据结构，压缩到一个字符串中，使用<code>serialize()</code>函数。</li>
 </ul>
 <ul>
@@ -176,7 +176,7 @@
 </li>
 </ul>
 <p><br></p>
-<h3><span id="0x02-序列化格式">0x02 序列化格式</span></h3><p>例子如下：</p>
+<h3 id="0x02-序列化格式"><a href="#0x02-序列化格式" class="headerlink" title="0x02 序列化格式"></a>0x02 序列化格式</h3><p>例子如下：</p>
 <pre><code class="php">&lt;?php
     class A {
         public $x;
@@ -246,7 +246,7 @@ string(47) &quot;O:1:&quot;A&quot;:2:{s:1:&quot;x&quot;;s:5:&quot;lethe&quot;;s:
 O:1:&quot;B&quot;:1:{s:4:&quot; * b&quot;;s:9:&quot;protected&quot;;}
 O:1:&quot;C&quot;:1:{s:1:&quot;c&quot;;s:6:&quot;public&quot;;}
 </code></pre><p><br></p>
-<h3><span id="0x03-魔术方法">0x03 魔术方法</span></h3><h6><span id="1php16个魔术方法">（1）PHP16个魔术方法</span></h6><p>PHP中把以双下划线__开头的方法称为魔术方法(Magic methods)，这些方法在达到某些条件时将会自动被调用：</p>
+<h3 id="0x03-魔术方法"><a href="#0x03-魔术方法" class="headerlink" title="0x03 魔术方法"></a>0x03 魔术方法</h3><h6 id="（1）PHP16个魔术方法"><a href="#（1）PHP16个魔术方法" class="headerlink" title="（1）PHP16个魔术方法"></a>（1）PHP16个魔术方法</h6><p>PHP中把以双下划线__开头的方法称为魔术方法(Magic methods)，这些方法在达到某些条件时将会自动被调用：</p>
 <ul>
 <li><p>__construct()，类的构造函数，:当一个类被创建时自动调用</p>
 </li>
@@ -283,7 +283,7 @@ O:1:&quot;C&quot;:1:{s:1:&quot;c&quot;;s:6:&quot;public&quot;;}
 </ul>
 <p>具体调用情况可以参考：<a href="https://segmentfault.com/a/1190000007250604#articleHeader4" target="_blank" rel="noopener">https://segmentfault.com/a/1190000007250604#articleHeader4</a></p>
 <p>其实在反序列化漏洞中经常利用的有：<code>__construct()</code>，<code>__destruct()</code>，<code>__sleep()</code>，<code>__wakeup()</code>，<code>__toString()</code>，<code>__invoke()</code>，<code>__call()</code>这几个，所以下面针对这几个作具体说明。</p>
-<h6><span id="2__construct调用方式">（2）__construct()调用方式</span></h6><p>在每个类中都有一个构造方法，如果没有显示地声明它，那么类中都会默认存在一个没有参数且内容为空的构造方法。</p>
+<h6 id="（2）-construct-调用方式"><a href="#（2）-construct-调用方式" class="headerlink" title="（2）__construct()调用方式"></a>（2）__construct()调用方式</h6><p>在每个类中都有一个构造方法，如果没有显示地声明它，那么类中都会默认存在一个没有参数且内容为空的构造方法。</p>
 <pre><code class="php">&lt;?php
     class A
     {
@@ -298,7 +298,7 @@ O:1:&quot;C&quot;:1:{s:1:&quot;c&quot;;s:6:&quot;public&quot;;}
 </code></pre>
 <p>运行结果：</p>
 <pre><code>This is a construct function
-</code></pre><h6><span id="3__destruct调用方式">（3）__destruct()调用方式</span></h6><p>在每个类中都有一个析构方法，如果没有显示地声明它，那么类中都会默认存在一个没有参数且内容为空的析构方法。</p>
+</code></pre><h6 id="（3）-destruct-调用方式"><a href="#（3）-destruct-调用方式" class="headerlink" title="（3）__destruct()调用方式"></a>（3）__destruct()调用方式</h6><p>在每个类中都有一个析构方法，如果没有显示地声明它，那么类中都会默认存在一个没有参数且内容为空的析构方法。</p>
 <pre><code class="php">&lt;?php
     class A
     {
@@ -319,7 +319,7 @@ O:1:&quot;C&quot;:1:{s:1:&quot;c&quot;;s:6:&quot;public&quot;;}
 <p>运行结果：</p>
 <pre><code>This is a construct function
 This is a destruct function
-</code></pre><h6><span id="4__sleep调用方式">（4）__sleep()调用方式</span></h6><ul>
+</code></pre><h6 id="（4）-sleep-调用方式"><a href="#（4）-sleep-调用方式" class="headerlink" title="（4）__sleep()调用方式"></a>（4）__sleep()调用方式</h6><ul>
 <li><p><code>serialize()</code> 函数会检查类中是否存在一个魔术方法 <code>__sleep()</code>；如果存在，则该方法会优先被调用，然后才执行序列化操作。</p>
 </li>
 <li><p>此功能可以用于清理对象，并返回一个包含对象中所有应被序列化的变量名称的数组。</p>
@@ -350,7 +350,7 @@ This is a destruct function
 O:1:&quot;A&quot;:1:{s:7:&quot; A test&quot;;s:5:&quot;Lethe&quot;;}
 </code></pre></li>
 </ul>
-<h6><span id="5__wakeup调用方式">（5）__wakeup()调用方式</span></h6><p><code>unserialize()</code> 会检查是否存在一个 <code>__wakeup()</code> 方法。如果存在，则会先调用 <code>__wakeup</code> 方法，预先准备对象需要的资源。</p>
+<h6 id="（5）-wakeup-调用方式"><a href="#（5）-wakeup-调用方式" class="headerlink" title="（5）__wakeup()调用方式"></a>（5）__wakeup()调用方式</h6><p><code>unserialize()</code> 会检查是否存在一个 <code>__wakeup()</code> 方法。如果存在，则会先调用 <code>__wakeup</code> 方法，预先准备对象需要的资源。</p>
 <pre><code class="php">&lt;?php
     class A
     {
@@ -381,7 +381,7 @@ O:1:&quot;A&quot;:1:{s:7:&quot; A test&quot;;s:5:&quot;Lethe&quot;;}
 <p>运行结果：</p>
 <pre><code>This is a sleep function
 This is a wakeup function
-</code></pre><h6><span id="6__tostring调用方式">（6）__toString()调用方式</span></h6><ul>
+</code></pre><h6 id="（6）-toString-调用方式"><a href="#（6）-toString-调用方式" class="headerlink" title="（6）__toString()调用方式"></a>（6）__toString()调用方式</h6><ul>
 <li><p><code>__toString()</code> 方法用于一个类被当成字符串时应怎样回应。例如 <code>echo $obj;</code> 应时该显示些什么，即调用其函数内容。</p>
 </li>
 <li><p><code>__toString()</code> 方法必须返回一个字符串，否则将发出一条 <code>E_RECOVERABLE_ERROR</code> 级别的致命错误。</p>
@@ -410,7 +410,7 @@ This is a wakeup function
 </code></pre>
 <p>运行结果：</p>
 <pre><code>This is a toString function
-</code></pre><h6><span id="7__invoke调用方式">（7）__invoke()调用方式</span></h6><ul>
+</code></pre><h6 id="（7）-invoke-调用方式"><a href="#（7）-invoke-调用方式" class="headerlink" title="（7）__invoke()调用方式"></a>（7）__invoke()调用方式</h6><ul>
 <li><p>当尝试以调用函数的方式调用一个对象时，__invoke() 方法会被自动调用，即<code>$obj = new class(); $obj();</code>时该做什么。</p>
 </li>
 <li><p>本特性只在 PHP 5.3.0 及以上版本有效。</p>
@@ -436,7 +436,7 @@ This is a wakeup function
 ?&gt;
 
 </code></pre>
-<h6><span id="8__call调用方式">（8）__call()调用方式</span></h6><ul>
+<h6 id="（8）-call-调用方式"><a href="#（8）-call-调用方式" class="headerlink" title="（8）__call()调用方式"></a>（8）__call()调用方式</h6><ul>
 <li><code>__call()</code>方法在调用的方法不存在时会自动调用，程序仍会继续执行下去。</li>
 <li>该方法有两个参数，第一个参数 <code>$function_name</code> 会自动接收不存在的方法名，第二个 <code>$arguments</code> 则以数组的方式接收不存在方法的多个参数。</li>
 <li>格式 <code>function __call(string $function_name, array $arguments){   //...   }</code></li>
@@ -470,8 +470,8 @@ This is a wakeup function
 )
 )不存在！&lt;br&gt;
 </code></pre><p><br></p>
-<h3><span id="0x04-反序列化漏洞分析">0x04 反序列化漏洞分析</span></h3><p>说了这么多，下面就通过几个例子看看到底如何利用php反序列化进行攻击。</p>
-<h5><span id="例1全面考察的一题">例1：全面考察的一题</span></h5><h6><span id="1题目">（1）题目</span></h6><pre><code class="php">&lt;?php
+<h3 id="0x04-反序列化漏洞分析"><a href="#0x04-反序列化漏洞分析" class="headerlink" title="0x04 反序列化漏洞分析"></a>0x04 反序列化漏洞分析</h3><p>说了这么多，下面就通过几个例子看看到底如何利用php反序列化进行攻击。</p>
+<h5 id="例1：全面考察的一题"><a href="#例1：全面考察的一题" class="headerlink" title="例1：全面考察的一题"></a>例1：全面考察的一题</h5><h6 id="（1）题目"><a href="#（1）题目" class="headerlink" title="（1）题目"></a>（1）题目</h6><pre><code class="php">&lt;?php
 class start_gg
 {
         public $mod1;
@@ -530,7 +530,7 @@ $a = $_GET[&#39;string&#39;];
 unserialize($a);
 ?&gt;
 </code></pre>
-<h6><span id="2思路">（2）思路：</span></h6><ul>
+<h6 id="（2）思路："><a href="#（2）思路：" class="headerlink" title="（2）思路："></a>（2）思路：</h6><ul>
 <li><p>要想获得输出flag，那么我们肯定要想办法调用<strong>GetFlag</strong>类的里的<code>get_flag()</code>方法。</p>
 </li>
 <li><p>在<strong>string1</strong>类我们可以看到，只要把<code>$str1</code>实例化为<strong>GetFlag</strong>类的对象，然后调用想办法调用<code>__toString()</code>方法即可，那就找有没有地方把对象当作字符串了。</p>
@@ -547,7 +547,7 @@ unserialize($a);
 </li>
 <li>如何在每个类中实例化另一个类呢？可以利用类的构造函数，只要这个类被实例化，构造函数就自动实例化了你所需要的那个类。</li>
 </ul>
-<h6><span id="3解答">（3）解答</span></h6><p>思路清楚后就很容易了，脚本如下：</p>
+<h6 id="（3）解答"><a href="#（3）解答" class="headerlink" title="（3）解答"></a>（3）解答</h6><p>思路清楚后就很容易了，脚本如下：</p>
 <pre><code class="php">&lt;?php
 class start_gg
 {
@@ -599,7 +599,7 @@ echo serialize($a);
 <p>题目是用Get传参进去，我这里直接将上述构造好的序列化字符串传进去，成功输出flag：</p>
 <p><img src="/2019/08/06/谈一谈PHP反序列化/20190806234240441.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h5><span id="例2第十二届全国大学生信息安全竞赛-justsoso">例2：第十二届全国大学生信息安全竞赛 JustSoso</span></h5><h6><span id="1题目">（1）题目</span></h6><p>本题要先用文件包含得到源码<code>index.php</code>和<code>hint.php</code>，在这里我就只讲关于反序列化的部分了。</p>
+<h5 id="例2：第十二届全国大学生信息安全竞赛-JustSoso"><a href="#例2：第十二届全国大学生信息安全竞赛-JustSoso" class="headerlink" title="例2：第十二届全国大学生信息安全竞赛 JustSoso"></a>例2：第十二届全国大学生信息安全竞赛 JustSoso</h5><h6 id="（1）题目-1"><a href="#（1）题目-1" class="headerlink" title="（1）题目"></a>（1）题目</h6><p>本题要先用文件包含得到源码<code>index.php</code>和<code>hint.php</code>，在这里我就只讲关于反序列化的部分了。</p>
 <p><code>index.php</code>包含了<code>hint.php</code>，其中有<code>$payload = unserialize($payload);</code>进行了反序列化，而<code>$payload</code>是我们可控的参数。</p>
 <p><code>hint.php</code>源码如下:</p>
 <pre><code class="php">//hint.php
@@ -642,7 +642,7 @@ class Flag{
 }
 ?&gt;
 </code></pre>
-<h6><span id="2思路">（2）思路</span></h6><ul>
+<h6 id="（2）思路"><a href="#（2）思路" class="headerlink" title="（2）思路"></a>（2）思路</h6><ul>
 <li>要想获取flag，明显要利用<strong>Flag</strong>类中<code>getFlag()</code>方法的<code>highlight_file()</code>函数将flag打印出来，因此需要将<code>$this-&gt;file</code>参数赋值为<code>flag.php</code>，所以就先找哪里调用了<code>getFlag()</code>方法。</li>
 <li>发现在<strong>Handle</strong>类的<code>__destruct()</code>方法中调用了，所以只需要将<code>$handle</code>实例化为<strong>Flag</strong>类的对象，然后创建<code>Handle</code>类的对象就行了，该对象销毁时就会自动调用<code>__destruct()</code>。</li>
 </ul>
@@ -651,7 +651,7 @@ class Flag{
 <p>前面我们介绍了序列化的格式，所以只需要在序列化字符串构造完成后，将属性的个数修改的比实际大就可以了。</p>
 <p>② 在你终于成功调用到了<code>getFlag()</code>方法后，还必须满足<code>$this-&gt;token === $this-&gt;token_flag</code>的验证，而<br><code>token_flag</code>是每次随机生成的，怎么样才能使<code>$token</code>和它相等呢？</p>
 <p>其实我们可以在构造的时候把<code>$token</code>声明为<code>$token_flag</code>的引用，如果不知道什么是引用，得好好补一下编程知识了，这样实际上<code>$token</code>与<code>$token_flag</code>就是同一个东西了，当然可以绕过验证。</p>
-<h6><span id="3解答">（3）解答</span></h6><p>构造脚本如下：</p>
+<h6 id="（3）解答-1"><a href="#（3）解答-1" class="headerlink" title="（3）解答"></a>（3）解答</h6><p>构造脚本如下：</p>
 <pre><code class="php">&lt;?php  
 class Handle{ 
     private $handle;  
@@ -678,8 +678,8 @@ echo serialize($a);
 <p>输出结果：<br><code>O:6:&quot;Handle&quot;:1:{s:14:&quot; Handle handle&quot;;O:4:&quot;Flag&quot;:3:{s:4:&quot;file&quot;;s:8:&quot;flag.php&quot;;s:5:&quot;token&quot;;N;s:10:&quot;token_flag&quot;;R:4;}}</code></p>
 <p>当然要作为此题的payload，别忘了前面说的还要把序列化串中属性的个数由1改为2来绕过<code>__wakeup</code>的执行。</p>
 <p><br></p>
-<h3><span id="0x05-php-session反序列化">0x05 PHP SESSION反序列化</span></h3><p>除了上面说的，在文件里面不严谨的使用了<code>unserialize()</code>之外，反序列化还有一种利用方式，即SESSION反序列化。</p>
-<h6><span id="1-session反序列化">（1） SESSION反序列化</span></h6><p>PHP在存储和读取session时,都会有一个序列化和反序列化的过程，同时反序列化中也会调用一些魔术方法。</p>
+<h3 id="0x05-PHP-SESSION反序列化"><a href="#0x05-PHP-SESSION反序列化" class="headerlink" title="0x05 PHP SESSION反序列化"></a>0x05 PHP SESSION反序列化</h3><p>除了上面说的，在文件里面不严谨的使用了<code>unserialize()</code>之外，反序列化还有一种利用方式，即SESSION反序列化。</p>
+<h6 id="（1）-SESSION反序列化"><a href="#（1）-SESSION反序列化" class="headerlink" title="（1） SESSION反序列化"></a>（1） SESSION反序列化</h6><p>PHP在存储和读取session时,都会有一个序列化和反序列化的过程，同时反序列化中也会调用一些魔术方法。</p>
 <p>PHP 内置了多种处理器用于存取 <code>$_SESSION</code> 数据，都会对数据进行序列化和反序列化，这几种处理器如下：</p>
 <table>
 <thead>
@@ -782,7 +782,7 @@ echo serialize($a);
 <pre><code>a:1:{s:4:&quot;name&quot;;s:42:&quot;|O:1:&quot;A&quot;:1:{s:4:&quot;test&quot;;s:10:&quot;phpinfo();&quot;;}&quot;;}
 </code></pre><p>但是在<code>test1.php</code>中是使用的<code>php</code>处理器，由它们的区别我们可以知道：在被<code>php</code>处理器反序列化的时候，会以<code>|</code>来分割为键值对。</p>
 <p>这样当带着上面上述Session去访问<code>test1.php</code>时，<code>|</code>后面的值，也就是我们构造的序列化字符串就会被成功的反序列化并执行了。</p>
-<h6><span id="2ctf实例">（2）CTF实例</span></h6><p>题目连接：<a href="http://web.jarvisoj.com:32784" target="_blank" rel="noopener">http://web.jarvisoj.com:32784</a></p>
+<h6 id="（2）CTF实例"><a href="#（2）CTF实例" class="headerlink" title="（2）CTF实例"></a>（2）CTF实例</h6><p>题目连接：<a href="http://web.jarvisoj.com:32784" target="_blank" rel="noopener">http://web.jarvisoj.com:32784</a></p>
 <p>给了源码如下：</p>
 <pre><code class="php">&lt;?php
 //A webshell is wait for you
@@ -813,7 +813,7 @@ else
 </code></pre>
 <p>可以看到这里用了<code>ini_set(&#39;session.serialize_handler&#39;, &#39;php&#39;);</code>，那么我们只要传入构造好的session，就可以进行反序列化攻击了。</p>
 <p>根据题目，先看一下<code>phpinfo()</code>的信息，发现<code>session.upload_progress.enabled</code>是on的，而session.upload_progress.cleanup所以可以通过上传文件，从而在session文件中写入数据。</p>
-<h6><span id="3关于sessionupload_progressphpgt54">（3）关于session.upload_progress（php&gt;=5.4）</span></h6><p>在php.ini有以下几个默认选项：</p>
+<h6 id="（3）关于session-upload-progress（php-gt-5-4）"><a href="#（3）关于session-upload-progress（php-gt-5-4）" class="headerlink" title="（3）关于session.upload_progress（php&gt;=5.4）"></a>（3）关于session.upload_progress（php&gt;=5.4）</h6><p>在php.ini有以下几个默认选项：</p>
 <pre><code>session.upload_progress.enabled = on
 session.upload_progress.cleanup = on
 session.upload_progress.prefix = &quot;upload_progress_&quot;

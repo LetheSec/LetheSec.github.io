@@ -166,8 +166,8 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h2><span id="0x01-前置知识">0x01 前置知识</span></h2><p><br></p>
-<h4><span id="1sql注入与sql盲注">1.SQL注入与SQL盲注</span></h4><p><strong>SQL注入：</strong></p>
+            <h2 id="0x01-前置知识"><a href="#0x01-前置知识" class="headerlink" title="0x01 前置知识"></a>0x01 前置知识</h2><p><br></p>
+<h4 id="1-SQL注入与SQL盲注"><a href="#1-SQL注入与SQL盲注" class="headerlink" title="1.SQL注入与SQL盲注"></a>1.SQL注入与SQL盲注</h4><p><strong>SQL注入：</strong></p>
 <ul>
 <li>执行SQL注入攻击时，服务器会响应来自数据库服务器的错误信息，信息提示SQL语法不正确等</li>
 <li>一般在页面上直接就会显示执行sql语句的结果</li>
@@ -179,10 +179,10 @@
 <li>有可能出现不确定sql是否执行的情况</li>
 </ul>
 <p><br></p>
-<h4><span id="2sql盲注分类">2.SQL盲注分类</span></h4><p>根据页面不同的响应方式，SQL盲注分为：<strong>基于布尔的盲注、基于时间的盲注、基于报错的盲注</strong></p>
+<h4 id="2-SQL盲注分类"><a href="#2-SQL盲注分类" class="headerlink" title="2.SQL盲注分类"></a>2.SQL盲注分类</h4><p>根据页面不同的响应方式，SQL盲注分为：<strong>基于布尔的盲注、基于时间的盲注、基于报错的盲注</strong></p>
 <p>（1）对于<strong>基于布尔的盲注</strong>，可通过构造真or假判断条件（数据库各项信息取值的大小比较，如：字段长度、版本数值、字段名、字段名各组成部分在不同位置对应的字符ASCII码…），将构造的sql语句提交到服务器，然后根据服务器对不同的请求返回不同的页面结果（True、False）；然后不断调整判断条件中的数值以逼近真实值，特别是需要关注响应从True<-->False发生变化的转折点。<br>（2）对于<strong>基于时间的盲注</strong>，通过构造真or假判断条件的sql语句，且sql语句中根据需要联合使用sleep()函数一同向服务器发送请求，观察服务器响应结果是否会执行所设置时间的延迟响应，以此来判断所构造条件的真or假（若执行sleep延迟，则表示当前设置的判断条件为真）；然后不断调整判断条件中的数值以逼近真实值，最终确定具体的数值大小or名称拼写。<br>（3）对于<strong>基于报错的盲注</strong>，搜寻查看网上部分Blog，基本是在rand()函数作为group by的字段进行联用的时候会违反Mysql的约定而报错。rand()随机不确定性，使得group by会使用多次而报错。</--></p>
 <p><br></p>
-<h4><span id="3sql盲注测试流程">3.SQL盲注测试流程</span></h4><p>SQL盲注的测试过程与DVWA的普通SQL Injection操作流程类似，大致测试流程如下：</p>
+<h4 id="3-SQL盲注测试流程"><a href="#3-SQL盲注测试流程" class="headerlink" title="3.SQL盲注测试流程"></a>3.SQL盲注测试流程</h4><p>SQL盲注的测试过程与DVWA的普通SQL Injection操作流程类似，大致测试流程如下：</p>
 <ul>
 <li>判断是否存在注入，注入的类型</li>
 <li>猜解当前数据库名称</li>
@@ -192,13 +192,13 @@
 <li>获取数据库的其他信息：版本、用户…</li>
 </ul>
 <p><br></p>
-<h4><span id="4requests库的使用">4.Requests库的使用</span></h4><p>在CTF中里，python脚本中最基本的就是requests库的使用，本文不过多介绍其使用方法，可参考以下官方文档，讲的很详细：<a href="http://docs.python-requests.org/zh_CN/latest/user/quickstart.html" target="_blank" rel="noopener">快速上手——requests</a>以及<a href="http://docs.python-requests.org/zh_CN/latest/user/advanced.html#advanced" target="_blank" rel="noopener">高级用法——request</a></p>
+<h4 id="4-Requests库的使用"><a href="#4-Requests库的使用" class="headerlink" title="4.Requests库的使用"></a>4.Requests库的使用</h4><p>在CTF中里，python脚本中最基本的就是requests库的使用，本文不过多介绍其使用方法，可参考以下官方文档，讲的很详细：<a href="http://docs.python-requests.org/zh_CN/latest/user/quickstart.html" target="_blank" rel="noopener">快速上手——requests</a>以及<a href="http://docs.python-requests.org/zh_CN/latest/user/advanced.html#advanced" target="_blank" rel="noopener">高级用法——request</a></p>
 <p><br></p>
-<h2><span id="0x02-前置工作">0x02 前置工作</span></h2><p><br></p>
+<h2 id="0x02-前置工作"><a href="#0x02-前置工作" class="headerlink" title="0x02 前置工作"></a>0x02 前置工作</h2><p><br></p>
 <p>1.为了更贴近CTF比赛的模式，因此在dvwa的数据库中加入了flag，最终脚本的结果也是爆出flag<br>2.加了两个flag是为了更好体现脚本的功能<br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302141221969.png" srcset="/img/loading.gif" alt="dvwa库中的表"><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302141308470.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h2><span id="0x03-low-sql-injection-blind">0x03 Low SQL Injection (Blind)</span></h2><p><br></p>
-<h4><span id="1测试分析">1.测试分析</span></h4><p>经过简单的测试之后发现，页面只会出现两种回显，即</p>
+<h2 id="0x03-Low-SQL-Injection-Blind"><a href="#0x03-Low-SQL-Injection-Blind" class="headerlink" title="0x03 Low SQL Injection (Blind)"></a>0x03 Low SQL Injection (Blind)</h2><p><br></p>
+<h4 id="1-测试分析"><a href="#1-测试分析" class="headerlink" title="1.测试分析"></a>1.测试分析</h4><p>经过简单的测试之后发现，页面只会出现两种回显，即</p>
 <pre><code>  User ID exists in the database.
 </code></pre><p>   和</p>
 <pre><code>  User ID is MISSING from the database.
@@ -276,7 +276,7 @@ if( isset( $_GET[ &#39;Submit&#39; ] ) ) {
 <li>未作任何输入过滤和限制，攻击者可任意构造所想输入的sql查询</li>
 </ul>
 <p><br></p>
-<h4><span id="2脚本编写">2.脚本编写</span></h4><p>脚本中所用到的SQL语句与dvwa前面非盲注时语句差不多，可参考：<a href="https://blog.csdn.net/qq_42181428/article/details/87892132" target="_blank" rel="noopener">dvwa之SQL注入（1）</a></p>
+<h4 id="2-脚本编写"><a href="#2-脚本编写" class="headerlink" title="2.脚本编写"></a>2.脚本编写</h4><p>脚本中所用到的SQL语句与dvwa前面非盲注时语句差不多，可参考：<a href="https://blog.csdn.net/qq_42181428/article/details/87892132" target="_blank" rel="noopener">dvwa之SQL注入（1）</a></p>
 <p><strong>（1）脚本一：爆库名、表个数、表名</strong><br>我这里写的脚本是将当前数据库的所有表名都跑出来，实际在CTF比赛中，为节约时间可以不必这么做，因为一般包含flag的表名都会有特殊含义，只需要知道包含flag的表名即可。</p>
 <pre><code class="python">#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
@@ -437,7 +437,7 @@ for j in range(0,rowNum+1):
 </code></pre>
 <p><strong>脚本三运行结果如下:</strong><br><img src="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/20190302172239513.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="script3"></p>
 <p><br></p>
-<h1><span id="0x04-总结">0x04 总结</span></h1><p>由于是刚入门的小白，各方面都在起步之中，还有许多需要继续努学习的，尤其要提高自己的代码编写能力，关于sql注入的学习也还会继续。</p>
+<h1 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h1><p>由于是刚入门的小白，各方面都在起步之中，还有许多需要继续努学习的，尤其要提高自己的代码编写能力，关于sql注入的学习也还会继续。</p>
 
             <hr>
           </div>
