@@ -55,7 +55,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="/">ホーム</a>
           </li>
         
           
@@ -63,7 +63,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">Archives</a>
+            <a class="nav-link" href="/archives/">アーカイブ</a>
           </li>
         
           
@@ -71,7 +71,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">Categories</a>
+            <a class="nav-link" href="/categories/">カテゴリー</a>
           </li>
         
           
@@ -79,7 +79,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">Tags</a>
+            <a class="nav-link" href="/tags/">タグ</a>
           </li>
         
           
@@ -87,7 +87,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/about/">About</a>
+            <a class="nav-link" href="/about/">本ブログ情報　</a>
           </li>
         
         
@@ -134,6 +134,87 @@
               <div class="col-12 col-md-10 m-auto">
                 
 
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2020/10/19/【论文笔记——对比预测编码CPC】Representation-Learning-with-Contrastive-Predictive-Coding/">
+        <p class="h4 index-header">【论文笔记——对比预测编码CPC】Representation Learning with Contrastive Predictive Coding</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">Representation Learning with Contrastive Predictive Codingarxiv：https://arxiv.org/abs/1807.03748
+code：https://github.com/jefflai108/Contrastive-Predictive-Coding-PyTorch
+1 Introduce作者提出了一种叫做“对比预测编码（CPC, Contrastive Predictive Coding）”的无监督方法，可以从高维数据中提取有用的 representation，这种 representation 学习到了对预测未来最有用的信息。
+目前无监督学习存在的问题：
+
+如何更好的从原始观测值中建模high-level representarion
+理想情况下的学习的representation到底是什么样的？是否可以使用无监督学习进行理想的representation learning？
+作者将无监督学习与预测编码的思想相结合，提出了是否学习到一些能对未来有很好预测效果的representation？
+
+本文的工作如下：
+</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-10-19&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/PaperNote">PaperNote</a>&nbsp;
+          &nbsp;
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2020/10/11/【论文笔记——自监督学习综述】Self-supervised-Visual-Feature-Learning-with-Deep-Neural-Networks-A-Survey/">
+        <p class="h4 index-header">【论文笔记——自监督学习综述】Self-supervised Visual Feature Learning with Deep Neural Networks：A Survey</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">arxiv：https://arxiv.org/abs/1902.06162
+1 介绍1.1 动机（1）Deep ConvNets 的性能很大程度上取决于它的 capability 和数据集的数量，但是大规模数据集的收集和注释非常昂贵。
+（2）因此近年来提出了许多 self-supervised learning 的方法，即从大规模无标记的数据中自主的学习特征。采取的方法通常是设置一些 pretext tasks（如图像上色、图像修补、图像拼接等），训练网络去解决 pretext tasks，在完成这些任务的过程中，网络就学习到了相应的特征，从而生成对应的伪标签（pseudo label）。
+（3）pretext task需要满足以下两个条件：
+
+ConvNets 需要捕获图片/视频中的 visual features 来解决 pretext tasks
+可以根据图像/视频的某些属性自动生成用于 pretext task 的伪标签
+
+
+self-supervised learning 的一般流程：
+
+首先，设计一个预定义的前置任务（pretext task），训练网络来解决改任务，根据</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-10-11&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/PaperNote">PaperNote</a>&nbsp;
+          &nbsp;
+        
+        
+      </div>
+    </div>
+  </div>
 
   <div class="row mb-4 mx-auto">
     
@@ -580,126 +661,11 @@ i</div>
     </div>
   </div>
 
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2020/02/01/Flask-Notes/" target="_self">
-          <img src="https://s1.ax1x.com/2020/03/15/83XvTI.jpg" srcset="/img/loading.gif" alt="Flask-Notes" class="img-fluid rounded z-depth-3 index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2020/02/01/Flask-Notes/">
-        <p class="h4 index-header">Flask-Notes</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">0x01 环境与应用的基本结构一、虚拟环境配置1.1 创建虚拟环境Python 3 和 Python 2 解释器创建虚拟环境的方法有所不同。在 Python 3中，虚拟环境由 Python 标准库中的 venv 包原生支持。
-使用如下命令创建虚拟环境：
-python -m venv virtual-environment-name
-
--m venv 选项的作用是以独立的脚本运行标准库中的 venv 包，后面的参数为虚拟环境的名称。
-例如，如下命令创建了一个名称为venv的虚拟环境：
-python -m venv venv
-
-命令执行完毕后，当前目录中会出现一个名为 venv 的子目录，这里就是一个全新的虚拟环境，包含这个项目专用的 Python 解释器。
-1.2 激活虚拟环境在Windows下，可以通过如下命令激活虚拟环境：
-venv/Scripts/aivate
-
-虚拟环境激活后，命令行的路径前会有(venv)，此时在命令行中输入python，将调用虚拟环境中的解释器，而不是全局解释器。如果打开了多个命令提示符窗口，则在每个窗口中都要激活虚拟环境。
-在命令提示符中输入deactiva</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-01&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python">Python</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python">Python</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-      <div class="col-12 col-md-4 m-auto">
-        <a href="/2020/01/01/AnhengMonthMatch2020-1-Writeup/" target="_self">
-          <img src="https://s2.ax1x.com/2020/03/11/8AVheP.png" srcset="/img/loading.gif" alt="安恒月赛2020元旦场Writeup" class="img-fluid rounded z-depth-3 index-thumbnails">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2020/01/01/AnhengMonthMatch2020-1-Writeup/">
-        <p class="h4 index-header">安恒月赛2020元旦场Writeup</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">正在复习密码学，突然发现今天有月赛了…于是做了一下，很简单的一次题目。。
-
-Web1进入后是一个JS的游戏，在index.js里修改一下destroyed的增加设置大一些，如下：
-
-然后随便玩一下就能得到flag了：
-
-
-Web2题目名字叫地图，进入后发现实际上没什么功能，只有index.php一个页面，
-点击发现url中存在page=index，于是尝试文件包含，正常的base64编码的payload会返回not base，应该是过滤了base，使用rot13编码读取，先读index.php可以发现flag在根目录，payload如下：
-/index.php/?page=php://filter/read=string.toupper|string.rot13/resource=/flag
-
-rot13解码得到flag。
-
-Crypto1题目如下给了3个png和一个加密脚本如下：
-
-from itertools import *
-from key import key
-
-ki= cycle(key)
-
-fr1 = open(&quot;flag.png&quot;,&quot;rb&</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-01-01&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Writeup">Writeup</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Writeup">Writeup</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
 
 
   <nav aria-label="index posts navigation">
     <span class="pagination pg-blue justify-content-center mt-5" id="pagination">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fas fa-angle-double-right"></i></a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fas fa-angle-double-right"></i></a>
     </span>
   </nav>
   
@@ -730,7 +696,7 @@ fr1 = open(&quot;flag.png&quot;,&quot;rb&</div>
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <h4 class="modal-title w-100 font-weight-bold">検索</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -738,7 +704,7 @@ fr1 = open(&quot;flag.png&quot;,&quot;rb&</div>
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
+          <label data-error="x" data-success="v" for="local-search-input">キーワード</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
