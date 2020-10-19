@@ -55,7 +55,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">Home</a>
           </li>
         
           
@@ -63,7 +63,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">Archives</a>
           </li>
         
           
@@ -71,7 +71,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">Categories</a>
           </li>
         
           
@@ -79,7 +79,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">Tags</a>
           </li>
         
           
@@ -87,7 +87,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">About</a>
           </li>
         
         
@@ -185,7 +185,17 @@
 <h2 id="2-Motivation-amp-amp-Intuitions"><a href="#2-Motivation-amp-amp-Intuitions" class="headerlink" title="2 Motivation &amp;&amp; Intuitions"></a>2 Motivation &amp;&amp; Intuitions</h2><p>模型主要的Intuitions就是学习一种能够对高维信号不同部分的基础共享信息（underlying shared infomation）进行编码的representation，同时丢弃掉更底层的低级信息和噪声。在时间序列和高维的建模中，通过对能够进行预测的representation进行学习，会使其学习到更多的全局结构，作者将学习到的这种特征称为”slow features“。$^{[13]}$</p>
 <p>预测高维数据的难点之一是均方误差和交叉熵这样的单峰损失效果不好，而如果使用一个强大的条件生成模型对每个细节进行重建，就会需要很大的计算量，并且会忽略了数据集$x$中的上下文关系$c$。（如一张图片包含上千位的信息，而最后的高级隐变量有可能仅仅是1024类别里10bit的一个类标签）。</p>
 <p>因此如果是为了提取出$x$和$c$之间的共享信息（shared information），直接建模生成模型 $p(x|c)$ 并不是最佳的。</p>
-<p>作者提出最大化 $x$（预测的未来）和上下文 $c$ （现在的环境）之间互信息的方式，定义如下：<br>$$<br>I(x ; c)=\sum_{x, c} p(x, c) \log \frac{p(x \mid c)}{p(x)} \tag{1}<br>$$<br>这里进一步解释一些<strong>互信息（mutual infomation）</strong>，互信息实际上就是表示<strong>两个变量之间的相关性</strong>，上式也就是互信息的定义式的变形，$I(x;c)$表示 $x$ 与 $c$ 的关系，但具体是什么关系呢？可以看如下的推导：<br>$$<br>\begin{aligned}<br>I(x;c) &amp;=\sum_{x, c} p(x, c) \log \frac{p(x \mid c)}{p(x)} \<br>&amp;=\sum_{x, c} p(x, c) \log p(x \mid c)-\sum_{x, c} p(x, c) \log p(x) \<br>&amp;=\sum_{c} p(c) \sum_{x} p(x \mid c) \log p(x \mid c)-\sum_{x} \sum_{c} p(x, c) \log p(x) \<br>&amp;=-H(x \mid c)+H(x) \<br>&amp;=H(x)-H(x \mid c)<br>\end{aligned}<br>$$<br>最终的结果是 $H(x)-H(x|c)$，其中$H(x)$为$x$的熵，用来衡量$x$的不确定度，定义如下：<br>$$<br>H(x)=-\sum_x p(x)logp(x)<br>$$<br>而$I(x,c)=H(x)-H(x|c)$也就说明了$x$与$c$的互信息<strong>即表示由于 $c$ 的引入而使 $x$ 熵减小的量，也就是 $x$ 不确定度减小的量</strong>。</p>
+<p>作者提出最大化 $x$（预测的未来）和上下文 $c$ （现在的环境）之间互信息的方式，定义如下：<br>$$<br>I(x ; c)=\sum_{x, c} p(x, c) \log \frac{p(x \mid c)}{p(x)} \tag{1}<br>$$<br>这里进一步解释一些<strong>互信息（mutual infomation）</strong>，互信息实际上就是表示<strong>两个变量之间的相关性</strong>，上式也就是互信息的定义式的变形，$I(x;c)$表示 $x$ 与 $c$ 的关系，但具体是什么关系呢？可以看如下的推导：<br>
+$$
+\begin{aligned}
+I(x;c) &=\sum_{x, c} p(x, c) \log \frac{p(x \mid c)}{p(x)} \\
+&=\sum_{x, c} p(x, c) \log p(x \mid c)-\sum_{x, c} p(x, c) \log p(x) \\
+&=\sum_{c} p(c) \sum_{x} p(x \mid c) \log p(x \mid c)-\sum_{x} \sum_{c} p(x, c) \log p(x) \\
+&=-H(x \mid c)+H(x) \\
+&=H(x)-H(x \mid c)
+\end{aligned}
+$$
+<br>最终的结果是 $H(x)-H(x|c)$，其中$H(x)$为$x$的熵，用来衡量$x$的不确定度，定义如下：<br>$$<br>H(x)=-\sum_x p(x)logp(x)<br>$$<br>而$I(x,c)=H(x)-H(x|c)$也就说明了$x$与$c$的互信息<strong>即表示由于 $c$ 的引入而使 $x$ 熵减小的量，也就是 $x$ 不确定度减小的量</strong>。</p>
 <p>因此，放在论文中的含义来看，最大化$I(x;c)$也就是通过充分学习现在的上下文 $c$ 最大程度的减小了未来 $x$ 的不确定度，从而起到了预测的效果，所以所以CPC希望网络可以最大化 $x$ 和 $c$ 之间的互信息。</p>
 <h2 id="3-Method"><a href="#3-Method" class="headerlink" title="3 Method"></a>3 Method</h2><h3 id="3-1-Contrastive-Predicting-Coding"><a href="#3-1-Contrastive-Predicting-Coding" class="headerlink" title="3.1 Contrastive Predicting Coding"></a>3.1 Contrastive Predicting Coding</h3><p><img src="/2020/10/19/【论文笔记——对比预测编码CPC】Representation-Learning-with-Contrastive-Predictive-Coding/image-20201015213150794.png" srcset="/img/loading.gif" alt="image-20201015213150794"></p>
 <p>上图就是 CPC 的架构图（以语音信号为例），首先用非线性编码器 $g_{enc}$（如AutoEncoder或者CNN） 将分割的时间窗口上的每个观测值 $x_t$的进行 $z_t=g_{enc}(x_t)$ 映射，得到到representation vector，然后再将$z_t$以及潜空间中之前所有时刻的相关信息输入到一个自回归模型 $g_{ar}$中，生成当前时刻的上下文表示$c_t=g_{ar}(z_{≤t})$</p>
@@ -237,7 +247,17 @@ $$
 <p><strong>（3）隐空间（latent space）</strong>：GAN的输入空间，指隐变量$z$的样本空间，”隐变量”可以理解为控制数据$X$生成的”幕后之手“。在统计机器学习中，隐变量生成式模型“生成”数据$X$的背后逻辑是，通过建模联合分布$p_θ(z,X)$ ，再从中采样得到 $(z,X)$ 对。具体操作是，为隐变量选择一个容易采样的分布，如高斯，再通过神经网络建模$p_θ(X|z)$，从而采样得到生成的数据。</p>
 <p><strong>（4）互信息（Mutual Information）</strong>：指变量间的相关性，通常用$I(X;Y)$表示$X$和$Y$之间的互信息:<br>$$<br>I(X ; Y)=\sum_{x \in X} \sum_{y \in Y} p(x, y) \log \frac{p(x \mid y)}{p(x)}<br>$$<br>$I(X;Y)$越大说明两者关系越密切。</p>
 <p>参考链接：<a href="https://www.cnblogs.com/gatherstars/p/6004075.html" target="_blank" rel="noopener">https://www.cnblogs.com/gatherstars/p/6004075.html</a></p>
-<p>文中定义的互信息为：<br>$$<br>I(x, c) =\sum_{x, c} p(x, c) \log \frac{p(x \mid c)}{p(x)}<br>$$<br>表示由于$c$的引入使得$x$不确定度减小的量，如下推导：<br>$$<br>\begin{aligned}<br>I(x, c) &amp;=\sum_{x, c} p(x, c) \log \frac{p(x \mid c)}{p(x)} \<br>&amp;=\sum_{x, c} p(x, c) \log \frac{p(x \mid c) p(c)}{p(x) p(c)} \<br>&amp;=\sum_{x, c} p(x, c) \log p(x \mid c)-\sum_{x, c} p(x, c) \log p(x) \<br>&amp;=\sum_{c} p(c) \sum_{x} p(x \mid c) \log p(x \mid c)-\sum_{x} \sum_{c} p(x, c) \log p(x) \<br>&amp;=H(x)-H(x \mid c)<br>\end{aligned}<br>$$<br>其中$H(x)$为$x$的熵，用来衡量$x$的不确定度，定义如下：<br>$$<br>H(x)=-\sum_x p(x)logp(x)<br>$$<br>由$I(x,c)=H(x)-H(x|C)$也就说明了$x$与$c$的互信息即表示由于$c$的引入而使$x$熵减小的量，也就是$x$不确定度减小的量。</p>
+<p>文中定义的互信息为：<br>$$<br>I(x, c) =\sum_{x, c} p(x, c) \log \frac{p(x \mid c)}{p(x)}<br>$$<br>表示由于$c$的引入使得$x$不确定度减小的量，如下推导：<br>
+$$
+\begin{aligned}
+I(x, c) &=\sum_{x, c} p(x, c) \log \frac{p(x \mid c)}{p(x)} \\
+&=\sum_{x, c} p(x, c) \log \frac{p(x \mid c) p(c)}{p(x) p(c)} \\
+&=\sum_{x, c} p(x, c) \log p(x \mid c)-\sum_{x, c} p(x, c) \log p(x) \\
+&=\sum_{c} p(c) \sum_{x} p(x \mid c) \log p(x \mid c)-\sum_{x} \sum_{c} p(x, c) \log p(x) \\
+&=H(x)-H(x \mid c)
+\end{aligned}
+$$
+<br>其中$H(x)$为$x$的熵，用来衡量$x$的不确定度，定义如下：<br>$$<br>H(x)=-\sum_x p(x)logp(x)<br>$$<br>由$I(x,c)=H(x)-H(x|C)$也就说明了$x$与$c$的互信息即表示由于$c$的引入而使$x$熵减小的量，也就是$x$不确定度减小的量。</p>
 <p><strong>（5）对比损失（Contrastive Loss）</strong>：</p>
 <p><strong>（6）NCE Loss</strong></p>
 <p><a href="https://blog.csdn.net/weixin_40901056/article/details/88568344" target="_blank" rel="noopener">https://blog.csdn.net/weixin_40901056/article/details/88568344</a></p>
@@ -288,7 +308,7 @@ $$
     <div class="d-none d-lg-block col-lg-2 toc-container">
       
   <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
     <div id="tocbot"></div>
   </div>
 
@@ -345,7 +365,7 @@ $$
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -353,7 +373,7 @@ $$
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>

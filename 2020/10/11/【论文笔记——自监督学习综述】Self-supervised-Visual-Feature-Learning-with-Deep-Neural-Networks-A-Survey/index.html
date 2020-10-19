@@ -55,7 +55,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">Home</a>
           </li>
         
           
@@ -63,7 +63,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">Archives</a>
           </li>
         
           
@@ -71,7 +71,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">Categories</a>
           </li>
         
           
@@ -79,7 +79,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">Tags</a>
           </li>
         
           
@@ -87,7 +87,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">About</a>
           </li>
         
         
@@ -201,16 +201,28 @@
 <li>指出了自监督学习未来可能的方向。</li>
 </ul>
 <h2 id="2-不同的学习模式"><a href="#2-不同的学习模式" class="headerlink" title="2 不同的学习模式"></a>2 不同的学习模式</h2><p>下面将对有监督、无监督（自监督学习看作无监督学习的子类）、弱监督和半监督四种视觉特征学习方法进行比较。</p>
-<h4 id="2-1-监督学习"><a href="#2-1-监督学习" class="headerlink" title="2.1 监督学习"></a>2.1 监督学习</h4><p>监督学习损失函数定义如下：<br>$$<br>\operatorname{loss}(D)=\min <em>{\theta} \frac{1}{N} \sum</em>{i=1}^{N} \operatorname{loss}\left(X_{i}, Y_{i}\right)<br>$$<br>$N$为数据集数量，$X_i$为数据集中的一个数据，$Y_i$为其对应的人工标注的标签:</p>
+<h4 id="2-1-监督学习"><a href="#2-1-监督学习" class="headerlink" title="2.1 监督学习"></a>2.1 监督学习</h4><p>监督学习损失函数定义如下：<br>
+$$
+\operatorname{loss}(D)=\min _{\theta} \frac{1}{N} \sum_{i=1}^{N} \operatorname{loss}\left(X_{i}, Y_{i}\right)
+$$
+<br>$N$为数据集数量，$X_i$为数据集中的一个数据，$Y_i$为其对应的人工标注的标签:</p>
 <ul>
 <li><p>优点：标签精确，效果好，取得了突破性成果。</p>
 </li>
 <li><p>缺点：数据收集和注释昂贵，需要耗费大量人力物力。</p>
 </li>
 </ul>
-<h4 id="2-2-半监督学习"><a href="#2-2-半监督学习" class="headerlink" title="2.2 半监督学习"></a>2.2 半监督学习</h4><p>半监督学习的损失函数如下：<br>$$<br>\operatorname{loss}\left(D_{1}, D_{2}\right)=\min <em>{\theta} \frac{1}{N} \sum</em>{i=1}^{N} \operatorname{loss}\left(X_{i}, Y_{i}\right)+\frac{1}{M} \sum_{i=1}^{M} \operatorname{loss} \left(Z_{i}, R\left(Z_{i}, X\right)\right)<br>$$<br>$X$表示少量的有标签数据集（数据集大小为$N$，表示为$D_1$），其中每个$X_i$对应的人工注释的标签为$Y_i$；$Z$表示大量的无标签数据集（数据集大小为$M$，表示为$D_2$）。</p>
+<h4 id="2-2-半监督学习"><a href="#2-2-半监督学习" class="headerlink" title="2.2 半监督学习"></a>2.2 半监督学习</h4><p>半监督学习的损失函数如下：<br>
+$$
+\operatorname{loss}\left(D_{1}, D_{2}\right)=\min _{\theta} \frac{1}{N} \sum_{i=1}^{N} \operatorname{loss}\left(X_{i}, Y_{i}\right)+\frac{1}{M} \sum_{i=1}^{M} \operatorname{loss} \left(Z_{i}, R\left(Z_{i}, X\right)\right)
+$$
+<br>$X$表示少量的有标签数据集（数据集大小为$N$，表示为$D_1$），其中每个$X_i$对应的人工注释的标签为$Y_i$；$Z$表示大量的无标签数据集（数据集大小为$M$，表示为$D_2$）。</p>
 <p>$R(Z_i,X)$是一个针对某个特定的任务的函数，用来表示无标签数据$Z_i$与有标签数据$X$之间的关系。</p>
-<h4 id="2-3-弱监督学习"><a href="#2-3-弱监督学习" class="headerlink" title="2.3 弱监督学习"></a>2.3 弱监督学习</h4><p>弱监督学习的损失函数如下：<br>$$<br>\operatorname{loss}(D)=\min <em>{\theta} \frac{1}{N} \sum</em>{i=1}^{N} \operatorname{loss}\left(X_{i}, C_{i}\right)<br>$$<br>$C_i$为数据$X_i$粗粒度的标签。</p>
+<h4 id="2-3-弱监督学习"><a href="#2-3-弱监督学习" class="headerlink" title="2.3 弱监督学习"></a>2.3 弱监督学习</h4><p>弱监督学习的损失函数如下：<br>
+$$
+\operatorname{loss}(D)=\min _{\theta} \frac{1}{N} \sum_{i=1}^{N} \operatorname{loss}\left(X_{i}, C_{i}\right)
+$$
+<br>$C_i$为数据$X_i$粗粒度的标签。</p>
 <p>粗粒度标签获取的成本要大大低于细粒度，因此相对容易获得大规模数据集。近年来，在某些方面也取得了不错的性能。$^{[21][22]}$</p>
 <h4 id="2-4-无监督学习"><a href="#2-4-无监督学习" class="headerlink" title="2.4 无监督学习"></a>2.4 无监督学习</h4><p>无监督学习即指学习过程不需要任何人工注释的标签，其中包括完全无监督学习（不需要任何标签）以及自监督学习（利用自动生成的伪标签进行训练）。</p>
 <h5 id="2-4-1-自监督学习"><a href="#2-4-1-自监督学习" class="headerlink" title="2.4.1 自监督学习"></a>2.4.1 自监督学习</h5><p>近年来，已经出现了许多用于视觉特征学习的自监督学习方法$^{[23]-[35]}$。</p>
@@ -487,7 +499,7 @@
     <div class="d-none d-lg-block col-lg-2 toc-container">
       
   <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
     <div id="tocbot"></div>
   </div>
 
@@ -544,7 +556,7 @@
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -552,7 +564,7 @@
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
