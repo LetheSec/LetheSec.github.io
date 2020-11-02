@@ -150,7 +150,7 @@ template {
   font-display: swap;
 }
 html {
-  font-family: 'Microsoft Jhenghei', Lantinghei SC, 'lanting', PingFang SC, Seguo UI, Microsoft Yahei, Arial;
+  font-family: Arial, Microsoft Yahei;
 }
 html::-webkit-scrollbar {
   width: 8px;
@@ -458,6 +458,28 @@ input[type="radio"]:not(:checked) + label:after {
 
 .icon-github:before {
   content: "\e88d";
+}
+
+
+@font-face {font-family: "iconfont";
+  src: url('iconfont.eot?t=1604331812650'); /* IE9 */
+  src: url('iconfont.eot?t=1604331812650#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAMYAAsAAAAABxgAAALMAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCCcAqCHIIEATYCJAMICwYABCAFhG0HNRsvBhHVk51kPw5ysidToAW/Hmlxt4WdRD8Hz9Na+v7M7OYHCFRyKkBcIFBs9wpEllCGXFVaR6SAZPU1QMCAXJPmrP7KCRM1V5Sz6NEX7rmUz8jnuZzeCiiQ+YFymWPSpF6AcUCB7oHRkRXQAXDD2E0EDuE1BIihQIh09w7PR3GATQLI9i2b1qC5JA5nVRTBrznpkDN4qDlqZsFp/nv5ozIFg2cBPeMbe9bT/n0Q1tggElhOCVTz+QHrHFggBBzI/NriKBax+JaYoqME++oU+D4YiVA3stc/D/EB7XEA5KnKe1Jh9a1yaQBwgAKrgC2j7geNj0vw4qKj0zddvBgbf/xy+FJM3LELazRzkCdW5u9kuat3rb33c+3CBTGXMpaEJc6LT6fi1ti1t2fC08cmg6lFx+8Gd47dC9+ff/xyJpVpPoKL8ha59erYbN7FiyOZOqHN0RMpE9Fa/v7Yymb1VQXWlmc2Je+V1bI3+VvKJpl4vnfN6qWrvaPv4Nvq8uSDbiJ9X6d5sqAB1uetjpdsycFLml9HT2jK29DblBlX2LHxVVbv0w5I2xzz8X9zw7g/cHlVYvN/jXUAfHwxWMbtjn5h0LsKCfxdVc8JF2qAyzhfVVs1rELvui+GGCBCj6b4Mtaa/ipVQUl/oXAU+SksShnpeCF4xFINH6UNMVToOx9Lqh1YxEUD5Q4qEJI8hiGBGViSvCQd7zM8MvyDT1IWsPJqd2Nu3xZ1ZHSCkfo/uWGZNfKIEp03mHfsOKvhghc4uQw1ZV2sXDGD59iTPqYV0aR5meiivIcYF1p58RiktCLroap0HUvlsEyZcsSgI2BEen/EGSxmms4WqvT9GzDeog63jA2kX4AlbnHSKNU9yKtx7jV2L58kH0ZLCI1obDEhF8UPERYXZK1f5sFAlOyI/Oqg0qbpvsZyffP0deeAGMBmggcnP9J7QhHdjCwD') format('woff2'),
+  url('iconfont.woff?t=1604331812650') format('woff'),
+  url('iconfont.ttf?t=1604331812650') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  url('iconfont.svg?t=1604331812650#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-resume-line:before {
+  content: "\e64a";
 }
 
 
@@ -1359,4 +1381,24 @@ header label {
 .post-content pre .keyword,
 .post-content pre .javascript .function {
   color: #8959a8;
+}
+.gt-container {
+  max-width: 780px;
+  margin: auto;
+}
+.gutter {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -khtml-user-select: none;
+}
+.post-content figure.highlight figcaption {
+  text-align: left;
+}
+.footer {
+  height: 3rem;
+  line-height: 1.2rem;
+}
+footer {
+  text-align: right;
 }

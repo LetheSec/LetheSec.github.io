@@ -1,171 +1,214 @@
 <!DOCTYPE html>
-<html lang="">
-
-
-
-
-
+<html lang>
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="UTF-8">
-  <meta name="google-site-verification" content="fVesNdKs5rVgSDBf0Af0gVcCtxUVEriFBGLGBH2GH8s">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://s2.ax1x.com/2019/10/30/K5JmBF.png">
-  <link rel="icon" type="image/png" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="description" content="Lethe&#39;s Blog">
-  <meta name="author" content="Lethe">
-  <meta name="keywords" content="Lethe&#39;s Blog">
-  <title>Flask-Notes ~ Lethe&#39;s Blog</title>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.10.2/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.8.9/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+    <meta name="author" content="Lethe">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
-
-<link rel="stylesheet" href="/css/main.css">
+    <meta name="subtitle" content="Life is a struggle">
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>Flask-Notes | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
 
 
 </head>
-
-
+<!-- <body background="https://s1.ax1x.com/2020/11/02/Br52e1.jpg"
+      style="background-repeat:no-repeat;
+			 background-size:100% 100%;
+             background-attachment: fixed;"> -->
 <body>
-  <header style="height: 70vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe's Blog</strong>&nbsp;</a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/archives/">Archives</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/categories/">Categories</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/tags/">Tags</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/about/">About</a>
-          </li>
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-    <div class="view intro-2" id="background"
-         style="background: url('https://s2.ax1x.com/2020/03/11/8k84bQ.jpg')no-repeat center center;
-           background-size: cover;
-           background-attachment: fixed;">
-      <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
-          <div class="container text-center white-text fadeInUp">
-            <span class="h2" id="subtitle">
-              
-            </span>
-
-            
-              <br>
-              
-                <p class="mt-3">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
-                  Saturday, February 1st 2020, 6:14 pm
-                </p>
-              
-
-              <p>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
                 
-                  
-                  &nbsp;<i class="far fa-chart-bar"></i>
-                  <span class="post-count">
-                    18.4k 字
-                  </span>&nbsp;
+                    <a class="menu-item" href="/archives">Posts</a>
                 
-
+                    <a class="menu-item" href="/category">Categories</a>
                 
-                  
-                  &nbsp;<i class="far fa-clock"></i>
-                  <span class="post-count">
-                      79 分钟
-                  </span>&nbsp;
+                    <a class="menu-item" href="/tag">Tags</a>
                 
-
+                    <a class="menu-item" href="/about">About</a>
                 
-                  <!-- 不蒜子统计文章PV -->
-                  
-                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
-                  <span id="busuanzi_container_page_pv">
-                    <span id="busuanzi_value_page_pv"></span> 次
-                  </span>&nbsp;
-                
-              </p>
-            
-          </div>
-
-          
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
         </div>
-      </div>
-    </div>
-  </header>
+    </nav>
 
-  <main>
     
-      
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <b><a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a></b>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <b><a class="menu-item" href="/archives">Posts</a></b>
+                
+                    <b><a class="menu-item" href="/category">Categories</a></b>
+                
+                    <b><a class="menu-item" href="/tag">Tags</a></b>
+                
+                    <b><a class="menu-item" href="/about">About</a></b>
+                
+            </div>
+        </div>
+    </nav>
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="py-5 z-depth-3" id="board">
-        <div class="post-content mx-auto" id="post">
-          <div class="markdown-body">
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <!-- <body style="background-color:rgb(199,237,204);"> -->
+<body style="background-color: RGB(227, 237, 205);">
+<div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Flask-Notes</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">February 1, 2020&nbsp;&nbsp;18:14:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Study-Notes/">Study Notes</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
             <h1 id="0x01-环境与应用的基本结构"><a href="#0x01-环境与应用的基本结构" class="headerlink" title="0x01 环境与应用的基本结构"></a>0x01 环境与应用的基本结构</h1><h3 id="一、虚拟环境配置"><a href="#一、虚拟环境配置" class="headerlink" title="一、虚拟环境配置"></a>一、虚拟环境配置</h3><h5 id="1-1-创建虚拟环境"><a href="#1-1-创建虚拟环境" class="headerlink" title="1.1 创建虚拟环境"></a>1.1 创建虚拟环境</h5><p>Python 3 和 Python 2 解释器创建虚拟环境的方法有所不同。在 Python 3中，虚拟环境由 Python 标准库中的 venv 包原生支持。</p>
 <p>使用如下命令创建虚拟环境：</p>
 <pre><code class="bash">python -m venv virtual-environment-name
@@ -183,7 +226,7 @@
 <h5 id="1-3-在虚拟环境中安装包"><a href="#1-3-在虚拟环境中安装包" class="headerlink" title="1.3 在虚拟环境中安装包"></a>1.3 在虚拟环境中安装包</h5><p>在激活虚拟环境后，同样可以使用pip包管理器来进行python包的安装。</p>
 <pre><code class="bash">pip install flask
 </code></pre>
-<p>可以使用<code>pip freeze</code>命令查看虚拟环境中安装了哪些包<br><img src="/2020/02/01/Flask-Notes/20200122211227958.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>可以使用<code>pip freeze</code>命令查看虚拟环境中安装了哪些包<br><img src="/2020/02/01/Flask-Notes/20200122211227958.png" alt="在这里插入图片描述"></p>
 <h5 id="1-4-踩坑"><a href="#1-4-踩坑" class="headerlink" title="1.4 踩坑"></a>1.4 踩坑</h5><p>（1）我实在windows下进行的配置，因为电脑上同时安装了python2和python3，所以之前把python3的解释器名字改为了<code>python3.exe</code>，但是使用<code>python3</code>命令创建venv虚拟环境会报错，将<code>python3.exe</code>改回<code>python.exe</code>，再用<code>python</code>命令即可成功创建。</p>
 <p>（2）在创建并激活虚拟环境后，发现解释器和pip管理器依然是全局的，后来将路径中的中文去掉，使用全英文路径即可。</p>
 <p>&lt;br&gt;</p>
@@ -751,7 +794,7 @@ def index():
 <p><code>format(&#39;LLL&#39;)</code>函数根据客户端计算机中的时区和区域设渲染日期和时间。参数决定了渲染的方式，从 <code>&#39;L&#39;</code> 到 <code>&#39;LLLL&#39;</code> 分别对应不同的复杂度。format() 函数还可接受很多自定义的格式说明符。</p>
 <p>第二行中的 <code>fromNow()</code> 渲染相对时间戳，而且会随着时间的推移自动刷新显示的时间。这个时间戳最开始显示为 <code>a few seconds ago</code>，但设定 <code>refresh=True</code> 参数后，其内容会随着时间的推移而更新。</p>
 <p>Moment.js文档：<a href="http://momentjs.com/docs/#/displaying/" target="_blank" rel="noopener">http://momentjs.com/docs/#/displaying/</a> </p>
-<p>效果如下：<br><img src="/2020/02/01/Flask-Notes/20200129152228157.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>效果如下：<br><img src="/2020/02/01/Flask-Notes/20200129152228157.png" alt="在这里插入图片描述"></p>
 <p>另外，Flask-Moment渲染的时间还可以实现多种语言的本地化，方法时在引入 Moment.js 后， 立即把两个字母的语言代码传给 <code>locale()</code> 函数，如西班牙语方式：</p>
 <pre><code class="python">{% block scripts %}
 {{ super() }}
@@ -987,7 +1030,7 @@ def index():
 <li><code>validate_on_submit()</code> 方法：提交表单后，数据能被所有验证函数接收，返回True；否则返回False。</li>
 <li>最后用 <code>render_template()</code> 渲染表单时，将变量name，和对象form传入到模板中。</li>
 </ul>
-<p>效果如下:<br><img src="/2020/02/01/Flask-Notes/20200130152413507.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>提交Lethe后：<br><img src="/2020/02/01/Flask-Notes/20200130152441302.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>&lt;br&gt;</p>
+<p>效果如下:<br><img src="/2020/02/01/Flask-Notes/20200130152413507.png" alt="在这里插入图片描述"><br>提交Lethe后：<br><img src="/2020/02/01/Flask-Notes/20200130152441302.png" alt="在这里插入图片描述"><br>&lt;br&gt;</p>
 <h3 id="五、重定向和用户会话"><a href="#五、重定向和用户会话" class="headerlink" title="五、重定向和用户会话"></a>五、重定向和用户会话</h3><p>在实际情况中，最好别让Web应用把 POST 请求作为浏览器发送的最后一个请求，因此可以使用重定向作为POST请求的响应。</p>
 <p>如在用POST方式提交完表单后，再向重定向的URL发送GET请求，显示页面的内容，用户不会察觉到有所不同，这叫做 <strong>“POST / 重定向 / GET”</strong> 模式。</p>
 <p>在这种模式下，应用处理POST请求时，需要用变量保存输入的数据，否则一旦重定向后，就无法再通过form.name.data获取POST请求中的字段值。</p>
@@ -1075,7 +1118,7 @@ def index():
 <li>get_flashed_messages() 函数获取的消息在下次调用时不会再次返回，因此闪现消息只显示一次，然后就消失了</li>
 </ul>
 <p>两次提交不同的值，效果如下：</p>
-<p><img src="/2020/02/01/Flask-Notes/20200130162436342.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2020/02/01/Flask-Notes/20200130162436342.png" alt="在这里插入图片描述"></p>
 <p>&lt;br&gt;</p>
 <h1 id="0x04-数据库"><a href="#0x04-数据库" class="headerlink" title="0x04 数据库"></a>0x04 数据库</h1><p>这里我们使用 <strong>Flask-SQLAlchemy</strong> 扩展来进行数据库操作，SQLAlchemy 是一个强大的关系型数据库框架，支持多种数据库后台。SQLAlchemy 提供了高层 ORM，也提供了使用数据库原生 SQL 的低层功能。</p>
 <p>同样现在虚拟环境中安装此扩展：</p>
@@ -1135,7 +1178,7 @@ db = SQLAlchemy(app) # 实例化SQLAlchemy
 </code></pre>
 <p>&lt;br&gt;</p>
 <h3 id="二、定义模型"><a href="#二、定义模型" class="headerlink" title="二、定义模型"></a>二、定义模型</h3><p>在 ORM（对象关系映射器）中，模型一般是一个 Python 类，类中的属性对应于数据库表中的列。Flask-SQLAlchemy 实例为模型提供了一个基类以及一系列辅助类和辅助函数，可用于定义模型的结构。</p>
-<p>如下实体 – 关系图中的 roles 表和 users 表，我们可以分别定义为 Role 和 User 模型：<br><img src="/2020/02/01/Flask-Notes/20200131142132560.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>如下实体 – 关系图中的 roles 表和 users 表，我们可以分别定义为 Role 和 User 模型：<br><img src="/2020/02/01/Flask-Notes/20200131142132560.png" alt="在这里插入图片描述"></p>
 <pre><code class="python">class Role(db.Model):
     __tablename__ = &#39;roles&#39;
     id = db.Column(db.Integer, primary_key=True)
@@ -1608,8 +1651,8 @@ def index():
 {{ wtf.quick_form(form) }}
 {% endblock %}
 </code></pre>
-<p>第一次提交：<br><img src="/2020/02/01/Flask-Notes/20200131163921967.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<p>再次提交：<br><img src="/2020/02/01/Flask-Notes/20200131163954957.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>也可以在数据库中的用户表中新加一列，用来存储每个用户的欢迎消息，在查询该用户时，取出对应的欢迎消息传给模板，从而显示定制的消息，在后面讲了数据库更新之后再来实现。</p>
+<p>第一次提交：<br><img src="/2020/02/01/Flask-Notes/20200131163921967.png" alt="在这里插入图片描述"></p>
+<p>再次提交：<br><img src="/2020/02/01/Flask-Notes/20200131163954957.png" alt="在这里插入图片描述"><br>也可以在数据库中的用户表中新加一列，用来存储每个用户的欢迎消息，在查询该用户时，取出对应的欢迎消息传给模板，从而显示定制的消息，在后面讲了数据库更新之后再来实现。</p>
 <p>&lt;br&gt;</p>
 <h3 id="六、集成Python-shell"><a href="#六、集成Python-shell" class="headerlink" title="六、集成Python shell"></a>六、集成Python shell</h3><p>每次启动 shell 会话都要导入数据库实例和模型，为了避免一直重复导入，可以做些配置让 flask shell 命令自动导入这些对象。</p>
 <p>若想把对象添加到导入列表中，必须使用 <code>app.shell_context_processor</code> 装饰器创建并注册一个 shell 上下文处理器如下：</p>
@@ -1792,7 +1835,7 @@ def index():
 {% endblock %}
 </code></pre>
 <p>（5）效果如下：</p>
-<p>① admin用户<br><img src="/2020/02/01/Flask-Notes/20200131181148133.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>② Lethe用户<br><img src="/2020/02/01/Flask-Notes/20200131181223198.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>③ 其他用户<br><img src="/2020/02/01/Flask-Notes/20200131181249640.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>① admin用户<br><img src="/2020/02/01/Flask-Notes/20200131181148133.png" alt="在这里插入图片描述"><br>② Lethe用户<br><img src="/2020/02/01/Flask-Notes/20200131181223198.png" alt="在这里插入图片描述"><br>③ 其他用户<br><img src="/2020/02/01/Flask-Notes/20200131181249640.png" alt="在这里插入图片描述"></p>
 <h5 id="7-4-添加几个迁移"><a href="#7-4-添加几个迁移" class="headerlink" title="7.4 添加几个迁移"></a>7.4 添加几个迁移</h5><p>（1）在开发项目的过程中，时常要修改数据库模型。如果使用迁移框架管理数据库，必须在迁移脚本中定义所有改动，否则改动将不可复现。</p>
 <p><strong>修改数据库</strong>的步骤与创建第一个迁移类似：<br>① 对数据库模型做必要的修改。<br>② 执行 <code>flask db migrate</code> 命令，生成迁移脚本。<br>③ 检查自动生成的脚本，改正不准确的地方。<br>④ 执行 <code>flask db upgrade</code> 命令，把改动应用到数据库中。</p>
 <p>（2）实现一个功能时，可能要多次修改数据库模型才能得到预期结果。如果前一个迁移还未提交到源码控制系统中，可以继续在那个迁移中修改，以免创建大量无意义的小迁移脚本。</p>
@@ -1856,7 +1899,7 @@ app.config[&#39;MAIL_USE_SSL&#39;] = True
 app.config[&#39;MAIL_USERNAME&#39;] = os.environ.get(&#39;MAIL_USERNAME&#39;)
 app.config[&#39;MAIL_PASSWORD&#39;] = os.environ.get(&#39;MAIL_PASSWORD&#39;)
 </code></pre>
-<p>注意qq邮箱需要先开启SMTP服务，并得到授权码：<br><img src="/2020/02/01/Flask-Notes/20200201115007140.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>MAIL_USERNAME为邮箱号，MAIL_PASSWORD 的值即为生成的授权码。</p>
+<p>注意qq邮箱需要先开启SMTP服务，并得到授权码：<br><img src="/2020/02/01/Flask-Notes/20200201115007140.png" alt="在这里插入图片描述"><br>MAIL_USERNAME为邮箱号，MAIL_PASSWORD 的值即为生成的授权码。</p>
 <p>由于QQ邮箱不支持非加密的协议，那么使用加密协议，分为两种加密协议，选择其中之一即可</p>
 <ul>
 <li>MAIL_USE_TLS：端口号是587</li>
@@ -1896,7 +1939,7 @@ $env:MAIL_PASSWORD=&#39;你的授权码&#39;
 ...     mail.send(msg)
 </code></pre>
 <p>注意：Flask-Mail 的 send() 函数使用 current_app ，因此要在激活的应用上下文中执行。</p>
-<p>成功收到邮件：<br><img src="/2020/02/01/Flask-Notes/20200201140105853.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>成功收到邮件：<br><img src="/2020/02/01/Flask-Notes/20200201140105853.png" alt="在这里插入图片描述"></p>
 <p>&lt;br&gt;</p>
 <h3 id="三、在应用中集成邮件发送功能"><a href="#三、在应用中集成邮件发送功能" class="headerlink" title="三、在应用中集成邮件发送功能"></a>三、在应用中集成邮件发送功能</h3><p>一般把发送电子邮件的部分定义为一个函数，这样还可以使用 Jinja2 模板渲染邮件正文，灵活性高。</p>
 <pre><code class="python">from flask_mail import Message
@@ -1959,7 +2002,7 @@ def index():
 <li>电子邮件的模板中有一个模板参数是用户，因此调用 send_email() 函数时要以关键字参数的形式传入用户。</li>
 </ul>
 <p>现在每次你在表单中填写新名字(如email test)，管理员(FLASKY_ADMIN)都会收到一封电子邮件。</p>
-<p><img src="/2020/02/01/Flask-Notes/20200201144149543.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2020/02/01/Flask-Notes/20200201144149543.png" alt="在这里插入图片描述"></p>
 <p>&lt;br&gt;</p>
 <h3 id="四、异步发送电子邮件"><a href="#四、异步发送电子邮件" class="headerlink" title="四、异步发送电子邮件"></a>四、异步发送电子邮件</h3><p>在上面的例子中，我们发现在发送电子邮件的时候，网页会停滞一会，为了避免用户感觉到这样的延迟，可以把发送电子邮件的函数移到后台线程中，修改方法如下：</p>
 <pre><code class="python">from threading import Thread
@@ -2373,294 +2416,116 @@ def make_shell_context():
 <pre><code class="bash">flask db upgrade
 </code></pre>
 
-            <hr>
-          </div>
-          <br>
-          <div>
-            <p>
-            
-              <span>
-                <i class="iconfont icon-inbox"></i>
-                
-                  <a class="hover-with-bg" href="/categories/Python">Python</a>
-                  &nbsp;
-                
-              </span>&nbsp;&nbsp;
-            
-            
-              <span>
-                <i class="iconfont icon-tag"></i>
-                
-                  <a class="hover-with-bg" href="/tags/Python">Python</a>
-                
-              </span>
-            
-            </p>
-            
-              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
-            
-          </div>
         </div>
-      </div>
-    </div>
-    <div class="d-none d-lg-block col-lg-2 toc-container">
-      
-  <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
-    <div id="tocbot"></div>
-  </div>
 
-    </div>
-  </div>
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://lethe.site/2020/02/01/Flask-Notes/">https://lethe.site/2020/02/01/Flask-Notes/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Python/"># Python</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/">GXYCTF2019&GWCTF2019——Writeup</a>
+            
+            
+            <a class="next" rel="next" href="/2020/01/01/AnhengMonthMatch2020-1-Writeup/">安恒月赛2020元旦场Writeup</a>
+            
+        </section>
+
+
+    </article>
 </div>
 
-<!-- custom -->
+</body>
 
-
-<!-- Comments -->
-<div class="col-lg-7 mx-auto nopadding-md">
-  <div class="container comments mx-auto" id="comments">
-    
-      <br><br>
-      
-      
-  <div class="disqus" style="width:100%">
-    <div id="disqus_thread"></div>
-    <script>
-      var disqus_config = function () {
-        this.page.url = 'https://lethe.site/2020/02/01/Flask-Notes/';
-        this.page.identifier = '/2020/02/01/Flask-Notes/';
-      };
-      var oldLoad = window.onload;
-      window.onload = function () {
-        var d = document, s = d.createElement('script');
-        s.type = 'text/javascript';
-        s.src = '//' + 'Lethe' + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-      };
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
-        powered by Disqus.</a></noscript>
-  </div>
-
-
-    
-  </div>
-</div>
-
-    
-  </main>
-
-  
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
-    </a>
-  
-
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
-    <i class="iconfont icon-love"></i>
-    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
-    <br>
-
-    
-  
-    <!-- 不蒜子统计PV -->
-    
-    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
-          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
-  
-  
-    <!-- 不蒜子统计UV -->
-    
-    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
-            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
-  
-  <br>
-
-
-
-    
-
-
-    <!-- cnzz Analytics icon -->
-    
-
-  </div>
-</footer>
-
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.8.9/js/mdb.min.js"></script>
-<script src="/js/main.js"></script>
-<script>
-(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https'){
-   bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-  }
-  else{
-  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-  }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-})();
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitalk/dist/gitalk.css">
+<script src="//unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+      var gitalk = new Gitalk({
+        clientID: 'b00b0a7008ebc4264da3',
+        clientSecret: 'd2cd3318af9e2b076eb378ac846e0e37341260ff',
+        repo: 'blog',
+        owner: 'Lethe',
+        admin: 'Lethe',
+        id: md5(location.pathname),      
+        labels: 'Gitalk'.split(',').filter(l => l),
+        perPage: 10,
+        pagerDirection: 'last',
+        createIssueManually: true,
+        distractionFreeMode: false
+      })
+      gitalk.render('gitalk-container')
 </script>
 
-  <script src="/js/lazyload.js"></script>
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span><font face="Comic Sans MS">Life is a struggle.</font></span>
+        <br>
+        <span><font face="Comic Sans MS">Lethe © 2018 - 2020</font></span>
+
+        <span> · 
+            <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<span class="site-uv">
+    总访客量:
+    <i class="busuanzi-value" id="busuanzi_value_site_uv"></i>
+</span>&nbsp;
 
 
+<span class="site-pv">
+    总访问量:
+    <i class="busuanzi-value" id="busuanzi_value_site_pv"></i>
+</span>
 
-  
-    <script src="https://cdn.staticfile.org/tocbot/4.8.0/tocbot.min.js"></script>
-  
-  <script src="/js/post.js"></script>
+          </span>
+    </div>
+</footer>
 
-
-
-  <script src="https://cdn.staticfile.org/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
-
-
-
-  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-<!-- Plugins -->
-
-
-  
-    <!-- Baidu Analytics -->
-    <script>
-      var _hmt = _hmt || [];
-      (function () {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?99792b18d5c4379d7bc5cf4bced8a563";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-      })();
-    </script>
-  
-
-  
-
-  
-
-  
-
-  <!-- cnzz Analytics -->
-  
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/r298/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.10/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "Flask-Notes&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.0/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "false",
-      
-      icon: "§"
-      
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
-  </script>
-
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      getSearchFile(path);
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
-      function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-
-
-
-
+    </div>
 </body>
 </html>

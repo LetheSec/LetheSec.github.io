@@ -1,171 +1,214 @@
 <!DOCTYPE html>
-<html lang="">
-
-
-
-
-
+<html lang>
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="UTF-8">
-  <meta name="google-site-verification" content="fVesNdKs5rVgSDBf0Af0gVcCtxUVEriFBGLGBH2GH8s">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://s2.ax1x.com/2019/10/30/K5JmBF.png">
-  <link rel="icon" type="image/png" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="description" content="Lethe&#39;s Blog">
-  <meta name="author" content="Lethe">
-  <meta name="keywords" content="Lethe&#39;s Blog">
-  <title>领航杯部分Writeup ~ Lethe&#39;s Blog</title>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.10.2/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.8.9/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+    <meta name="author" content="Lethe">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
-
-<link rel="stylesheet" href="/css/main.css">
+    <meta name="subtitle" content="Life is a struggle">
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>领航杯部分Writeup | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
 
 
 </head>
-
-
+<!-- <body background="https://s1.ax1x.com/2020/11/02/Br52e1.jpg"
+      style="background-repeat:no-repeat;
+			 background-size:100% 100%;
+             background-attachment: fixed;"> -->
 <body>
-  <header style="height: 70vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe's Blog</strong>&nbsp;</a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/archives/">Archives</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/categories/">Categories</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/tags/">Tags</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/about/">About</a>
-          </li>
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-    <div class="view intro-2" id="background"
-         style="background: url('https://s2.ax1x.com/2020/03/11/8k84bQ.jpg')no-repeat center center;
-           background-size: cover;
-           background-attachment: fixed;">
-      <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
-          <div class="container text-center white-text fadeInUp">
-            <span class="h2" id="subtitle">
-              
-            </span>
-
-            
-              <br>
-              
-                <p class="mt-3">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
-                  Monday, November 25th 2019, 3:13 pm
-                </p>
-              
-
-              <p>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
                 
-                  
-                  &nbsp;<i class="far fa-chart-bar"></i>
-                  <span class="post-count">
-                    1.5k 字
-                  </span>&nbsp;
+                    <a class="menu-item" href="/archives">Posts</a>
                 
-
+                    <a class="menu-item" href="/category">Categories</a>
                 
-                  
-                  &nbsp;<i class="far fa-clock"></i>
-                  <span class="post-count">
-                      6 分钟
-                  </span>&nbsp;
+                    <a class="menu-item" href="/tag">Tags</a>
                 
-
+                    <a class="menu-item" href="/about">About</a>
                 
-                  <!-- 不蒜子统计文章PV -->
-                  
-                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
-                  <span id="busuanzi_container_page_pv">
-                    <span id="busuanzi_value_page_pv"></span> 次
-                  </span>&nbsp;
-                
-              </p>
-            
-          </div>
-
-          
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
         </div>
-      </div>
-    </div>
-  </header>
+    </nav>
 
-  <main>
     
-      
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <b><a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a></b>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <b><a class="menu-item" href="/archives">Posts</a></b>
+                
+                    <b><a class="menu-item" href="/category">Categories</a></b>
+                
+                    <b><a class="menu-item" href="/tag">Tags</a></b>
+                
+                    <b><a class="menu-item" href="/about">About</a></b>
+                
+            </div>
+        </div>
+    </nav>
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="py-5 z-depth-3" id="board">
-        <div class="post-content mx-auto" id="post">
-          <div class="markdown-body">
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <!-- <body style="background-color:rgb(199,237,204);"> -->
+<body style="background-color: RGB(227, 237, 205);">
+<div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">领航杯部分Writeup</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">November 25, 2019&nbsp;&nbsp;15:13:41</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Writeup/">Writeup</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
             <h1 id="编码解码"><a href="#编码解码" class="headerlink" title="编码解码"></a>编码解码</h1><pre><code>V2VsY29tZXRvdGhlUGlsb3RDdXA=
 </code></pre><p>签到题，base64解码一下得到：</p>
 <pre><code>WelcometothePilotCup
@@ -206,27 +249,27 @@ f.write(new)
 
 f.close()
 </code></pre>
-<p>直接打不开，用010 Editor看一下：<br><img src="/2019/11/25/LHB-Writeup/20191122191914979.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>删掉上面选中的部分，再打开，得到flag：b91011fc<img src="/2019/11/25/LHB-Writeup/201911221919373.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>直接打不开，用010 Editor看一下：<br><img src="/2019/11/25/LHB-Writeup/20191122191914979.png" alt="在这里插入图片描述"><br>删掉上面选中的部分，再打开，得到flag：b91011fc<img src="/2019/11/25/LHB-Writeup/201911221919373.png" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1 id="lsb"><a href="#lsb" class="headerlink" title="lsb"></a>lsb</h1><p>给了下面这张图片：<br><img src="/2019/11/25/LHB-Writeup/20191122192053275.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<p>根据题目名字lsb，用Stegsolve打开，移位到下面位置得到flag：ONPGRAMBCICM<br><img src="/2019/11/25/LHB-Writeup/20191122192250933.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h1 id="lsb"><a href="#lsb" class="headerlink" title="lsb"></a>lsb</h1><p>给了下面这张图片：<br><img src="/2019/11/25/LHB-Writeup/20191122192053275.png" alt="在这里插入图片描述"></p>
+<p>根据题目名字lsb，用Stegsolve打开，移位到下面位置得到flag：ONPGRAMBCICM<br><img src="/2019/11/25/LHB-Writeup/20191122192250933.png" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1 id="恢复与解密"><a href="#恢复与解密" class="headerlink" title="恢复与解密"></a>恢复与解密</h1><p>题目描述：公安人员在犯罪分子的电脑中发现一些磁盘文件，但是发现关键信息已经被删除，现需要你对磁盘进行恢复，并对恢复出来的一些秘密文件里面的加密信息进行解密。 注意：通过strings获取到的yc4pl0fvjs2k1t7T为假flag，请尝试使用其他正确的做题方式获取flag。</p>
 <p>所以可以判断这题为磁盘恢复，并且有假flag。</p>
 <p>附件给的是一个xty.img，在kali下面命令进行挂载：</p>
 <pre><code class="bash">mount -o loop xty.img /mnt
 </code></pre>
-<p><img src="/2019/11/25/LHB-Writeup/20191122192641539.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<p>发一下一个隐藏文件夹<code>.hide</code>，里面有一个<code>secret.odg</code>，打开得到如下内容：<br><img src="/2019/11/25/LHB-Writeup/20191122192752446.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>好像没什么用，想到题目描述中的磁盘恢复，所以需要用到sstat 和 ext3grep这两个工具，先用下面命令查看相关信息：</p>
+<p><img src="/2019/11/25/LHB-Writeup/20191122192641539.png" alt="在这里插入图片描述"></p>
+<p>发一下一个隐藏文件夹<code>.hide</code>，里面有一个<code>secret.odg</code>，打开得到如下内容：<br><img src="/2019/11/25/LHB-Writeup/20191122192752446.png" alt="在这里插入图片描述"><br>好像没什么用，想到题目描述中的磁盘恢复，所以需要用到sstat 和 ext3grep这两个工具，先用下面命令查看相关信息：</p>
 <pre><code>fsstat xty.img
-</code></pre><p><img src="/2019/11/25/LHB-Writeup/20191122193022786.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>注意这里<code>Root Directory: 2</code>中的2是我们要用到的。</p>
+</code></pre><p><img src="/2019/11/25/LHB-Writeup/20191122193022786.png" alt="在这里插入图片描述"><br>注意这里<code>Root Directory: 2</code>中的2是我们要用到的。</p>
 <p>再用ext3grep工具，查看目录如下：</p>
 <pre><code>ext3grep --inode 2 xty.img
-</code></pre><p><img src="/2019/11/25/LHB-Writeup/201911221933068.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>可以看到很多secret文件，实际上内容都一样，用下面命令将其恢复出来：</p>
+</code></pre><p><img src="/2019/11/25/LHB-Writeup/201911221933068.png" alt="在这里插入图片描述"><br>可以看到很多secret文件，实际上内容都一样，用下面命令将其恢复出来：</p>
 <pre><code>ext3grep --restore-file secret xty.img
-</code></pre><p><img src="/2019/11/25/LHB-Writeup/20191122193728451.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>打开该文件发现下面一串字符：</p>
+</code></pre><p><img src="/2019/11/25/LHB-Writeup/20191122193728451.png" alt="在这里插入图片描述"><br>打开该文件发现下面一串字符：</p>
 <pre><code>aWdxNDs3NDFSOzFpa1I1MWliT08waWdx
-</code></pre><p><img src="/2019/11/25/LHB-Writeup/20191122193818373.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+</code></pre><p><img src="/2019/11/25/LHB-Writeup/20191122193818373.png" alt="在这里插入图片描述"></p>
 <p>base64一下得到：</p>
 <pre><code>igq4;741R;1ikR51ibOO0igq
 </code></pre><p>异或解密脚本如下：</p>
@@ -241,28 +284,28 @@ for i in range(0,200):
     print (p)
 
 </code></pre>
-<p>得到的唯一一个无特殊字符的即为flag：jdr78472Q82jhQ62jaLL3jdr<img src="/2019/11/25/LHB-Writeup/20191122194428814.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>得到的唯一一个无特殊字符的即为flag：jdr78472Q82jhQ62jaLL3jdr<img src="/2019/11/25/LHB-Writeup/20191122194428814.png" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1 id="文件提取"><a href="#文件提取" class="headerlink" title="文件提取"></a>文件提取</h1><p>给了一个flag.exe，strings一下可以看到是图片转base64后的字符串：<br><img src="/2019/11/25/LHB-Writeup/20191122195004615.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>随便找个在线网站转回图片如下：</p>
-<p><img src="/2019/11/25/LHB-Writeup/20191122195200384.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后strings一下这个图片得到flag：flag{068EEF6A7BAD3FDF}<br><img src="/2019/11/25/LHB-Writeup/20191122195251726.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h1 id="文件提取"><a href="#文件提取" class="headerlink" title="文件提取"></a>文件提取</h1><p>给了一个flag.exe，strings一下可以看到是图片转base64后的字符串：<br><img src="/2019/11/25/LHB-Writeup/20191122195004615.png" alt="在这里插入图片描述"><br>随便找个在线网站转回图片如下：</p>
+<p><img src="/2019/11/25/LHB-Writeup/20191122195200384.png" alt="在这里插入图片描述"><br>然后strings一下这个图片得到flag：flag{068EEF6A7BAD3FDF}<br><img src="/2019/11/25/LHB-Writeup/20191122195251726.png" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1 id="forensics"><a href="#forensics" class="headerlink" title="forensics"></a>forensics</h1><p>给了一个pngdecode.docx：<br><img src="/2019/11/25/LHB-Writeup/20191122195431580.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<p>一开始分析了好久这个图片，但是无果…然后对整个docx文档foremost提取一下，得到flag：360HA360<br><img src="/2019/11/25/LHB-Writeup/20191122195959283.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h1 id="forensics"><a href="#forensics" class="headerlink" title="forensics"></a>forensics</h1><p>给了一个pngdecode.docx：<br><img src="/2019/11/25/LHB-Writeup/20191122195431580.png" alt="在这里插入图片描述"></p>
+<p>一开始分析了好久这个图片，但是无果…然后对整个docx文档foremost提取一下，得到flag：360HA360<br><img src="/2019/11/25/LHB-Writeup/20191122195959283.png" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1 id="OldCypher-Easy"><a href="#OldCypher-Easy" class="headerlink" title="OldCypher-Easy"></a>OldCypher-Easy</h1><p>给了密文如下：</p>
 <pre><code>Vvr Ifnvaus Bdwokv Gbtrzsa Vkqgofntja rrlznxk eflvkozjcdue rs “mzg oez ff pjkhvtx ok kqzioeg vgfsf.” Zyil au vvykokaeoyrp avuwfnzv, bnl fcry eom ucdgaie mzg qhxiegl dfrguta gh huk wixdf ce oks ijggrtk-dtq uqvketbxkq sulnwsvwbtj. Taw fssoeimaqb sutulwu gbrvlr gp huk towwu hugk htng prke ulwf tbx teglwfvkj th wpoorv sxutsg ifmfmpwpgkihf. Dig iiyilquegghr fqknjryl wpqbsgalkgg zath fgts gnrn mzkg: vz uetdu kvzy mxujoaojml xqf rtjukapu vtkezjkhl, zvcafkehkj fhj glpnrnzapu fktrxl msly, grhlqqbrj fhj cignvnmaeogoeg nkgff, kcevltcaot anuvwbtj agv gzrikihfu, rvmzttd eofn, rnw eqfr. Cztagwh nzkefhvwam ko ijqjvjv a vgodykke vzcfnikekabogofn, pw ychru stq vvnz dowwtb pxppmgifnvyy bfxcybvs mzg ggauy hx oognvmtlkqnr kevzpwdavs ygt grilrbfi rvmzttd kbsuimtlkca, ypsmwog, ntu dbkvfvhltxv eczvlttlkcay rgtapgg guvxjuoeorl tlvopqj. fesi{42s96q9hw73d79v4xf5308t18o8519is10c512u2}
 </code></pre><p>最后一串明显像flag的格式，在这个网站进行维吉尼亚解密：<a href="https://www.guballa.de/vigenere-solver" target="_blank" rel="noopener">https://www.guballa.de/vigenere-solver</a></p>
-<p>得到flag：flag{42e96d9bf73d79c4fd5308f18b8519cb10c512b2}<br><img src="/2019/11/25/LHB-Writeup/20191122200254756.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>得到flag：flag{42e96d9bf73d79c4fd5308f18b8519cb10c512b2}<br><img src="/2019/11/25/LHB-Writeup/20191122200254756.png" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1 id="MasterofZip-Middle"><a href="#MasterofZip-Middle" class="headerlink" title="MasterofZip-Middle"></a>MasterofZip-Middle</h1><h4 id="level1"><a href="#level1" class="headerlink" title="level1"></a>level1</h4><p>给了一个压缩包，和一个Readme.md内容如下：</p>
 <pre><code>小明喜欢用自己的手机号来加密zip，我们通过社工只查到了他手机号的前三位为199，你能解开这个压缩包吗？(手机号为伪造手机号，请不要试图拨打或社工)
-</code></pre><p>于是爆破199开头的手机号，得到密码：19950453796<br><img src="/2019/11/25/LHB-Writeup/20191122200459667.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<h4 id="level2"><a href="#level2" class="headerlink" title="level2"></a>level2</h4><p>第一层解压后得到一个压缩包和一个Readme.txt，内容不重要，但是看到level2.zip里面也有一个Readme.txt，所以尝试明文攻击，成功恢复密钥并解压：<br><img src="/2019/11/25/LHB-Writeup/20191122200717183.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<h4 id="level3"><a href="#level3" class="headerlink" title="level3"></a>level3</h4><p>第二层解压后，只给了一个压缩包，于是尝试伪加密：<br><img src="/2019/11/25/LHB-Writeup/20191122200956572.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>将箭头位置修该为0，成功解压，得到下面这张图片：<br><img src="/2019/11/25/LHB-Writeup/20191122201051790.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后修改发图片高度：<br><img src="/2019/11/25/LHB-Writeup/20191122201106882.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<p>得到flag：flag{4537ec3bd52ba2b41c4a780db841efc3ddccc4a4}<br><img src="/2019/11/25/LHB-Writeup/20191122201150405.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+</code></pre><p>于是爆破199开头的手机号，得到密码：19950453796<br><img src="/2019/11/25/LHB-Writeup/20191122200459667.png" alt="在这里插入图片描述"></p>
+<h4 id="level2"><a href="#level2" class="headerlink" title="level2"></a>level2</h4><p>第一层解压后得到一个压缩包和一个Readme.txt，内容不重要，但是看到level2.zip里面也有一个Readme.txt，所以尝试明文攻击，成功恢复密钥并解压：<br><img src="/2019/11/25/LHB-Writeup/20191122200717183.png" alt="在这里插入图片描述"></p>
+<h4 id="level3"><a href="#level3" class="headerlink" title="level3"></a>level3</h4><p>第二层解压后，只给了一个压缩包，于是尝试伪加密：<br><img src="/2019/11/25/LHB-Writeup/20191122200956572.png" alt="在这里插入图片描述"><br>将箭头位置修该为0，成功解压，得到下面这张图片：<br><img src="/2019/11/25/LHB-Writeup/20191122201051790.png" alt="在这里插入图片描述"><br>然后修改发图片高度：<br><img src="/2019/11/25/LHB-Writeup/20191122201106882.png" alt="在这里插入图片描述"></p>
+<p>得到flag：flag{4537ec3bd52ba2b41c4a780db841efc3ddccc4a4}<br><img src="/2019/11/25/LHB-Writeup/20191122201150405.png" alt="在这里插入图片描述"></p>
 <p><br></p>
-<h1 id="数据包分析-Easy"><a href="#数据包分析-Easy" class="headerlink" title="数据包分析-Easy"></a>数据包分析-Easy</h1><p>题目给了一个http3.pcap，进行流量分析，根据题目描述，直接导出HTTP对象列表，发现flag.php:<br><img src="/2019/11/25/LHB-Writeup/20191122201347715.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<p>导出后，即可在里面看到flag：flag{3eyufhnj87}<br><img src="/2019/11/25/LHB-Writeup/20191122201438522.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h1 id="数据包分析-Easy"><a href="#数据包分析-Easy" class="headerlink" title="数据包分析-Easy"></a>数据包分析-Easy</h1><p>题目给了一个http3.pcap，进行流量分析，根据题目描述，直接导出HTTP对象列表，发现flag.php:<br><img src="/2019/11/25/LHB-Writeup/20191122201347715.png" alt="在这里插入图片描述"></p>
+<p>导出后，即可在里面看到flag：flag{3eyufhnj87}<br><img src="/2019/11/25/LHB-Writeup/20191122201438522.png" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1 id="EasyRSA"><a href="#EasyRSA" class="headerlink" title="EasyRSA"></a>EasyRSA</h1><p>题目给了加密脚本如下：</p>
 <pre><code class="python">from Crypto.Util.number import getPrime, inverse
@@ -326,296 +369,118 @@ for i in range(1,65538):
 
 </code></pre>
 <p>运行得到flag：flag{6b85823e6f121a7bb3407ff2e9f5f2f27efcc5a6}</p>
-<p><img src="/2019/11/25/LHB-Writeup/20191122202145663.png" srcset="/img/loading.gif" alt="在这里插入图片描述"> </p>
+<p><img src="/2019/11/25/LHB-Writeup/20191122202145663.png" alt="在这里插入图片描述"> </p>
 
-            <hr>
-          </div>
-          <br>
-          <div>
-            <p>
-            
-              <span>
-                <i class="iconfont icon-inbox"></i>
-                
-                  <a class="hover-with-bg" href="/categories/Writeup">Writeup</a>
-                  &nbsp;
-                
-              </span>&nbsp;&nbsp;
-            
-            
-              <span>
-                <i class="iconfont icon-tag"></i>
-                
-                  <a class="hover-with-bg" href="/tags/Writeup">Writeup</a>
-                
-              </span>
-            
-            </p>
-            
-              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
-            
-          </div>
         </div>
-      </div>
-    </div>
-    <div class="d-none d-lg-block col-lg-2 toc-container">
-      
-  <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
-    <div id="tocbot"></div>
-  </div>
 
-    </div>
-  </div>
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://lethe.site/2019/11/25/LHB-Writeup/">https://lethe.site/2019/11/25/LHB-Writeup/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Writeup/"># Writeup</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/01/01/AnhengMonthMatch2020-1-Writeup/">安恒月赛2020元旦场Writeup</a>
+            
+            
+            <a class="next" rel="next" href="/2019/11/19/Python-unserialize-vulnerability/">浅谈python反序列化漏洞</a>
+            
+        </section>
+
+
+    </article>
 </div>
 
-<!-- custom -->
+</body>
 
-
-<!-- Comments -->
-<div class="col-lg-7 mx-auto nopadding-md">
-  <div class="container comments mx-auto" id="comments">
-    
-      <br><br>
-      
-      
-  <div class="disqus" style="width:100%">
-    <div id="disqus_thread"></div>
-    <script>
-      var disqus_config = function () {
-        this.page.url = 'https://lethe.site/2019/11/25/LHB-Writeup/';
-        this.page.identifier = '/2019/11/25/LHB-Writeup/';
-      };
-      var oldLoad = window.onload;
-      window.onload = function () {
-        var d = document, s = d.createElement('script');
-        s.type = 'text/javascript';
-        s.src = '//' + 'Lethe' + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-      };
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
-        powered by Disqus.</a></noscript>
-  </div>
-
-
-    
-  </div>
-</div>
-
-    
-  </main>
-
-  
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
-    </a>
-  
-
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
-    <i class="iconfont icon-love"></i>
-    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
-    <br>
-
-    
-  
-    <!-- 不蒜子统计PV -->
-    
-    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
-          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
-  
-  
-    <!-- 不蒜子统计UV -->
-    
-    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
-            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
-  
-  <br>
-
-
-
-    
-
-
-    <!-- cnzz Analytics icon -->
-    
-
-  </div>
-</footer>
-
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.8.9/js/mdb.min.js"></script>
-<script src="/js/main.js"></script>
-<script>
-(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https'){
-   bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-  }
-  else{
-  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-  }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-})();
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitalk/dist/gitalk.css">
+<script src="//unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+      var gitalk = new Gitalk({
+        clientID: 'b00b0a7008ebc4264da3',
+        clientSecret: 'd2cd3318af9e2b076eb378ac846e0e37341260ff',
+        repo: 'blog',
+        owner: 'Lethe',
+        admin: 'Lethe',
+        id: md5(location.pathname),      
+        labels: 'Gitalk'.split(',').filter(l => l),
+        perPage: 10,
+        pagerDirection: 'last',
+        createIssueManually: true,
+        distractionFreeMode: false
+      })
+      gitalk.render('gitalk-container')
 </script>
 
-  <script src="/js/lazyload.js"></script>
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span><font face="Comic Sans MS">Life is a struggle.</font></span>
+        <br>
+        <span><font face="Comic Sans MS">Lethe © 2018 - 2020</font></span>
+
+        <span> · 
+            <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<span class="site-uv">
+    总访客量:
+    <i class="busuanzi-value" id="busuanzi_value_site_uv"></i>
+</span>&nbsp;
 
 
+<span class="site-pv">
+    总访问量:
+    <i class="busuanzi-value" id="busuanzi_value_site_pv"></i>
+</span>
 
-  
-    <script src="https://cdn.staticfile.org/tocbot/4.8.0/tocbot.min.js"></script>
-  
-  <script src="/js/post.js"></script>
+          </span>
+    </div>
+</footer>
 
-
-
-  <script src="https://cdn.staticfile.org/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
-
-
-
-  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-<!-- Plugins -->
-
-
-  
-    <!-- Baidu Analytics -->
-    <script>
-      var _hmt = _hmt || [];
-      (function () {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?99792b18d5c4379d7bc5cf4bced8a563";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-      })();
-    </script>
-  
-
-  
-
-  
-
-  
-
-  <!-- cnzz Analytics -->
-  
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/r298/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.10/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "领航杯部分Writeup&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.0/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "false",
-      
-      icon: "§"
-      
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
-  </script>
-
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      getSearchFile(path);
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
-      function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-
-
-
-
+    </div>
 </body>
 </html>

