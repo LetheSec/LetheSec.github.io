@@ -125,7 +125,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    8.4k 字
+                    8.5k 字
                   </span>&nbsp;
                 
 
@@ -166,7 +166,7 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <p>arxiv：<a href="https://arxiv.org/abs/1902.06162" target="_blank" rel="noopener">https://arxiv.org/abs/1902.06162</a></p>
+            <h1 id="Self-supervised-Visual-Feature-Learning-with-Deep-Neural-Networks：A-Survey"><a href="#Self-supervised-Visual-Feature-Learning-with-Deep-Neural-Networks：A-Survey" class="headerlink" title="Self-supervised Visual Feature Learning with Deep Neural Networks：A Survey"></a>Self-supervised Visual Feature Learning with Deep Neural Networks：A Survey</h1><p>arxiv：<a href="https://arxiv.org/abs/1902.06162" target="_blank" rel="noopener">https://arxiv.org/abs/1902.06162</a></p>
 <h2 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1 介绍"></a>1 介绍</h2><h4 id="1-1-动机"><a href="#1-1-动机" class="headerlink" title="1.1 动机"></a>1.1 动机</h4><p>（1）Deep ConvNets 的性能很大程度上取决于它的 capability 和数据集的数量，但是大规模数据集的收集和注释非常昂贵。</p>
 <p>（2）因此近年来提出了许多 self-supervised learning 的方法，即从大规模无标记的数据中自主的学习特征。采取的方法通常是设置一些 pretext tasks（如图像上色、图像修补、图像拼接等），训练网络去解决 pretext tasks，在完成这些任务的过程中，网络就学习到了相应的特征，从而生成对应的伪标签（pseudo label）。</p>
 <p>（3）pretext task需要满足以下两个条件：</p>
@@ -235,8 +235,13 @@ $$
 <h4 id="2-4-无监督学习"><a href="#2-4-无监督学习" class="headerlink" title="2.4 无监督学习"></a>2.4 无监督学习</h4><p>无监督学习即指学习过程不需要任何人工注释的标签，其中包括完全无监督学习（不需要任何标签）以及自监督学习（利用自动生成的伪标签进行训练）。</p>
 <h5 id="2-4-1-自监督学习"><a href="#2-4-1-自监督学习" class="headerlink" title="2.4.1 自监督学习"></a>2.4.1 自监督学习</h5><p>近年来，已经出现了许多用于视觉特征学习的自监督学习方法$^{[23]-[35]}$。</p>
 <p>与监督学习相似的地方是：自监督学习也需要$X_i$~$P_i$的的数据对进行训练，不过这里的$P_i$并不是监督学习里通过人工注释的到的标签，而是完成 pretext task 而自动生成的伪标签。</p>
-<p>给定一组数据集$D={P_i}^N_{i=0}$，其训练损失函数定义为：</p>
-<p>$$<br>\operatorname{loss}(D)=\min <em>{\theta} \frac{1}{N} \sum</em>{i=1}^{N} \operatorname{loss}\left(X_{i}, P_{i}\right)<br>$$</p>
+<p>给定一组数据集$D={P_i}^N_{i=0}$，其训练损失函数定义为：<br>
+
+$$
+\operatorname{loss}(D)=\min _{\theta} \frac{1}{N} \sum_{i=1}^{N} \operatorname{loss}\left(X_{i}, P_{i}\right)
+$$
+
+</p>
 <p>只要伪标签$P_i$不是由人工标注的，那么就属于自监督学习。</p>
 <h2 id="3-常见的深度网络架构"><a href="#3-常见的深度网络架构" class="headerlink" title="3 常见的深度网络架构"></a>3 常见的深度网络架构</h2><p>该节主要介绍了用于学习图像和视频特征的常见架构，对于不同的学习方法来说，架构大致是相同的</p>
 <h4 id="3-1-学习图像特征的架构"><a href="#3-1-学习图像特征的架构" class="headerlink" title="3.1 学习图像特征的架构"></a>3.1 学习图像特征的架构</h4><p>主要介绍 AlexNet$^{[8]}$、VGG$^{[9]}$、GooLeNet$^{[10]}$、ResNet$^{[11]}$ 和 DenseNet$^{[12]}$ 五种图像特征学习架构。</p>
