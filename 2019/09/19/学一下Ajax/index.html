@@ -223,20 +223,36 @@
 <p><br></p>
 <h2 id="0x02-XHR对象创建"><a href="#0x02-XHR对象创建" class="headerlink" title="0x02 XHR对象创建"></a>0x02 XHR对象创建</h2><p>Ajax的核心是XMLHttpRequest对象（简称为XHR对象）的使用，XMLHttpRequest对象作为浏览器请求服务器的一个接口，可以使用异步的方式通过浏览器向服务器发送请求并解析服务器的响应。</p>
 <p>使用Ajax服务器发送HTTP请求的首要任务是创建一个XMLHttpRequest对象，也称实例化XHR对象，代码如下：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">	<span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">&lt;script type=&quot;text/javascript&quot;&gt;
+    var xhr = new XMLHttpRequest();
+&lt;/script&gt;
+</code></pre>
 <p><br></p>
-<h2 id="0x03-Ajax发送请求"><a href="#0x03-Ajax发送请求" class="headerlink" title="0x03 Ajax发送请求"></a>0x03 Ajax发送请求</h2><h6 id="（1）open-方法"><a href="#（1）open-方法" class="headerlink" title="（1）open() 方法"></a>（1）open() 方法</h6><p>用法：<br><figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">open(<span class="function"><span class="keyword">method</span>,<span class="title">url</span>,<span class="title">async</span>)</span></span><br></pre></td></tr></table></figure></p>
-<p>规定请求的类型、URL 以及是否异步处理请求。</p>
+<h2 id="0x03-Ajax发送请求"><a href="#0x03-Ajax发送请求" class="headerlink" title="0x03 Ajax发送请求"></a>0x03 Ajax发送请求</h2><h6 id="（1）open-方法"><a href="#（1）open-方法" class="headerlink" title="（1）open() 方法"></a>（1）open() 方法</h6><p>用法：</p>
+<pre><code>open(method,url,async)
+</code></pre><p>规定请求的类型、URL 以及是否异步处理请求。</p>
 <ul>
 <li>method：请求的类型；GET 或 POST</li>
 <li>url：文件在服务器上的位置</li>
 <li>async：true（异步）或 false（同步）</li>
 </ul>
-<p>demo:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">	<span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">	xhr.open(<span class="string">"get"</span>, <span class="string">"./Ajax/demo_get.php"</span>, <span class="literal">true</span>);</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h6 id="（2）send-方法"><a href="#（2）send-方法" class="headerlink" title="（2）send() 方法"></a>（2）send() 方法</h6><p>用法：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">send</span><span class="params">(string)</span></span></span><br></pre></td></tr></table></figure></p>
-<p>open()方法执行完毕后，调用send()方法通过HTTP协议将请求发送到服务器。</p>
+<p>demo:</p>
+<pre><code class="javascript">&lt;script type=&quot;text/javascript&quot;&gt;
+    var xhr = new XMLHttpRequest();
+    xhr.open(&quot;get&quot;, &quot;./Ajax/demo_get.php&quot;, true);
+&lt;/script&gt;
+</code></pre>
+<h6 id="（2）send-方法"><a href="#（2）send-方法" class="headerlink" title="（2）send() 方法"></a>（2）send() 方法</h6><p>用法：</p>
+<pre><code>send(string)
+</code></pre><p>open()方法执行完毕后，调用send()方法通过HTTP协议将请求发送到服务器。</p>
 <p>如果为GET请求，send()方法无参数，默认为<code>null</code>；如果为POST请求，则send()方法的参数为要发送的数据。</p>
-<p>demo:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">	<span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">	xhr.open(<span class="string">"get"</span>, <span class="string">"./Ajax/demo_get.php"</span>, <span class="literal">true</span>);</span><br><span class="line">	xhr.sned(<span class="literal">null</span>);</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>demo:</p>
+<pre><code class="javascript">&lt;script type=&quot;text/javascript&quot;&gt;
+    var xhr = new XMLHttpRequest();
+    xhr.open(&quot;get&quot;, &quot;./Ajax/demo_get.php&quot;, true);
+    xhr.sned(null);
+&lt;/script&gt;
+</code></pre>
 <p><br></p>
 <h2 id="0x04-Ajax接收响应"><a href="#0x04-Ajax接收响应" class="headerlink" title="0x04 Ajax接收响应"></a>0x04 Ajax接收响应</h2><p>浏览器接收到服务器的响应后，信息可以通过XMLHttpRequest对象的属性和方法使用。在使用XHR对象接收响应的过程中有四个常用的属性，分别为：</p>
 <ul>
@@ -245,7 +261,19 @@
 <li><code>responseXML</code>：如果响应的内容类型。是”text/xml”或”application/xml”，那么此属性将以document形式返回保存响应数据的XML DOM文档。</li>
 <li><code>statusText</code>：以文本形式返回HTTP的状态说明。</li>
 </ul>
-<p>demo:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">	<span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">	xhr.open(<span class="string">"get"</span>, <span class="string">"./Ajax/demo_get.php"</span>, <span class="literal">false</span>);	<span class="comment">//同步请求</span></span><br><span class="line">	xhr.send(<span class="literal">null</span>);</span><br><span class="line">	<span class="comment">//判断请求是否成功</span></span><br><span class="line">	<span class="keyword">if</span>(xhr.status == <span class="number">200</span> || xhr.status == <span class="number">304</span>)&#123;</span><br><span class="line">		alert(xhr.responseText);	<span class="comment">//打印响应数据</span></span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		alert(<span class="string">"请求失败，状态码为："</span> + xhr.status);</span><br><span class="line">	&#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>demo:</p>
+<pre><code class="javascript">&lt;script type=&quot;text/javascript&quot;&gt;
+    var xhr = new XMLHttpRequest();
+    xhr.open(&quot;get&quot;, &quot;./Ajax/demo_get.php&quot;, false);    //同步请求
+    xhr.send(null);
+    //判断请求是否成功
+    if(xhr.status == 200 || xhr.status == 304){
+        alert(xhr.responseText);    //打印响应数据
+    }else{
+        alert(&quot;请求失败，状态码为：&quot; + xhr.status);
+    }
+&lt;/script&gt;
+</code></pre>
 <p><br></p>
 <h2 id="0x05-异步Ajax"><a href="#0x05-异步Ajax" class="headerlink" title="0x05 异步Ajax"></a>0x05 异步Ajax</h2><p>如果设置open()方法的第三个参数值为true，则表示Ajax需要异步处理请求。此时，需要判断服务器响应的数据是否传送完成，检测XHR对象中的readState属性的状态码是否为4.</p>
 <p>readySate属性表示请求/响应过程当前的状态，如下表：</p>
@@ -286,18 +314,108 @@
 </tbody>
 </table>
 <p>理论上，Ajax发送请求处理响应的过程中只要<code>readState</code>的状态码改变一次，就会触发<code>readystatechange</code>事件，因此可以利用这个事件来检测每次状态变化后readySate的值，来判断当前Ajax接收数据的状态。</p>
-<p>demo:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">loadXMLDoc</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">var</span> xmlhttp;</span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">window</span>.XMLHttpRequest)</span><br><span class="line">  &#123;<span class="comment">// code for IE7+, Firefox, Chrome, Opera, Safari</span></span><br><span class="line">  xmlhttp=<span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">  &#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  &#123;<span class="comment">// code for IE6, IE5</span></span><br><span class="line">  xmlhttp=<span class="keyword">new</span> ActiveXObject(<span class="string">"Microsoft.XMLHTTP"</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建onreadystatechange事件监测Ajax状态变化</span></span><br><span class="line">xmlhttp.onreadystatechange=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (xmlhttp.readyState==<span class="number">4</span> &amp;&amp; xmlhttp.status==<span class="number">200</span>)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="built_in">document</span>.getElementById(<span class="string">"myDiv"</span>).innerHTML=xmlhttp.responseText;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">xmlhttp.open(<span class="string">"GET"</span>,<span class="string">"/ajax/test1.txt"</span>,<span class="literal">true</span>);</span><br><span class="line">xmlhttp.send();</span><br><span class="line">&#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div id=<span class="string">"myDiv"</span>&gt;<span class="xml"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Let AJAX change this text<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;button type=<span class="string">"button"</span> onclick=<span class="string">"loadXMLDoc()"</span>&gt;通过 AJAX 改变内容&lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&lt;/</span>body&gt;</span><br><span class="line">&lt;<span class="regexp">/html&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>demo:</p>
+<pre><code class="javascript">&lt;html&gt;
+&lt;head&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+function loadXMLDoc()
+{
+var xmlhttp;
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject(&quot;Microsoft.XMLHTTP&quot;);
+  }
+
+//创建onreadystatechange事件监测Ajax状态变化
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 &amp;&amp; xmlhttp.status==200)
+    {
+    document.getElementById(&quot;myDiv&quot;).innerHTML=xmlhttp.responseText;
+    }
+  }
+xmlhttp.open(&quot;GET&quot;,&quot;/ajax/test1.txt&quot;,true);
+xmlhttp.send();
+}
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;div id=&quot;myDiv&quot;&gt;&lt;h2&gt;Let AJAX change this text&lt;/h2&gt;&lt;/div&gt;
+&lt;button type=&quot;button&quot; onclick=&quot;loadXMLDoc()&quot;&gt;通过 AJAX 改变内容&lt;/button&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
 <p><br></p>
 <h2 id="0x06-JSON数据传递"><a href="#0x06-JSON数据传递" class="headerlink" title="0x06 JSON数据传递"></a>0x06 JSON数据传递</h2><p>目前Ajax技术进行数据传递时，采用JSON格式的数据进行传递已经成为事实上的标准。相较与XML而言，使用JSON格式的数据传递实现简单且方便。采用JSON格式的数据进行传递时，往往应用于数据量比较多，且需要清晰传递的情况。但是此种方式传递需要将服务器返回的JSON格式字符串先转化为Javascript对象。</p>
 <p>demo：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">        &lt;input type=<span class="string">"button"</span> onclick=<span class="string">"info();"</span> value=<span class="string">"info"</span>&gt;</span><br><span class="line">        &lt;p id=<span class="string">"name"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">        &lt;p id=<span class="string">"age"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line">        &lt;p id=<span class="string">"school"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line">&lt;<span class="regexp">/body&gt;</span></span><br><span class="line"><span class="regexp">&lt;script&gt;</span></span><br><span class="line"><span class="regexp">        function info()&#123;</span></span><br><span class="line"><span class="regexp">            var xhr = new XMLHttpRequest();</span></span><br><span class="line"><span class="regexp">            xhr.onreadystatechange = function()&#123;</span></span><br><span class="line"><span class="regexp">                if(this.readyState == 4)&#123;</span></span><br><span class="line"><span class="regexp">                    var person = eval('(' + this.responseText + ')');</span></span><br><span class="line"><span class="regexp">                    console.log(person);</span></span><br><span class="line"><span class="regexp">                    document.getElementById('name').innerHTML = "name:" + person.name;</span></span><br><span class="line"><span class="regexp">                    document.getElementById('age').innerHTML = "age:" + person.age;</span></span><br><span class="line"><span class="regexp">                    document.getElementById('school').innerHTML = "school:" + person.school;</span></span><br><span class="line"><span class="regexp">                &#125;</span></span><br><span class="line"><span class="regexp">            &#125;</span></span><br><span class="line"><span class="regexp">            xhr.open('get', 'ajax_json.php', true);</span></span><br><span class="line"><span class="regexp">            xhr.send();</span></span><br><span class="line"><span class="regexp">        &#125;</span></span><br><span class="line"><span class="regexp">&lt;/</span>script&gt;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">&lt;body&gt;
+        &lt;input type=&quot;button&quot; onclick=&quot;info();&quot; value=&quot;info&quot;&gt;
+        &lt;p id=&quot;name&quot;&gt;&lt;/h1&gt;
+        &lt;p id=&quot;age&quot;&gt;&lt;/p&gt;
+        &lt;p id=&quot;school&quot;&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;script&gt;
+        function info(){
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if(this.readyState == 4){
+                    var person = eval(&#39;(&#39; + this.responseText + &#39;)&#39;);
+                    console.log(person);
+                    document.getElementById(&#39;name&#39;).innerHTML = &quot;name:&quot; + person.name;
+                    document.getElementById(&#39;age&#39;).innerHTML = &quot;age:&quot; + person.age;
+                    document.getElementById(&#39;school&#39;).innerHTML = &quot;school:&quot; + person.school;
+                }
+            }
+            xhr.open(&#39;get&#39;, &#39;ajax_json.php&#39;, true);
+            xhr.send();
+        }
+&lt;/script&gt;
+</code></pre>
 <p>说明：<code>eval()</code>方法可以将JSON字符串转换为JSON对象。</p>
 <p>服务端的返回的JSON格式的数据，代码如下：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $person = [];</span><br><span class="line">    $person[] = <span class="keyword">array</span>(<span class="string">'name'</span> =&gt; <span class="string">'Lethe'</span>,</span><br><span class="line">                      <span class="string">'age'</span> =&gt; <span class="string">'19'</span>,</span><br><span class="line">                      <span class="string">'school'</span> =&gt; <span class="string">'CUMT'</span>);</span><br><span class="line">    $person[] = <span class="keyword">array</span>(<span class="string">'name'</span> =&gt; <span class="string">'Jack'</span>,</span><br><span class="line">                      <span class="string">'age'</span> =&gt; <span class="string">'20'</span>,</span><br><span class="line">                      <span class="string">'school'</span> =&gt; <span class="string">'B'</span>);</span><br><span class="line">    $person[] = <span class="keyword">array</span>(<span class="string">'name'</span> =&gt; <span class="string">'Ben'</span>,</span><br><span class="line">                      <span class="string">'age'</span> =&gt; <span class="string">'20'</span>,</span><br><span class="line">                      <span class="string">'school'</span> =&gt; <span class="string">'C'</span>);</span><br><span class="line">    $n = mt_rand(<span class="number">0</span>,<span class="number">2</span>);</span><br><span class="line">    <span class="keyword">echo</span> json_encode($person[$n]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="php">&lt;?php
+    $person = [];
+    $person[] = array(&#39;name&#39; =&gt; &#39;Lethe&#39;,
+                      &#39;age&#39; =&gt; &#39;19&#39;,
+                      &#39;school&#39; =&gt; &#39;CUMT&#39;);
+    $person[] = array(&#39;name&#39; =&gt; &#39;Jack&#39;,
+                      &#39;age&#39; =&gt; &#39;20&#39;,
+                      &#39;school&#39; =&gt; &#39;B&#39;);
+    $person[] = array(&#39;name&#39; =&gt; &#39;Ben&#39;,
+                      &#39;age&#39; =&gt; &#39;20&#39;,
+                      &#39;school&#39; =&gt; &#39;C&#39;);
+    $n = mt_rand(0,2);
+    echo json_encode($person[$n]);
+?&gt;
+</code></pre>
 <p><img src="/2019/09/19/学一下Ajax/20190920010126777.png" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h2 id="0x06-查询缓存"><a href="#0x06-查询缓存" class="headerlink" title="0x06 查询缓存"></a>0x06 查询缓存</h2><p>为了避免缓存带来的影响，可以向URL中添加一个随机数或者时间戳作为请求数据的一部分，发送给服务器，以保证当前的请求始终为首次发送。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;input type=<span class="string">"text"</span> name=<span class="string">"username"</span>&gt;</span><br><span class="line">&lt;<span class="regexp">/body&gt;</span></span><br><span class="line"><span class="regexp">&lt;script type="text/</span>javascript<span class="string">"&gt;</span></span><br><span class="line"><span class="string">    var username = document.getElementsByName("</span>username<span class="string">")[0];</span></span><br><span class="line"><span class="string">    username.onblur = function()</span></span><br><span class="line"><span class="string">    &#123;</span></span><br><span class="line"><span class="string">        var xhr = new XMLHttpRequest();</span></span><br><span class="line"><span class="string">        var url = "</span>./Ajax/demo_get.php?username=<span class="string">" + encodeURIComponent(this.value);</span></span><br><span class="line"><span class="string">        xhr.onreadystatechange = function()&#123;</span></span><br><span class="line"><span class="string">            if(xhr.status == 4)&#123;</span></span><br><span class="line"><span class="string">                alert(this.responseText);</span></span><br><span class="line"><span class="string">            &#125;</span></span><br><span class="line"><span class="string">        &#125; </span></span><br><span class="line"><span class="string">        xhr.open('GET',url+'&amp;num'+Math.random(), true);</span></span><br><span class="line"><span class="string">        xhr.sned(null);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&lt;/script&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">&lt;body&gt;
+    &lt;input type=&quot;text&quot; name=&quot;username&quot;&gt;
+&lt;/body&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    var username = document.getElementsByName(&quot;username&quot;)[0];
+    username.onblur = function()
+    {
+        var xhr = new XMLHttpRequest();
+        var url = &quot;./Ajax/demo_get.php?username=&quot; + encodeURIComponent(this.value);
+        xhr.onreadystatechange = function(){
+            if(xhr.status == 4){
+                alert(this.responseText);
+            }
+        } 
+        xhr.open(&#39;GET&#39;,url+&#39;&amp;num&#39;+Math.random(), true);
+        xhr.sned(null);
+    }
+&lt;/script&gt;
+</code></pre>
 <p><br></p>
 <h2 id="0x07-Ajax函数封装"><a href="#0x07-Ajax函数封装" class="headerlink" title="0x07 Ajax函数封装"></a>0x07 Ajax函数封装</h2><p>使用Ajax发送HTTP请求通常有如下几个步骤：</p>
 <ul>
@@ -309,9 +427,58 @@
 </li>
 </ul>
 <p>使用Ajax的步骤基本固定，因此可以把上述步骤抽象出来封装成一个Ajax方法，当需要调用Ajax时，直接调用此方法即可，代码如下：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ajax</span>(<span class="params">obj</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// 创建XHR对象，并设置Ajax默认为GET请求方式，设置回调函数异步处理请求，返回响应</span></span><br><span class="line">    obj.method = obj.method || <span class="string">'get'</span>;</span><br><span class="line">    <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">    xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;    <span class="comment">//异步处理请求，接收响应</span></span><br><span class="line">        <span class="keyword">if</span>((xhr.status == <span class="number">4</span>)&amp;&amp;(xhr.status == <span class="number">200</span>))&#123;</span><br><span class="line">            <span class="comment">//callback()为回调函数，若不设置则无回调</span></span><br><span class="line">            obj.callback &amp;&amp; obj.callback(xhr.responseText);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//分别用GET和POST两种方式创建查询字符串，用来保护用户提交的数据信息，并分别发送Ajax异步请求</span></span><br><span class="line">    <span class="keyword">var</span> strData = <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">if</span>(obj.method == <span class="string">'post'</span>)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> obj.data)&#123;</span><br><span class="line">            strData += <span class="string">'&amp;'</span> + key + <span class="string">'='</span> + obj.data[key];</span><br><span class="line">        &#125;</span><br><span class="line">        strData = strData.substring(<span class="number">1</span>); <span class="comment">//去掉开头多余的&amp;</span></span><br><span class="line">        xhr.open(<span class="string">'post'</span>, obj.url, <span class="literal">true</span>);</span><br><span class="line">        <span class="comment">//设置请求头</span></span><br><span class="line">        xhr.setRequestHeader(<span class="string">"content-type"</span>, <span class="string">"application/x-www-form-urlencode"</span>);</span><br><span class="line">        xhr.send(strData);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">//如果是GET方式，则需要对数据进行编码</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> obj.data)&#123;</span><br><span class="line">            strData += <span class="string">'&amp;'</span> + <span class="built_in">encodeURIComponent</span>(key) + <span class="string">'='</span> + <span class="built_in">encodeURIComponent</span>(obj.data[key]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//去掉多余的&amp;,并增加时间戳，防止缓存</span></span><br><span class="line">        strData = strData.substring(<span class="number">1</span>) + <span class="string">'&amp;'</span> + <span class="built_in">Number</span>(<span class="keyword">new</span> Data());</span><br><span class="line">        xhr.open(<span class="string">'get'</span>, obj.url + <span class="string">'?'</span> + strData, <span class="literal">true</span>);</span><br><span class="line">        xhr.send(<span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">&lt;script type=&quot;text/javascript&quot;&gt;
+function ajax(obj){
+    // 创建XHR对象，并设置Ajax默认为GET请求方式，设置回调函数异步处理请求，返回响应
+    obj.method = obj.method || &#39;get&#39;;
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function(){    //异步处理请求，接收响应
+        if((xhr.status == 4)&amp;&amp;(xhr.status == 200)){
+            //callback()为回调函数，若不设置则无回调
+            obj.callback &amp;&amp; obj.callback(xhr.responseText);
+        }
+    }
+    //分别用GET和POST两种方式创建查询字符串，用来保护用户提交的数据信息，并分别发送Ajax异步请求
+    var strData = &#39;&#39;;
+    if(obj.method == &#39;post&#39;){
+        for(var key in obj.data){
+            strData += &#39;&amp;&#39; + key + &#39;=&#39; + obj.data[key];
+        }
+        strData = strData.substring(1); //去掉开头多余的&amp;
+        xhr.open(&#39;post&#39;, obj.url, true);
+        //设置请求头
+        xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/x-www-form-urlencode&quot;);
+        xhr.send(strData);
+    }else{
+        //如果是GET方式，则需要对数据进行编码
+        for(var key in obj.data){
+            strData += &#39;&amp;&#39; + encodeURIComponent(key) + &#39;=&#39; + encodeURIComponent(obj.data[key]);
+        }
+        //去掉多余的&amp;,并增加时间戳，防止缓存
+        strData = strData.substring(1) + &#39;&amp;&#39; + Number(new Data());
+        xhr.open(&#39;get&#39;, obj.url + &#39;?&#39; + strData, true);
+        xhr.send(null);
+    }
+}
+&lt;/script&gt;
+</code></pre>
 <p>调用事例如下：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">html code...</span><br><span class="line"></span><br><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">btn.onclick = <span class="function"><span class="keyword">function</span>(<span class="params">&#123;</span></span></span><br><span class="line"><span class="function"><span class="params">    ajax(&#123;</span></span></span><br><span class="line"><span class="function"><span class="params">        url: <span class="string">'/ajax/demo.php'</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">        method: <span class="string">'GET'</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">        data: &#123;year:year.value, month:month.value, day:dat.value&#125;,</span></span></span><br><span class="line"><span class="function"><span class="params">        callback: function(data</span>)</span>&#123;</span><br><span class="line">            result.innerHTML = data;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">html code...
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+btn.onclick = function({
+    ajax({
+        url: &#39;/ajax/demo.php&#39;,
+        method: &#39;GET&#39;,
+        data: {year:year.value, month:month.value, day:dat.value},
+        callback: function(data){
+            result.innerHTML = data;
+        }
+    })
+})
+&lt;/script&gt;
+</code></pre>
+
         </div>
 
         

