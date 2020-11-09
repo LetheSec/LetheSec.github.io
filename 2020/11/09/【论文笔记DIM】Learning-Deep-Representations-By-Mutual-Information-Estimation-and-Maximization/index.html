@@ -264,17 +264,19 @@
 <p>$x$ 表示原始图像，$f_{\psi}(x)$ 表示经过卷积层输出的 $M×M$（注意，DIM 里的  $M×M$  指的是 $M×M$ 块，而不是像素）的 feature map，而 $y=h_{\psi}\left(f_{\psi}(x)\right)$ 则为经过全连接层之后最终的 feature vector（也可以理解为图像的一种 representation），再将这个 representation 应用于一些下游任务，如分类。</p>
 <p>而 DIM 的整体思路如下图，也就是“用图片 encode 后得到的 representation（$y$），与同一张图片的 feature map 组成正样本对，和另一张图片的 feature map 组成负样本对，然后利用 GAN 的思想训练一个 Discriminator 来区分这两中样本对”。<br><img src="/2020/11/09/【论文笔记DIM】Learning-Deep-Representations-By-Mutual-Information-Estimation-and-Maximization/20201107154035986.png" alt="在这里插入图片描述"></p>
 <p>既然要训练 Discriminator ，就不得不提一下 DIM 的损失函数，那么就得先说一下其优化目标。</p>
-<p>首先，我们定义一些数学符号：<br>
+<p>首先，我们定义一些数学符号：</p>
+
+
 - $x∈X$为 image 数据集；编码器 encoder 为 ${ E }_{\psi}=h_{\psi} \circ f_{\psi}$ （ $\circ$ 表示是由后面那两个函数组成 ）； $f_{\psi}(x)$ 表示由将原始图像 $x$ 映射到 feature map； $h_{\psi}(f_{\psi}(x))$  表示将 feature map 再映射到最后的输出 representation，即 $y=h_{\psi}(f_{\psi}(x))=E_{\psi}(x) ∈ Y$。
-</p>
-<ul>
-<li>将样本从 $f_{\psi}(X)$ 经过 $h_{\psi}$ 得到的 $y∈Y$ 的分布，也叫做 ”push-forward distribution“（目前还不是很理解这个名词），记作$Q_{\psi,X}$</li>
-</ul>
-<p>而 DIM 最终的优化目标也就是以下两点：</p>
-<ul>
-<li>最大化 $f_{\psi}(X)$ 和 $Y$ 之间的互信息。（作者根据具体任务的不同，又分为了 global 和 local 两种，后面再提）</li>
-<li>在最终的 representation 中再加入一个统计性的约束，使得到的 $y$ 的分布（push-forward distribution）$Q_{\psi,X}$尽量与先验分布 $Q_{prior}$ 相匹配，有点类似对抗自编码器（AAE）。</li>
-</ul>
+
+- 将样本从 $f_{\psi}(X)$ 经过 $h_{\psi}$ 得到的 $y∈Y$ 的分布，也叫做 ”push-forward distribution“（目前还不是很理解这个名词），记作$Q_{\psi,X}$
+
+而 DIM 最终的优化目标也就是以下两点：
+
+- 最大化 $f_{\psi}(X)$ 和 $Y$ 之间的互信息。（作者根据具体任务的不同，又分为了 global 和 local 两种，后面再提）
+- 在最终的 representation 中再加入一个统计性的约束，使得到的 $y$ 的分布（push-forward distribution）$Q_{\psi,X}$尽量与先验分布 $Q_{prior}$ 相匹配，有点类似对抗自编码器（AAE）。
+
+
 <p><br></p>
 <h1 id="3-Loss-function"><a href="#3-Loss-function" class="headerlink" title="3 Loss function"></a>3 Loss function</h1><h3 id="Global-Infomax"><a href="#Global-Infomax" class="headerlink" title="Global Infomax"></a>Global Infomax</h3><p>知道了优化目标，下面就是如何去建立和推导该目标的数学表达方式。</p>
 <p>我们首先解决第一个优化目标，也就是最大化互信息。互信息就是衡量两个变量的相关性，如果 $X$ 和 $Y$ 相互独立，即$P_{XY}=P_{X}P_{Y}$，那么它们的互信息 $I(X;Y)$ 也就为0。互信息的定义如下：<br>$$<br>\begin{aligned}<br>\mathcal I(X;Y) &amp;=\sum_{X, Y} P(X, Y) \log \frac{P(X \mid Y)}{P(X)} \<br>\end{aligned} \tag 1<br>$$<br>KL散度则是衡量同一个随机变量两个分布之间的差异，其值越小，说明分布越接近，定义如下：<br>$$<br>\begin{aligned}<br>\mathcal D_{KL}(X||Y) &amp;=\mathbb{E}_{P_{X Y}}[\log \frac{P(X)}{P(Y)}] \<br>\end{aligned} \tag 2<br>$$<br>MI和KL散度之间的关系也不难推导，如下：</p>
