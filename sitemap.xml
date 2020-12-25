@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lethe.site/2020/12/25/NCE-and-InfoNCE/</loc>
+    
+    <lastmod>2020-12-25T08:59:50.023Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lethe.site/2020/10/11/%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E8%87%AA%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E7%BB%BC%E8%BF%B0%E3%80%91Self-supervised-Visual-Feature-Learning-with-Deep-Neural-Networks-A-Survey/</loc>
     
     <lastmod>2020-11-14T06:40:58.427Z</lastmod>
