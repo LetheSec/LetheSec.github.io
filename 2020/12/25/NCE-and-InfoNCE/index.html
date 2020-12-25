@@ -534,9 +534,73 @@ $$
 <li>正样本也就是与 $c_t$ 间隔固定步长 $k$ 的数据，根据 NCE 中说明的设定，正样本选取 1 个；因为在 NCE 中证明了噪声分布与数据分布越接近越好，所以负样本就直接在当前序列中随机选取（只要不是那一个正样本就行），负样本数量越多越好。</li>
 </ul>
 <p>所以要做的就是训练一个  logistics 分类模型，来区分这两个正负样本对。问题转换后，训练的模型能够“成功分辨出每个正负样本的能力”就等价于“根据 $c_t$ 预测 $x_{t+k}$ 的能力”。 </p>
-<p>根据 NCE 中的设置，现在假设给出一组大小为 $N$ 的 $X={x_1,\dots,x_N}$，其中包含 $1$ 个从 $p(x_{t+k}|c_t)$ 中取样正样本和 $N-1$ 从一个指定分布(用于对比的噪声分布) $p(x_{t+k})$，假设第 $x_i$ 是正样本，且$i=t+k$，上下文 $c_t$ 表示 $t$ 之前的数据，那么能够正确的同时找到那一个正样本 $x_{t+k}$ 和 $N-1$ 个负样本的情况可以写成如下形式：<br>$$<br>\begin{aligned}<br>p\left(d=i \mid X, c_{t}\right)&amp;=p(x_{t+k}|c_t)\<br>&amp;=\frac{p\left(x_{t+k} \mid c_{t}\right) \prod_{l \neq t+k} p\left(x_{l}\right)}{\sum_{j=1}^{N} p\left(x_{j} \mid c_{t}\right) \prod_{l \neq j} p\left(x_{l}\right)} \<br>&amp;=\frac{\frac{p\left(x_{t+k} \mid c_{t}\right)}{p\left(x_{t+k}\right)}}{\sum_{j=1}^{N} \frac{p\left(x_{j} \mid c_{t}\right)}{p\left(x_{j}\right)}}<br>\end{aligned} \tag {26}<br>$$<br>我们最大化上面这个式子，即最大化模型“成功分辨出每个正负样本的能力”，也就是最大化我们定义的密度比，也就是最大化 $c_t$ 与 $x_{t+k}$ 的互信息。</p>
-<p>参考 $(5)$ 式，可以写成根据 $c_t$ 预测 $x_{t+k}$的形式：<br>$$<br>\begin{aligned}<br>p(x_{t+k}|c_t)&amp;= \frac{exp(s_{\theta}(x_{t+k},c_t))}{\sum_{x_j \in X}exp(s_{\theta}(x_{j},c_t))} \<br>\end{aligned} \tag {27}<br>$$<br>在上式中，我们知道 $s_{\theta}(x,c)$ 是一个 socring function ，输出的分数用来量化 $x$ 在上下文 $c$ 中匹配性，而放在这里 $s_{\theta}(x_{t+k},c_t)$ 也就指的是量化对 $x_{t+k}$ 预测的结果和真实结果的相似程度，文章中用余弦相似度来量化，并且将 $exp(s_{\theta}(x_{t+k},c_t))$ 定义为 $f_k(x_{t+k},c_t)$，也就是：<br>$$<br>\begin{aligned}<br>p(x_{t+k}|c_t)&amp;= \frac{f_k(x_{t+k},c_t)}{\sum_{x_j \in X}f_k(x_{j},c_t)} \<br>\end{aligned} \tag {28}<br>$$<br>现在对比 $(26)(28)$两个式子，这两个式子的目标是一致的，也就意味着 $f_k(x_{t+k},c_t)$ 实际上就可以作为密度比 $\frac{p(x_{t+k} \mid c_t)}{p(x_{t+k})}$ 的一种表示形式，它们之间虽不直接等价，但是含义上是正相关的，即：<br>$$<br>\begin{aligned}<br>f_k(x_{t+k},c_t)\propto\frac{p(x_{t+k}|c_t)}{p(x_{t+k})}<br>\end{aligned} \tag {28}<br>$$<br>现在我们的优化目标就是使 $(26)$ 或 $(28)$ 式的结果最大，所以可以写出对应形式的交叉熵损失函数如下：<br>$$<br>\begin{aligned}<br>\mathcal{L}<em>{N}&amp;=-\sum</em>{X}\left[p(x,c)\log \frac{f_{k}\left(x_{t+k}, c_{t}\right)}{\sum_{x_{j} \in X} f_{k}\left(x_{j}, c_{t}\right)}\right] \<br>&amp;=-\mathbb{E}<em>X\left[\log \frac{f</em>{k}\left(x_{t+k}, c_{t}\right)}{\sum_{x_{j} \in X} f_{k}\left(x_{j}, c_{t}\right)}\right] \<br>\end{aligned} \tag {29}<br>$$<br>上式就是最终得到的 <strong>InfoNCE 损失函数</strong>了，并且最小化 InfoNCE，也就等价于最大化 $x_{t+k}$ 和 $c_t$ 之间互信息的下限，从而做到了我们所要求的最大化 $I\left(x_{t+k};c_{t}\right)$，证明如下，<br>$$<br>\begin{aligned}<br>\mathcal{L}<em>{\mathrm{N}}^{\mathrm{opt}} &amp;=-\underset{X}{\mathbb{E}} \log \left[\frac{\frac{p\left(x</em>{t+k} \mid c_{t}\right)}{p\left(x_{t+k}\right)}}{\frac{p\left(x_{t+k} \mid c_{t}\right)}{p\left(x_{t+k}\right)}+\sum_{x_{j} \in X_{\mathrm{neg}}} \frac{p\left(x_{j} \mid c_{t}\right)}{p\left(x_{j}\right)}}\right] \<br>&amp;=\underset{X}{\mathbb{E}} \log \left[1+\frac{p\left(x_{t+k}\right)}{p\left(x_{t+k} \mid c_{t}\right)} \sum_{x_{j} \in X_{\mathrm{neg}}} \frac{p\left(x_{j} \mid c_{t}\right)}{p\left(x_{j}\right)}\right] \<br>&amp; \approx \underset{X}{\mathbb{E}} \log \left[1+\frac{p\left(x_{t+k}\right)}{p\left(x_{t+k} \mid c_{t}\right)}(N-1) \underset{x_{j}}{\mathbb{E}} \frac{p\left(x_{j} \mid c_{t}\right)}{p\left(x_{j}\right)}\right] \<br>&amp;=\underset{X}{\mathbb{E}} \log \left[1+\frac{p\left(x_{t+k}\right)}{p\left(x_{t+k} \mid c_{t}\right)}(N-1)\right] \<br>&amp; \geq \underset{X}{\mathbb{E}} \log \left[\frac{p\left(x_{t+k}\right)}{p\left(x_{t+k} \mid c_{t}\right)} N\right] \<br>&amp;=-I\left(x_{t+k}, c_{t}\right)+\log (N)<br>\end{aligned} \tag {30}<br>$$<br>到底为止，如何从由 NCE 结合互信息的思想构建 $(29)$ 式中的 InfoNCE 也清楚了，现在 InfoNCE 主要用在自监督学习中作为一个对比损失函数，实际上 InfoNCE 的这个思想也是可以作为互信息的一个估计器，在论文中也有证明它和另一个互信息估计器 MINE 之间的关系，这里就不再详细说明了。</p>
-<p>在使用 InfoNCE 时把它当作一个对比损失，那么分子上的 $(x_{t+k},c_t)$ 表示正样本对，分母上的$(x_j,c_t)$ 表示负样本对，我们只要构建好正负样本对，然后利用 InfoNCE 的优化过程，就可以做到使正样本对之间的互信息最大，使负样本对之间的互信息最小这件事情了：<br>$$<br>\begin{aligned}<br>\mathcal{L}_{N}^{InfoNCE}<br>&amp;=-\mathbb{E}<em>X\left[\log \frac{f</em>{k}\left(x_{t+k}, c_{t}\right)}{\sum_{x_{j} \in X} f_{k}\left(x_{j}, c_{t}\right)}\right] \<br>\end{aligned} \tag {31}<br>$$</p>
+<p>根据 NCE 中的设置，现在假设给出一组大小为 $N$ 的 $X={x_1,\dots,x_N}$，其中包含 $1$ 个从 $p(x_{t+k}|c_t)$ 中取样正样本和 $N-1$ 从一个指定分布(用于对比的噪声分布) $p(x_{t+k})$，假设第 $x_i$ 是正样本，且$i=t+k$，上下文 $c_t$ 表示 $t$ 之前的数据，那么能够正确的同时找到那一个正样本 $x_{t+k}$ 和 $N-1$ 个负样本的情况可以写成如下形式：</p>
+
+$$
+\begin{aligned}
+p\left(d=i \mid X, c_{t}\right)&=p(x_{t+k}|c_t)\\
+&=\frac{p\left(x_{t+k} \mid c_{t}\right) \prod_{l \neq t+k} p\left(x_{l}\right)}{\sum_{j=1}^{N} p\left(x_{j} \mid c_{t}\right) \prod_{l \neq j} p\left(x_{l}\right)} \\
+&=\frac{\frac{p\left(x_{t+k} \mid c_{t}\right)}{p\left(x_{t+k}\right)}}{\sum_{j=1}^{N} \frac{p\left(x_{j} \mid c_{t}\right)}{p\left(x_{j}\right)}}
+\end{aligned} \tag {26}
+$$
+
+<p>我们最大化上面这个式子，即最大化模型“成功分辨出每个正负样本的能力”，也就是最大化我们定义的密度比，也就是最大化 $c_t$ 与 $x_{t+k}$ 的互信息。</p>
+<p>参考 $(5)$ 式，可以写成根据 $c_t$ 预测 $x_{t+k}$的形式：</p>
+
+$$
+\begin{aligned}
+p(x_{t+k}|c_t)&= \frac{exp(s_{\theta}(x_{t+k},c_t))}{\sum_{x_j \in X}exp(s_{\theta}(x_{j},c_t))} \\
+\end{aligned} \tag {27}
+$$
+
+<p>在上式中，我们知道 $s_{\theta}(x,c)$ 是一个 socring function ，输出的分数用来量化 $x$ 在上下文 $c$ 中匹配性，而放在这里 $s_{\theta}(x_{t+k},c_t)$ 也就指的是量化对 $x_{t+k}$ 预测的结果和真实结果的相似程度，文章中用余弦相似度来量化，并且将 $exp(s_{\theta}(x_{t+k},c_t))$ 定义为 $f_k(x_{t+k},c_t)$，也就是：</p>
+
+$$
+\begin{aligned}
+p(x_{t+k}|c_t)&= \frac{f_k(x_{t+k},c_t)}{\sum_{x_j \in X}f_k(x_{j},c_t)} \\
+\end{aligned} \tag {28}
+$$
+
+<p>现在对比 $(26)(28)$两个式子，这两个式子的目标是一致的，也就意味着 $f_k(x_{t+k},c_t)$ 实际上就可以作为密度比 $\frac{p(x_{t+k} \mid c_t)}{p(x_{t+k})}$ 的一种表示形式，它们之间虽不直接等价，但是含义上是正相关的，即：</p>
+
+$$
+\begin{aligned}
+f_k(x_{t+k},c_t)\propto\frac{p(x_{t+k}|c_t)}{p(x_{t+k})}
+\end{aligned} \tag {28}
+$$
+
+<p>现在我们的优化目标就是使 $(26)$ 或 $(28)$ 式的结果最大，所以可以写出对应形式的交叉熵损失函数如下：</p>
+
+$$
+\begin{aligned}
+\mathcal{L}_{N}&=-\sum_{X}\left[p(x,c)\log \frac{f_{k}\left(x_{t+k}, c_{t}\right)}{\sum_{x_{j} \in X} f_{k}\left(x_{j}, c_{t}\right)}\right] \\
+&=-\mathbb{E}_X\left[\log \frac{f_{k}\left(x_{t+k}, c_{t}\right)}{\sum_{x_{j} \in X} f_{k}\left(x_{j}, c_{t}\right)}\right] \\
+\end{aligned} \tag {29}
+$$
+
+<p>上式就是最终得到的 <strong>InfoNCE 损失函数</strong>了，并且最小化 InfoNCE，也就等价于最大化 $x_{t+k}$ 和 $c_t$ 之间互信息的下限，从而做到了我们所要求的最大化 $I\left(x_{t+k};c_{t}\right)$，证明如下，</p>
+
+$$
+\begin{aligned}
+\mathcal{L}_{\mathrm{N}}^{\mathrm{opt}} &=-\underset{X}{\mathbb{E}} \log \left[\frac{\frac{p\left(x_{t+k} \mid c_{t}\right)}{p\left(x_{t+k}\right)}}{\frac{p\left(x_{t+k} \mid c_{t}\right)}{p\left(x_{t+k}\right)}+\sum_{x_{j} \in X_{\mathrm{neg}}} \frac{p\left(x_{j} \mid c_{t}\right)}{p\left(x_{j}\right)}}\right] \\
+&=\underset{X}{\mathbb{E}} \log \left[1+\frac{p\left(x_{t+k}\right)}{p\left(x_{t+k} \mid c_{t}\right)} \sum_{x_{j} \in X_{\mathrm{neg}}} \frac{p\left(x_{j} \mid c_{t}\right)}{p\left(x_{j}\right)}\right] \\
+& \approx \underset{X}{\mathbb{E}} \log \left[1+\frac{p\left(x_{t+k}\right)}{p\left(x_{t+k} \mid c_{t}\right)}(N-1) \underset{x_{j}}{\mathbb{E}} \frac{p\left(x_{j} \mid c_{t}\right)}{p\left(x_{j}\right)}\right] \\
+&=\underset{X}{\mathbb{E}} \log \left[1+\frac{p\left(x_{t+k}\right)}{p\left(x_{t+k} \mid c_{t}\right)}(N-1)\right] \\
+& \geq \underset{X}{\mathbb{E}} \log \left[\frac{p\left(x_{t+k}\right)}{p\left(x_{t+k} \mid c_{t}\right)} N\right] \\
+&=-I\left(x_{t+k}, c_{t}\right)+\log (N)
+\end{aligned} \tag {30}
+$$
+
+<p>到底为止，如何从由 NCE 结合互信息的思想构建 $(29)$ 式中的 InfoNCE 也清楚了，现在 InfoNCE 主要用在自监督学习中作为一个对比损失函数，实际上 InfoNCE 的这个思想也是可以作为互信息的一个估计器，在论文中也有证明它和另一个互信息估计器 MINE 之间的关系，这里就不再详细说明了。</p>
+<p>在使用 InfoNCE 时把它当作一个对比损失，那么分子上的 $(x_{t+k},c_t)$ 表示正样本对，分母上的$(x_j,c_t)$ 表示负样本对，我们只要构建好正负样本对，然后利用 InfoNCE 的优化过程，就可以做到使正样本对之间的互信息最大，使负样本对之间的互信息最小这件事情了：</p>
+
+$$
+\begin{aligned}
+\mathcal{L}_{N}^{InfoNCE}
+&=-\mathbb{E}_X\left[\log \frac{f_{k}\left(x_{t+k}, c_{t}\right)}{\sum_{x_{j} \in X} f_{k}\left(x_{j}, c_{t}\right)}\right] \\
+\end{aligned} \tag {31}
+$$
+
 <h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>最初目的只是因为看到很多地方直接使用了 InfoNCE（实际上就是 CPC），但没有说明详细的原理，网上除了磊爷的文章[6]之外，很多都是浮于表面的解释，远不能解答我的疑惑 ，所以作为一个刚入门的小白，我还是想亲自推导一下 InfoNCE 的以及它的来源 NCE 的原理，没想到这个坑越挖越深，最后花的时间远远超出我的预期，导致一堆其他事情没有做….好在最终还是按照我的理解基本弄清楚了（如果有哪里理解错的地方，请告诉我），也不知道这样做有没有意义。虽然不知道多少人有耐心看到这里，但看在我码了这么多字和公式的分上，都看到这了，点个赞不过分吧~~</p>
 <h1 id="附录-1"><a href="#附录-1" class="headerlink" title="附录 1"></a>附录 1</h1><p>实际上 NCE 要解决的是<strong>归一化参数密度估计问题</strong>。</p>
 <p>假设现在有一组观测样本 $X={x_1,x_2,\dots,x_n}$，它遵循一个未知的参数化概率密度函数 $p_d(.;\theta)$ ，参数密度估计问题就是根据观测样本 $X$ 找到一组最优参数 $\theta$，通常使用极大似然估计的方法。对于这个密度函数 $p_m(.;\theta)$ 的估计还需要满足下面两个约束条件：</p>
@@ -546,7 +610,25 @@ $$
 </ul>
 <p>如果同时满足上面两个约束条件，那么称建模的密度函数是归一化的；如果只满足正约束条件，那么称其未归一化。</p>
 <p>在语言模型中说的 $Z(c)$ 在 NCE 实际上就是指，指的是 partition function，这里用 $Z(\theta)$表示，假设 $p_m^0(.;\theta)$ 为估计的未归一化模型，则 $Z(\theta)=\int p_m^0(x;\theta)dx$，而将模型归一化的方式就是：$\frac{p_m^0(.;\theta)}{Z(\theta)}$。而对于 $Z(\theta)$ ，除非 $p_m^0(.;\theta)$ 的形式特别简单，否则是没办法写出积分的解析解形式的，只能通过数值积分的方法来近似。这种数值积分对于低维问题是有较高的精度的，但是对于实际应用中的很多高维问题，在计算上就是非常昂贵甚至不可接受的。</p>
-<h1 id="附录-2"><a href="#附录-2" class="headerlink" title="附录 2"></a>附录 2</h1><p>附录1中提到可以通过 $\frac{p_m^0(.;\theta)}{Z(\theta)}$ 来对 $p_m^0(.;\theta)$ 进行归一化，实际上可以看作对 $p_m^0(.;\theta)$ 进行了一定的缩放，假设归一化后的密度函数为 $p_m(.;\theta)$，则：<br>$$<br>\begin{aligned}<br>\log p_m(.;\theta) &amp;= \log \frac{p_m^0(.;\theta)}{Z(\theta)}\<br>&amp;=\log p_m^0(.;\theta)-\log Z(c)<br>\end{aligned}<br>$$<br>因此我们可以把 $\log Z(c)$ 当成一个参数 $c$，也就是：<br>$$<br>\begin{aligned}<br>\log p_m(.;\theta)<br>&amp;=\log p_m^0(.;\theta)-c<br>\end{aligned}<br>$$<br>也就是学习一个参数 $c$，来对未归一化的 $p_m^0(.;\theta)$ 进行大小为 $c$ 的缩放，最终达到归一化的效果。</p>
+<h1 id="附录-2"><a href="#附录-2" class="headerlink" title="附录 2"></a>附录 2</h1><p>附录1中提到可以通过 $\frac{p_m^0(.;\theta)}{Z(\theta)}$ 来对 $p_m^0(.;\theta)$ 进行归一化，实际上可以看作对 $p_m^0(.;\theta)$ 进行了一定的缩放，假设归一化后的密度函数为 $p_m(.;\theta)$，则：</p>
+
+$$
+\begin{aligned}
+\log p_m(.;\theta) &= \log \frac{p_m^0(.;\theta)}{Z(\theta)}\\
+&=\log p_m^0(.;\theta)-\log Z(c)
+\end{aligned}
+$$
+
+<p>因此我们可以把 $\log Z(c)$ 当成一个参数 $c$，也就是：</p>
+
+$$
+\begin{aligned}
+\log p_m(.;\theta)
+&=\log p_m^0(.;\theta)-c
+\end{aligned}
+$$
+
+<p>也就是学习一个参数 $c$，来对未归一化的 $p_m^0(.;\theta)$ 进行大小为 $c$ 的缩放，最终达到归一化的效果。</p>
 <h1 id="附录-3"><a href="#附录-3" class="headerlink" title="附录 3"></a>附录 3</h1><p>按照 <a href="https://www.jmlr.org/papers/volume13/gutmann12a/gutmann12a.pdf" target="_blank" rel="noopener">Noise-Contrastive Estimation of Unnormalized Statistical Models, with Applications to Natural Image Statistics [Gutmann and Hyvrinen(2012)]</a> 中的解释，估计数据的密度函数 $p(x)$ 实际上是确定观测数据 $X$ 的属性，而这种属性一般需要相对于另一些参考数据(噪声) $Y$ 的属性来体现(描述)出来的。如果我们参考(噪声)数据 $Y$ 是从概率密度函数为 $p_n$ 的分布中独立同分布采样出来的 ，$X$ 相对于 $Y$ 的属性用它们的密度比 $p_d/p_n$ 来描述。那么如果相对数据 $Y$ 的分布 $p_n$ 已知，也就能通过 $p_d/p_n$ 来获得 $X$ 的密度函数 $p_d$。话句话说，如果我们知道 $Y$ 的属性，也知道了 $X$ 和 $Y$ 之间的差异，那么我们也就知道了 $X$ 的属性。</p>
 <p>所以 NCE 中通过训练一个二分类器来对 $X$ 和 $Y$ 中的数据进行比较，为了区分出这两个数据，分类器就会比较它们属性的不同，换句话说，这个二分类也就学到了 $X$ 和 $Y$ 之间的差异，而这个差异根据 $(14)(15)$ 式的推导，也确实符合 $p_d/p_n$ 的形式的，实际上也就是训练了 logistic 分类器。</p>
 <h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>[1] Tomas Mikolov, Kai Chen, Greg Corrado, and Jeffrey Dean. Efficient estimation of word representations in vector space. arXiv preprint arXiv:1301.3781, 2013.</p>
