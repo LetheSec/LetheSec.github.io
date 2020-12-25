@@ -250,9 +250,34 @@
             <p><strong>文章首发于</strong>：<a href="https://zhuanlan.zhihu.com/p/334772391" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/334772391</a></p>
 <h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0 前言"></a>0 前言</h1><p>作为刚入门自监督学习的小白，在阅读其中 Contrastive Based 方法的论文时，经常会看到 InfoNCE 这个 loss（在 CPC 的论文中提出），之前只知道它的思想来自于 NCE 以及代表什么含义，但是对其背后的理论推导、以及如何从 NCE 迁移到 InfoNCE 的思想不太清楚，因此这篇文章就是通过理论推导和自己的理解来对 NCE 和 InfoNCE 的来龙去脉有个了解。</p>
 <h1 id="1-从-NLP-入手"><a href="#1-从-NLP-入手" class="headerlink" title="1 从 NLP 入手"></a>1 从 NLP 入手</h1><h2 id="1-1-背景"><a href="#1-1-背景" class="headerlink" title="1.1 背景"></a>1.1 背景</h2><p>NCE，也就是 Noise Contrastive Noise（噪声对比估计）， 在 <a href="http://proceedings.mlr.press/v9/gutmann10a/gutmann10a.pdf" target="_blank" rel="noopener">Noise-contrastive estimation: A new estimation principle for unnormalized statistical models [Gutmann and Hyvsarinen, 2010]</a>  这篇论文中被提出，但是这篇论文的阐述过于“数学”不太便于理解，并且论文中估计的是概率密度函数（pdf, probability density function）。而 NLP 中的 word 或 vision 中的 pixel 都是离散的，且我们感兴趣的是的概率质量函数（pmf, probability mass function），因此我主要参考了 <a href="https://www.cs.toronto.edu/~amnih/papers/ncelm.pdf" target="_blank" rel="noopener">A fast and simple algorithm for training neural probabilistic language models</a> 这篇论文，它就是在使用 NCE 时假设了离散分布，并用 pmf 代替其中 pdf，然后将 NCE 应用到 NLP 领域。（我对 NLP 领域不是很了解，部分阐述方式可能会不严谨）。</p>
-<h2 id="1-2-n-gram"><a href="#1-2-n-gram" class="headerlink" title="1.2 n-gram"></a>1.2 n-gram</h2><p>语言模型（language model）就是假设一门语言所有可能的句子服从一个概率分布，每个句子出现的概率加起来是1，那么语言模型的任务就是预测每个句子在语言中出现的概率。如果把句子 $s$ 看成单词 $w$ 的序列 $s={w_1,w_2,…,w_m}$，那么语言模型就是建模一个 $p(w_1,w_2,…,w_m)$ 来计算这个句子 $s$ 出现的概率，直观上我们要得到这个语言模型，基于链式法则可以表示为每个单词出现的条件概率的乘积，我们将条件概率的条件 $(w_1,w_2,…,w_{i-1})$ 称为单词 $w_i$ 的上下文，用 $c_i$ 表示。<br>$$<br>\begin{aligned}<br>p\left(w_{1}, w_{2}, \ldots, w_{m}\right)&amp;=p\left(w_{1}\right) <em> p\left(w_{2} \mid w_{1}\right) </em> p\left(w_{3} \mid w_{1}, w_{2}\right) \ldots p\left(w_{m} \mid w_{1}, \ldots, w_{m-1}\right) \<br>&amp;=\prod_{i=1}^{m} p\left(w_{i} \mid w_{1}, w_{2}, \ldots, w_{i-1}\right) \<br>&amp;=\prod_{i=1}^{m} p\left(w_{i} \mid c_i\right)<br>\end{aligned} \tag 1<br>$$<br>可以看到，language model 就是条件概率 $p(w_i|c_i)$ 的集合，但是直接计算每个条件概率是不现实的。因此在统计语言模型中，引入了马尔可夫假设，即“<strong>一个词出现的概率只与它前面出现的有限的一个或者 n 个词有关</strong>”，将这 $n$ 个词称为一个 gram，这就是著名的 n-gram 模型，因此可以将模型简化为：<br>$$<br>p\left(w_{1}, w_{2}, w_{3}, \ldots, w_{m}\right)=\prod_{i=1}^{m} p\left(w_{i} \mid w_{i-n+1}, \ldots, w_{i-1}\right) \tag 2<br>$$</p>
+<h2 id="1-2-n-gram"><a href="#1-2-n-gram" class="headerlink" title="1.2 n-gram"></a>1.2 n-gram</h2><p>语言模型（language model）就是假设一门语言所有可能的句子服从一个概率分布，每个句子出现的概率加起来是1，那么语言模型的任务就是预测每个句子在语言中出现的概率。如果把句子 $s$ 看成单词 $w$ 的序列 $s={w_1,w_2,…,w_m}$，那么语言模型就是建模一个 $p(w_1,w_2,…,w_m)$ 来计算这个句子 $s$ 出现的概率，直观上我们要得到这个语言模型，基于链式法则可以表示为每个单词出现的条件概率的乘积，我们将条件概率的条件 $(w_1,w_2,…,w_{i-1})$ 称为单词 $w_i$ 的上下文，用 $c_i$ 表示。</p>
+
+$$
+\begin{aligned}
+p\left(w_{1}, w_{2}, \ldots, w_{m}\right)&=p\left(w_{1}\right) * p\left(w_{2} \mid w_{1}\right) * p\left(w_{3} \mid w_{1}, w_{2}\right) \ldots p\left(w_{m} \mid w_{1}, \ldots, w_{m-1}\right) \\
+&=\prod_{i=1}^{m} p\left(w_{i} \mid w_{1}, w_{2}, \ldots, w_{i-1}\right) \\
+&=\prod_{i=1}^{m} p\left(w_{i} \mid c_i\right)  
+\end{aligned} \tag 1
+$$
+
+<p>可以看到，language model 就是条件概率 $p(w_i|c_i)$ 的集合，但是直接计算每个条件概率是不现实的。因此在统计语言模型中，引入了马尔可夫假设，即“<strong>一个词出现的概率只与它前面出现的有限的一个或者 n 个词有关</strong>”，将这 $n$ 个词称为一个 gram，这就是著名的 n-gram 模型，因此可以将模型简化为：</p>
+
+$$
+p\left(w_{1}, w_{2}, w_{3}, \ldots, w_{m}\right)=\prod_{i=1}^{m} p\left(w_{i} \mid w_{i-n+1}, \ldots, w_{i-1}\right) \tag 2
+$$
+
 <h2 id="1-3-最大似然估计"><a href="#1-3-最大似然估计" class="headerlink" title="1.3 最大似然估计"></a>1.3 最大似然估计</h2><p>然而，在机器学习领域有一个方法是：对所要考虑的问题建模后为其构造一个目标函数，然后对这个目标函数进行优化，从而求得一组最优的参数，最后利用这组最优参数对应的模型进行预测，也就是<strong>最大似然估计</strong>。</p>
-<p>因此，在建模统计语言模型时，利用最大似然估计，对于 $(1)$ 式目标函数，我们可以写出其对数似然函数如下：<br>$$<br>\mathcal{L}<em>{MLE}= \sum</em>{w \in s} \log p_{\theta}(w \mid c) \tag 3<br>$$<br>然后对最大化对数似然函数 $\mathcal{L}<em>{MLE}$，实际上这样就是将 $p(w|c)$ 看成 $w$ 和 $c$ 的函数， $\theta$ 为待定参数集：<br>$$<br>p</em>{\theta}(w|c)=F(w,c;\theta) \tag 4<br>$$<br>这样一旦最优参数集 $\theta^{<em>}$ 可以确定，函数 $F$ 就被唯一确定，那么对于任何概率 $p(w|c)$ 都可以用 函数 $F(w,c;{\theta}^{</em>})$ 来计算了。</p>
+<p>因此，在建模统计语言模型时，利用最大似然估计，对于 $(1)$ 式目标函数，我们可以写出其对数似然函数如下：</p>
+
+$$
+\mathcal{L}_{MLE}= \sum_{w \in s} \log p_{\theta}(w \mid c) \tag 3
+$$
+然后对最大化对数似然函数 $\mathcal{L}_{MLE}$，实际上这样就是将 $p(w|c)$ 看成 $w$ 和 $c$ 的函数， $\theta$ 为待定参数集：
+$$
+p_{\theta}(w|c)=F(w,c;\theta) \tag 4
+$$
+这样一旦最优参数集 $\theta^{*}$ 可以确定，函数 $F$ 就被唯一确定，那么对于任何概率 $p(w|c)$ 都可以用 函数 $F(w,c;{\theta}^{*})$ 来计算了。
+
 <h2 id="1-4-神经概率语言模型"><a href="#1-4-神经概率语言模型" class="headerlink" title="1.4 神经概率语言模型"></a>1.4 神经概率语言模型</h2><p>上面的方法似然看起来很美好，但其中有两个问题：</p>
 <ul>
 <li>如何构造一个好的函数 $F$ 。</li>
