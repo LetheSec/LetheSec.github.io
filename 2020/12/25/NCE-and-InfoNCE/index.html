@@ -284,33 +284,248 @@ $$
 <li>最大似然估计虽然理论上简单可行，但对于某些模型，在实际计算时可能需要很大的计算量，因此未必容易。</li>
 </ul>
 <p>首先来看第一个问题，这也就是我们为什么引入神经网络，因为神经网络理论上可以表示任何函数，那么通过训练，肯定能找到这个合适的 $F$，因此Bengio 等人在 2003 年 <a href="https://jmlr.org/papers/volume3/tmp/bengio03a.pdf" target="_blank" rel="noopener">A Neural Probabilistic Language Model</a> 中提出了神经概率语言模型（NPLM）。其不在受限于 gram 的大小，可以在包含任意大小上下文的情况下建模 $w$ 的条件概率。</p>
-<p>具体来看，它把语言模型的建立当作一个多分类问题，我们用 $V={ v_1,v_2,…,v_{|V|} }$ 表示一个包含所有单词的单词库，其大小为 $|V|$，将 $(w_i,c_i)$ 当成一对训练样本（实际上 $w$ 会转换成词向量，这里不做详解），通过神经网络后和 softmax 后，输出一个向量 $\hat{y}=\left[\hat{y}<em>{i,1},\hat{y}</em>{i,2},…,\hat{y}<em>{i,|V|}\right]$, 其中每一维 $\hat{y}</em>{i,j}=p(v_j|c_i)$ 表示上下文为 $c_i$时 第 $i$ 个单词是单词库中第 $j$ 个单词 $v_j$ 的概率，训练过程要求最后单词库中概率最大的单词就是训练样本对中的 $w_i$。这样训练结束后，给神经网络一个上下文 $c_l=(w_1,w_2,…,w_{l-1})$，神经网络就能预测在当前上下文 $c_l$时，下一个 单词 $w_l$ 是单词库中的各个词的概率，通过这个我们也就可以构建语言模型。</p>
+
+具体来看，它把语言模型的建立当作一个多分类问题，我们用 $V=\{ v_1,v_2,...,v_{|V|} \}$ 表示一个包含所有单词的单词库，其大小为 $|V|$，将 $(w_i,c_i)$ 当成一对训练样本（实际上 $w$ 会转换成词向量，这里不做详解），通过神经网络后和 softmax 后，输出一个向量 $\hat{y}=\left[\hat{y}_{i,1},\hat{y}_{i,2},...,\hat{y}_{i,|V|}\right]$, 其中每一维 $\hat{y}_{i,j}=p(v_j|c_i)$ 表示上下文为 $c_i$时 第 $i$ 个单词是单词库中第 $j$ 个单词 $v_j$ 的概率，训练过程要求最后单词库中概率最大的单词就是训练样本对中的 $w_i$。这样训练结束后，给神经网络一个上下文 $c_l=(w_1,w_2,...,w_{l-1})$，神经网络就能预测在当前上下文 $c_l$时，下一个 单词 $w_l$ 是单词库中的各个词的概率，通过这个我们也就可以构建语言模型。
+
 <p>我们知道，这种方法本质上就是拟合一个 $w$ 和 $c$ 的函数 $F$，或者说建立一个参数集为 $\theta$ 条件概率分布 $p_{\theta}(w|c)$ ，只要给出当前上下文 $c$ ，我们就能够直接计算下一个单词 $w$ 的概率。</p>
-<p>假设输入到 softmax 前的结果用 $s_{\theta}(w,c)$ 表示，实际上 $s_{\theta}(w,c)$ 是有含义的，它是一个 socring function ，<strong>输出的分数用来量化 $w$ 在上下文 $c$ 中匹配性</strong>，那么 $w$ 条件概率可以表示为以下形式：<br>$$<br>\begin{aligned}<br>p_{\theta}(w|c)&amp;= \frac{exp(s_{\theta}(w,c))}{\sum_{w^\prime \in V}exp(s_{\theta}(w,c))} \<br>&amp;= \frac{u_{\theta}(w,c)}{Z(c)}<br>\end{aligned} \tag 5<br>$$<br>式中， $u_{\theta}(w,c)=exp(s_{\theta}(w,c))$ 表示下一个单词是这个 $w$ 在单词库中的概率；令 $Z(c) = \sum_{w^\prime \in V}exp(s_{\theta}(w,c))$ 表示当前单词库中所有单词的概率的累和，通常将这一项叫做“配分函数”或“归一化因子”。一般来说，单词库 $|V|$ 的数量是非常巨大的，因此<strong>计算 $Z(c)$ 是非常昂贵、耗时的一件事，这也就是 NCE 要解决的问题</strong>。<strong>（见附录1）</strong></p>
-<p>如果我们不考虑 $s_{\theta}(w,c)$ 的具体形式，那么 $(5)$ 式实际上就可以当作我们在 $(4)$ 式中所构造的函数 $F$ 的表达式， 既然如此，那我们接着用 1.3 中提到的最大似然估计的方式来试着求解 $F$ 的参数 $\theta$。我们将从句子(语料) $s$ 中取样的 $w$ 看成经验分布(数据分布) $\tilde{p}(w|c)$ ，$(3)$ 式中的 $\mathcal{L}<em>{MLE}$ 可以写成：<br>$$<br>\begin{aligned}<br>\mathcal{L}</em>{MLE} &amp;= \sum_{w \sim \tilde{p}(w|c)} \log p_{\theta}(w \mid c) \<br>&amp;=\mathbb E_{w \sim \tilde{p}(w|c)} \log{\frac{u_{\theta}(w,c)}{Z(c)}}<br>\end{aligned} \tag 6<br>$$<br>现在要最大化 $\mathcal{L}<em>{MLE}$，那么将其关于 $\theta$ 求导：<br>$$<br>\begin{aligned}<br>\frac{\partial}{\partial \theta}\mathcal{L}</em>{\mathrm{MLE}}&amp;=\mathbb E_{w \sim \tilde{p}(w|c)} \frac{\partial}{\partial \theta}\log{\frac{u_{\theta}(w,c)}{Z(c)}} \<br>&amp;=\mathbb E_{w \sim \tilde{p}(w|c)} \left[ \frac{\partial}{\partial \theta}  \log{u_{\theta}(w,c)}- \frac{\partial}{\partial \theta}\log{Z(c)} \right] \<br>&amp;=\mathbb E_{w \sim \tilde{p}(w|c)} \frac{\partial}{\partial \theta}  \log{u_{\theta}(w,c)} -  \frac{\partial}{\partial \theta} \log{Z(c)}<br>\end{aligned} \tag 7<br>$$</p>
+<p>假设输入到 softmax 前的结果用 $s_{\theta}(w,c)$ 表示，实际上 $s_{\theta}(w,c)$ 是有含义的，它是一个 socring function ，<strong>输出的分数用来量化 $w$ 在上下文 $c$ 中匹配性</strong>，那么 $w$ 条件概率可以表示为以下形式：</p>
+
+$$
+\begin{aligned}
+p_{\theta}(w|c)&= \frac{exp(s_{\theta}(w,c))}{\sum_{w^\prime \in V}exp(s_{\theta}(w,c))} \\
+&= \frac{u_{\theta}(w,c)}{Z(c)}
+\end{aligned} \tag 5
+$$
+
+<p>式中， $u_{\theta}(w,c)=exp(s_{\theta}(w,c))$ 表示下一个单词是这个 $w$ 在单词库中的概率；令 $Z(c) = \sum_{w^\prime \in V}exp(s_{\theta}(w,c))$ 表示当前单词库中所有单词的概率的累和，通常将这一项叫做“配分函数”或“归一化因子”。一般来说，单词库 $|V|$ 的数量是非常巨大的，因此<strong>计算 $Z(c)$ 是非常昂贵、耗时的一件事，这也就是 NCE 要解决的问题</strong>。<strong>（见附录1）</strong></p>
+
+如果我们不考虑 $s_{\theta}(w,c)$ 的具体形式，那么 $(5)$ 式实际上就可以当作我们在 $(4)$ 式中所构造的函数 $F$ 的表达式， 既然如此，那我们接着用 1.3 中提到的最大似然估计的方式来试着求解 $F$ 的参数 $\theta$。我们将从句子(语料) $s$ 中取样的 $w$ 看成经验分布(数据分布) $\tilde{p}(w|c)$ ，$(3)$ 式中的 $\mathcal{L}_{MLE}$ 可以写成：
+$$
+\begin{aligned}
+\mathcal{L}_{MLE} &= \sum_{w \sim \tilde{p}(w|c)} \log p_{\theta}(w \mid c) \\
+&=\mathbb E_{w \sim \tilde{p}(w|c)} \log{\frac{u_{\theta}(w,c)}{Z(c)}}
+\end{aligned} \tag 6
+$$
+现在要最大化 $\mathcal{L}_{MLE}$，那么将其关于 $\theta$ 求导：
+$$
+\begin{aligned}
+\frac{\partial}{\partial \theta}\mathcal{L}_{\mathrm{MLE}}&=\mathbb E_{w \sim \tilde{p}(w|c)} \frac{\partial}{\partial \theta}\log{\frac{u_{\theta}(w,c)}{Z(c)}} \\
+&=\mathbb E_{w \sim \tilde{p}(w|c)} \left[ \frac{\partial}{\partial \theta}  \log{u_{\theta}(w,c)}- \frac{\partial}{\partial \theta}\log{Z(c)} \right] \\
+&=\mathbb E_{w \sim \tilde{p}(w|c)} \frac{\partial}{\partial \theta}  \log{u_{\theta}(w,c)} -  \frac{\partial}{\partial \theta} \log{Z(c)}
+\end{aligned} \tag 7
+$$
+
 <p>这里解释一下上面到最后一步的转换，因为 $Z(c)=\sum_{w^\prime \in V}exp(s_{\theta}(w,c))$，其中 $w^{\prime}$ 为单词库 $V$ 中所有的单词，而单词库其中每个单词的概率由 $p_{\theta}(w|c)$ 产生，因此 $w^{\prime} \sim p_{\theta}(w|c)$，与经验分布 $w \sim \tilde{p}(w|c)$ 不相关，所以可以把期望 $\mathbb E_{w \sim \tilde{p}(w|c)}$ 去掉。</p>
-<p> $(7)$ 式结果中的 $\frac{\partial}{\partial \theta} \log{Z(c)}$ 计算如下：<br>$$<br>\begin{aligned}<br>\frac{\partial}{\partial \theta}\log{Z(c)}&amp;=\frac{1}{Z(c)} \frac{\partial}{\partial \theta}Z(c) \<br>&amp;=\frac{1}{Z(c)}\frac{\partial}{\partial \theta} \sum_{w^\prime \in V}u_{\theta}(w,c) \<br>&amp;=\frac{1}{Z(c)} \frac{\partial}{\partial \theta} \sum_{w^\prime \in V} {exp(s_{\theta}(w,c))} \<br>&amp;=\sum_{w^\prime \in V} \frac{1}{Z(c)} exp(s_{\theta}(w,c)) \frac{\partial}{\partial \theta} s_{\theta}(w,c) \<br>&amp;=\sum_{w^\prime \in V} p_{\theta}(w|c) \frac{\partial}{\partial \theta} s_{\theta}(w,c) \<br>&amp;=\mathbb{E}<em>{w \sim p</em>{\theta}(w|c)} \frac{\partial}{\partial \theta} s_{\theta}(w,c) \<br>&amp;=\mathbb{E}<em>{w \sim p</em>{\theta}(w|c)} \frac{\partial}{\partial \theta} logu_{\theta}(w,c)<br>\end{aligned} \tag 8<br>$$</p>
-<p>将 $(8)$ 式结果带回 $(7)$ 式中得：<br>$$<br>\begin{aligned}<br>\frac{\partial}{\partial \theta}\mathcal{L}<em>{\mathrm{MLE}}<br>&amp;=\mathbb E</em>{w \sim \tilde{p}(w|c)} \frac{\partial}{\partial \theta}  \log{u_{\theta}(w,c)} -  \frac{\partial}{\partial \theta} \log{Z(c)} \<br>&amp;=\mathbb E_{w \sim \tilde{p}(w|c)} \frac{\partial}{\partial \theta}  \log{u_{\theta}(w,c)} - \mathbb{E}<em>{w \sim p</em>{\theta}(w|c)} \frac{\partial}{\partial \theta} logu_{\theta}(w,c) \<br>&amp;=\sum_w{\tilde{p}(w|c) \frac{\partial}{\partial \theta}  \log{u_{\theta}(w,c)}} - \sum_w {p_{\theta}(w|c) \frac{\partial}{\partial \theta} logu_{\theta}(w,c)} \<br>&amp;=\sum_w{\left[ \tilde{p}(w|c) \frac{\partial}{\partial \theta}  \log{u_{\theta}(w,c)} - p_{\theta}(w|c) \frac{\partial}{\partial \theta} logu_{\theta}(w,c) \right]} \<br>&amp;=\sum_w{\left[\left(\tilde{p}(w|c)- p_{\theta}(w|c)\right)\frac{\partial}{\partial \theta} logu_{\theta}(w,c)\right]}<br>\end{aligned} \tag 9<br>$$<br>看似最大似然很美好，但是实际上还是绕不开对“归一化常数”的计算，所以就需要 NCE 登场了。</p>
+<p> $(7)$ 式结果中的 $\frac{\partial}{\partial \theta} \log{Z(c)}$ 计算如下：</p>
+
+$$
+\begin{aligned}
+\frac{\partial}{\partial \theta}\log{Z(c)}&=\frac{1}{Z(c)} \frac{\partial}{\partial \theta}Z(c) \\
+&=\frac{1}{Z(c)}\frac{\partial}{\partial \theta} \sum_{w^\prime \in V}u_{\theta}(w,c) \\
+&=\frac{1}{Z(c)} \frac{\partial}{\partial \theta} \sum_{w^\prime \in V} {exp(s_{\theta}(w,c))} \\
+&=\sum_{w^\prime \in V} \frac{1}{Z(c)} exp(s_{\theta}(w,c)) \frac{\partial}{\partial \theta} s_{\theta}(w,c) \\
+&=\sum_{w^\prime \in V} p_{\theta}(w|c) \frac{\partial}{\partial \theta} s_{\theta}(w,c) \\
+&=\mathbb{E}_{w \sim p_{\theta}(w|c)} \frac{\partial}{\partial \theta} s_{\theta}(w,c) \\
+&=\mathbb{E}_{w \sim p_{\theta}(w|c)} \frac{\partial}{\partial \theta} logu_{\theta}(w,c)
+\end{aligned} \tag 8
+$$
+
+<p>将 $(8)$ 式结果带回 $(7)$ 式中得：</p>
+
+$$
+\begin{aligned}
+\frac{\partial}{\partial \theta}\mathcal{L}_{\mathrm{MLE}}
+&=\mathbb E_{w \sim \tilde{p}(w|c)} \frac{\partial}{\partial \theta}  \log{u_{\theta}(w,c)} -  \frac{\partial}{\partial \theta} \log{Z(c)} \\
+&=\mathbb E_{w \sim \tilde{p}(w|c)} \frac{\partial}{\partial \theta}  \log{u_{\theta}(w,c)} - \mathbb{E}_{w \sim p_{\theta}(w|c)} \frac{\partial}{\partial \theta} logu_{\theta}(w,c) \\
+&=\sum_w{\tilde{p}(w|c) \frac{\partial}{\partial \theta}  \log{u_{\theta}(w,c)}} - \sum_w {p_{\theta}(w|c) \frac{\partial}{\partial \theta} logu_{\theta}(w,c)} \\
+&=\sum_w{\left[ \tilde{p}(w|c) \frac{\partial}{\partial \theta}  \log{u_{\theta}(w,c)} - p_{\theta}(w|c) \frac{\partial}{\partial \theta} logu_{\theta}(w,c) \right]} \\
+&=\sum_w{\left[\left(\tilde{p}(w|c)- p_{\theta}(w|c)\right)\frac{\partial}{\partial \theta} logu_{\theta}(w,c)\right]}
+\end{aligned} \tag 9
+$$
+
+<p>看似最大似然很美好，但是实际上还是绕不开对“归一化常数”的计算，所以就需要 NCE 登场了。</p>
 <h1 id="2-什么是-NCE"><a href="#2-什么是-NCE" class="headerlink" title="2 什么是 NCE"></a>2 什么是 NCE</h1><p>上一节中说明了计算 $Z(c)$ 非常昂贵这个问题需要解决，一个简单的思路是将 $Z(c)$ 也看出模型的一个参数 $z_c$ 来进行训练，但是这种方法不适合于上面提到的最大似然估计，因为由 $(6)$ 式可以看出来，它会直接将 $Z(c)$ 趋于 $0$ 来获得最大似然。因此，也有人提利用这个思想提出了一些不定义 $Z(c)$ ，直接用 $u_{\theta}(w,c)$ 估计模型的方法，如 <a href="https://www.cs.toronto.edu/~hinton/absps/tr00-004.pdf" target="_blank" rel="noopener">contrastive divergence (Hinton, 2002)</a> 和 <a href="https://jmlr.org/papers/volume6/hyvarinen05a/old.pdf" target="_blank" rel="noopener">score matching (Hyvarinen, 2005)</a>。<strong>（见附录2）</strong></p>
 <p>而 NCE 不同于上面两种方法，它是通过最大化同一个目标函数来估计模型参数 $\theta$ 和归一化常数，NCE 的核心思想就是通过学习数据分布样本和噪声分布样本之间的区别，从而发现数据中的一些特性，因为这个方法需要依靠与噪声数据进行对比，所以称为“噪声对比估计（Noise Contrastive Estimation）”。更具体来说，NCE 将问题转换成了一个二分类问题，分类器能够对数据样本和噪声样本进行二分类。<strong>（见附录3）</strong></p>
 <p>现在假设一个特定上下文 $c$ 的数据分布为  $\tilde{p}(w|c)$ ，我们称从它里面取出的样本为<strong>正样本</strong>，令类别 $D=1$；而另一个与 $c$ 无关的噪声分布为 $q(w)$，我们称从里面取出的样本为负样本，令类别为 $D=0$。遵循<a href="https://www.jmlr.org/papers/volume13/gutmann12a/gutmann12a.pdf" target="_blank" rel="noopener">Gutmann and Hyvrinen (2012)</a> 中的设置，假设现在取出了 $k_d$ 个正样本和 $k_n$ 个负样本，将这些正负样本混合形成一个混合分布 $p_{mixture}(w|c)$。</p>
-<p>我们可以得到先验概率:<br>$$<br>\begin{aligned}<br>p(D=1)=\frac{k_d}{k_d+k_n} \<br>p(D=0)=\frac{k_n}{k_d+k_n} \<br>p(w|D=1,c)= \tilde{p}(w|c) \<br>p(w|D=0,c)=q(w)<br>\end{aligned} \tag {10}<br>$$<br>所以可以计算后验概率:</p>
-<p>$$<br>\begin{aligned}<br>p(D=0|w,c) &amp;=\frac{p(D=0)p(w|D=0,c)}{p(D=0)p(w|D=0,c)+p(D=1)p(w|D=1,c)} \<br>&amp;=\frac{\frac{k_n}{k_d+k_n} \times q(w)}{\frac{k_d}{k_d+k_n} \times \tilde{p}(w \mid c)+\frac{k_n}{k_d+k_n} \times q(w)} \<br>&amp;=\frac{\frac{k_n}{k_d} \times q(w)}{\tilde{p}(w \mid c)+\frac{k_n}{k_d} \times q(w)} \ \<br>p(D=1|w,c)&amp;= \frac{p(D=1)p(w|D=1,c)}{p(D=0)p(w|D=0,c)+p(D=1)p(w|D=1,c)} \<br>&amp;=\frac{\frac{k_d}{k_d+k_n} \times \tilde{p}(w|c)}{\frac{k_d}{k_d+k_n} \times \tilde{p}(w \mid c)+\frac{k_n}{k_d+k_n} \times q(w)} \<br>&amp;=\frac{\tilde{p}(w \mid c)}{\tilde{p}(w \mid c)+\frac{k_n}{k_d} \times q(w)}<br>\end{aligned} \tag {11}<br>$$</p>
-<p>我们令负样本和正样本的比例为： $k=\frac{k_n}{k_d}$，则有：<br>$$<br>\begin{aligned}<br>p(D=0|w,c) &amp;=\frac{k \times q(w)}{\tilde{p}(w \mid c)+k \times q(w)} \ \<br>p(D=1|w,c)<br>&amp;=\frac{\tilde{p}(w \mid c)}{\tilde{p}(w \mid c)+k \times q(w)}<br>\end{aligned} \tag {12}<br>$$<br>现在我们观察 $(12)$ 式，<strong>NCE 所做的事情就是将式中的经验分布 $\tilde{p}(w|c)$ 替换成概率模型 $p_{\theta}(w|c)$</strong>，使后验概率称为参数为 $\theta$ 的函数。但问题是这样现在这样的形式还是需要计算 $Z(c)$，我们只是将原来问题进行了一定的转换从而引入了噪声分布。为了解决这个问题，NCE 做了两个设定：</p>
+<p>我们可以得到先验概率:</p>
+
+$$
+\begin{aligned}
+p(D=1)=\frac{k_d}{k_d+k_n} \\
+p(D=0)=\frac{k_n}{k_d+k_n} \\
+p(w|D=1,c)= \tilde{p}(w|c) \\
+p(w|D=0,c)=q(w)
+\end{aligned} \tag {10}
+$$
+
+<p>所以可以计算后验概率:</p>
+
+$$
+\begin{aligned}
+p(D=0|w,c) &=\frac{p(D=0)p(w|D=0,c)}{p(D=0)p(w|D=0,c)+p(D=1)p(w|D=1,c)} \\
+&=\frac{\frac{k_n}{k_d+k_n} \times q(w)}{\frac{k_d}{k_d+k_n} \times \tilde{p}(w \mid c)+\frac{k_n}{k_d+k_n} \times q(w)} \\
+&=\frac{\frac{k_n}{k_d} \times q(w)}{\tilde{p}(w \mid c)+\frac{k_n}{k_d} \times q(w)} \\ \\
+p(D=1|w,c)&= \frac{p(D=1)p(w|D=1,c)}{p(D=0)p(w|D=0,c)+p(D=1)p(w|D=1,c)} \\
+&=\frac{\frac{k_d}{k_d+k_n} \times \tilde{p}(w|c)}{\frac{k_d}{k_d+k_n} \times \tilde{p}(w \mid c)+\frac{k_n}{k_d+k_n} \times q(w)} \\
+&=\frac{\tilde{p}(w \mid c)}{\tilde{p}(w \mid c)+\frac{k_n}{k_d} \times q(w)}
+\end{aligned} \tag {11}
+$$
+
+<p>我们令负样本和正样本的比例为： $k=\frac{k_n}{k_d}$，则有：</p>
+
+$$
+\begin{aligned}
+p(D=0|w,c) &=\frac{k \times q(w)}{\tilde{p}(w \mid c)+k \times q(w)} \\ \\
+p(D=1|w,c)
+&=\frac{\tilde{p}(w \mid c)}{\tilde{p}(w \mid c)+k \times q(w)}
+\end{aligned} \tag {12}
+$$
+
+<p>现在我们观察 $(12)$ 式，<strong>NCE 所做的事情就是将式中的经验分布 $\tilde{p}(w|c)$ 替换成概率模型 $p_{\theta}(w|c)$</strong>，使后验概率称为参数为 $\theta$ 的函数。但问题是这样现在这样的形式还是需要计算 $Z(c)$，我们只是将原来问题进行了一定的转换从而引入了噪声分布。为了解决这个问题，NCE 做了两个设定：</p>
 <ul>
 <li>一个就是前面提到的，将 $Z(c)$ 作为一个参数 $z_c$ 来进行估计，相当于引进了一个新的参数。</li>
 <li>第二个是：事实证明(<a href="https://www.cs.toronto.edu/~amnih/papers/ncelm.pdf" target="_blank" rel="noopener">Mnih and Teh, 2012</a>)，对于参数很多的神经网络来说，我们将 $z_c$ 固定为 1 对每个 $c$ 仍是有效的。</li>
 </ul>
-<p>第二个设定，即减少了参数的数量，又使模型的输出符合”归一化“的性质（即 $Z(c)≈1$），是很合理的，如果 $Z(c)=1$ ，由 $(5)$ 式可以得到 $p_{\theta}(w|c)=u_{\theta}(w|c)$,  那么 $(12)$ 式可以写成如下形式，即具有参数 $\theta$ 的后验概率：<br>$$<br>\begin{array}{l}<br>p_{\theta}(D=0|w,c)=\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \<br>p_{\theta}(D=1|w,c)=\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)}<br>\end{array} \tag {13}<br>$$<br>现在我们有了参数为 $\theta$ 的二元分类问题，假设标签 $D_t$ 为伯努利分布，那么很容易写出他的条件对数似然 $\mathcal{L}<em>{NCE}^c$ 如下，实际上在它前面加上负号后，$-\mathcal{L}</em>{NCE}^c$ 也就等价于 logistics 分类里的 log loss，或者说交叉熵损失函数：<br>$$<br>\begin{aligned}<br>\mathcal{L}^c_{\mathrm{NCE}}<br>&amp;=\sum_{t=1}^{k_d+k_n} \left[ D_t \log P(D=1|w_t,c) +(1-D_t) \log P(D=0|w_t,c) \right] \<br>&amp;=\sum_{t=1}^{k_d}\log P(D=1|w_t,c) + \sum_{t=1}^{k_n} \log P(D=0|w_t,c) \<br>&amp;=\sum_{t=1}^{k_d}\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)} + \sum_{t=1}^{k_n} \frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \<br>\end{aligned} \tag {14}<br>$$<br>而在 NCE 的目标函数还需要在 $(14)$ 式的基础上除以正样本的数量 $k_d$，即<br>$$<br>\begin{aligned}<br>J^c_{NCE}<br>&amp;=\frac{1}{k_d}\left[\sum_{t=1}^{k_d}\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)} + \sum_{t=1}^{k_n} \frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)}\right] \<br>&amp;=\frac{1}{k_d}\sum_{t=1}^{k_d}\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)} + \frac{1}{k_d} \sum_{t=1}^{k_n} \frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \<br>&amp;=\frac{1}{k_d}\sum_{t=1}^{k_d}\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)} + \frac{k}{k_n} \sum_{t=1}^{k_n} \frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)}<br>\end{aligned} \tag {15}<br>$$<br>当数据数量很大时，根据大数定律，上式也可以写成：<br>$$<br>\begin{aligned}<br>J^c_{NCE}<br>&amp;=\frac{1}{k_d}\sum_{t=1}^{k_d}\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)} + \frac{k}{k_n} \sum_{t=1}^{k_n} \frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \<br>&amp;=\mathbb{E}<em>{w \sim \tilde{p}(w|c)} \frac{u</em>{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)} + k \mathbb{E}<em>{w \sim q(w)} \frac{k \times q(w)}{u</em>{\theta}(w, c)+k \times q(w)}<br>\end{aligned} \tag {16}<br>$$<br>要最大化上述对数似然函数，也就是最大化如下目标函数：<br>$$<br>\begin{aligned}<br>J^c_{NCE}&amp;=  \mathbb{E}<em>{w \sim \tilde{p}(w|c)}{\log{\frac{u</em>{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)}}} + k\mathbb{E}<em>{w \sim q(w)} {\log{\frac{k \times q(w)}{u</em>{\theta}(w, c)+k \times q(w)}}} \<br>\end{aligned} \tag {17}<br>$$<br>NCE 目标函数中的 $k$ 实际上就是在设置“二分类问题”时，选取的负样本与正样本的<strong>比例</strong>，通常的做法会默认正样本数量为 1 ，然后将负样本的数量 $k$ 作为一个手动输入的参数，从而确定这个比例 $k$。在 <a href="https://github.com/tensorflow/tensorflow/blob/v2.3.1/tensorflow/python/ops/nn_impl.py#L1956-L2058" target="_blank" rel="noopener">TensorFlow</a> 中，正样本的数量 num_true 默认值为1，如果设置大于 1，那么会进行一个 $1 / {\text{num_ture}} $ 的归一化。<br><img src="/2020/12/25/NCE-and-InfoNCE/20201208232056110.png" alt="在这里插入图片描述"></p>
+<p>第二个设定，即减少了参数的数量，又使模型的输出符合”归一化“的性质（即 $Z(c)≈1$），是很合理的，如果 $Z(c)=1$ ，由 $(5)$ 式可以得到 $p_{\theta}(w|c)=u_{\theta}(w|c)$,  那么 $(12)$ 式可以写成如下形式，即具有参数 $\theta$ 的后验概率：</p>
+
+$$
+\begin{array}{l}
+p_{\theta}(D=0|w,c)=\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \\
+p_{\theta}(D=1|w,c)=\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)}
+\end{array} \tag {13}
+$$
+
+<p>现在我们有了参数为 $\theta$ 的二元分类问题，假设标签 $D_t$ 为伯努利分布，那么很容易写出他的条件对数似然 $\mathcal{L}<em>{NCE}^c$ 如下，实际上在它前面加上负号后，$-\mathcal{L}</em>{NCE}^c$ 也就等价于 logistics 分类里的 log loss，或者说交叉熵损失函数：</p>
+
+$$
+\begin{aligned}
+\mathcal{L}^c_{\mathrm{NCE}}
+&=\sum_{t=1}^{k_d+k_n} \left[ D_t \log P(D=1|w_t,c) +(1-D_t) \log P(D=0|w_t,c) \right] \\
+&=\sum_{t=1}^{k_d}\log P(D=1|w_t,c) + \sum_{t=1}^{k_n} \log P(D=0|w_t,c) \\
+&=\sum_{t=1}^{k_d}\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)} + \sum_{t=1}^{k_n} \frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \\
+\end{aligned} \tag {14}
+$$
+
+<p>而在 NCE 的目标函数还需要在 $(14)$ 式的基础上除以正样本的数量 $k_d$，即</p>
+
+$$
+\begin{aligned}
+J^c_{NCE}
+&=\frac{1}{k_d}\left[\sum_{t=1}^{k_d}\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)} + \sum_{t=1}^{k_n} \frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)}\right] \\
+&=\frac{1}{k_d}\sum_{t=1}^{k_d}\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)} + \frac{1}{k_d} \sum_{t=1}^{k_n} \frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \\
+&=\frac{1}{k_d}\sum_{t=1}^{k_d}\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)} + \frac{k}{k_n} \sum_{t=1}^{k_n} \frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)}
+\end{aligned} \tag {15}
+$$
+
+<p>当数据数量很大时，根据大数定律，上式也可以写成：</p>
+
+$$
+\begin{aligned}
+J^c_{NCE}
+&=\frac{1}{k_d}\sum_{t=1}^{k_d}\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)} + \frac{k}{k_n} \sum_{t=1}^{k_n} \frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \\
+&=\mathbb{E}_{w \sim \tilde{p}(w|c)} \frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)} + k \mathbb{E}_{w \sim q(w)} \frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)}
+\end{aligned} \tag {16}
+$$
+
+<p>要最大化上述对数似然函数，也就是最大化如下目标函数：</p>
+
+$$
+\begin{aligned}
+J^c_{NCE}&=  \mathbb{E}_{w \sim \tilde{p}(w|c)}{\log{\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)}}} + k\mathbb{E}_{w \sim q(w)} {\log{\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)}}} \\
+\end{aligned} \tag {17}
+$$
+
+<p>NCE 目标函数中的 $k$ 实际上就是在设置“二分类问题”时，选取的负样本与正样本的<strong>比例</strong>，通常的做法会默认正样本数量为 1 ，然后将负样本的数量 $k$ 作为一个手动输入的参数，从而确定这个比例 $k$。在 <a href="https://github.com/tensorflow/tensorflow/blob/v2.3.1/tensorflow/python/ops/nn_impl.py#L1956-L2058" target="_blank" rel="noopener">TensorFlow</a> 中，正样本的数量 num_true 默认值为1，如果设置大于 1，那么会进行一个 $1 / {\text{num_ture}} $ 的归一化。<br><img src="/2020/12/25/NCE-and-InfoNCE/20201208232056110.png" alt="在这里插入图片描述"></p>
 <p>可以看到实际上这个比例 $k$ 对我们的 NCE 优化是有影响的，所以 NCE 的作者也考虑了什么样的比例 $k$ 是最好的，我这里就直接说结论了，有兴趣的可以看详细看下这篇论文 <a href="https://www.jmlr.org/papers/volume13/gutmann12a/gutmann12a.pdf" target="_blank" rel="noopener">Gutmann and Hyvrinen (2012)</a> 。</p>
 <p>结论是：对于设置的噪声分布 $q(w)$，我们实际上是希望它尽量接近数据分布 $\tilde{p}(w|c)$ 的，否则这个二分类任务就过于简单了，也就无法很好的学到数据特性。而作者通过实验和推导证明（我在第三节中也会简单的证明一下），当负样本和正样本数量之比 $k$ 越大，那么我们的 NCE 对于噪声分布好坏的依赖程度也就越小。换句话说，作者建议我们在计算能力运行的条件下，尽可能的增大比值 $k$。也许这也就是大家都默认将正样本数量设置为 $1$ 的原因：正样本至少取要 1 个，所以最大化比值  $k$，也就是尽可能取更多负样本的同时，将正样本数量取最小值 $1$.</p>
-<p>另外，如果我们希望目标函数不是只针对一个特定的上下文 $c$，而是使不同的上下文可以共享参数，也就是设置一批上下文的全局目标函数：<br>$$<br>\begin{aligned}<br>J_{NCE}<br>&amp;=\sum_c P(c) J^c_{NCE} \<br>\end{aligned} \tag {18}<br>$$<br>到这，NCE 的构建就完成了，总结一下就是：从上下文 $c$ 中取出单词作为正样本，从噪声分布中取出单词作为负样本，正负样本数量比为 $1:k$，然后训练一个二分类器，通过一个类似于交叉熵损失函数的目标函数进行训练（如果取正样本数量为1，那么 $(14)$ 式与 $(15)$ 式等价，NCE 目标函数就等价于交叉熵损失函数）。</p>
+<p>另外，如果我们希望目标函数不是只针对一个特定的上下文 $c$，而是使不同的上下文可以共享参数，也就是设置一批上下文的全局目标函数：</p>
+
+$$
+\begin{aligned}
+J_{NCE}
+&=\sum_c P(c) J^c_{NCE} \\
+\end{aligned} \tag {18}
+$$
+
+<p>到这，NCE 的构建就完成了，总结一下就是：从上下文 $c$ 中取出单词作为正样本，从噪声分布中取出单词作为负样本，正负样本数量比为 $1:k$，然后训练一个二分类器，通过一个类似于交叉熵损失函数的目标函数进行训练（如果取正样本数量为1，那么 $(14)$ 式与 $(15)$ 式等价，NCE 目标函数就等价于交叉熵损失函数）。</p>
 <h1 id="3-NCE-的原理"><a href="#3-NCE-的原理" class="headerlink" title="3 NCE 的原理"></a>3 NCE 的原理</h1><p>上面虽然推导了那么多公式，但实际只是按照 NCE 的思想进行问题的转换，那么这样做究竟是否正确呢？根据附录 3 的描述，直觉上看好像是没有问题的。</p>
-<p>我们再看回 $(17)$ 式，我们对它关于 $\theta$ 进行求导:<br>$$<br>\begin{aligned}<br>\frac{\partial}{\partial \theta} J^c_{NCE}(\theta)&amp;=  \frac{\partial}{\partial \theta}  \left[\mathbb{E}<em>{w \sim \tilde{p}(w|c)}{\log{\frac{u</em>{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)}}} + k\mathbb{E}<em>{w \sim q(w)} {\log{\frac{k \times q(w)}{u</em>{\theta}(w, c)+k \times q(w)}}} \right] \<br>&amp;=\frac{\partial}{\partial \theta} \sum_{w} \tilde{p}(w|c) \log{\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)}} + \frac{\partial}{\partial \theta} k\sum_{w}q(w) \log{\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)}} \<br>&amp;=\sum_{w} \tilde{p}(w|c)\frac{\partial}{\partial \theta}  \log{\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)}} + k\sum_{w}q(w) \frac{\partial}{\partial \theta}  \log{\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)}} \<br>\end{aligned} \tag {19}<br>$$<br>分布对上面的两项进行求导：<br>$$<br>\begin{aligned}<br>\frac{\partial}{\partial \theta} log{\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q({w})}}<br>&amp;= -\frac{\partial}{\partial \theta}log{(1+\frac{k \times q(w)}{u_{\theta}(w,c)})} \<br>&amp;=-\frac{1}{1+\frac{k \times q(w)}{u_{\theta}(w,c)}}\frac{\partial}{\partial \theta}\frac{k \times q(w)}{u_{\theta}(w,c)} \<br>&amp;=-\frac{1}{1+\frac{k \times q({w})}{u_{\theta}(w,c)}} (k \times q(w)) \frac{-1} {[u_{\theta}(w,c)]^2} \frac{\partial}{\partial \theta} \frac{1}{u_{\theta}(w, c)} \<br>&amp;=\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \frac{1}{u_{\theta}(w,c)} \frac{\partial}{\partial \theta} \frac{1}{u_{\theta}(w,c)} \<br>&amp;=\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \frac{\partial}{\partial \theta} log{u_{\theta}(w,c)}<br>\end{aligned} \tag {20}<br>$$</p>
-<p>$$<br>\begin{aligned}<br>\frac{\partial}{\partial \theta} log{\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)}}<br>&amp;=-\frac{\partial}{\partial \theta}log{(1+\frac{u_{\theta}(w,c)}{k \times q(w)})} \<br>&amp;=-\frac{1}{1+\frac{u_{\theta}(w,c)}{k \times q(w)}}\frac{\partial}{\partial \theta}\frac{u_{\theta}(w,c)}{k \times q(w)} \<br>&amp;=-\frac{1}{1+\frac{u_{\theta}(w,c)}{k \times q(w)}} \frac{1}{k \times q(w)} \frac{\partial}{\partial \theta}u_{\theta}(w,c) \<br>&amp;=-\frac{1}{u_{\theta}(w,c) + k \times q(w)} \frac{\partial}{\partial \theta}u_{\theta}(w,c) \<br>&amp;=-\frac{u_{\theta}(w,c)}{u_{\theta}(w,c) + k \times q(w)} \frac{1}{u_{\theta}(w,c)} \frac{\partial}{\partial \theta}u_{\theta}(w,c) \<br>&amp;=-\frac{u_{\theta}(w,c)}{u_{\theta}(w,c) + k \times q(w)} \frac{\partial}{\partial \theta}log{u_{\theta}(w,c)} \<br>\end{aligned} \tag {21}<br>$$<br>将结果再带回 $(19)$ 式中，并根据前面 $Z(c)=1$ 的设定，也就是 $p_{\theta}(w,c)=u_{\theta}(w,c)$：<br>$$<br>\begin{aligned}<br>\frac{\partial}{\partial \theta} J^c_{NCE}(\theta)<br>&amp;=\sum_{w} \tilde{p}(w|c)\frac{\partial}{\partial \theta}  \log{\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)}} + k\sum_{w}q(w) \frac{\partial}{\partial \theta}  \log{\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)}} \<br>&amp;=\sum_{w} \tilde{p}(w|c) \frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \frac{\partial}{\partial \theta} \log{u_{\theta}(w,c)} - k\sum_{w}q(w) \frac{u_{\theta}(w,c)}{u_{\theta}(w,c) + k \times q(w)} \frac{\partial}{\partial \theta}\log{u_{\theta}(w,c)} \<br>&amp;=\sum_{w} \tilde{p}(w|c) \frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \frac{\partial}{\partial \theta} \log{u_{\theta}(w,c)} - \sum_{w} u_{\theta}(w,c)  \frac{k \times q(w)}{u_{\theta}(w,c) + k \times q(w)} \frac{\partial}{\partial \theta}\log{u_{\theta}(w,c)} \<br>&amp;=\sum_w{\left[\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \left(\tilde{p}(w|c)- u_{\theta}(w,c)\right)\frac{\partial}{\partial \theta}log u_{\theta}(w,c)\right]}<br>\end{aligned} \tag {22}<br>$$<br>上一节中我们设定了 $Z(c)=1$，也就是 $p_{\theta}(w|c)=u_{\theta}(w,c)$，因此：<br>$$<br>\begin{aligned}<br>\frac{\partial}{\partial \theta} J^c_{NCE}(\theta)<br>&amp;=\sum_w{\left[\frac{k \times q(w)}{p_{\theta}(w|c)+k \times q(w)} \left(\tilde{p}(w|c)- p_{\theta}(w|c)\right)\frac{\partial}{\partial \theta}log u_{\theta}(w,c)\right]}<br>\end{aligned} \tag {23}<br>$$<br>这里的参数 $k$ 依然指的是负样本与正样本数量的比例，如果我们令 $k\to\infty$ 的话，那么：<br>$$<br>\begin{aligned}<br>\lim_{k \to \infty} \frac{\partial}{\partial \theta} J^c_{NCE}(\theta)<br>&amp;=\lim_{k \to \infty} \sum_w{\left[\frac{q(w)}{ \frac{p_{\theta}(w|c)}{k}+q(w)} \left(\tilde{p}(w|c)- p_{\theta}(w|c)\right)\frac{\partial}{\partial \theta}log u_{\theta}(w,c)\right]} \<br>&amp;= \sum_w{\left[\left(\tilde{p}(w|c)- p_{\theta}(w|c)\right)\frac{\partial}{\partial \theta}log u_{\theta}(w,c)\right]}<br>\end{aligned} \tag {24}<br>$$<br>可以看到，当 $k$ 趋于无穷时，$(24)$ 式中 NCE 目标函数的梯度和 $(9)$ 式中 MLE 对数似然函数梯度是等价的，也就是说我们通过 NCE 转换后的优化目标，本质上就是对极大似然估计方法的一种近似，并且随着负样本和正样本数量比 $k$ 的增大，这种近似越精确，这也解释了为什么作者建议我们将 $k$ 设置的越大越好。</p>
+<p>我们再看回 $(17)$ 式，我们对它关于 $\theta$ 进行求导:</p>
+
+$$
+\begin{aligned}
+\frac{\partial}{\partial \theta} J^c_{NCE}(\theta)&=  \frac{\partial}{\partial \theta}  \left[\mathbb{E}_{w \sim \tilde{p}(w|c)}{\log{\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)}}} + k\mathbb{E}_{w \sim q(w)} {\log{\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)}}} \right] \\
+&=\frac{\partial}{\partial \theta} \sum_{w} \tilde{p}(w|c) \log{\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)}} + \frac{\partial}{\partial \theta} k\sum_{w}q(w) \log{\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)}} \\
+&=\sum_{w} \tilde{p}(w|c)\frac{\partial}{\partial \theta}  \log{\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)}} + k\sum_{w}q(w) \frac{\partial}{\partial \theta}  \log{\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)}} \\
+\end{aligned} \tag {19}
+$$
+
+<p>分布对上面的两项进行求导：</p>
+
+$$
+\begin{aligned}
+\frac{\partial}{\partial \theta} log{\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q({w})}} 
+&= -\frac{\partial}{\partial \theta}log{(1+\frac{k \times q(w)}{u_{\theta}(w,c)})} \\
+&=-\frac{1}{1+\frac{k \times q(w)}{u_{\theta}(w,c)}}\frac{\partial}{\partial \theta}\frac{k \times q(w)}{u_{\theta}(w,c)} \\
+&=-\frac{1}{1+\frac{k \times q({w})}{u_{\theta}(w,c)}} (k \times q(w)) \frac{-1} {[u_{\theta}(w,c)]^2} \frac{\partial}{\partial \theta} \frac{1}{u_{\theta}(w, c)} \\
+&=\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \frac{1}{u_{\theta}(w,c)} \frac{\partial}{\partial \theta} \frac{1}{u_{\theta}(w,c)} \\
+&=\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \frac{\partial}{\partial \theta} log{u_{\theta}(w,c)}
+\end{aligned} \tag {20}
+$$
+
+
+$$
+\begin{aligned}
+\frac{\partial}{\partial \theta} log{\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)}} 
+&=-\frac{\partial}{\partial \theta}log{(1+\frac{u_{\theta}(w,c)}{k \times q(w)})} \\
+&=-\frac{1}{1+\frac{u_{\theta}(w,c)}{k \times q(w)}}\frac{\partial}{\partial \theta}\frac{u_{\theta}(w,c)}{k \times q(w)} \\
+&=-\frac{1}{1+\frac{u_{\theta}(w,c)}{k \times q(w)}} \frac{1}{k \times q(w)} \frac{\partial}{\partial \theta}u_{\theta}(w,c) \\
+&=-\frac{1}{u_{\theta}(w,c) + k \times q(w)} \frac{\partial}{\partial \theta}u_{\theta}(w,c) \\
+&=-\frac{u_{\theta}(w,c)}{u_{\theta}(w,c) + k \times q(w)} \frac{1}{u_{\theta}(w,c)} \frac{\partial}{\partial \theta}u_{\theta}(w,c) \\
+&=-\frac{u_{\theta}(w,c)}{u_{\theta}(w,c) + k \times q(w)} \frac{\partial}{\partial \theta}log{u_{\theta}(w,c)} \\
+\end{aligned} \tag {21}
+$$
+
+<p>将结果再带回 $(19)$ 式中，并根据前面 $Z(c)=1$ 的设定，也就是 $p_{\theta}(w,c)=u_{\theta}(w,c)$：</p>
+
+$$
+\begin{aligned}
+\frac{\partial}{\partial \theta} J^c_{NCE}(\theta)
+&=\sum_{w} \tilde{p}(w|c)\frac{\partial}{\partial \theta}  \log{\frac{u_{\theta}(w, c)}{u_{\theta}(w, c)+k \times q(w)}} + k\sum_{w}q(w) \frac{\partial}{\partial \theta}  \log{\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)}} \\
+&=\sum_{w} \tilde{p}(w|c) \frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \frac{\partial}{\partial \theta} \log{u_{\theta}(w,c)} - k\sum_{w}q(w) \frac{u_{\theta}(w,c)}{u_{\theta}(w,c) + k \times q(w)} \frac{\partial}{\partial \theta}\log{u_{\theta}(w,c)} \\
+&=\sum_{w} \tilde{p}(w|c) \frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \frac{\partial}{\partial \theta} \log{u_{\theta}(w,c)} - \sum_{w} u_{\theta}(w,c)  \frac{k \times q(w)}{u_{\theta}(w,c) + k \times q(w)} \frac{\partial}{\partial \theta}\log{u_{\theta}(w,c)} \\
+&=\sum_w{\left[\frac{k \times q(w)}{u_{\theta}(w, c)+k \times q(w)} \left(\tilde{p}(w|c)- u_{\theta}(w,c)\right)\frac{\partial}{\partial \theta}log u_{\theta}(w,c)\right]}
+\end{aligned} \tag {22}
+$$
+
+<p>上一节中我们设定了 $Z(c)=1$，也就是 $p_{\theta}(w|c)=u_{\theta}(w,c)$，因此：</p>
+
+$$
+\begin{aligned}
+\frac{\partial}{\partial \theta} J^c_{NCE}(\theta)
+&=\sum_w{\left[\frac{k \times q(w)}{p_{\theta}(w|c)+k \times q(w)} \left(\tilde{p}(w|c)- p_{\theta}(w|c)\right)\frac{\partial}{\partial \theta}log u_{\theta}(w,c)\right]}
+\end{aligned} \tag {23}
+$$
+这里的参数 $k$ 依然指的是负样本与正样本数量的比例，如果我们令 $k\to\infty$ 的话，那么：
+$$
+\begin{aligned}
+\lim_{k \to \infty} \frac{\partial}{\partial \theta} J^c_{NCE}(\theta)
+&=\lim_{k \to \infty} \sum_w{\left[\frac{q(w)}{ \frac{p_{\theta}(w|c)}{k}+q(w)} \left(\tilde{p}(w|c)- p_{\theta}(w|c)\right)\frac{\partial}{\partial \theta}log u_{\theta}(w,c)\right]} \\
+&= \sum_w{\left[\left(\tilde{p}(w|c)- p_{\theta}(w|c)\right)\frac{\partial}{\partial \theta}log u_{\theta}(w,c)\right]}
+\end{aligned} \tag {24}
+$$
+
+<p>可以看到，当 $k$ 趋于无穷时，$(24)$ 式中 NCE 目标函数的梯度和 $(9)$ 式中 MLE 对数似然函数梯度是等价的，也就是说我们通过 NCE 转换后的优化目标，本质上就是对极大似然估计方法的一种近似，并且随着负样本和正样本数量比 $k$ 的增大，这种近似越精确，这也解释了为什么作者建议我们将 $k$ 设置的越大越好。</p>
 <h1 id="4-从-NCE-到-InfoNCE"><a href="#4-从-NCE-到-InfoNCE" class="headerlink" title="4 从 NCE 到 InfoNCE"></a>4 从 NCE 到 InfoNCE</h1><p>到目前为止，应该对 NCE 的来龙去脉比较清楚了（至少我比较清楚了，公式太多不知道多少人有耐心看到这里了…）。</p>
 <p>InfoNCE 是在 <a href="https://arxiv.org/abs/1807.03748" target="_blank" rel="noopener">Representation Learning with Contrastive Predictive Coding</a> 这篇论文中提出的，这里不会具体介绍 CPC ，而是着重说明如何借鉴 NCE 的思想提出 InfoNCE 并用于 CPC 中的，如果还不太了解的可以看我的这篇文章 <a href="https://zhuanlan.zhihu.com/p/317711322" target="_blank" rel="noopener">对 CPC (对比预测编码) 的理解</a>。</p>
-<p>简单来说，CPC(对比预测编码) 就是一种通过无监督任务来学习(编码)高维数据在的特征表示(representation)，而通常采取的无监督策略就是根据上下文预测未来或者缺失的信息，NLP 中已经利用这种思想来学习 word 的 representation$^{[1]}$。而作者认为，要构建这样的预测任务，一个方法是直接建模条件生成模型 $p(x_{t+k}|c_t)$ 根据当前上下文 $c_t$预测 $k$ 个时刻后的数据 $x_{t+k}$（假设是像文本/语音中那样的序列数据）；但作者觉得这样的方法过于针对细节进行重建，并不是很好，于是引入了互信息的思想，认为我们可以通过<strong>最大化</strong>当前上下文 $c_t$ 和要未来的数据 $x_{t+k}$ 之间的<strong>互信息</strong>来构建预测任务，互信息的表示如下：<br>$$<br>\begin{aligned}<br>I(x_{t+k} ; c_t)=\sum_{x, c} p(x_{t+k}, c_t) \log \frac{p(x_{t+k} \mid c_t)}{p(x_{t+k})}<br>\end{aligned} \tag {25}<br>$$<br>我们没办法知道 $x_{t+k}$ 和 $c_t$ 之间的联合分布 $p(x_{t+k},c_t)$ ，因此要最大化 $I(x_{t+k} ; c_t)$，就需要从 $\frac{p(x_{t+k} \mid c_t)}{p(x_{t+k})}$ 入手，即最大化 $\frac{p(x_{t+k} \mid c_t)}{p(x_{t+k})}$ 。</p>
+<p>简单来说，CPC(对比预测编码) 就是一种通过无监督任务来学习(编码)高维数据在的特征表示(representation)，而通常采取的无监督策略就是根据上下文预测未来或者缺失的信息，NLP 中已经利用这种思想来学习 word 的 representation$^{[1]}$。而作者认为，要构建这样的预测任务，一个方法是直接建模条件生成模型 $p(x_{t+k}|c_t)$ 根据当前上下文 $c_t$预测 $k$ 个时刻后的数据 $x_{t+k}$（假设是像文本/语音中那样的序列数据）；但作者觉得这样的方法过于针对细节进行重建，并不是很好，于是引入了互信息的思想，认为我们可以通过<strong>最大化</strong>当前上下文 $c_t$ 和要未来的数据 $x_{t+k}$ 之间的<strong>互信息</strong>来构建预测任务，互信息的表示如下：</p>
+
+$$
+\begin{aligned}
+I(x_{t+k} ; c_t)=\sum_{x, c} p(x_{t+k}, c_t) \log \frac{p(x_{t+k} \mid c_t)}{p(x_{t+k})}
+\end{aligned} \tag {25}
+$$
+我们没办法知道 $x_{t+k}$ 和 $c_t$ 之间的联合分布 $p(x_{t+k},c_t)$ ，因此要最大化 $I(x_{t+k} ; c_t)$，就需要从 $\frac{p(x_{t+k} \mid c_t)}{p(x_{t+k})}$ 入手，即最大化 $\frac{p(x_{t+k} \mid c_t)}{p(x_{t+k})}$ 。
+
 <p>那么如何训练 $\frac{p(x_{t+k} \mid c_t)}{p(x_{t+k})}$ 呢？我们可以把这个比例定义为<strong>密度比</strong>，那么根据<strong>附录 3</strong> 中的思想，分子 $p(x_{t+k}|c_t)$ 就相当于 $p_d$，是我们想得到的目标函数；分母 $p(x_{t+k})$ 就相当于 $p_n$ ，是用来进行对比的参考分布(噪声)。</p>
 <p>因此，我们就可以根据 NCE 中提供的思路，将问题转换为一个<strong>二分类</strong>的问题，更具体来解释：</p>
 <ul>
