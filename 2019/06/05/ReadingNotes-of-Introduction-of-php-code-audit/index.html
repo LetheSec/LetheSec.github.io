@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Lethe">
+
+
+    <meta name="subtitle" content="Life is a struggle">
+
+
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>php代码审计入门读书小结 | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">php代码审计入门读书小结</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 5, 2019&nbsp;&nbsp;14:01:57</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Reading-Notes/">Reading Notes</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>由于看到不少讲web安全的地方都会推荐一本书叫 <strong>《代码审计：企业级web代码安全架构》</strong>，于是从图书馆找来这本书读了一下，虽然有些内容可能有点老了，但整体上还是挺不错的，下面做一点总结。</p>
+<h4 id="一、通用代码审计思路"><a href="#一、通用代码审计思路" class="headerlink" title="一、通用代码审计思路"></a>一、通用代码审计思路</h4><p>常见的代码审计思路有以下四种：</p>
+<p><strong>1、根据敏感关键词（敏感函数）回溯参数传递过程。</strong></p>
+<p><strong>2、查找可控变量，正向追踪变量传递过程。</strong></p>
+<p><strong>3、寻找敏感功能点，通读功能点代码。</strong><br>（1）文件上传功能：文件上传漏洞、文件名SQL注入漏洞<br>（2）文件管理功能：任意文件操作漏洞、XSS漏洞<br>（3）登陆认证功能：任意用户登陆漏洞、越权漏洞<br>（4）找回密码功能</p>
+<p><strong>4、直接通读全文代码</strong></p>
+<p>  通读全文代码时，首先应看程序的代码结构，如主目录有哪些文件，模块目录有哪些文件，插件目录有哪些文件，除了关注有哪些文件，还要注意文件的大小、创建时间。在看程序目录结构时候，注意以下几个文件：<br>  （1）<strong>函数集文件</strong>：通常命名中包含<code>functions</code>或者<code>common</code>等关键字，一般可以在index.php或者一些功能性文件的头部可以找到。<br>  （2）<strong>配置文件</strong>：通常命名中包含<code>config</code>关键字，配置文件包括web程序运行必须的功能性配置选项以及数据库等配置信息。<br>  （3）<strong>安全过滤文件</strong>：通常文件名中包含<code>filter</code>、<code>safe</code>、<code>check</code>等关键字，这类文件主要是对参数进行过滤，关系到我们找到的可疑点能否利用。<br>  （4）<strong>index文件</strong>：index是一个程序的入口文件，通常读一遍index文件就可以大致了解整个程序的架构、运行的流程、包含到的文件，其中核心文件有哪些。</p>
+<br>
+
+<h4 id="二、SQL注入漏洞"><a href="#二、SQL注入漏洞" class="headerlink" title="二、SQL注入漏洞"></a>二、SQL注入漏洞</h4><p>1.<strong>普通注入</strong>：int型和string型</p>
+<p>2.<strong>编码注入</strong>：宽字节注入和二次urldecode注入</p>
+<p>（1）宽字节注入：<br>当php连接mysql时如果 <code>set character_set_client =gbk</code>时会导致该注入的发生。提交</p>
+<pre><code>`/1.php?id= -1&#39; and 1=1%23`
+</code></pre>
+<p>时，单引号会被<code>\</code>转义.<br>这时如果提交<code>?id=-1%df&#39; and 1=1#</code>的话，过滤用的<code>\ (%5c)</code>会与<code>%df%5c</code>组合，mysql语句就成了</p>
+<pre><code>select * from user where id=&#39;-1運&#39; and 1=1#`
+</code></pre>
+<p>（2）urldecode二次解码<br>在web中通常使用<code>addslashes()</code>、<code>mysql_real_escape_string()</code>、<code>mysql_escape_string</code>函数或者开启GPC的方式来防止注入，原理就是给预定义字符也就是单引号、双引号、反斜杠和NULL进行转义，但是如果某处使用了<code>urldecode</code>或者<code>rawurldecode</code>函数，如果开启了GPC来过滤，那么提交<code>?id=1%25%27</code>,<code>%25</code>经过url解码为<code>%</code>，<code>%27</code>解码为<code>单引号</code>，那么成功引发注入，在代码审计的过程中要注意这两个函数。</p>
+<p>3.<strong>防护</strong></p>
+<p>（1）魔术引号 gpc&#x2F;rutime<br>在数据处理中主要有两条路线，一种是用户主动提交的，另外一种是用户被动接受的，<br>GPC主要对用户的POST、GET、cookie的值进行过滤，runtimer对从数据库或者文件中获取的数据进行过滤，但是对Int类型注入作用不大。</p>
+<p>（2）过滤函数<br>addslashes与GPC的作用差不多。</p>
+<p>mysql_real_esca## 二、SQL注入漏洞pe_string()、mysql_escape_string()：主要对字符串进行过滤。</p>
+<p>intval()、floatval()等：这类是将string类型转化为int类型的函数，将 <code>1&#39; union select</code>强制转化为1,</p>
+<br>
+
+<h4 id="三、XSS漏洞"><a href="#三、XSS漏洞" class="headerlink" title="三、XSS漏洞"></a>三、XSS漏洞</h4><p>推荐书籍：《XSS跨站脚本攻击剖析与防御》、《Web前端黑客技术揭秘》</p>
+<p>1.<strong>分类</strong></p>
+<p>（1）反射型XSS<br>（2）存储型XSS</p>
+<p>2.<strong>防御</strong></p>
+<p>过滤掉特殊字符即可：</p>
+<ul>
+<li>单引号（’）</li>
+<li>双引号（”）</li>
+<li>尖括号（&lt;&gt;）</li>
+<li>反斜杠（\）</li>
+<li>冒号（:）</li>
+<li>and符（&amp;）</li>
+<li>#号（#）</li>
+</ul>
+<br>
+
+<h4 id="四、CSRF漏洞"><a href="#四、CSRF漏洞" class="headerlink" title="四、CSRF漏洞"></a>四、CSRF漏洞</h4><p>1.<strong>判断方法</strong></p>
+<p>（1）黑盒<br>在挖掘CSRF的时候可以先搭建好环境，打开几个有非静态操作的页面，抓包看看有没有token，如果没有token的话，在直接请求这个页面，不带referer。如果返回的数据还是一样的，那说明有可能有CSRF漏洞。<br>  （2）白盒<br>看看几个核心文件里面有没有验证token和referer相关的代码。  </p>
+<p>2.<strong>防御</strong></p>
+<p>（1）Token验证<br>（2）验证码验证</p>
+<br>
+
+<h4 id="五、文件操作漏洞"><a href="#五、文件操作漏洞" class="headerlink" title="五、文件操作漏洞"></a>五、文件操作漏洞</h4><p>1.<strong>文件包含漏洞</strong></p>
+<p>文件包含函数: </p>
+<ul>
+<li>include()</li>
+<li>include_once()</li>
+<li>require()</li>
+<li>require_once()</li>
+</ul>
+<p>2.<strong>文件读取(下载漏洞)</strong></p>
+<p>文件读取函数：</p>
+<ul>
+<li>file_get_contents()</li>
+<li>highlight_file()</li>
+<li>fopen()</li>
+<li>readfile()</li>
+<li>fread()</li>
+<li>fgetss()</li>
+<li>fgets()</li>
+<li>parse_ini_file()</li>
+<li>show_source()</li>
+<li>file()</li>
+<li>文件包含函数include以及php输入输出流php:&#x2F;&#x2F;filter</li>
+</ul>
+<p>3.<strong>文件上传漏洞</strong></p>
+<ul>
+<li>对文件名或扩展名未过滤或过滤不全</li>
+<li>黑名单存在绕过</li>
+<li>文件头、content-type验证绕过</li>
+<li>解析漏洞</li>
+</ul>
+<p>4.<strong>文件删除漏洞</strong></p>
+<p>文件删除函数：</p>
+<ul>
+<li>unlink()</li>
+<li>老版本下session_destroy()</li>
+</ul>
+<p>5.<strong>防御</strong></p>
+<p>（1）对文件操作的权限管理要合理<br>（2）有些文件不需要直接传入文件名<br>（3）过滤掉文件跳转的一些符号<br>（4）文件上传尽量使用白名单过滤扩展名，保存上传的文件时利用时间戳+随机数MD5重命名</p>
+<br>
+
+<h4 id="六、代码执行漏洞"><a href="#六、代码执行漏洞" class="headerlink" title="六、代码执行漏洞"></a>六、代码执行漏洞</h4><p>1.<strong>常见函数</strong></p>
+<ul>
+<li>eval()</li>
+<li>assert()</li>
+<li>preg_replace()</li>
+<li>call_user_func()</li>
+<li>call_user_func_array()</li>
+<li>array_map()</li>
+</ul>
+<p>（1）eval 和 assert 函数</p>
+<p>动态执行代码，参数直接就是php代码。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$a</span>=<span class="string">&#x27;aaa&#x27;</span>;</span><br><span class="line"><span class="variable">$b</span>=<span class="string">&#x27;bbb&#x27;</span>;</span><br><span class="line"><span class="keyword">eval</span>(<span class="string">&#x27;$a=$b;&#x27;</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$a</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">结果输出: bbb</span><br></pre></td></tr></table></figure>
+
+<p>（2）preg_replace函数<br>该函数作用是对字符串进行正则处理，它的参数和返回如下：<br><code>mixed preg_replace ( mixed $pattern , mixed $replacement , mixed $subject [, int $limit=-1 [, int &amp;$count ] ] )</code><br>这段代码的含义是搜索<code>$subject</code>中匹配<code>$pattern</code>的部分，以<code>$replacement</code>进行代替，而当<code>$pattern</code>处即第一个参数存在e修饰符时，<code>$replacement</code>的值会被当作PHP代码来执行。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">preg_replace</span>(<span class="string">&quot;/\[(.*)\]/e&quot;</span>, <span class="string">&#x27;\\1&#x27;</span>, <span class="variable">$_GET</span>[<span class="string">&#x27;str&#x27;</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">当传入?str=[<span class="title function_ invoke__">phpinfo</span>()]</span><br><span class="line">代码执行成功，回显phpinfo页面</span><br></pre></td></tr></table></figure>
+
+<p>（3）调用函数过滤不严<br>call_user_fun()和araay_map()等函数有调用其他函数的功能，其中一个参数作为要调用的函数名，如果这个传入的函数名可控， 就可以调用意外的函数来执行代码。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$b</span>=<span class="string">&#x27;phpinfo()&#x27;</span>;</span><br><span class="line"><span class="title function_ invoke__">call_user_func</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;a&#x27;</span>], <span class="variable">$b</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">当请求?a=assert时候，调用了assert函数，并将<span class="title function_ invoke__">phpinfo</span>()作为参数传入，执行了该代码。</span><br></pre></td></tr></table></figure>
+
+<p>（4）动态函数执行<br>php动态函数的写法为“变量(参数)”，如下例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$_GET</span>[<span class="string">&#x27;a&#x27;</span>](<span class="variable">$GET_</span>[<span class="string">&#x27;b&#x27;</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">上述代码意思时a的参数作为函数，b的参数作为函数的参数</span><br><span class="line">即当传入?a=assert&amp;b=<span class="title function_ invoke__">phpinfo</span>()时，相当于执行<span class="title function_ invoke__">assert</span>(<span class="string">&#x27;phpinfo()&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>2.<strong>防御</strong></p>
+<p>采用白名单过滤，或者结合正则表达式来进行白名单限制。</p>
+<br>
+
+<h4 id="七、命令执行漏洞"><a href="#七、命令执行漏洞" class="headerlink" title="七、命令执行漏洞"></a>七、命令执行漏洞</h4><p>1.<strong>命令执行函数：</strong></p>
+<ul>
+<li>system()</li>
+<li>exec()</li>
+<li>shell_exec()</li>
+<li>passthru()</li>
+<li>pcntl_exec()</li>
+<li>popen()</li>
+<li>proc_open()</li>
+<li>反引号（&#96;），相当于调用shell_exec()</li>
+</ul>
+<p>（1）system()、exec()、shell_exec()、passthru()以及反引号(&#96;)可以直接传入命令并且函数会返回执行结果，其中system()函数会直接回显打印输出，不需要ehco也可以。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">system</span>(<span class="string">&#x27;whoami&#x27;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">结果输出当前的WebServer用户</span><br></pre></td></tr></table></figure>
+<p>（2）popen()、proc_open()不会直接返回执行结果，而是返回一个文件指针，但是命令已经执行了。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">popen</span>(<span class="string">&#x27;whoami &gt;&gt;D://2.txt&#x27;</span>, <span class="string">&#x27;r&#x27;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">执行完可以在D盘根目录看到<span class="number">2</span>.txt这个文件，内容为WebServer用户名</span><br></pre></td></tr></table></figure>
+
+<p>2.<strong>防御</strong></p>
+<p>（1）命令防注入函数</p>
+<ul>
+<li>escapeshellcmd() 过滤整体命令，参数是一整条命令</li>
+<li>escapeshellarg() 过滤参数，将参数限制在一对双引号里，确保参数为一个字符串，因此它会把双引号替换为空格</li>
+</ul>
+<br>
+
+<h4 id="八、变量覆盖漏洞"><a href="#八、变量覆盖漏洞" class="headerlink" title="八、变量覆盖漏洞"></a>八、变量覆盖漏洞</h4><p>1.<strong>引发函数：</strong></p>
+<ul>
+<li>extract()</li>
+<li>parse_str()</li>
+<li>import_request_variables()</li>
+</ul>
+<p>（1）extract 函数<br>简单来说就是将数组中的键值对注册成变量。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$b</span>=<span class="number">3</span>;</span><br><span class="line"><span class="variable">$a</span>=<span class="keyword">array</span>(<span class="string">&#x27;b&#x27;</span>=&gt;<span class="string">&#x27;1&#x27;</span>);</span><br><span class="line"><span class="title function_ invoke__">extract</span>(<span class="variable">$a</span>);</span><br><span class="line"><span class="title function_ invoke__">print_r</span>(<span class="variable">$b</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">结果输出：<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>原本变量<code>$b</code>的值为3，经过extract()函数对变量<code>$a</code>处理后，变量<code>$b</code>的值被覆盖为1。</p>
+<p>（2）parse_str 函数<br>parse_str()函数作用是解析字符串并注册成变量，它在注册变量之前不会验证当前变量是否已经存在，所以会覆盖掉已有变量。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$b</span>=<span class="number">1</span>;</span><br><span class="line"><span class="title function_ invoke__">parse_str</span>(<span class="string">&#x27;b=2&#x27;</span>);</span><br><span class="line"><span class="title function_ invoke__">print_r</span>(<span class="variable">$b</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">结果输出：<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>（3）import_request_variables 函数<br>import_request_variables()函数是把GET、POST、COOKIE的参数注册成变量，用在register_globals被禁止的时候，需要PHP4.1至5.4之间的版本。</p>
+<p>（4）$$ 变量覆盖</p>
+<p>2.<strong>防御</strong><br>（1）使用原始变量<br>（2）验证变量存在</p>
+<br>
+
+<h4 id="九、逻辑处理漏洞"><a href="#九、逻辑处理漏洞" class="headerlink" title="九、逻辑处理漏洞"></a>九、逻辑处理漏洞</h4><p>1.<strong>等于与存在判断绕过</strong><br>（1）in_array()函数<br>（2）is_numeric函数<br>（3）双等于（&#x3D;&#x3D;）和三等于（ &#x3D;&#x3D;&#x3D;）</p>
+<p>2.<strong>账户体系中的越权漏洞</strong></p>
+<p>3.<strong>未 exit 或 return 引发的安全问题</strong></p>
+<p>4.<strong>常见支付漏洞</strong></p>
+<p>5.<strong>防御</strong><br>（1）深入熟悉业务逻辑<br>（2）熟悉函数的功能和差异</p>
+<br>
+
+<h4 id="十、会话认证漏洞"><a href="#十、会话认证漏洞" class="headerlink" title="十、会话认证漏洞"></a>十、会话认证漏洞</h4><p>1.<strong>cookie认证安全</strong><br>（1）cookie的SQL注入<br>（2）伪造cookie</p>
+<p>2.<strong>防御</strong><br>（1）严格限制输入的异常字符已经避免用客户端提交的内容直接操作<br>（2）将cookie与session结合起来使用，并保证客户端不能操作敏感session参数<br>（3）敏感数据不要放在cookie中</p>
+<br>
+
+<h4 id="十一、二次漏洞"><a href="#十一、二次漏洞" class="headerlink" title="十一、二次漏洞"></a>十一、二次漏洞</h4><p>1.<strong>什么是二次漏洞</strong><br>需要先构造好利用代码写入网站保存，在第二次或多次请求后调用攻击代码触发或者修改配置触发的漏洞叫做而此漏洞。</p>
+<p>（此漏洞较复杂，需之后进一步学习研究）</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://lethe.site/2019/06/05/ReadingNotes-of-Introduction-of-php-code-audit/">https://lethe.site/2019/06/05/ReadingNotes-of-Introduction-of-php-code-audit/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Code-Audit/"># Code Audit</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/07/14/Git-Learning-Summary/">Git学习小结</a>
+            
+            
+            <a class="next" rel="next" href="/2019/05/27/SSH-for-Kali/">对Kali Linux进行SSH远程控制</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Lethe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

