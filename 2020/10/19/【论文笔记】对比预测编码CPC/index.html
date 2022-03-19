@@ -294,7 +294,7 @@ $$
 
 <p>最终的结果是 $H(x)-H(x|c)$，其中$H(x)$为$x$的熵，用来衡量$x$的不确定度，定义如下：<br>$$<br>H(x)&#x3D;-\sum_x p(x)logp(x)<br>$$<br>而$I(x,c)&#x3D;H(x)-H(x|c)$也就说明了$x$与$c$的互信息<strong>即表示由于 $c$ 的引入而使 $x$ 熵减小的量，也就是 $x$ 不确定度减小的量</strong>。</p>
 <p>因此，放在论文中的含义来看，最大化$I(x;c)$也就是通过充分学习现在的上下文 $c$ 最大程度的减小了未来 $x$ 的不确定度，从而起到了预测的效果，所以所以CPC希望网络可以最大化 $x$ 和 $c$ 之间的互信息。</p>
-<h2 id="3-Method"><a href="#3-Method" class="headerlink" title="3 Method"></a>3 Method</h2><h3 id="3-1-Contrastive-Predicting-Coding"><a href="#3-1-Contrastive-Predicting-Coding" class="headerlink" title="3.1 Contrastive Predicting Coding"></a>3.1 Contrastive Predicting Coding</h3><p><img src="/http://localhost:4000//%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E3%80%91%E5%AF%B9%E6%AF%94%E9%A2%84%E6%B5%8B%E7%BC%96%E7%A0%81CPC%5Cimage-20201015213150794.png" alt="image-20201015213150794"></p>
+<h2 id="3-Method"><a href="#3-Method" class="headerlink" title="3 Method"></a>3 Method</h2><h3 id="3-1-Contrastive-Predicting-Coding"><a href="#3-1-Contrastive-Predicting-Coding" class="headerlink" title="3.1 Contrastive Predicting Coding"></a>3.1 Contrastive Predicting Coding</h3><p><img src="/.site//%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E3%80%91%E5%AF%B9%E6%AF%94%E9%A2%84%E6%B5%8B%E7%BC%96%E7%A0%81CPC%5Cimage-20201015213150794.png" alt="image-20201015213150794"></p>
 <p>上图就是 CPC 的架构图（以语音信号为例），首先用非线性编码器 $g_{enc}$（如AutoEncoder或者CNN） 将分割的时间窗口上的每个观测值 $x_t$的进行 $z_t&#x3D;g_{enc}(x_t)$ 映射，得到到representation vector，然后再将$z_t$以及潜空间中之前所有时刻的相关信息输入到一个自回归模型 $g_{ar}$中，生成当前时刻的上下文表示$c_t&#x3D;g_{ar}(z_{≤t})$</p>
 
 
@@ -354,7 +354,7 @@ $$
 
 
 
-<h2 id="4-Experiments"><a href="#4-Experiments" class="headerlink" title="4 Experiments"></a>4 Experiments</h2><p><img src="/http://localhost:4000//%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E3%80%91%E5%AF%B9%E6%AF%94%E9%A2%84%E6%B5%8B%E7%BC%96%E7%A0%81CPC%5Cimage-20201019163955977.png" alt="image-20201019163955977"></p>
+<h2 id="4-Experiments"><a href="#4-Experiments" class="headerlink" title="4 Experiments"></a>4 Experiments</h2><p><img src="/.site//%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E3%80%91%E5%AF%B9%E6%AF%94%E9%A2%84%E6%B5%8B%E7%BC%96%E7%A0%81CPC%5Cimage-20201019163955977.png" alt="image-20201019163955977"></p>
 <p>CPC在计算机视觉领域的用法</p>
 <br>
 
@@ -393,7 +393,7 @@ S_{i}=\frac{e^{i}}{\sum_{j} e^{j}}
 $$
 
 
-<p><img src="/http://localhost:4000//%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E3%80%91%E5%AF%B9%E6%AF%94%E9%A2%84%E6%B5%8B%E7%BC%96%E7%A0%81CPC%5Cimage-20201019230132624.png" alt="image-20201019230132624"></p>
+<p><img src="/.site//%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E3%80%91%E5%AF%B9%E6%AF%94%E9%A2%84%E6%B5%8B%E7%BC%96%E7%A0%81CPC%5Cimage-20201019230132624.png" alt="image-20201019230132624"></p>
 <p>如上图，将原来输出的 3,1,-3 通过softmax函数作用，映射成为(0,1)的值，而这些值的累和为1（满足概率的性质），那么我们就可以将它理解成概率，在最后选取输出结点的时候，我们就可以选取概率最大（也就是值对应最大的）结点，作为我们的预测目标。</p>
 <p><strong>（8）各种熵：</strong></p>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/35423404">https://zhuanlan.zhihu.com/p/35423404</a></p>
@@ -420,7 +420,7 @@ $$
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="http://localhost:4000/2020/10/19/%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E3%80%91%E5%AF%B9%E6%AF%94%E9%A2%84%E6%B5%8B%E7%BC%96%E7%A0%81CPC/">http://localhost:4000/2020/10/19/%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E3%80%91%E5%AF%B9%E6%AF%94%E9%A2%84%E6%B5%8B%E7%BC%96%E7%A0%81CPC/</a></span>
+                        <span><a href="https://lethe.site/2020/10/19/%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E3%80%91%E5%AF%B9%E6%AF%94%E9%A2%84%E6%B5%8B%E7%BC%96%E7%A0%81CPC/">https://lethe.site/2020/10/19/%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E3%80%91%E5%AF%B9%E6%AF%94%E9%A2%84%E6%B5%8B%E7%BC%96%E7%A0%81CPC/</a></span>
                     </p>
                 
                 
