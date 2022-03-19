@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Lethe">
+
+
+    <meta name="subtitle" content="Life is a struggle">
+
+
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>Git学习小结 | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Git学习小结</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">July 14, 2019&nbsp;&nbsp;16:22:45</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Study-Notes/">Study Notes</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>学习自<a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/896043488029600">https://www.liaoxuefeng.com/wiki/896043488029600</a><br><br></p>
+<h3 id="一、创建版本库"><a href="#一、创建版本库" class="headerlink" title="一、创建版本库"></a>一、创建版本库</h3><p>（1） <code>git init</code> 初始化一个Git仓库</p>
+<p>（2）添加文件到Git仓库，分两步：<br><code>git add &lt;file&gt;</code> 将工作区中修改提交到暂存区，可反复多次使用，添加多个文件<br><code>git commit -m &lt;message&gt;</code> 将在暂存区中修改提交到分支</p>
+<br>
+
+
+<h3 id="二、时光穿梭机"><a href="#二、时光穿梭机" class="headerlink" title="二、时光穿梭机"></a>二、时光穿梭机</h3><p><code>git status</code> 可以查看工作区的状态</p>
+<p>如果<code>git status</code>发现有文件被修改过，用<code>git diff</code>可以查看修改内容。</p>
+<p>（1）版本回退</p>
+<ul>
+<li><p><code>HEAD</code>指向的版本就是当前版本，<code> git reset --hard HEAD^</code>即回退到上一版本</p>
+</li>
+<li><p><code>git reset --hard commit_id</code> 可以回退到历史中任何一个版本，只要知道其版本号</p>
+</li>
+<li><p><code>git log</code> 可以查看提交历史，以便确定要回退到哪个版本。</p>
+</li>
+<li><p><code>git reflog</code> 可以查看命令历史，以便确定要回到未来的哪个版本</p>
+</li>
+</ul>
+<p>（2）工作区和暂存区<br><img src="/http://localhost:4000//1.jpg" alt="在这里插入图片描述"><br>把文件往Git版本库里添加的时候，是分两步执行的：</p>
+<p>第一步是用<code>git add</code>把文件添加进去，实际上就是把文件修改添加到暂存区；</p>
+<p>第二步是用<code>git commit</code>提交更改，实际上就是把暂存区的所有内容提交到当前分支。</p>
+<p>因为我们创建Git版本库时，Git自动为我们创建了唯一一个<code>master</code>分支，所以，现在，<code>git commit</code>就是往<code>master</code>分支上提交更改。</p>
+<p>可以简单理解为，需要提交的文件修改通通放到暂存区，然后，一次性提交暂存区的所有修改。</p>
+<p>（3）管理修改<br>第一次修改 -&gt; <code>git add</code> -&gt; 第二次修改 -&gt; <code>git commit</code><br>上述过程只有第一次修改会被提交。</p>
+<p>第一次修改 -&gt; <code>git add</code> -&gt; 第二次修改 -&gt; <code>git add</code> -&gt; <code>git commit</code><br>两次修改均被提交。</p>
+<p>（4）撤销修改</p>
+<ul>
+<li><p>当改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令<code>git checkout -- file</code></p>
+</li>
+<li><p>当不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，第一步用命令<code>git reset HEAD &lt;file&gt;</code>，就回到了上述过程，第二步按上述过程操作，即<code>git checkout -- file</code>。</p>
+</li>
+<li><p>已经提交了不合适的修改到版本库时，想要撤销本次提交，则需要进行<strong>版本回退</strong>，不过前提是没有推送到远程</p>
+</li>
+</ul>
+<p>（5）删除文件</p>
+<p>当在工作区中删除了一个文件后，<br><code>git rm &lt;filename&gt;</code> 可以从版本库中将该文件删除</p>
+<p><code>git checkout -- &lt;filename&gt;</code> 用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以还原</p>
+<br>
+
+<h3 id="三、远程仓库"><a href="#三、远程仓库" class="headerlink" title="三、远程仓库"></a>三、远程仓库</h3><ul>
+<li><p>要关联一个远程库，使用命令<code>git remote add origin git@server-name:path/repo-name.git</code></p>
+</li>
+<li><p>关联后，使用命令<code>git push -u origin master</code>第一次推送master分支的所有内容</p>
+</li>
+<li><p>此后，每次本地提交后，只要有必要，就可以使用命令<code>git push origin master</code>推送最新修改</p>
+</li>
+<li><p>要克隆一个仓库，首先必须知道仓库的地址，然后使用<code>git clone</code>命令克隆。</p>
+</li>
+</ul>
+<br>
+
+<h3 id="四、分支管理"><a href="#四、分支管理" class="headerlink" title="四、分支管理"></a>四、分支管理</h3><p>（1）创建与合并分支</p>
+<p>查看分支：<code>git branch</code></p>
+<p>创建分支：<code>git branch &lt;name&gt;</code></p>
+<p>切换分支：<code>git checkout &lt;name&gt;</code></p>
+<p>创建+切换分支：<code>git checkout -b &lt;name&gt;</code></p>
+<p>合并某分支到当前分支：<code>git merge &lt;name&gt;</code></p>
+<p>删除分支：<code>git branch -d &lt;name&gt;</code></p>
+<p>（2）解决冲突</p>
+<p>当Git无法自动合并分支时，就必须首先解决冲突。解决冲突后，再提交，合并完成。</p>
+<p>解决冲突就是把Git合并失败的文件手动编辑为我们希望的内容，再提交。</p>
+<p>用<code>git log --graph</code>命令可以看到分支合并图。(参数<code>--graph --pretty=oneline --abbrev-commit</code>可以更美观)</p>
+<p>（3）分支管理策略</p>
+<p>实际开发中，我们应该按照几个基本原则进行分支管理：<br>① 首先，<code>master</code>分支应该是非常稳定的，也就是仅用来发布新版本，平时不能在上面干活；</p>
+<p>② 干活都在<code>dev</code>分支上，也就是说，<code>dev</code>分支是不稳定的，到某个时候，比如1.0版本发布时，再把<code>dev</code>分支合并到<code>master</code>上，在<code>master</code>分支发布1.0版本；</p>
+<p>③ 每个人都在<code>dev</code>分支上干活，每个人都有自己的分支，时不时地往<code>dev</code>分支上合并就可以了。<br><img src="/http://localhost:4000//2.png" alt="在这里插入图片描述"><br>合并分支时，加上<code>--no-ff</code>参数就可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并，而默认的<code>fast forward</code>合并就看不出来曾经做过合并。</p>
+<p>（4）Bug分支</p>
+<p>修复bug时，我们会通过创建新的bug分支进行修复，然后合并，最后删除</p>
+<p>当手头工作没有完成时，可以先暂存当前工作现场，修复完后在恢复：</p>
+<p><code>git stash</code> 可以暂存当前的工作现场</p>
+<p><code>git stash list</code> 可以查看暂存的工作现场</p>
+<p><code>git stash apply</code> 恢复现场，但是恢复后，<code>stash</code>内容并不删除，需要用<code>git stash drop</code>来删除；</p>
+<p><code>git stash pop</code> 恢复的同时把<code>stash</code>内容也删了</p>
+<p>（5）Feature分支</p>
+<p>开发一个新feature，最好新建一个分支；</p>
+<p>如果要丢弃一个没有被合并过的分支，可以通过<code>git branch -D &lt;name&gt;</code>强行删除。</p>
+<p>（6）多人协作</p>
+<ul>
+<li><p>查看远程库信息, 使用<code>git remote -v</code>；</p>
+</li>
+<li><p>本地新建的分支如果不推送到远程，对其他人就是不可见的；</p>
+</li>
+<li><p>从本地推送分支，使用<code>git push origin branch-name</code>，如果推送失败，先用<code>git pull</code>抓取远程的新提交；</p>
+</li>
+<li><p>在本地创建和远程分支对应的分支，使用<code>git checkout -b branch-name origin/branch-name</code>，本地和远程分支的名称最好一致；</p>
+</li>
+<li><p>建立本地分支和远程分支的关联，使用<code>git branch --set-upstream branch-name origin/branch-name</code>；</p>
+</li>
+<li><p>从远程抓取分支，使用<code>git pull</code>，如果有冲突，要先处理冲突。</p>
+</li>
+</ul>
+<p><strong>多人协作的工作模式通常是这样：</strong></p>
+<ol>
+<li><p>首先，可以试图用<code>git push origin &lt;branch-name&gt;</code>推送自己的修改；</p>
+</li>
+<li><p>如果推送失败，则因为远程分支比你的本地更新，需要先用<code>git pull</code>试图合并；</p>
+</li>
+<li><p>如果合并有冲突，则解决冲突，并在本地提交；</p>
+</li>
+<li><p>没有冲突或者解决掉冲突后，再用<code>git push origin &lt;branch-name&gt;</code>推送就能成功</p>
+</li>
+</ol>
+<p>如果<code>git pull</code>提示<code>no tracking information</code>，则说明本地分支和远程分支的链接关系没有创建，用命令<code>git branch --set-upstream-to &lt;branch-name&gt; origin/&lt;branch-name&gt;</code>。</p>
+<p>（7）Rebase</p>
+<ul>
+<li><p>rebase操作可以把本地未push的分叉提交历史整理成直线；</p>
+</li>
+<li><p>rebase的目的是使得我们在查看历史提交的变化时更容易，因为分叉的提交需要三方对比。</p>
+</li>
+</ul>
+<br>  
+
+<h3 id="五、标签管理"><a href="#五、标签管理" class="headerlink" title="五、标签管理"></a>五、标签管理</h3><p>（1）创建标签</p>
+<ul>
+<li><p><code>git tag &lt;tagname&gt;</code> 用于新建一个标签，默认为<code>HEAD</code>，也可以指定一个<code>commit id</code></p>
+</li>
+<li><p><code>git tag -a &lt;tagname&gt; -m &quot;blablabla...&quot;</code> 可以指定标签信息；</p>
+</li>
+<li><p><code>git tag</code> 可以查看所有标签。</p>
+</li>
+</ul>
+<p>（2）操作标签</p>
+<ul>
+<li><p><code>git push origin &lt;tagname&gt;</code> 可以推送一个本地标签</p>
+</li>
+<li><p><code>git push origin --tags</code>可以推送全部未推送过的本地标签</p>
+</li>
+<li><p><code>git tag -d &lt;tagname&gt;</code>可以删除一个本地标签</p>
+</li>
+<li><p><code>git push origin :refs/tags/&lt;tagname&gt;</code>可以删除一个远程标签</p>
+</li>
+</ul>
+<br>
+<br>
+
+<p>最后附一张git命令表：<br><img src="/http://localhost:4000//3.png" alt="在这里插入图片描述"></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://localhost:4000/2019/07/14/Git_Learning/">http://localhost:4000/2019/07/14/Git_Learning/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Git/"># Git</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/07/16/SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/">SQL注入总结</a>
+            
+            
+            <a class="next" rel="next" href="/2019/06/05/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%85%A5%E9%97%A8%E8%AF%BB%E4%B9%A6%E5%B0%8F%E7%BB%93/">php代码审计入门读书小结</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Lethe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

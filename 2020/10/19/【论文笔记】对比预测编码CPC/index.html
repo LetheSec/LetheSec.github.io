@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Lethe">
+
+
+    <meta name="subtitle" content="Life is a struggle">
+
+
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>【论文笔记】对比预测编码CPC | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">【论文笔记】对比预测编码CPC</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 19, 2020&nbsp;&nbsp;0:53:16</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/PaperNote/">PaperNote</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>arxiv：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1807.03748">https://arxiv.org/abs/1807.03748</a></p>
+<p>code：<a target="_blank" rel="noopener" href="https://github.com/jefflai108/Contrastive-Predictive-Coding-PyTorch">https://github.com/jefflai108/Contrastive-Predictive-Coding-PyTorch</a></p>
+<h2 id="1-Introduce"><a href="#1-Introduce" class="headerlink" title="1 Introduce"></a>1 Introduce</h2><p>作者提出了一种叫做“<strong>对比预测编码（CPC, Contrastive Predictive Coding）</strong>”的无监督方法，可以从高维数据中提取有用的 representation，这种 representation 学习到了对预测未来最有用的信息。</p>
+<p>目前无监督学习存在的问题：</p>
+<ul>
+<li>如何更好的从原始观测值中建模high-level representarion</li>
+<li>理想情况下的学习的representation到底是什么样的？是否可以使用无监督学习进行理想的representation learning？</li>
+<li>作者将无监督学习与预测编码的思想相结合，提出了是否学习到一些能对未来有很好预测效果的representation？</li>
+</ul>
+<p>本文的工作如下：</p>
+<ul>
+<li>将高维数据压缩到更紧凑的隐空间中，在其中条件预测更容易建模。</li>
+<li>我们使用强大的自回归模型在这个隐空间中预测未来的许多步骤。</li>
+<li>依靠噪声对比估计（Noise-Contrastive Estimation）$^{[12]}$来计算损失函数（和自然语言模型中的学习单词嵌入方式类似），从而可以对整个模型进行端到端的训练。</li>
+<li>最终提出的Contrastive Predictive Codeing（CPC）方法可以用相同的机制在图像、语音、自然语言、强化学习等多个模态的数据上都能学习到高级信息。</li>
+</ul>
+<h2 id="2-Motivation-amp-amp-Intuitions"><a href="#2-Motivation-amp-amp-Intuitions" class="headerlink" title="2 Motivation &amp;&amp; Intuitions"></a>2 Motivation &amp;&amp; Intuitions</h2><p>模型主要的Intuitions就是学习一种能够对高维信号不同部分的基础共享信息（underlying shared infomation）进行编码的representation，同时丢弃掉更底层的低级信息和噪声。在时间序列和高维的建模中，通过对能够进行预测的representation进行学习，会使其学习到更多的全局结构，作者将学习到的这种特征称为”slow features“。$^{[13]}$</p>
+<p>预测高维数据的难点之一是均方误差和交叉熵这样的单峰损失效果不好，而如果使用一个强大的条件生成模型对每个细节进行重建，就会需要很大的计算量，并且会忽略了数据集$x$中的上下文关系$c$。（如一张图片包含上千位的信息，而最后的高级隐变量有可能仅仅是1024类别里10bit的一个类标签）。</p>
+<p>因此如果是为了提取出$x$和$c$之间的共享信息（shared information），直接建模生成模型 $p(x|c)$ 并不是最佳的。</p>
+<p>作者提出最大化 $x$（预测的未来）和上下文 $c$ （现在的环境）之间互信息的方式，定义如下：<br>$$<br>I(x ; c)&#x3D;\sum_{x, c} p(x, c) \log \frac{p(x \mid c)}{p(x)} \tag{1}<br>$$<br>这里进一步解释一些<strong>互信息（mutual infomation）</strong>，互信息实际上就是表示<strong>两个变量之间的相关性</strong>，上式也就是互信息的定义式的变形，$I(x;c)$表示 $x$ 与 $c$ 的关系，但具体是什么关系呢？可以看如下的推导：</p>
+
+$$
+\begin{aligned}
+I(x;c) &=\sum_{x, c} p(x, c) \log \frac{p(x \mid c)}{p(x)} \\
+&=\sum_{x, c} p(x, c) \log p(x \mid c)-\sum_{x, c} p(x, c) \log p(x) \\
+&=\sum_{c} p(c) \sum_{x} p(x \mid c) \log p(x \mid c)-\sum_{x} \sum_{c} p(x, c) \log p(x) \\
+&=-H(x \mid c)+H(x) \\
+&=H(x)-H(x \mid c)
+\end{aligned}
+$$
+
+<p>最终的结果是 $H(x)-H(x|c)$，其中$H(x)$为$x$的熵，用来衡量$x$的不确定度，定义如下：<br>$$<br>H(x)&#x3D;-\sum_x p(x)logp(x)<br>$$<br>而$I(x,c)&#x3D;H(x)-H(x|c)$也就说明了$x$与$c$的互信息<strong>即表示由于 $c$ 的引入而使 $x$ 熵减小的量，也就是 $x$ 不确定度减小的量</strong>。</p>
+<p>因此，放在论文中的含义来看，最大化$I(x;c)$也就是通过充分学习现在的上下文 $c$ 最大程度的减小了未来 $x$ 的不确定度，从而起到了预测的效果，所以所以CPC希望网络可以最大化 $x$ 和 $c$ 之间的互信息。</p>
+<h2 id="3-Method"><a href="#3-Method" class="headerlink" title="3 Method"></a>3 Method</h2><h3 id="3-1-Contrastive-Predicting-Coding"><a href="#3-1-Contrastive-Predicting-Coding" class="headerlink" title="3.1 Contrastive Predicting Coding"></a>3.1 Contrastive Predicting Coding</h3><p><img src="/http://localhost:4000//%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E3%80%91%E5%AF%B9%E6%AF%94%E9%A2%84%E6%B5%8B%E7%BC%96%E7%A0%81CPC%5Cimage-20201015213150794.png" alt="image-20201015213150794"></p>
+<p>上图就是 CPC 的架构图（以语音信号为例），首先用非线性编码器 $g_{enc}$（如AutoEncoder或者CNN） 将分割的时间窗口上的每个观测值 $x_t$的进行 $z_t&#x3D;g_{enc}(x_t)$ 映射，得到到representation vector，然后再将$z_t$以及潜空间中之前所有时刻的相关信息输入到一个自回归模型 $g_{ar}$中，生成当前时刻的上下文表示$c_t&#x3D;g_{ar}(z_{≤t})$</p>
+
+
+如果要用当前的 $c$ 去预测 $k$ 个时刻后的 $z_{t+k}$ ，之前提到作者不采用生成模型 $p(x_{t+k}|c)$ 进行预测，而是最大化 $x_{t+k}$和 $c$ 之间的互信息使得预测的 $\hat{z}_{t+i}$ 与真实的  $z_{t+i}$  尽可能的相似。 根据等式1，我们没办法控制互信息中的 $x$ 和 $c$ 的联合分布概率 $p(x,c)$，因此作者提出了一个密度比的概念，如下：
+
+
+
+<p>$$<br>f_{k}\left(x_{t+k}, c_{t}\right) \propto \frac{p\left(x_{t+k} \mid c_{t}\right)}{p\left(x_{t+k}\right)} \tag {2}<br>$$</p>
+
+上式中 $f_k(x_{t+k,c_t})$ 表示上下文 $c_t$ 的预测和未来真实值 $x_{t+k}$ 的相似程度，其正比于未来真实数据与随机采样数据的概率之比 $\frac{p\left(x_{t+k}\mid c_{t}\right)}{p\left(x_{t+k}\right)}$ 
+
+
+
+<p>然后作者直接用线性矩阵 $W_1,W_2,\dots,W_k$乘以$c_t$来作为预测值（即$W_kc_t$），而$z_{t+k}^K$为真实值，用向量内积来衡量相似度，由此得到了论文中的如下函数来逼近密度比：<br>$$<br>f_{k}\left(x_{t+k}, c_{t}\right)&#x3D;\exp \left(z_{t+k}^{T} W_{k} c_{t}\right) \tag{3}<br>$$</p>
+<h3 id="3-2-InfoNCE-Loss"><a href="#3-2-InfoNCE-Loss" class="headerlink" title="3.2 InfoNCE Loss"></a>3.2 InfoNCE Loss</h3><p>下面考虑如何对模型进行优化从而实现我们的目标，这里作者参考了NCE loss的思想提出了InfoNCE loss，定义如下：</p>
+
+$$
+\mathcal{L}_{\mathrm{N}}=-\underset{X}{\mathbb{E}}\left[\log \frac{f_{k}\left(x_{t+k}, c_{t}\right)}{\sum_{x_{j} \in X} f_{k}\left(x_{j}, c_{t}\right)}\right] \tag{4}
+$$
+其中 $X={\{x_1,x_2,\dots,x_N\}} $ 是一组样本，这里面 $(x_{t+k},c_t$) 可以看成正样本对，$(x_j,c_t)$可以看成负样本对。**因此为了优化该损失，我们希望分子尽可能大，分母尽可能小。这也就符合我们对于 $x$ 和 $c$ 互信息的要求，即正样本对之间的互信息更大，负样本对之间的互信息更小。优化该损失，实际上就是最大化$x_{t+k}$ 和 $c_t$ 间的互信息。**
+
+<p>等式4实际上是一个正确分类正样本的<strong>多分类交叉熵损失</strong>（这里可以用softmax理解，但并不一定是softmax）。现在考虑该损失的最佳情况，假设 $x_i$ 是 $c_t$ 预测的结果，即正样本，那么 $x_i$ 被采样的概率如下，这实际上也就是等式2中定义的 $f_k(x_{i},c_t)$的最优输出结果：<br>$$<br>\begin{aligned}<br>p\left(d&#x3D;i \mid X, c_{t}\right) &amp;&#x3D;\frac{p\left(x_{i} \mid c_{t}\right) \prod_{l \neq i} p\left(x_{l}\right)}{\sum_{j&#x3D;1}^{N} p\left(x_{j} \mid c_{t}\right) \prod_{l \neq j} p\left(x_{l}\right)} \<br>&amp;&#x3D;\frac{\frac{p\left(x_{i} \mid c_{t}\right)}{p\left(x_{i}\right)}}{\sum_{j&#x3D;1}^{N} \frac{p\left(x_{j} \mid c_{t}\right)}{p\left(x_{j}\right)}}<br>\end{aligned} \tag{5}<br>$$<br>可以看到 $f_k(x_{t+k},c_t)$ 确实与 $\frac{p(x_{t+k}|c_t)}{p(x_{t+k})}$  成比例，并且与负样本选择的数量 $N-1$ 无关，与前面所定义的密度比的概念相符合。</p>
+<h3 id="3-3-Estimating-the-MI-with-InfoNCE"><a href="#3-3-Estimating-the-MI-with-InfoNCE" class="headerlink" title="3.3 Estimating the MI with InfoNCE"></a>3.3 Estimating the MI with InfoNCE</h3><p>虽然我们已经能够训练这个网络，但实际上我们可以具体推导 InfoNCE 和互信息之间的关系，以证明优化 InfoNCE loss 确实对在最大化互信息有帮助。由前面可以知道，$f_k(x_{t+k},c_t)$ 是由 $\frac{p(x_{t+k}|c_t)}{p(x_{t+k})}$ 决定，因此将其带入等式4中，并且将 $X$ 氛围正样本 $x_{t+k}$ 和负样本 $X_{neg}$ ：</p>
+
+$$
+\begin{aligned}
+\mathcal{L}_{\mathrm{N}}^{\mathrm{opt}} &=-\underset{X}{\mathbb{E}} \log \left[\frac{\frac{p\left(x_{t+k} \mid c_{t}\right)}{p\left(x_{t+k}\right)}}{\frac{p\left(x_{t+k} \mid c_{t}\right)}{p\left(x_{t+k}\right)}+\sum_{x_{j} \in X_{\mathrm{ncg}}} \frac{p\left(x_{j} \mid c_{t}\right)}{p\left(x_{j}\right)}}\right] \\
+&=\underset{X}{\mathbb{E}} \log \left[1+\frac{p\left(x_{t+k}\right)}{p\left(x_{t+k} \mid c_{t}\right)} \sum_{x_{j} \in X_{\text {neg }}} \frac{p\left(x_{j} \mid c_{t}\right)}{p\left(x_{j}\right)}\right] \\
+& \approx \underset{X}{\mathbb{E}} \log \left[1+\frac{p\left(x_{t+k}\right)}{p\left(x_{t+k} \mid c_{t}\right)}(N-1) \underset{x_{j}}{\mathbb{E}} \frac{p\left(x_{j} \mid c_{t}\right)}{p\left(x_{j}\right)}\right] \\
+&=\underset{X}{\mathbb{E}} \log \left[1+\frac{p\left(x_{t+k}\right)}{p\left(x_{t+k} \mid c_{t}\right)}(N-1)\right] \\
+& \geq \underset{X}{\mathbb{E}} \log \left[\frac{p\left(x_{t+k}\right)}{p\left(x_{t+k} \mid c_{t}\right)} N\right] \\
+&=-I\left(x_{t+k}, c_{t}\right)+\log (N)
+\end{aligned}
+$$
+
+<p>所以最终得到：<br>$$<br>I\left(x_{t+k}, c_{t}\right)\geq \log (N)-L_N^{opt}<br>$$<br>优化InfoNCE（最小化$L_N^{opt}$）也就是最大化 $X_{t+k}$ 和 $c_t$ 之间的互信息的下限，并且 $N$ 越大，上面第三步中的约等于就越准确。</p>
+<p>InfoNCE也与MINE有关$^{[54]}$，不失一般性的定义 $f(x,c)&#x3D;e^{F(x,c)}$：</p>
+
+$$
+\begin{aligned}
+\underset{X}{\mathbb{E}}\left[\log \frac{f(x, c)}{\sum_{x_{j} \in X} f\left(x_{j}, c\right)}\right]&=\underset{(x, c)}{\mathbb{E}}[F(x, c)]-\underset{(x, c)}{\mathbb{E}}\left[\log \sum_{x_{j} \in X} e^{F\left(x_{j}, c\right)}\right] \\
+&= \underset{(x, c)}{\mathbb{E}}[F(x, c)]-\underset{(x, c)}{\mathbb{E}}\left[\log \left(e^{F(x, c)}+\sum_{x_{j} \in X_{\text {neg }}} e^{F\left(x_{j}, c\right)}\right)\right] \\
+& \leq \underset{(x, c)}{\mathbb{E}}[F(x, c)]-\underset{c}{\mathbb{E}}\left[\log \sum_{x_{j} \in X_{\mathrm{neg}}} e^{F\left(x_{j}, c\right)}\right] \\
+& =\underset{(x, c)}{\mathbb{E}}[F(x, c)]-\underset{c}{\mathbb{E}}\left[\log \frac{1}{N-1} \sum_{x_{j} \in X_{\text {neg }}} e^{F\left(x_{j}, c\right)}+\log (N-1)\right]
+\end{aligned}
+$$
+
+<p>而MINE的定义为：</p>
+
+$$
+I \widehat{(X ; Z)}_{n}=\sup _{\theta \in \Theta} \mathbb{E}_{\mathbb{P}_{X Z}^{(n)}}\left[T_{\theta}\right]-\log \left(\mathbb{E}_{\mathbb{P}_{X}^{(n)} \otimes \hat{\mathbb{P}}_{Z}^{(n)}}\left[e^{T_{\theta}}\right]\right)
+$$
+
+
+
+最终推导的结果几乎等价于MINE估计器，只是多了一个常数 $\underset{c}{\mathbb{E}}[\log (N-1)]$ 。作者声明，当面临困难任务时，InfoNCE与MINE表现都很好，而如果目标很容易根据上下文进行预测的简答任务，则MINE会变得不稳定。
+
+
+
+<h2 id="4-Experiments"><a href="#4-Experiments" class="headerlink" title="4 Experiments"></a>4 Experiments</h2><p><img src="/http://localhost:4000//%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E3%80%91%E5%AF%B9%E6%AF%94%E9%A2%84%E6%B5%8B%E7%BC%96%E7%A0%81CPC%5Cimage-20201019163955977.png" alt="image-20201019163955977"></p>
+<p>CPC在计算机视觉领域的用法</p>
+<br>
+
+
+
+
+<h3 id="相关知识补充："><a href="#相关知识补充：" class="headerlink" title="相关知识补充："></a>相关知识补充：</h3><p><strong>（1）表征学习（Representation Learning）</strong>：学习数据的表征，以便在构建分类器或其他预测器时更容易提取有用的信息，无监督学习也属于表征学习。</p>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://www.jiqizhixin.com/graph/technologies/64d4c374-6061-46cc-8d29-d0a582934876">https://www.jiqizhixin.com/graph/technologies/64d4c374-6061-46cc-8d29-d0a582934876</a></p>
+<p><strong>（2）自回归模型（Autoregressive Model，AR模型）</strong>：是统计上一种处理时间序列的方法，用同一变数，例如$x$的之前各期，即$x_1$至$x_{t-1}$来预测本期$x_t$的表现，并假设它们为线性关系。这是从回归分析的线性回归发展而来，只不过不是$x$预测$y$，而是用$x$预测$x$（自己），所以叫做自回归。</p>
+<p>定义：<br>$$<br>X_{t}&#x3D;c+\sum_{i&#x3D;1}^{p} \varphi_{i} X_{t-i}+\varepsilon_{t}<br>$$<br>其中：$c$是常数项；$\varepsilon_{t}$被假设为平均数等于0，标准差等于$\sigma$的随机误差值；$\varepsilon _{t}$被假设为对于任何的$t$都不变。</p>
+<p><strong>（3）隐空间（latent space）</strong>：GAN的输入空间，指隐变量$z$的样本空间，”隐变量”可以理解为控制数据$X$生成的”幕后之手“。在统计机器学习中，隐变量生成式模型“生成”数据$X$的背后逻辑是，通过建模联合分布$p_θ(z,X)$ ，再从中采样得到 $(z,X)$ 对。具体操作是，为隐变量选择一个容易采样的分布，如高斯，再通过神经网络建模$p_θ(X|z)$，从而采样得到生成的数据。</p>
+<p><strong>（4）互信息（Mutual Information）</strong>：指变量间的相关性，通常用$I(X;Y)$表示$X$和$Y$之间的互信息:<br>$$<br>I(X ; Y)&#x3D;\sum_{x \in X} \sum_{y \in Y} p(x, y) \log \frac{p(x \mid y)}{p(x)}<br>$$<br>$I(X;Y)$越大说明两者关系越密切。</p>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/gatherstars/p/6004075.html">https://www.cnblogs.com/gatherstars/p/6004075.html</a></p>
+<p>文中定义的互信息为：<br>$$<br>I(x, c) &#x3D;\sum_{x, c} p(x, c) \log \frac{p(x \mid c)}{p(x)}<br>$$<br>表示由于$c$的引入使得$x$不确定度减小的量，如下推导：</p>
+
+$$
+\begin{aligned}
+I(x, c) &=\sum_{x, c} p(x, c) \log \frac{p(x \mid c)}{p(x)} \\
+&=\sum_{x, c} p(x, c) \log \frac{p(x \mid c) p(c)}{p(x) p(c)} \\
+&=\sum_{x, c} p(x, c) \log p(x \mid c)-\sum_{x, c} p(x, c) \log p(x) \\
+&=\sum_{c} p(c) \sum_{x} p(x \mid c) \log p(x \mid c)-\sum_{x} \sum_{c} p(x, c) \log p(x) \\
+&=H(x)-H(x \mid c)
+\end{aligned}
+$$
+
+<p>其中$H(x)$为$x$的熵，用来衡量$x$的不确定度，定义如下：<br>$$<br>H(x)&#x3D;-\sum_x p(x)logp(x)<br>$$<br>由$I(x,c)&#x3D;H(x)-H(x|C)$也就说明了$x$与$c$的互信息即表示由于$c$的引入而使$x$熵减小的量，也就是$x$不确定度减小的量。</p>
+<p><strong>（5）对比损失（Contrastive Loss）</strong>：</p>
+<p><strong>（6）NCE Loss</strong></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_40901056/article/details/88568344">https://blog.csdn.net/weixin_40901056/article/details/88568344</a></p>
+<p><strong>（7）softmax函数</strong>：</p>
+<p>softmax用于多分类过程中，它将多个神经元的输出，映射到（0,1）区间内，可以看成概率来理解，从而来进行多分类。</p>
+<p>假设我们有一个数组，V，Vi表示V中的第i个元素，那么这个元素的softmax值就是：</p>
+
+$$
+S_{i}=\frac{e^{i}}{\sum_{j} e^{j}}
+$$
+
+
+<p><img src="/http://localhost:4000//%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E3%80%91%E5%AF%B9%E6%AF%94%E9%A2%84%E6%B5%8B%E7%BC%96%E7%A0%81CPC%5Cimage-20201019230132624.png" alt="image-20201019230132624"></p>
+<p>如上图，将原来输出的 3,1,-3 通过softmax函数作用，映射成为(0,1)的值，而这些值的累和为1（满足概率的性质），那么我们就可以将它理解成概率，在最后选取输出结点的时候，我们就可以选取概率最大（也就是值对应最大的）结点，作为我们的预测目标。</p>
+<p><strong>（8）各种熵：</strong></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/35423404">https://zhuanlan.zhihu.com/p/35423404</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2ea0406d0793">https://www.jianshu.com/p/2ea0406d0793</a></p>
+<p><strong>参考链接：</strong></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/129076690">https://zhuanlan.zhihu.com/p/129076690</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/75517749">https://zhuanlan.zhihu.com/p/75517749</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/137076811">https://zhuanlan.zhihu.com/p/137076811</a></p>
+<p><strong>参考文献：</strong></p>
+<p>[12] Michael Gutmann and Aapo Hyvärinen. Noise-contrastive estimation: A new estimation principle for unnormalized statistical models. In Proceedings of the Thirteenth International Conference on Artificial Intelligence and Statistics, pages 297–304, 2010.</p>
+<p>[13] Laurenz Wiskott and Terrence J Sejnowski. Slow feature analysis: Unsupervised learning of invariances. Neural computation, 14(4):715–770, 2002.</p>
+<p>[54] Ishmael Belghazi, Sai Rajeswar, AristideN Baratin, R Devon Hjelm, and Aaron Courville. Mine: Mutual information neural estimation. 2018.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://localhost:4000/2020/10/19/%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E3%80%91%E5%AF%B9%E6%AF%94%E9%A2%84%E6%B5%8B%E7%BC%96%E7%A0%81CPC/">http://localhost:4000/2020/10/19/%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E3%80%91%E5%AF%B9%E6%AF%94%E9%A2%84%E6%B5%8B%E7%BC%96%E7%A0%81CPC/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E8%87%AA%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/"># 自监督学习</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/11/09/%E5%AF%B9Deep%20InfoMax(DIM)%E7%9A%84%E7%90%86%E8%A7%A3/">对Deep InfoMax(DIM)的理解</a>
+            
+            
+            <a class="next" rel="next" href="/2020/10/11/%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E8%87%AA%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E7%BB%BC%E8%BF%B0%E3%80%91Self-supervised-Visual-Feature-Learning-with-Deep-Neural-Networks-A-Survey/">【自监督学习综述】Self-supervised Visual Feature Learning with Deep Neural Networks：A Survey</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Lethe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

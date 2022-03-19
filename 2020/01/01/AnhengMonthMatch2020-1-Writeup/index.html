@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Lethe">
+
+
+    <meta name="subtitle" content="Life is a struggle">
+
+
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>安恒月赛2020元旦场Writeup | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">安恒月赛2020元旦场Writeup</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 1, 2020&nbsp;&nbsp;20:07:34</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Writeup/">Writeup</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>正在复习密码学，突然发现今天有月赛了…于是做了一下，很简单的一次题目。。</p>
+<br>
+
+
+<h1 id="Web1"><a href="#Web1" class="headerlink" title="Web1"></a>Web1</h1><p>进入后是一个JS的游戏，在<code>index.js</code>里修改一下<code>destroyed</code>的增加设置大一些，如下：</p>
+<p><img src="/http://localhost:4000//20200101182915730.png" alt="在这里插入图片描述"></p>
+<p>然后随便玩一下就能得到flag了：</p>
+<p><img src="/http://localhost:4000//20200101183118827.png" alt="在这里插入图片描述"></p>
+<br>
+
+<h1 id="Web2"><a href="#Web2" class="headerlink" title="Web2"></a>Web2</h1><p>题目名字叫地图，进入后发现实际上没什么功能，只有<code>index.php</code>一个页面，</p>
+<p><img src="/http://localhost:4000//20200101183447834.png" alt="在这里插入图片描述"><br>点击发现url中存在<code>page=index</code>，于是尝试文件包含，正常的base64编码的payload会返回<code>not base</code>，应该是过滤了base，使用rot13编码读取，先读<code>index.php</code>可以发现flag在根目录，payload如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/index.php/?page=php://filter/read=string.toupper|string.rot13/resource=/flag</span><br></pre></td></tr></table></figure>
+
+<p><img src="/http://localhost:4000//20200101183717300.png" alt="在这里插入图片描述"></p>
+<p>rot13解码得到flag。</p>
+<br>
+
+<h1 id="Crypto1"><a href="#Crypto1" class="headerlink" title="Crypto1"></a>Crypto1</h1><p>题目如下给了3个png和一个加密脚本如下：</p>
+<p><img src="/http://localhost:4000//20200101185338363.png" alt="在这里插入图片描述"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> key <span class="keyword">import</span> key</span><br><span class="line"></span><br><span class="line">ki= cycle(key)</span><br><span class="line"></span><br><span class="line">fr1 = <span class="built_in">open</span>(<span class="string">&quot;flag.png&quot;</span>,<span class="string">&quot;rb&quot;</span>)</span><br><span class="line">fr2 = <span class="built_in">open</span>(<span class="string">&quot;fflag.png&quot;</span>,<span class="string">&quot;rb&quot;</span>)</span><br><span class="line">fw1 = <span class="built_in">open</span>(<span class="string">&quot;flag_e.png&quot;</span>,<span class="string">&quot;wb&quot;</span>)</span><br><span class="line">fw2 = <span class="built_in">open</span>(<span class="string">&quot;fflag_e.png&quot;</span>,<span class="string">&quot;wb&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> now <span class="keyword">in</span> fr1:</span><br><span class="line">    <span class="keyword">for</span> nowByte <span class="keyword">in</span> now:</span><br><span class="line">        newByte = nowByte ^ <span class="built_in">ord</span>(<span class="built_in">next</span>(ki))</span><br><span class="line">        fw1.write(<span class="built_in">bytes</span>([newByte]))</span><br><span class="line">fr1.close()</span><br><span class="line">fw1.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> now <span class="keyword">in</span> fr2:</span><br><span class="line">    <span class="keyword">for</span> nowByte <span class="keyword">in</span> now:</span><br><span class="line">        newByte = nowByte ^ <span class="built_in">ord</span>(<span class="built_in">next</span>(ki))</span><br><span class="line">        fw2.write(<span class="built_in">bytes</span>([newByte]))</span><br><span class="line">fr2.close()</span><br><span class="line">fw2.close()</span><br></pre></td></tr></table></figure>
+
+<p>其中fflag.png是打了马赛克的flag，看一下代码，flag.png加密得到flag_e.png，fflag.png加密得到fflag_e.png，但是加密用的ki不知道。简单分析一下，加密过程就是循环用ki每一位的ascii的与图片进行异或，且两次的加密过程一样，那么思路就清楚了。</p>
+<p>我们有fflag.png和加密后的fflag_e.png，前者相当于明文m，后者相当于密文c，加密过程为c&#x3D;m⊕k，那么现在已知m和c，容易得到k&#x3D;m⊕c<br>有如下脚本计算ki的ascii：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">fr_m = <span class="built_in">open</span>(<span class="string">&quot;fflag.png&quot;</span>, <span class="string">&quot;rb&quot;</span>)</span><br><span class="line">fr_c = <span class="built_in">open</span>(<span class="string">&quot;fflag_e.png&quot;</span>, <span class="string">&quot;rb&quot;</span>)</span><br><span class="line">m = []</span><br><span class="line">c = []</span><br><span class="line">ki = []</span><br><span class="line"><span class="keyword">for</span> now <span class="keyword">in</span> fr_m:</span><br><span class="line">    <span class="keyword">for</span> nowByte <span class="keyword">in</span> now:</span><br><span class="line">        m.append(nowByte)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> now <span class="keyword">in</span> fr_c:</span><br><span class="line">    <span class="keyword">for</span> nowByte <span class="keyword">in</span> now:</span><br><span class="line">        c.append(nowByte)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(m)):</span><br><span class="line">    ki.append(m[i] ^ c[i])</span><br><span class="line"></span><br><span class="line">fr_m.close()</span><br><span class="line">fr_c.close()</span><br><span class="line"><span class="built_in">print</span>(ki)</span><br></pre></td></tr></table></figure>
+
+<p>很容易得到ki如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[65, 108, 105, 116, 97, 95, 105, 115, 95, 115, 111, 95, 99, 117, 116, 101]</span><br></pre></td></tr></table></figure>
+
+<p>于是对flag_e.png进行解密如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">flag_r = <span class="built_in">open</span>(<span class="string">&quot;flag_e.png&quot;</span>,<span class="string">&quot;rb&quot;</span>)</span><br><span class="line">flag_w = <span class="built_in">open</span>(<span class="string">&quot;flag.png&quot;</span>,<span class="string">&quot;wb&quot;</span>)</span><br><span class="line">ki = [<span class="number">65</span>, <span class="number">108</span>, <span class="number">105</span>, <span class="number">116</span>, <span class="number">97</span>, <span class="number">95</span>, <span class="number">105</span>, <span class="number">115</span>, <span class="number">95</span>, <span class="number">115</span>, <span class="number">111</span>, <span class="number">95</span>, <span class="number">99</span>, <span class="number">117</span>, <span class="number">116</span>, <span class="number">101</span>]*<span class="number">500</span></span><br><span class="line">c = []</span><br><span class="line"><span class="keyword">for</span> now <span class="keyword">in</span> flag_r:</span><br><span class="line">    <span class="keyword">for</span> nowByte <span class="keyword">in</span> now:</span><br><span class="line">        c.append(nowByte)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(c)):</span><br><span class="line">    newByte = c[i] ^ ki[i]</span><br><span class="line">    flag_w.write(<span class="built_in">bytes</span>([newByte]))</span><br><span class="line"></span><br><span class="line">flag_r.close()</span><br><span class="line">flag_w.close()</span><br></pre></td></tr></table></figure>
+
+<p>运行得到flag.png:</p>
+<p><img src="/http://localhost:4000//20200101190909765.png" alt="在这里插入图片描述"></p>
+<br>
+
+<h1 id="Crypto2"><a href="#Crypto2" class="headerlink" title="Crypto2"></a>Crypto2</h1><p>一道RSA的题目，给的脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">from</span> flag <span class="keyword">import</span> flag</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p = getPrime(<span class="number">1024</span>)</span><br><span class="line">r = random.randint(<span class="number">2</span>, <span class="number">10</span>)</span><br><span class="line">e =<span class="number">65537</span></span><br><span class="line">n = p ** r</span><br><span class="line">m=flag</span><br><span class="line"><span class="keyword">assert</span>(<span class="built_in">int</span>(m.encode(<span class="string">&#x27;hex&#x27;</span>), <span class="number">16</span>) &lt; n)</span><br><span class="line">c = <span class="built_in">pow</span>(<span class="built_in">int</span>(m.encode(<span class="string">&#x27;hex&#x27;</span>), <span class="number">16</span>),e,n) </span><br><span class="line">c=long_to_bytes(c)</span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;c =\n&#x27;</span>, c.encode(<span class="string">&#x27;base64&#x27;</span>),n</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">c =</span></span><br><span class="line"><span class="string">apxy3z3DgGnzaEedcUy3A49wAsqyyn9sqx6eYZL5iDrCq0Wjs8BOY2Ofza5wuaFigm32PVpO5jpu</span></span><br><span class="line"><span class="string">Dgw9b6oX8KM2ZB9/dDmwQc7JKnAKhCQrIc1v9qt7iQbnTK0DTQj/xvQkz/IBeSjoWBmHOx4s0tDx</span></span><br><span class="line"><span class="string">ZRAjOPui5wwAywNM3ynULEPczv+xN2v+6HBeoS2YuyfF5mq/pIAMPwZs+QpkuwxSbNQ6xPNP9Ox1</span></span><br><span class="line"><span class="string">IeKz/41F7/D2fDsGB5CcFdAiQq+r95BhVeGzeaiQBpzwAXAPKIyO+fP6/M9XmpSJwjaMSiAUnksp</span></span><br><span class="line"><span class="string">9KfVOXgEG9Z0FmxP6rgqPl0vU+rVeJ2RsTUYCSP8Vy+PD3PGwDDdUtNzvcEXKr2BKiNoOUxprBAt</span></span><br><span class="line"><span class="string">yvcsmGqRLgDl1ZVgzSZ1U4MAmJ9x42mIU0XvolqaOCJZzaym1kJoBlw7/7+Nej4owEtan/c3TIkD</span></span><br><span class="line"><span class="string">kr/gCenUD/8MSlvnfTUMGdQLkSht2BZiuiHxVVRVzY5ETG6v+w9AtDMC</span></span><br><span class="line"><span class="string">4600616808891590817884946117009414083548013610469076381106568481948720521467073218024827360073980550620353792084520767372304347132535784875671026563160583598386773718586111034826555689602824563172463446924287072570386712719870348862904936370894695108302490867826094352072132696743116741635111860205049129717948520534270924834318704244999690532431941248905257880347561221151841978982240191397364038490250930604211256385925496658620755582058753376328583001312846508295319286941837220522563729215928111164274042890696771820759856790994461944209269732769269559257608440686713206622111649275898426040931301005711446055819707704086201357712959922814300067907536161841255533171805313149332383712997091780368142625499055149806043238057037400510197255364471685815004154357049874205884682322443391374020169114833722616851257895369648472048116320266548560787733764126281102645474252013714507014577620450816459153848279084910457288549191</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>给了n和密文c，可以看到n是用p的r次幂，r为2~10的随机数，分解一下n试试，如下：</p>
+<p><img src="/http://localhost:4000//20200101184952357.png" alt="在这里插入图片描述"></p>
+<p>发现可以成功分解，并且知道r为3，这样就很容易求出d了，解密脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> bytes_to_long</span><br><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="keyword">import</span> libnum</span><br><span class="line"></span><br><span class="line">n = <span class="number">4600616808891590817884946117009414083548013610469076381106568481948720521467073218024827360073980550620353792084520767372304347132535784875671026563160583598386773718586111034826555689602824563172463446924287072570386712719870348862904936370894695108302490867826094352072132696743116741635111860205049129717948520534270924834318704244999690532431941248905257880347561221151841978982240191397364038490250930604211256385925496658620755582058753376328583001312846508295319286941837220522563729215928111164274042890696771820759856790994461944209269732769269559257608440686713206622111649275898426040931301005711446055819707704086201357712959922814300067907536161841255533171805313149332383712997091780368142625499055149806043238057037400510197255364471685815004154357049874205884682322443391374020169114833722616851257895369648472048116320266548560787733764126281102645474252013714507014577620450816459153848279084910457288549191</span></span><br><span class="line">e =<span class="number">65537</span></span><br><span class="line">c =<span class="string">&quot;apxy3z3DgGnzaEedcUy3A49wAsqyyn9sqx6eYZL5iDrCq0Wjs8BOY2Ofza5wuaFigm32PVpO5jpuDgw9b6oX8KM2ZB9/dDmwQc7JKnAKhCQrIc1v9qt7iQbnTK0DTQj/xvQkz/IBeSjoWBmHOx4s0tDxZRAjOPui5wwAywNM3ynULEPczv+xN2v+6HBeoS2YuyfF5mq/pIAMPwZs+QpkuwxSbNQ6xPNP9Ox1IeKz/41F7/D2fDsGB5CcFdAiQq+r95BhVeGzeaiQBpzwAXAPKIyO+fP6/M9XmpSJwjaMSiAUnksp9KfVOXgEG9Z0FmxP6rgqPl0vU+rVeJ2RsTUYCSP8Vy+PD3PGwDDdUtNzvcEXKr2BKiNoOUxprBAtyvcsmGqRLgDl1ZVgzSZ1U4MAmJ9x42mIU0XvolqaOCJZzaym1kJoBlw7/7+Nej4owEtan/c3TIkDkr/gCenUD/8MSlvnfTUMGdQLkSht2BZiuiHxVVRVzY5ETG6v+w9AtDMC&quot;</span></span><br><span class="line">p = <span class="number">166317783008561461619809354338149369955529500804877784696135394445562837564392263478378996752766024769472311034930058535976624952022796449711650766155307359508289724267180551758503427912271216717074610090283635131622612435152898135011648054004511857955351506722712213877180074987292198905073222084609633471831</span></span><br><span class="line">r = <span class="number">3</span></span><br><span class="line">phin = <span class="built_in">pow</span>(p, <span class="number">3</span>) - <span class="built_in">pow</span>(p, <span class="number">2</span>)</span><br><span class="line">d = gmpy2.invert(e, phin)</span><br><span class="line">c = bytes_to_long(base64.b64decode(c))</span><br><span class="line">m = <span class="built_in">pow</span>(<span class="built_in">int</span>(c), d, n)</span><br><span class="line">flag = libnum.n2s(m)</span><br><span class="line"><span class="built_in">print</span>(flag)</span><br></pre></td></tr></table></figure>
+
+<p>运行得到flag：</p>
+<p><img src="/http://localhost:4000//20200101185201926.png" alt="在这里插入图片描述"></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://localhost:4000/2020/01/01/AnhengMonthMatch2020-1-Writeup/">http://localhost:4000/2020/01/01/AnhengMonthMatch2020-1-Writeup/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Writeup/"># Writeup</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/02/01/Flask-Notes/">Flask-Notes</a>
+            
+            
+            <a class="next" rel="next" href="/2019/11/25/LHB-Writeup/">领航杯部分Writeup</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Lethe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

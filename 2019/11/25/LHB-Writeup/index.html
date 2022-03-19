@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Lethe">
+
+
+    <meta name="subtitle" content="Life is a struggle">
+
+
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>领航杯部分Writeup | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">领航杯部分Writeup</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">November 25, 2019&nbsp;&nbsp;15:13:41</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Writeup/">Writeup</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="编码解码"><a href="#编码解码" class="headerlink" title="编码解码"></a>编码解码</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">V2VsY29tZXRvdGhlUGlsb3RDdXA=</span><br></pre></td></tr></table></figure>
+
+<p>签到题，base64解码一下得到：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WelcometothePilotCup</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h1 id="取证分析"><a href="#取证分析" class="headerlink" title="取证分析"></a>取证分析</h1><p>给了一个pacp.pcap，CTF Wiki里面收录过这一道例题…</p>
+<p>wireshark 打开发现全部为DNS协议,查询名为大量字符串<code>xxxxx.skullseclabs.org</code></p>
+<p>好像是BSides San Francisco CTF 2017原题，参考这篇文章：<a target="_blank" rel="noopener" href="https://volatilevirus.home.blog/2018/12/30/bsidessf17-ctf-dnscap-write-up/">https://volatilevirus.home.blog/2018/12/30/bsidessf17-ctf-dnscap-write-up/</a></p>
+<p>先用下面命令进行提取：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tshark -r pacp.pcap -T fields -e dns.qry.name &gt; hex</span><br></pre></td></tr></table></figure>
+
+<p>然后用如下脚本得到flag.png:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scapy.<span class="built_in">all</span> <span class="keyword">import</span> *</span><br><span class="line"> </span><br><span class="line">                                                 r = rdpcap(<span class="string">&quot;pacp.pcap&quot;</span>)</span><br><span class="line"> </span><br><span class="line">a = <span class="string">&quot;&quot;</span></span><br><span class="line"> </span><br><span class="line">b = <span class="string">&quot;&quot;</span></span><br><span class="line">c = <span class="string">&quot;&quot;</span></span><br><span class="line">new = <span class="string">&quot;&quot;</span></span><br><span class="line"> </span><br><span class="line">f = <span class="built_in">open</span>(<span class="string">&quot;flag.png&quot;</span>,<span class="string">&quot;w&quot;</span>)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span> (<span class="number">0</span>,<span class="built_in">len</span>(r)):</span><br><span class="line">    <span class="keyword">if</span> r[i].haslayer(DNSQR) <span class="keyword">and</span> <span class="keyword">not</span> r[i].haslayer(DNSRR):</span><br><span class="line">        a = r[i][DNSQR].qname</span><br><span class="line">        b = a.replace(<span class="string">&quot;.skullseclabs.org.&quot;</span>,<span class="string">&quot;&quot;</span>)</span><br><span class="line">        b = b.replace(<span class="string">&quot;.&quot;</span>,<span class="string">&quot;&quot;</span>).decode(<span class="string">&quot;hex&quot;</span>)[<span class="number">9</span>:]</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> b == c:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"> </span><br><span class="line">        c = b</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> <span class="number">6</span> &lt; i &lt;<span class="number">365</span>:</span><br><span class="line">            new = new + b</span><br><span class="line"> </span><br><span class="line">f.write(new)</span><br><span class="line"> </span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
+
+<p>直接打不开，用010 Editor看一下：<br><img src="/http://localhost:4000//20191122191914979.png" alt="在这里插入图片描述"><br>删掉上面选中的部分，再打开，得到flag：b91011fc<img src="/http://localhost:4000//201911221919373.png" alt="在这里插入图片描述"></p>
+<br>
+
+<h1 id="lsb"><a href="#lsb" class="headerlink" title="lsb"></a>lsb</h1><p>给了下面这张图片：<br><img src="/http://localhost:4000//20191122192053275.png" alt="在这里插入图片描述"></p>
+<p>根据题目名字lsb，用Stegsolve打开，移位到下面位置得到flag：ONPGRAMBCICM<br><img src="/http://localhost:4000//20191122192250933.png" alt="在这里插入图片描述"></p>
+<br>
+
+<h1 id="恢复与解密"><a href="#恢复与解密" class="headerlink" title="恢复与解密"></a>恢复与解密</h1><p>题目描述：公安人员在犯罪分子的电脑中发现一些磁盘文件，但是发现关键信息已经被删除，现需要你对磁盘进行恢复，并对恢复出来的一些秘密文件里面的加密信息进行解密。 注意：通过strings获取到的yc4pl0fvjs2k1t7T为假flag，请尝试使用其他正确的做题方式获取flag。</p>
+<p>所以可以判断这题为磁盘恢复，并且有假flag。</p>
+<p>附件给的是一个xty.img，在kali下面命令进行挂载：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -o loop xty.img /mnt</span><br></pre></td></tr></table></figure>
+<p><img src="/http://localhost:4000//20191122192641539.png" alt="在这里插入图片描述"></p>
+<p>发一下一个隐藏文件夹<code>.hide</code>，里面有一个<code>secret.odg</code>，打开得到如下内容：<br><img src="/http://localhost:4000//20191122192752446.png" alt="在这里插入图片描述"><br>好像没什么用，想到题目描述中的磁盘恢复，所以需要用到sstat 和 ext3grep这两个工具，先用下面命令查看相关信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fsstat xty.img</span><br></pre></td></tr></table></figure>
+<p><img src="/http://localhost:4000//20191122193022786.png" alt="在这里插入图片描述"><br>注意这里<code>Root Directory: 2</code>中的2是我们要用到的。</p>
+<p>再用ext3grep工具，查看目录如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ext3grep --inode 2 xty.img</span><br></pre></td></tr></table></figure>
+<p><img src="/http://localhost:4000//201911221933068.png" alt="在这里插入图片描述"><br>可以看到很多secret文件，实际上内容都一样，用下面命令将其恢复出来：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ext3grep --restore-file secret xty.img</span><br></pre></td></tr></table></figure>
+<p><img src="/http://localhost:4000//20191122193728451.png" alt="在这里插入图片描述"><br>打开该文件发现下面一串字符：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aWdxNDs3NDFSOzFpa1I1MWliT08waWdx</span><br></pre></td></tr></table></figure>
+<p><img src="/http://localhost:4000//20191122193818373.png" alt="在这里插入图片描述"></p>
+<p>base64一下得到：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">igq4;741R;1ikR51ibOO0igq</span><br></pre></td></tr></table></figure>
+
+<p>异或解密脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> string</span><br><span class="line"></span><br><span class="line">c = <span class="string">&quot;igq4;741R;1ikR51ibOO0igq&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">200</span>):</span><br><span class="line">    p = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(c)):</span><br><span class="line">        p += <span class="built_in">chr</span>(<span class="built_in">ord</span>(c[j])^i)</span><br><span class="line">    <span class="built_in">print</span> (p)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>得到的唯一一个无特殊字符的即为flag：jdr78472Q82jhQ62jaLL3jdr<img src="/http://localhost:4000//20191122194428814.png" alt="在这里插入图片描述"></p>
+<br>
+
+<h1 id="文件提取"><a href="#文件提取" class="headerlink" title="文件提取"></a>文件提取</h1><p>给了一个flag.exe，strings一下可以看到是图片转base64后的字符串：<br><img src="/http://localhost:4000//20191122195004615.png" alt="在这里插入图片描述"><br>随便找个在线网站转回图片如下：</p>
+<p><img src="/http://localhost:4000//20191122195200384.png" alt="在这里插入图片描述"><br>然后strings一下这个图片得到flag：flag{068EEF6A7BAD3FDF}<br><img src="/http://localhost:4000//20191122195251726.png" alt="在这里插入图片描述"></p>
+<br>
+
+<h1 id="forensics"><a href="#forensics" class="headerlink" title="forensics"></a>forensics</h1><p>给了一个pngdecode.docx：<br><img src="/http://localhost:4000//20191122195431580.png" alt="在这里插入图片描述"></p>
+<p>一开始分析了好久这个图片，但是无果…然后对整个docx文档foremost提取一下，得到flag：360HA360<br><img src="/http://localhost:4000//20191122195959283.png" alt="在这里插入图片描述"></p>
+<br>
+
+<h1 id="OldCypher-Easy"><a href="#OldCypher-Easy" class="headerlink" title="OldCypher-Easy"></a>OldCypher-Easy</h1><p>给了密文如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Vvr Ifnvaus Bdwokv Gbtrzsa Vkqgofntja rrlznxk eflvkozjcdue rs “mzg oez ff pjkhvtx ok kqzioeg vgfsf.” Zyil au vvykokaeoyrp avuwfnzv, bnl fcry eom ucdgaie mzg qhxiegl dfrguta gh huk wixdf ce oks ijggrtk-dtq uqvketbxkq sulnwsvwbtj. Taw fssoeimaqb sutulwu gbrvlr gp huk towwu hugk htng prke ulwf tbx teglwfvkj th wpoorv sxutsg ifmfmpwpgkihf. Dig iiyilquegghr fqknjryl wpqbsgalkgg zath fgts gnrn mzkg: vz uetdu kvzy mxujoaojml xqf rtjukapu vtkezjkhl, zvcafkehkj fhj glpnrnzapu fktrxl msly, grhlqqbrj fhj cignvnmaeogoeg nkgff, kcevltcaot anuvwbtj agv gzrikihfu, rvmzttd eofn, rnw eqfr. Cztagwh nzkefhvwam ko ijqjvjv a vgodykke vzcfnikekabogofn, pw ychru stq vvnz dowwtb pxppmgifnvyy bfxcybvs mzg ggauy hx oognvmtlkqnr kevzpwdavs ygt grilrbfi rvmzttd kbsuimtlkca, ypsmwog, ntu dbkvfvhltxv eczvlttlkcay rgtapgg guvxjuoeorl tlvopqj. fesi&#123;42s96q9hw73d79v4xf5308t18o8519is10c512u2&#125;</span><br></pre></td></tr></table></figure>
+<p>最后一串明显像flag的格式，在这个网站进行维吉尼亚解密：<a target="_blank" rel="noopener" href="https://www.guballa.de/vigenere-solver">https://www.guballa.de/vigenere-solver</a></p>
+<p>得到flag：flag{42e96d9bf73d79c4fd5308f18b8519cb10c512b2}<br><img src="/http://localhost:4000//20191122200254756.png" alt="在这里插入图片描述"></p>
+<br>
+
+<h1 id="MasterofZip-Middle"><a href="#MasterofZip-Middle" class="headerlink" title="MasterofZip-Middle"></a>MasterofZip-Middle</h1><h4 id="level1"><a href="#level1" class="headerlink" title="level1"></a>level1</h4><p>给了一个压缩包，和一个Readme.md内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">小明喜欢用自己的手机号来加密zip，我们通过社工只查到了他手机号的前三位为199，你能解开这个压缩包吗？(手机号为伪造手机号，请不要试图拨打或社工)</span><br></pre></td></tr></table></figure>
+
+<p>于是爆破199开头的手机号，得到密码：19950453796<br><img src="/http://localhost:4000//20191122200459667.png" alt="在这里插入图片描述"></p>
+<h4 id="level2"><a href="#level2" class="headerlink" title="level2"></a>level2</h4><p>第一层解压后得到一个压缩包和一个Readme.txt，内容不重要，但是看到level2.zip里面也有一个Readme.txt，所以尝试明文攻击，成功恢复密钥并解压：<br><img src="/http://localhost:4000//20191122200717183.png" alt="在这里插入图片描述"></p>
+<h4 id="level3"><a href="#level3" class="headerlink" title="level3"></a>level3</h4><p>第二层解压后，只给了一个压缩包，于是尝试伪加密：<br><img src="/http://localhost:4000//20191122200956572.png" alt="在这里插入图片描述"><br>将箭头位置修该为0，成功解压，得到下面这张图片：<br><img src="/http://localhost:4000//20191122201051790.png" alt="在这里插入图片描述"><br>然后修改发图片高度：<br><img src="/http://localhost:4000//20191122201106882.png" alt="在这里插入图片描述"></p>
+<p>得到flag：flag{4537ec3bd52ba2b41c4a780db841efc3ddccc4a4}<br><img src="/http://localhost:4000//20191122201150405.png" alt="在这里插入图片描述"></p>
+<br>
+
+<h1 id="数据包分析-Easy"><a href="#数据包分析-Easy" class="headerlink" title="数据包分析-Easy"></a>数据包分析-Easy</h1><p>题目给了一个http3.pcap，进行流量分析，根据题目描述，直接导出HTTP对象列表，发现flag.php:<br><img src="/http://localhost:4000//20191122201347715.png" alt="在这里插入图片描述"></p>
+<p>导出后，即可在里面看到flag：flag{3eyufhnj87}<br><img src="/http://localhost:4000//20191122201438522.png" alt="在这里插入图片描述"></p>
+<br>
+
+<h1 id="EasyRSA"><a href="#EasyRSA" class="headerlink" title="EasyRSA"></a>EasyRSA</h1><p>题目给了加密脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> getPrime, inverse</span><br><span class="line">flag = <span class="string">&#x27;flag&#123;a-z0-9&#125;&#x27;</span></span><br><span class="line">nbits = <span class="number">2048</span></span><br><span class="line">p = getPrime(nbits / <span class="number">2</span>)</span><br><span class="line">q = getPrime(nbits / <span class="number">2</span>)</span><br><span class="line"><span class="keyword">assert</span> p != q</span><br><span class="line">N = p * q</span><br><span class="line">e = <span class="number">0x10001</span></span><br><span class="line">phiN = (p - <span class="number">1</span>) * (q - <span class="number">1</span>)</span><br><span class="line">d = inverse(e, phiN)</span><br><span class="line">phint = d % (p - <span class="number">1</span>)</span><br><span class="line">qhint = q % (p - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">str2int</span>(<span class="params">s</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">int</span>(s.encode(<span class="string">&#x27;hex&#x27;</span>), <span class="number">16</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;pubkey.txt&#x27;</span>, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="built_in">str</span>(e) + <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    f.write(<span class="built_in">str</span>(N) + <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    f.write(<span class="built_in">str</span>(phint) + <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    f.write(<span class="built_in">str</span>(qhint) + <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plain = str2int(flag)</span><br><span class="line"></span><br><span class="line">c = <span class="built_in">pow</span>(plain, e, N)</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;cipher.txt&#x27;</span>, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="built_in">hex</span>(c))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>但实际上没什么用，只是告诉了我们pubkey.txt里面分别对应的内容，即：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">e = 65537</span><br><span class="line">N = 16969752165509132627630266968748854330340701692125427619559836488350298234735571480353078614975580378467355952333755313935516513773552163392952656321490268452556604858966899956242107008410558657924344295651939297328007932245741660910510032969527598266270511004857674534802203387399678231880894252328431133224653544948661283777645985028207609526654816645155558915197745062569124587412378716049814040670665079480055644873470756602993387261939566958806296599782943460141582045150971031211218617091283284118573714029266331227327398724265170352646794068702789645980810005549376399535110820052472419846801809110186557162127</span><br><span class="line">phint = 1781625775291028870269685257521108090329543012728705467782546913951537642623621769246441122189948671374990946405164459867410646825591310622618379116284293794090970292165263334749393009999335413089903796624326168039618287078192646490488534062803960418790874890435529393047389228718835244370645215187358081805</span><br><span class="line">qhint = 10450978538445496868237560522155647855468044038637044818500580506745232482415364474390893285539835615564332910332708101539048528242011762736342572650763270501265440674647489375438852377280494520168349154604800218665628586180057648386859933274414030182106920793492451577530884172876623074281199949317487086975</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>而这里的phint和qhint实际上就是常说的dp和dq。</p>
+<p>还给了密文如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0x7b5d1ea2d92df27239817ce8d885e1f66569dd41e075efc13d09dd1df673a8fba68ec7487c1552028e9eb9ba6663983f96d01925bbdfd18398e44f970257fa0f96b6ec915d05d637ebb4c8f4c56c44b2bb46bd1afe5a67acd640585dccf1681155308c0663cb57fccdc10c097c454dafdd2a96ccd08e9a2a8b0a9727bbe9945e579b0652d1c1d826305f0dd716cfb647cadb8eca1a0286dfb938b60b89981403d4faa6df54cfac0fa4699c97aeba6e82ab575cd6aa4421018cf9b404836c02b5301dbc475a0bcc5eef86bcbeb89a73355dbeb80e7b4d23c7a39f32c6b6138125c73892633f46b0bf1114aa67f09e1d394dfa4020e318f7d8004b84fc835b1ee9L</span><br></pre></td></tr></table></figure>
+
+<p>所以这题我们有c、e、n、dp、dq，足够解出明文了。</p>
+<p>参考这篇文章：<a target="_blank" rel="noopener" href="https://skysec.top/2018/08/24/RSA%E4%B9%8B%E6%8B%92%E7%BB%9D%E5%A5%97%E8%B7%AF(1)/">https://skysec.top/2018/08/24/RSA%E4%B9%8B%E6%8B%92%E7%BB%9D%E5%A5%97%E8%B7%AF(1)/</a></p>
+<p>最终解密脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="keyword">import</span> libnum</span><br><span class="line">e = <span class="number">65537</span></span><br><span class="line">n = <span class="number">16969752165509132627630266968748854330340701692125427619559836488350298234735571480353078614975580378467355952333755313935516513773552163392952656321490268452556604858966899956242107008410558657924344295651939297328007932245741660910510032969527598266270511004857674534802203387399678231880894252328431133224653544948661283777645985028207609526654816645155558915197745062569124587412378716049814040670665079480055644873470756602993387261939566958806296599782943460141582045150971031211218617091283284118573714029266331227327398724265170352646794068702789645980810005549376399535110820052472419846801809110186557162127</span></span><br><span class="line">dp = <span class="number">1781625775291028870269685257521108090329543012728705467782546913951537642623621769246441122189948671374990946405164459867410646825591310622618379116284293794090970292165263334749393009999335413089903796624326168039618287078192646490488534062803960418790874890435529393047389228718835244370645215187358081805</span></span><br><span class="line">c = <span class="string">&quot;0x7b5d1ea2d92df27239817ce8d885e1f66569dd41e075efc13d09dd1df673a8fba68ec7487c1552028e9eb9ba6663983f96d01925bbdfd18398e44f970257fa0f96b6ec915d05d637ebb4c8f4c56c44b2bb46bd1afe5a67acd640585dccf1681155308c0663cb57fccdc10c097c454dafdd2a96ccd08e9a2a8b0a9727bbe9945e579b0652d1c1d826305f0dd716cfb647cadb8eca1a0286dfb938b60b89981403d4faa6df54cfac0fa4699c97aeba6e82ab575cd6aa4421018cf9b404836c02b5301dbc475a0bcc5eef86bcbeb89a73355dbeb80e7b4d23c7a39f32c6b6138125c73892633f46b0bf1114aa67f09e1d394dfa4020e318f7d8004b84fc835b1ee9L&quot;</span></span><br><span class="line">c = <span class="built_in">int</span>(c[:-<span class="number">1</span>], <span class="number">16</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">65538</span>):</span><br><span class="line">    <span class="keyword">if</span> (dp*e-<span class="number">1</span>)%i == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">if</span> n%(((dp*e-<span class="number">1</span>)/i)+<span class="number">1</span>)==<span class="number">0</span>:</span><br><span class="line">            p=((dp*e-<span class="number">1</span>)/i)+<span class="number">1</span></span><br><span class="line">            q=n/(((dp*e-<span class="number">1</span>)/i)+<span class="number">1</span>)</span><br><span class="line">            phi = (p-<span class="number">1</span>)*(q-<span class="number">1</span>)</span><br><span class="line">            d = gmpy2.invert(e,phi)%phi</span><br><span class="line">            <span class="built_in">print</span> libnum.n2s(<span class="built_in">pow</span>(c,d,n))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>运行得到flag：flag{6b85823e6f121a7bb3407ff2e9f5f2f27efcc5a6}</p>
+<p><img src="/http://localhost:4000//20191122202145663.png" alt="在这里插入图片描述"> </p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://localhost:4000/2019/11/25/LHB-Writeup/">http://localhost:4000/2019/11/25/LHB-Writeup/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Writeup/"># Writeup</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/01/01/AnhengMonthMatch2020-1-Writeup/">安恒月赛2020元旦场Writeup</a>
+            
+            
+            <a class="next" rel="next" href="/2019/11/19/Python-unserialize-vulnerability/">浅谈python反序列化漏洞</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Lethe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

