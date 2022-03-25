@@ -269,7 +269,7 @@
 <li>ConvNets 需要捕获图片&#x2F;视频中的 visual features 来解决 pretext tasks</li>
 <li>可以根据图像&#x2F;视频的某些属性自动生成用于 pretext task 的伪标签</li>
 </ul>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20200928163803414.png" alt="Fig.1"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20200928163803414.png" alt="Fig.1"></p>
 <p>self-supervised learning 的一般流程：</p>
 <ul>
 <li>首先，设计一个预定义的前置任务（pretext task），训练网络来解决改任务，根据数据的某些属性自动生成前置任务下的伪标签。</li>
@@ -348,10 +348,10 @@ $$
 <h2 id="3-常见的深度网络架构"><a href="#3-常见的深度网络架构" class="headerlink" title="3 常见的深度网络架构"></a>3 常见的深度网络架构</h2><p>该节主要介绍了用于学习图像和视频特征的常见架构，对于不同的学习方法来说，架构大致是相同的</p>
 <h4 id="3-1-学习图像特征的架构"><a href="#3-1-学习图像特征的架构" class="headerlink" title="3.1 学习图像特征的架构"></a>3.1 学习图像特征的架构</h4><p>主要介绍 AlexNet$^{[8]}$、VGG$^{[9]}$、GooLeNet$^{[10]}$、ResNet$^{[11]}$ 和 DenseNet$^{[12]}$ 五种图像特征学习架构。</p>
 <h5 id="3-1-1-AlexNet"><a href="#3-1-1-AlexNet" class="headerlink" title="3.1.1 AlexNet"></a>3.1.1 AlexNet</h5><p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/876354/blog/1620906">https://my.oschina.net/u/876354/blog/1620906</a></p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201001093802276.png" alt="image-20201001093802276"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201001093802276.png" alt="image-20201001093802276"></p>
 <p>6240万个参数的AlexNet在ImageNet上训练了130万张图片。AlexNet具有8层，其中5层为卷积层，3层为全连接层，ReLU应用在每个卷积层之后。94%的参数来自全连接层，很容易过拟合，因此可通过数据扩充、数据丢失和正则化来避免。</p>
 <h5 id="3-1-2-VGG"><a href="#3-1-2-VGG" class="headerlink" title="3.1.2 VGG"></a>3.1.2 VGG</h5><p>详细参考：<a target="_blank" rel="noopener" href="https://my.oschina.net/u/876354/blog/1634322">https://my.oschina.net/u/876354/blog/1634322</a></p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201001094956564.png" alt="image-20201001094956564"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201001094956564.png" alt="image-20201001094956564"></p>
 <p>VGG具有16个卷积层，分别属于5个卷积块。其与AlexNet不同的是，AlexNet具有大的卷积步幅和内核大小，但是VGG中的所有卷积核都有相同的小尺寸（3×3）和小的卷积步幅（1×1）。</p>
 <p>较大的内核大小会导致过多的参数和较大的模型大小，而较大的卷积步幅会导致网络在较低层丢失一些精细的功能。</p>
 <h5 id="3-1-3-ResNet"><a href="#3-1-3-ResNet" class="headerlink" title="3.1.3 ResNet"></a>3.1.3 ResNet</h5><p>详细参考：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/31852747">https://zhuanlan.zhihu.com/p/31852747</a></p>
@@ -359,20 +359,20 @@ $$
 <p>残差网络ResNet通过使用条约连接（skip connection），将前一个特征图发送到下一个卷积来在卷积快中使用来客服梯度消失和梯度爆炸。</p>
 <p>skip connections中文为<strong>跳跃连接</strong>，通常用于残差网络中，作用是在比较深的网络中，解决在训练的过程中<strong>梯度爆炸</strong>和<strong>梯度消失</strong>问题。</p>
 <p>参考：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/news/134921">https://cloud.tencent.com/developer/news/134921</a></p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201001102526359.png" alt="image-20201001102526359"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201001102526359.png" alt="image-20201001102526359"></p>
 <h5 id="3-1-4-GoogLeNet"><a href="#3-1-4-GoogLeNet" class="headerlink" title="3.1.4 GoogLeNet"></a>3.1.4 GoogLeNet</h5><p>详细参考：<a target="_blank" rel="noopener" href="https://my.oschina.net/u/876354/blog/1637819">https://my.oschina.net/u/876354/blog/1637819</a></p>
 <p>GoogLeNet 是一个22层的深度网络，基本块是七十块，它由4个具有不同内核大小的并行卷积层组成，然后是1×1卷积来降维。</p>
 <p>GoogLeNet在计算成本不变的情况下增加了网络的深度和宽度，结构如下：</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201001122734534.png" alt="image-20201001122734534"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201001122734534.png" alt="image-20201001122734534"></p>
 <h5 id="3-1-5-DenseNet"><a href="#3-1-5-DenseNet" class="headerlink" title="3.1.5 DenseNet"></a>3.1.5 DenseNet</h5><p>详细参考：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/37189203">https://zhuanlan.zhihu.com/p/37189203</a></p>
 <p>为了减轻深层网络中深层难以记住网络的低级功能的问题，提出了密集连接，将卷积块之前的所有特征作为神经网络中下一个卷积块的输入发送，这样所有先前的卷积块的输出特征都用作当前块的输入。这样，较浅的块可以专注于低级功能，而较深的块专注于高级任务特定功能。</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201001123650760.png" alt="image-20201001123650760"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201001123650760.png" alt="image-20201001123650760"></p>
 <h4 id="3-2-学习视频特征的架构"><a href="#3-2-学习视频特征的架构" class="headerlink" title="3.2 学习视频特征的架构"></a>3.2 学习视频特征的架构</h4><ul>
 <li>基于2DConvNet的方法在每个单帧上应用2DConvNet，并将多个帧的图像特征融合为视频特征。</li>
 <li>基于3DConvNet的方法采用3D卷积运算从多个帧中同时提取空间和时间特征。</li>
 <li>基于LSTM的方法采用LSTM对视频中的长期动态进行建模。</li>
 </ul>
-<h5 id="3-2-1-Two-Stream-Network（双流网络）"><a href="#3-2-1-Two-Stream-Network（双流网络）" class="headerlink" title="3.2.1 Two-Stream Network（双流网络）"></a>3.2.1 Two-Stream Network（双流网络）</h5><p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201001144423636.png" alt="image-20201001144423636"></p>
+<h5 id="3-2-1-Two-Stream-Network（双流网络）"><a href="#3-2-1-Two-Stream-Network（双流网络）" class="headerlink" title="3.2.1 Two-Stream Network（双流网络）"></a>3.2.1 Two-Stream Network（双流网络）</h5><p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201001144423636.png" alt="image-20201001144423636"></p>
 <p>用一个2DConvNet捕获RGB流中的空间特征，用另一个2DConvNet捕获光流中的时间特征。实验表面，两种流的融合可以显著提高动作识别的准确性，后来这项工作已经扩展到多流网络，以融合不同类型输入的特征。</p>
 <h5 id="3-2-2-Spatiotemporal-Convolutional-Neural-Network（时空卷积神经网络）"><a href="#3-2-2-Spatiotemporal-Convolutional-Neural-Network（时空卷积神经网络）" class="headerlink" title="3.2.2  Spatiotemporal Convolutional Neural Network（时空卷积神经网络）"></a>3.2.2  Spatiotemporal Convolutional Neural Network（时空卷积神经网络）</h5><p>3DConvNets能够同时从多个帧中提取空间和时间特征。</p>
 <p>C3D是一个类似VGG的11层的3DConvNet，其中8个卷积层，3个全连接层，所有核的大小为3×3×3，卷积步幅固定为1个像素。</p>
@@ -381,12 +381,12 @@ $$
 <h5 id="3-2-3-Recurrent-Neural-Network（递归神经网络，RNN）"><a href="#3-2-3-Recurrent-Neural-Network（递归神经网络，RNN）" class="headerlink" title="3.2.3 Recurrent Neural Network（递归神经网络，RNN）"></a>3.2.3 Recurrent Neural Network（递归神经网络，RNN）</h5><p>由于能够对序列中的时间动态建模，RNN经常作为有序帧序列应用于视频。</p>
 <p>LSTM使用存储单元来存储、修改和访问内部状态，可以更好的对长期时间关系建模。$^{[73]}$</p>
 <p>基于LSTM提出的用于人类动作识别的长期递归卷积网络（LRCN，long-term recurrent convolutional networks）框架如下:$^{[54]}$</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201001161322468.png" alt="image-20201001161322468"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201001161322468.png" alt="image-20201001161322468"></p>
 <p>将LSTM顺序的应用于ConvNets提取的特征，以模拟帧序列中的时间动态。使用LSTM将视频建模为帧序列，能显式地对视频中的长期时间动态建模。</p>
 <h4 id="3-3-ConvNet-架构的总结"><a href="#3-3-ConvNet-架构的总结" class="headerlink" title="3.3 ConvNet 架构的总结"></a>3.3 ConvNet 架构的总结</h4><p>深度卷积网络已经在各种计算机视觉任务中表现得很好，但是一个常见是这些网络在数据稀缺的情况下通常由数百万个参数，从而导致数百万个参数。</p>
 <p>在大数据集上进行预训练并在小数据集上进行微调，无论是性能和效率上都要优于在小规模数据集从头开始训练，但是大规模数据集的收集和注释仍然是一个代价很大的过程。因此提出了许多子监督学习办法，之后的部分介绍了针对图像和视频特征的自监督学习的一般流程。</p>
 <h2 id="4-常见的前置任务和下游任务"><a href="#4-常见的前置任务和下游任务" class="headerlink" title="4 常见的前置任务和下游任务"></a>4 常见的前置任务和下游任务</h2><p>大多数自监督学习的方法都遵循下图的模式：</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201001203218066.png" alt="image-20201001203218066"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201001203218066.png" alt="image-20201001203218066"></p>
 <p>为ConvNets定义一个预任务，通过解决该预任务来学习到视觉特征，并自动生成伪标签$P$，而无需人工注释。通过最小化ConvNet的预测$O$和伪标签$P$的误差来优化ConvNet，这样在完成前置任务后就得到了能捕获图像或视频视觉特征的ConvNet模型。</p>
 <h4 id="4-1-从前置任务中学习视觉特征"><a href="#4-1-从前置任务中学习视觉特征" class="headerlink" title="4.1 从前置任务中学习视觉特征"></a>4.1 从前置任务中学习视觉特征</h4><p>目前已经有许多前置任务应用于自监督学习，如前景对象分割（foreground object segmentation）$^{[81]}$、图像修复（image inpainting）$^{[19]}$、聚类（clustering）$^{[44]}$、图像着色（image colorization）$^{[82]}$、时间序列验证（temporal order verification）$^{[44]}$、视频音频对应验证（visual audio correspondence verification）$^{[25]}$。</p>
 <p>以图像着色为例子，该任务即需要将灰度图着色为彩色图。在着色的过程中，只有网络学习到了图像的结构和上下文信息，才能生成逼真的彩色图像。</p>
@@ -407,7 +407,7 @@ $$
 <p><strong>（4）Cross modal-based（基于跨模态的方法）</strong></p>
 <p>这种前置任务训练ConvNet验证两个不同的输入数据通道是否彼此对应。包括视觉-音频对应验证（Visual-Audio Correspondence Verification）、RGB流对应验证（RGB-Flow Correspondence Verification）、自我感应（egomotion）。</p>
 <p>上面四类如下图所示：</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201001211847574.png" alt="image-20201001211847574"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201001211847574.png" alt="image-20201001211847574"></p>
 <h4 id="4-3-常用的下游评估任务"><a href="#4-3-常用的下游评估任务" class="headerlink" title="4.3 常用的下游评估任务"></a>4.3 常用的下游评估任务</h4><p>为了评估通过自监督方法学习方法学习到的的图像或视频特征的质量，将学习到参数用作预训练模型，然后对下游高级任务进行微调，这种迁移学习的能力可以证明所学特征的泛化能力。</p>
 <p>常见的下游高级视觉任务有：</p>
 <ul>
@@ -426,12 +426,12 @@ $$
 </li>
 </ul>
 <h2 id="5-数据集"><a href="#5-数据集" class="headerlink" title="5 数据集"></a>5 数据集</h2><p>自监督学习不需要人工标注的数据，因此任何监督学习的数据集都可以用来自监督方式的视觉特征学习。</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201002162138051.png" alt="image-20201002162138051"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201002162138051.png" alt="image-20201002162138051"></p>
 <h2 id="6-图像特征的学习"><a href="#6-图像特征的学习" class="headerlink" title="6 图像特征的学习"></a>6 图像特征的学习</h2><h4 id="6-1-基于生成（Generation-based）"><a href="#6-1-基于生成（Generation-based）" class="headerlink" title="6.1 基于生成（Generation-based）"></a>6.1 基于生成（Generation-based）</h4><p><strong>（1）Image Generation with GAN</strong></p>
 <p>GAN通常用来生成逼真的图像，有一个生成器（generator）和一个判别器（discriminator）判别器为了能够区分真实图像与生成数据图像分布的区别，就需要捕获图像中的语义特征来完成任务，因此就可以将判别器的参数应用于下游视觉任务。但是此类生成图像任务主要目的是生成逼真的图像，而不是在下游任务获得更好的性能。</p>
 <p>对抗训练（adversarial training）可以帮助网络捕获真实数据的真实分布并生成真实数据，当没有人工注释的标签涉及时，也属于自监督学习。</p>
 <p><strong>（2）Image Inpainting</strong></p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201002173133776.png" alt="image-20201002173133776"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201002173133776.png" alt="image-20201002173133776"></p>
 <p>图像修补（Image Inpainting）是根据图像的其余部分预测任意缺失区域的任务，只有模型真正读懂了这张图所代表的含义，学习到了图像的特征（颜色、结构等），才能有效的修补缺失的区域。$^{[19]}$</p>
 <p>一般是由生成器和判别器两个网络进行对抗从而预测缺失部分，为了完成图像修复任务，两个网络都需要学习图像的语义特征：</p>
 <ul>
@@ -446,19 +446,19 @@ $$
 </ul>
 <p>和其他GAN相似，判别网络学到的参数可以迁移到其他下游任务上，但是目前还没有人测试这个迁移学习的性能如何。</p>
 <p><strong>（4）Image Colorization</strong></p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201002191222250.png" alt="image-20201002191222250"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201002191222250.png" alt="image-20201002191222250"></p>
 <p>图像着色（Image Colorization）将灰度图片作为输入，网络需要正确的为图片进行着色，为了使每个像素正确着色，网络就需要识别对象并将统一部分的像素分组在一起，从而在该过程中学习了图像的视觉特征。</p>
 <p>最近几年，研究人员提出了许多基于图像着色的方法$^{[18][137][138]}$，并且有一些工作专门使用图像着色作为自监督图像表征学习的前置任务。</p>
 <h4 id="6-2-基于上下文（Context-Based）"><a href="#6-2-基于上下文（Context-Based）" class="headerlink" title="6.2 基于上下文（Context-Based）"></a>6.2 基于上下文（Context-Based）</h4><p><strong>（1）Context Similarity</strong></p>
 <p>基于上下文相似性进行学习（Learning with Context Similarity），这里指的是在自监督学习中使用聚类算法。基于传统的提取特征的方法（e.g. Hog, SIFT)将图像聚类，然后基于聚类后的伪标签进行训练，让ConvNET对数据进行分类（或识别两个图像是否来自同一个类）。为了能够完成该分类任务，ConvNet就需要学习每个类别之间的相似性和不同类别之间的差异性。</p>
 <p>下图为DeepCluster的架构，用K-Means对图像迭代的进行聚类，然后用后续的聚类伪标签监督的更新ConvNet的权重。</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201003113900613.png" alt="image-20201003113900613"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201003113900613.png" alt="image-20201003113900613"></p>
 <p>Contrasting（基于对比的）：中心思想是训练一个网络使其可以最大化来自同一图片的相似性，最小化来自不同图片的相似性。值得一提的是SimCLR，这个方法在ImageNet上比其他自监督的方法精度高。</p>
 <p><strong>（2）Spatial Context Structure</strong></p>
 <p>利用图像包含的丰富的空间上下文信息来设计前置任务，例如图像中不同块之间的相对位置。</p>
 <ul>
 <li><p><strong>Image Jigsaw Puzzle$^{[20]}$：</strong>将图像切块，随机打乱，训练网络重新复原该图像。该方法的关键在于，找到一个合适的任务，让任务不会太过简单（达不到训练预期效果），也不会太难（训练无法收敛）。</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201003142716169.png" alt="image-20201003142716169"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201003142716169.png" alt="image-20201003142716169"></p>
 </li>
 <li><p><strong>Geometric Transformation$^{[28]}$：</strong>将原图旋转一定角度，让网络预测出图像的旋转角度。</p>
 </li>
@@ -466,16 +466,16 @@ $$
 <h4 id="6-3-基于自动生成语义标签（Free-Semantic-Label-based）"><a href="#6-3-基于自动生成语义标签（Free-Semantic-Label-based）" class="headerlink" title="6.3 基于自动生成语义标签（Free Semantic Label-based）"></a>6.3 基于自动生成语义标签（Free Semantic Label-based）</h4><p>通过Game Engine或Hard-code自动生成语义标签（如segmentation masks、depth images、optic flows、surface normal images），因为这些语义标签不需要任何人工注释，因此可以使用合成数据集与无标记大型数据集结合使用进行自监督学习。</p>
 <p><strong>（1）Labels Generated by Game Engines</strong></p>
 <p>Game Engine可以渲染逼真的图像比提供精确的像素级标签，并且可以低成本合成大规模数据集。</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201003145210867.png" alt="image-20201003145210867"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201003145210867.png" alt="image-20201003145210867"></p>
 <p>虽然可以利用自动生产的语义标签进行学习，但是毕竟合成的图像与真实图像学习到的视觉特征还是有区别的。因此，Ren和Lee提出了一种基于对抗学习的无监督特征空间域自适应方法$^{[30]}$（这里可以理解为自监督）：</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201003145458613.png" alt="image-20201003145458613"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201003145458613.png" alt="image-20201003145458613"></p>
 <p>该方法使用了一个鉴别器$D$进行对抗训练，来不断最小化真实图像和合成图像直接特征空间域的差异，这样就可以在合成图像的语义标签训练下，更好的捕获真实图像的视觉特征。</p>
 <p><strong>优点：</strong>与其他的让网络隐式的学习视觉特征不同，此种方法直接利用了合成图像自动生成的精确语义标签进行训练，使得网络学习与图像中对象高度相关的特征。</p>
 <p><strong>（2）Labels Generated by Hard-code programs</strong></p>
 <p>通过在图像或视频上使用硬编码程序（Hard-code program）来获取语义标签，使用生成的标签训练ConvNet。</p>
 <p>优点是可以用语义标签作为监督信号，驱使ConvNet直接学习语义特征；确定是硬编码检测器生成的语义标签容易引入噪音，需要专门处理。</p>
 <h4 id="6-4-总结"><a href="#6-4-总结" class="headerlink" title="6.4 总结"></a>6.4 总结</h4><p>用于图像的自监督学习前置任务总结：</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201002162758472.png" alt="image-20201002162758472"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201002162758472.png" alt="image-20201002162758472"></p>
 <h2 id="7-视频特征的学习"><a href="#7-视频特征的学习" class="headerlink" title="7 视频特征的学习"></a>7 视频特征的学习</h2><h4 id="7-1-基于生成（Generation-based）"><a href="#7-1-基于生成（Generation-based）" class="headerlink" title="7.1 基于生成（Generation-based）"></a>7.1 基于生成（Generation-based）</h4><p><strong>（1）Video Generation with GAN</strong></p>
 <p>与图像类生成方法类似，通常由两部分组成：Generator（生成器：生成视频）和Discriminator（判别器：区分生成的与真实的视频），Discriminator为解决判别任务需要学习视频中到相应的语义特征，然后其中的参数可以被迁移到其他下游任务。</p>
 <ul>
@@ -505,25 +505,25 @@ $$
 <p>验证输入的RGB帧和光流是否彼此对应来学习视频特征$^{[23],[24]}$。</p>
 <p><strong>（2）Visual-Audio Correspondence</strong></p>
 <p>利用视频和音频对应关系学习特征的方法$^{[25],[93]}$。</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201003185359746.png" alt="image-20201003185359746"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201003185359746.png" alt="image-20201003185359746"></p>
 <p>通过从一个视频的同一时间提取视频帧和音频来采样正数据，而通过从不同的视频或一个视频的不同时间提取视频帧和音频来生成负训练数据。训练网络以发现视频数据和音频数据的相关性以完成此任务。</p>
 <p><strong>（3）Ego-motion</strong></p>
 <p>利用以自我为中心的视频和自我运动信号$^{[94],[95]}$之间的对应关系进行学习。</p>
 <p>参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/cserwangjun/article/details/103154308">https://blog.csdn.net/cserwangjun/article/details/103154308</a></p>
 <h4 id="7-4-总结"><a href="#7-4-总结" class="headerlink" title="7.4 总结"></a>7.4 总结</h4><p>用于视频的自监督学习前置任务总结：</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201003154431844.png" alt="image-20201003154431844"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201003154431844.png" alt="image-20201003154431844"></p>
 <h2 id="8-性能比较"><a href="#8-性能比较" class="headerlink" title="8 性能比较"></a>8 性能比较</h2><h4 id="8-1-学习图像特征的性能"><a href="#8-1-学习图像特征的性能" class="headerlink" title="8.1 学习图像特征的性能"></a>8.1 学习图像特征的性能</h4><p>使用来自AlexNet的卷积层的激活作为特征对ImageNet和Places数据集进行线性分类，其中“Places labels ”和“ImageNet labels ”两行为具有人工注释标签的监督学习，结果如下，</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201003210614656.png" alt="image-20201003210614656"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201003210614656.png" alt="image-20201003210614656"></p>
 <ul>
 <li>自监督学习的性能总是由于从头训练（第二栏第一行）。</li>
 <li>所有自监督方法都在conv3和conv4表现较好，可能因为浅层捕获了一般的低级特征，而深层捕获了与预任务相关的特征。</li>
 <li>当用于训练预任务的数据集与下游任务的数据集之间存在领域差距时，自监督学习方法能够达到与使用ImageNet标签监督训练的模型相当的性能。</li>
 </ul>
 <p>在除了图像分类下游任务，在目标检测和语义分割的性能对比如下：</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201003211419837.png" alt="image-20201003211419837"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201003211419837.png" alt="image-20201003211419837"></p>
 <p>总体来看，<strong>DeepClustering</strong>在所有自监督学习方法中表现最好。</p>
 <h4 id="8-2-学习视频特征的性能"><a href="#8-2-学习视频特征的性能" class="headerlink" title="8.2 学习视频特征的性能"></a>8.2 学习视频特征的性能</h4><p>比较现有的自我监督方法在UCF101和HMDB51数据集上的动作识别性能，Kinetics Label表示人工注释标签的监督学的性能：</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSL-survey/image-20201003211633068.png" alt="image-20201003211633068"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSL-survey/image-20201003211633068.png" alt="image-20201003211633068"></p>
 <h2 id="9-展望"><a href="#9-展望" class="headerlink" title="9 展望"></a>9 展望</h2><p><strong>（1）Learning Features from Synthetic Data（从合成的数据中学习）</strong></p>
 <ul>
 <li><p>利用合成数据来练网络，因为通过游戏引擎生成的图像和视频可以自动生成精确的注释，从而利用预任务从合成数据中学习特征具有较好的效果。</p>

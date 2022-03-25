@@ -565,36 +565,36 @@
 <p>所以直接在构造的语句最后加上<code>http://</code>绕过检测，再注释掉即可。</p>
 <p>payload：<br><code>java&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;:alert(1)//http://</code><br><br></p>
 <h5 id="Level-10"><a href="#Level-10" class="headerlink" title="Level 10"></a>Level 10</h5><p>这题没有输入框，url上给了一个keyword参数，尝试闭合再构造，虽然回显的内容没有过滤，但是却不会弹窗，查看源码，发现还有一个隐藏的form表单，看看能否利用。</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730195539277.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/XSS-challenges-solutions/20190730195539277.png" alt="在这里插入图片描述"></p>
 <p>尝试<code>?t_link=Lethe&amp;t_history=Lethe&amp;t_sort=Lethe</code></p>
 <p>发现<code>t_sort</code>参数可以利用</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730195830826.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/XSS-challenges-solutions/20190730195830826.png" alt="在这里插入图片描述"></p>
 <p>于是进行构造，发现尖括号被过滤了，于是利用事件进行弹窗。</p>
 <p>payload:<br><code>?t_sort=&quot; type=image src=x onerror=alert(1)//</code></p>
 <br>
 
 <h5 id="Level-11"><a href="#Level-11" class="headerlink" title="Level 11"></a>Level 11</h5><p>和上一关一样有一个隐藏的表单，也是<code>t_sort</code>参数可以利用</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/2019073020054445.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/XSS-challenges-solutions/2019073020054445.png" alt="在这里插入图片描述"></p>
 <p>用上一关的payload进行测试，发现双引号也被过滤了，应该又要换个思路了。</p>
 <p>重新打开页面观察源码，看到一个可疑的地方，那新增的一个参数不是白加的，当你从第10关跳到第11关时，<code>t_ref</code>的value值是页面的Referer的值。</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730201235164.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/XSS-challenges-solutions/20190730201235164.png" alt="在这里插入图片描述"></p>
 <p>于是在跳转的时候抓包修改Referer的值为<code>&quot; type=text onclick=&quot;alert(1)</code>，如下：</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730201950407.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/XSS-challenges-solutions/20190730201950407.png" alt="在这里插入图片描述"></p>
 <p>然后在Target界面Forward，回到闯关页面发现已成功注，点击输入框即可弹窗。</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730202044406.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/XSS-challenges-solutions/20190730202044406.png" alt="在这里插入图片描述"></p>
 <br>
 
 <h5 id="Level-12"><a href="#Level-12" class="headerlink" title="Level 12"></a>Level 12</h5><p>与上一关类似，不过这里是利用User-Agent:</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730202249699.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/XSS-challenges-solutions/20190730202249699.png" alt="在这里插入图片描述"></p>
 <p>同样抓包修改User-Agent的值进行构造</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730202431311.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/XSS-challenges-solutions/20190730202431311.png" alt="在这里插入图片描述"></p>
 <p>payload:<br><code>&quot; type=text onclick=&quot;alert(1)</code></p>
 <br>
 
 <h5 id="Level-13"><a href="#Level-13" class="headerlink" title="Level 13"></a>Level 13</h5><p>与前两关相同，只不过这一关是利用Cookie进行注入。</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730202710641.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/XSS-challenges-solutions/20190730202710641.png" alt="在这里插入图片描述"></p>
 <p>抓包修改Cookie为：<code>user=&quot; type=text onclick=&quot;alert(1)</code>即可</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/2019073020292078.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/XSS-challenges-solutions/2019073020292078.png" alt="在这里插入图片描述"></p>
 <br>
 
 <h5 id="Level-14"><a href="#Level-14" class="headerlink" title="Level 14"></a>Level 14</h5><p>进入14关，没有输入框，url中没有参数，查看源码，发现使用了<code>&lt;iframe&gt;</code>标签引入了<code>http://www.exifviewer.org/</code></p>
@@ -602,24 +602,24 @@
 <br>
 
 <h5 id="Level-15"><a href="#Level-15" class="headerlink" title="Level 15"></a>Level 15</h5><p>页面什么都没有，那么直接看源码</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730204024883.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/XSS-challenges-solutions/20190730204024883.png" alt="在这里插入图片描述"></p>
 <p>第一眼看貌似也没什么，实际上还是因为我对js不是很熟悉…搜索得到，这里使用了AngularJS框架的 <code>ng-include</code> 指令，可参考：<a target="_blank" rel="noopener" href="https://www.runoob.com/angularjs/ng-ng-include.html">https://www.runoob.com/angularjs/ng-ng-include.html</a></p>
 <p>其实就是可以利用 <code>ng-include</code> 指令来包含文件&gt;</p>
 <p>有两默认情况下，包含的文件需要包含在同一个域名下，也就是符合SOP。</p>
 <p>所以网上大多方法是包含了第一关的代码，如下payload：<code>?src=&#39;level1.php?name=test&lt;img src=1 onerror=alert(1)&gt;&#39;</code></p>
 <p>但是我在做的过程中发现，引用的名字会直接出现在源码上:</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730210141438.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/XSS-challenges-solutions/20190730210141438.png" alt="在这里插入图片描述"></p>
 <p>那么理论上通过闭合也是可以的</p>
 <p>于是尝试payload:<br><code>?src=&quot;&gt;&lt;img src=&quot;x&quot; onerror=alert(1)&gt;</code></p>
 <p>发现真的是可以的..</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/2019073021103933.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/XSS-challenges-solutions/2019073021103933.png" alt="在这里插入图片描述"></p>
 <br>
 
 <h5 id="Level-16"><a href="#Level-16" class="headerlink" title="Level 16"></a>Level 16</h5><p>输入点包含在<code>&lt;center&gt;</code>标签内，过滤了空格，可以用<code>%0a</code>代替空格进行绕过。</p>
 <p>payload:<br><code>?keyword=&lt;img%0asrc=x%0aonerror=alert(1)&gt;</code><br><br></p>
 <h5 id="Level-17"><a href="#Level-17" class="headerlink" title="Level 17"></a>Level 17</h5><p>进入之后会看到一个关于flash的什么东西，暂时先不管，做xss先找输入输出点。</p>
 <p>url中有<code>arg01</code>和<code>arg02</code>两个参数，应该是输入点，查看源码发现在<code>&lt;embed&gt;</code>标签的<code>src</code>中会输出这两个参数的值，如下：</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/XSS-challenges-solutions/20190730211932413.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/XSS-challenges-solutions/20190730211932413.png" alt="在这里插入图片描述"></p>
 <p>先试试闭合，发现过滤了尖括号，可以考虑用<code>onerror</code>弹窗。</p>
 <p>payload：<br><code>?arg01=&amp;arg02= onmouseover=alert(1)</code></p>
 <br>

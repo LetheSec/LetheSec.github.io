@@ -282,7 +282,7 @@
 
 <p>第一个参数是用来指明是否是wsdl模式。</p>
 <p>第二个参数为一个数组，如果在wsdl模式下，此参数可选；如果在非wsdl模式下，则必须设置<code>location</code>和<code>uri</code>选项，其中<code>location </code>是要将请求发送到的SOAP服务器的URL，而uri 是SOAP服务的目标命名空间。</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSRF-CRLF-Attack-by-SoapClient/20190906000607209.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSRF-CRLF-Attack-by-SoapClient/20190906000607209.png" alt="在这里插入图片描述"></p>
 <p>知道上述两个参数的含义后，就很容易构造出SSRF的利用payload了。</p>
 <p>我们可以设置第一个参数为<code>null</code>，然后第二个参数的<code>location</code>选项设置为<code>target_url</code>，如下</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$a</span> = <span class="keyword">new</span> <span class="title class_">SoapClient</span>(<span class="literal">null</span>, <span class="keyword">array</span>(<span class="string">&#x27;location&#x27;</span> =&gt; <span class="string">&quot;http://xxx.xxx.xxx&quot;</span>,</span><br><span class="line">                                     <span class="string">&#x27;uri&#x27;</span>      =&gt; <span class="string">&quot;123&quot;</span>));</span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">serialize</span>(<span class="variable">$a</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
@@ -296,7 +296,7 @@
 
 <h1 id="0x04-SSRF-CRLF攻击内网"><a href="#0x04-SSRF-CRLF攻击内网" class="headerlink" title="0x04 SSRF+CRLF攻击内网"></a>0x04 SSRF+CRLF攻击内网</h1><p>实际上很多时候都需要这两个漏洞配合在一起使用，当我们我们可以从外网调用到soap的api，而攻击目标是在内网，那么就可以利用SoapClient进行SSRF攻击内网，然后配合CRLF构造POST请求增加我们的攻击面。</p>
 <p>那么为什么在用SoapClient类进行SSRF的时候会有CRLF注入的问题呢？如下：</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSRF-CRLF-Attack-by-SoapClient/20190906003122388.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSRF-CRLF-Attack-by-SoapClient/20190906003122388.png" alt="在这里插入图片描述"></p>
 <p>可以看到options参数中还有一个选项为<code>user_agent</code>，运行我们自己设置<code>User-Agent</code>的值。</p>
 <p>当我们可以控制<code>User-Agent</code>的值时，也就意味着我们完全可以构造一个POST请求，因为<code>Content-Type</code>为和<code>Content-Length</code>都在<code>User-Agent</code>之下，而控制这两个是利用CRLF发送post请求最关键的地方。</p>
 <p>最后给出wupco师傅的生成任意POST报文的POC:</p>

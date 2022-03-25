@@ -219,26 +219,26 @@
 
 <p>4、使用如下命令重新创建一个新的密钥。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dpkg-reconfigure openssh-server</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSH-for-Kali/20190527001528877.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSH-for-Kali/20190527001528877.png" alt="在这里插入图片描述"></p>
 <br>
 
 <p>5、修改<code>sshd_config</code>文件，该文件位于<code> /etc/ssh/sshd_config</code>，如下图：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gedit sshd_config</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSH-for-Kali/20190527001838540.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSH-for-Kali/20190527001838540.png" alt="在这里插入图片描述"></p>
 <br>
 
 <p>6、接下来，在终端启动SSH服务，命令如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/ssh start</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSH-for-Kali/2019052700194696.png" alt="在这里插入图片描述"><br>如果像查看SSH服务运行状态，可以使用如下命令：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSH-for-Kali/2019052700194696.png" alt="在这里插入图片描述"><br>如果像查看SSH服务运行状态，可以使用如下命令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -antp</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSH-for-Kali/20190527002127279.png" alt="在这里插入图片描述"><br>可以看到SSH服务已经在22端口上运行起来了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSH-for-Kali/20190527002127279.png" alt="在这里插入图片描述"><br>可以看到SSH服务已经在22端口上运行起来了。</p>
 <br>
 
 <p>7、查看自己kali的ip地址。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifconfig</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSH-for-Kali/2019052700235545.png" alt="在这里插入图片描述"><br><br></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSH-for-Kali/2019052700235545.png" alt="在这里插入图片描述"><br><br></p>
 <p>8、最后可以使用PuTTY来完成远程登陆。</p>
-<p><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSH-for-Kali/20190527002556995.png" alt="在这里插入图片描述"><br>输入账号和密码后即可远程控制你的kali，如下：<br><img src="https://gitee.com/Lethesec/oss/raw/master/Blog/SSH-for-Kali/20190527002459885.png" alt="在这里插入图片描述"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSH-for-Kali/20190527002556995.png" alt="在这里插入图片描述"><br>输入账号和密码后即可远程控制你的kali，如下：<br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/SSH-for-Kali/20190527002459885.png" alt="在这里插入图片描述"></p>
 
         </div>
 

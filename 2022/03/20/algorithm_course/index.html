@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Lethe">
+
+
+    <meta name="subtitle" content="Life is a struggle">
+
+
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>USTC-算法分析与设计 | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">USTC-算法分析与设计</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 20, 2022&nbsp;&nbsp;16:04:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Algorithm/">Algorithm</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="1-分治与递归"><a href="#1-分治与递归" class="headerlink" title="1 分治与递归"></a>1 分治与递归</h1><h2 id="1-1-阶乘函数"><a href="#1-1-阶乘函数" class="headerlink" title="1.1 阶乘函数"></a>1.1 阶乘函数</h2><p><img src="/.site//image-20220320161510908.png" alt="image-20220320161510908"></p>
+<p>代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//阶乘函数</span></span><br><span class="line"><span class="meta"># <span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">factorial</span><span class="params">(<span class="type">int</span> n)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> n * <span class="built_in">factorial</span>(n - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;   </span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line">    cout &lt;&lt; <span class="built_in">factorial</span>(n) &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-2-Fibonacci数列"><a href="#1-2-Fibonacci数列" class="headerlink" title="1.2 Fibonacci数列"></a>1.2 Fibonacci数列</h2><p><img src="/.site//image-20220320161403851.png" alt="image-20220320161403851"></p>
+<p>代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Fibonacci数列</span></span><br><span class="line"><span class="meta"># <span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">fibonacci</span><span class="params">(<span class="type">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">fibonacci</span>(n<span class="number">-1</span>) + <span class="built_in">fibonacci</span>(n<span class="number">-2</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line">    cout &lt;&lt; <span class="built_in">fibonacci</span>(n) &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-3-全排列问题"><a href="#1-3-全排列问题" class="headerlink" title="1.3 全排列问题"></a>1.3 全排列问题</h2><p><img src="/.site//image-20220320161642543.png" alt="image-20220320161642543"></p>
+<p>思路：</p>
+<ul>
+<li>定义函数<code>perm(int list[], int k, int m)</code>表示获取<code>list[k:m]</code>的全排列。</li>
+<li>递归条件：<ul>
+<li>当<code>n=1</code>时，全排列只有一种，即为它本身。</li>
+<li>当<code>n&gt;1</code>时，可以依次将每一个数作为前缀，然后对后续<code>n-1</code>个数进行全排列。</li>
+</ul>
+</li>
+</ul>
+<p>代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 全排列</span></span><br><span class="line"><span class="meta"># <span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">swap</span><span class="params">(<span class="type">int</span> &amp;a, <span class="type">int</span> &amp;b)</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> tmp = a;</span><br><span class="line">    a = b;</span><br><span class="line">    b = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//产生list[k:m]的全排列</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">perm</span><span class="params">(<span class="type">int</span> list[], <span class="type">int</span> k, <span class="type">int</span> m)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (k == m) &#123; <span class="comment">//只剩一个元素</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i =<span class="number">0</span>;i &lt;=m;i++)&#123;</span><br><span class="line">            cout &lt;&lt; list[i];</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//还有多个元素，递归产生排列</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = k; i&lt;=m; i++) &#123; </span><br><span class="line">            <span class="comment">//k到m的元素依次作为前缀,生成剩余数的全排列</span></span><br><span class="line">            <span class="built_in">swap</span>(list[k], list[i]);</span><br><span class="line">            <span class="built_in">perm</span>(list, k+<span class="number">1</span>, m);</span><br><span class="line">            <span class="built_in">swap</span>(list[k], list[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> a[] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;;</span><br><span class="line">    <span class="built_in">perm</span>(a, <span class="number">0</span>, <span class="number">2</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-4-整数划分问题"><a href="#1-4-整数划分问题" class="headerlink" title="1.4 整数划分问题"></a>1.4 整数划分问题</h2><p><img src="/.site//image-20220320162315684.png" alt="image-20220320162315684"></p>
+<p><img src="/.site//image-20220320162341988.png" alt="image-20220320162341988"></p>
+<p>（1）递归解法</p>
+<p>思路：</p>
+<p>对于$q(n,m)$：</p>
+<ul>
+<li><p>当<code>n=1,m=1</code>时，整数划分只有一种结果</p>
+</li>
+<li><p>当<code>n&lt;m</code>时，<code>q(n,m)</code>等价于<code>q(n,n)</code></p>
+</li>
+<li><p>当<code>n=m</code>时，共有<code>1+q(n,m-1)</code>中划分结果：</p>
+<ul>
+<li>整数划分中包含<code>m</code>，则只有一种划分结果，即<code>&#123;m&#125;</code></li>
+<li>整数划分中不包含<code>m</code>，则意味着划分中的最大整数位<code>m-1</code>，即需递归解决<code>q(n,m-1)</code></li>
+</ul>
+</li>
+<li><p>当<code>n&gt;m</code>时，共有<code>q(n-m,m)+q(n,m-1)</code>中划分结果</p>
+<ul>
+<li>整数划分中包含<code>m</code>，即划分为<code>&#123;m,&#123;..&#125;</code>，这其中除了<code>m</code>外，其余部分可以看成对<code>n-m</code>继续进行划分，最大值可能为<code>m</code>,需递归解决<code>q(n-m,m)</code></li>
+<li>整数划分中不包含<code>m</code>，即划分结果中最大为<code>m-1</code>，递归解决<code>q(n,m-1)</code></li>
+</ul>
+</li>
+</ul>
+<p>代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//整数划分问题（递归解法） https://developer.aliyun.com/article/445250</span></span><br><span class="line"><span class="comment">//<span class="doctag">TODO:</span> 动态规划解法</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">q</span><span class="params">(<span class="type">int</span> n, <span class="type">int</span> m)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">1</span> || m == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (n &lt; m) &#123;</span><br><span class="line">        <span class="comment">// 最大的划分不会超过n，所以等价于q(n, n)</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">q</span>(n, n); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (n == m) &#123;</span><br><span class="line">        <span class="comment">// (1)划分中包含m，则划分就为&#123;m&#125;，只有一个数</span></span><br><span class="line">        <span class="comment">// (2)划分中不包含m，则划分中的最大数只能为m-1，即递归划分为q(n,m-1)个数</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span> + <span class="built_in">q</span>(n, m - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (n &gt; m) &#123;</span><br><span class="line">        <span class="comment">// (1) 划分中包含m，即&#123;m, &#123;...&#125;&#125;, 其中除了m外，其余的看成对n-m继续进行划分，最大值可能为m, 即为q(n, m)</span></span><br><span class="line">        <span class="comment">// (2) 划分中不包含m，即划分中的所有数都要小于m，即看成为q(n,m-1)</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">q</span>(n - m, m) + <span class="built_in">q</span>(n, m - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> n,m;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    cout &lt;&lt; <span class="built_in">q</span>(n,m) &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>（2）动态规划解法</p>
+<p>TODO</p>
+<h2 id="1-5-棋盘覆盖问题"><a href="#1-5-棋盘覆盖问题" class="headerlink" title="1.5 棋盘覆盖问题"></a>1.5 棋盘覆盖问题</h2><p><img src="/.site//image-20220320200745108.png" alt="image-20220320200745108"></p>
+<p><img src="/.site//image-20220320200807568.png" alt="image-20220320200807568"></p>
+<p>思路：</p>
+<ul>
+<li><p>分治法将棋盘划分为四个区域，从而得到四个子问题进行解决。</p>
+</li>
+<li><p>特殊方格必然位于四个区域中的其中一个，但是另外三个区域则没有特殊方格，导致了子问题不相同。因此，可以假设先用一个L型骨牌放在四个区域的交界处当作特殊方格，从而使每一个区域内都存在一个特殊方格，如下图所示：</p>
+<img src="/.site//image-20220320201130769.png" alt="image-20220320201130769" style="zoom:50%;">
+</li>
+<li><p>通过这样的分割和假设，棋盘分割问题就可以转化为四个1&#x2F;4规模的子问题。</p>
+</li>
+</ul>
+<p>代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//棋盘覆盖问题</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> tile = <span class="number">0</span>;              <span class="comment">// L型骨牌的编号</span></span><br><span class="line"><span class="type">int</span> Board[<span class="number">100</span>][<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;; <span class="comment">//存放棋盘</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">ChessBoard</span><span class="params">(<span class="type">int</span> tr, <span class="type">int</span> tc, <span class="type">int</span> dr, <span class="type">int</span> dc, <span class="type">int</span> size)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (size == <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="type">int</span> t = ++tile;   <span class="comment">//表示L型骨牌的编号</span></span><br><span class="line">    <span class="type">int</span> s = size / <span class="number">2</span>; <span class="comment">//划分区域</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dr &lt; tr + s &amp;&amp; dc &lt; tc + s) <span class="comment">//如果特殊方格在左上区域</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">ChessBoard</span>(tr, tc, dr, dc, s); <span class="comment">//解决左上区域的子问题</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="comment">//如果特殊方格不在在左上区域</span></span><br><span class="line">    &#123;</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s - <span class="number">1</span>] = t;             <span class="comment">//用L型骨牌在该区域右下角放置一个特殊方格</span></span><br><span class="line">        <span class="built_in">ChessBoard</span>(tr, tc, tr + s - <span class="number">1</span>, tc + s - <span class="number">1</span>, s); <span class="comment">//有特殊方格后则可以继续解决该子问题</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dr &lt; tr + s &amp;&amp; dc &gt;= tc + s) <span class="comment">//如果特殊方格在右上区域</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">ChessBoard</span>(tr, tc + s, dr, dc, s); <span class="comment">//解决右上区域的子问题</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="comment">//如果特殊方格不在右上区域</span></span><br><span class="line">    &#123;</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s] = t;                 <span class="comment">//用L型骨牌在该区域左下角放置一个特殊方格</span></span><br><span class="line">        <span class="built_in">ChessBoard</span>(tr, tc + s, tr + s - <span class="number">1</span>, tc + s, s); <span class="comment">//有特殊方格后则可以继续解决该子问题</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dr &gt;= tr + s &amp;&amp; dc &lt; tc + s) <span class="comment">//如果特殊方格在左下区域</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">ChessBoard</span>(tr + s, tc, dr, dc, s); <span class="comment">//解决左下区域的子问题</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="comment">//如果特殊方格不在左下区域</span></span><br><span class="line">    &#123;</span><br><span class="line">        Board[tr + s][tc + s - <span class="number">1</span>] = t;                 <span class="comment">//用L型骨牌在该区域右上角放置一个特殊方格</span></span><br><span class="line">        <span class="built_in">ChessBoard</span>(tr + s, tc, tr + s, tc + s - <span class="number">1</span>, s); <span class="comment">//有特殊方格后则可以继续解决该子问题</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dr &gt;= tr + s &amp;&amp; dc &gt;= tc + s) <span class="comment">//如果特殊方格在右下区域</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">ChessBoard</span>(tr + s, tc + s, dr, dc, s); <span class="comment">//解决右下区域的子问题</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="comment">//如果特殊方格不在右下区域</span></span><br><span class="line">    &#123;</span><br><span class="line">        Board[tr + s][tc + s] = t;                     <span class="comment">//用L型骨牌在该区域左上角放置一个特殊方格</span></span><br><span class="line">        <span class="built_in">ChessBoard</span>(tr + s, tc + s, tr + s, tc + s, s); <span class="comment">//有特殊方格后则可以继续解决该子问题</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> size = <span class="number">8</span>;</span><br><span class="line">    <span class="type">int</span> special_row = <span class="number">3</span>;</span><br><span class="line">    <span class="type">int</span> special_col = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">ChessBoard</span>(<span class="number">0</span>, <span class="number">0</span>, special_row, special_col, size);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; size; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%2d &quot;</span>, Board[i][j]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="整数因子分解问题"><a href="#整数因子分解问题" class="headerlink" title="整数因子分解问题"></a>整数因子分解问题</h2><p><img src="/.site//image-20220323164805370.png" alt="image-20220323164805370"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1: 1</span><br><span class="line">2: 2</span><br><span class="line">3: 3</span><br><span class="line">4: 4 2*2</span><br><span class="line">5: 5</span><br><span class="line">6: 6 2*3 3*2 </span><br></pre></td></tr></table></figure>
+
+<p>（1）解法一：递归</p>
+<p>思路：</p>
+<ul>
+<li>当<code>n=1</code>时，只有一种分解方式。</li>
+<li>当<code>n&gt;1</code>时，<code>solve(n)</code>可以对<code>n</code>的每一个因子再去求该分解子问题。</li>
+</ul>
+<p>（2）解法二：动态规划</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://lethe.site/2022/03/20/algorithm_course/">https://lethe.site/2022/03/20/algorithm_course/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Algorithm/"># Algorithm</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/12/25/NCE-and-InfoNCE/">Noise Contrastive Estimation 前世今生——从 NCE 到 InfoNCE</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>Life is a struggle.</span>
+        <!-- <span>© Lethe | 2019 - 2022</span> -->
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
