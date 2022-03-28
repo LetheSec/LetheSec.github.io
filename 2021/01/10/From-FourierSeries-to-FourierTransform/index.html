@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Lethe">
+
+
+    <meta name="subtitle" content="Life is a struggle">
+
+
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>数学推导：从傅里叶级数到傅里叶变换 | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">数学推导：从傅里叶级数到傅里叶变换</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 10, 2021&nbsp;&nbsp;15:48:19</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/AI/">AI</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="傅里叶变换的推导"><a href="#傅里叶变换的推导" class="headerlink" title="傅里叶变换的推导"></a>傅里叶变换的推导</h1><p>主要参考自 DR_CAN 的B站教程 <a target="_blank" rel="noopener" href="https://space.bilibili.com/230105574/channel/detail?cid=67768">纯干货傅里叶变换</a>。</p>
+<h2 id="0x01-三角函数系的正交性与傅里叶级数"><a href="#0x01-三角函数系的正交性与傅里叶级数" class="headerlink" title="0x01 三角函数系的正交性与傅里叶级数"></a>0x01 三角函数系的正交性与傅里叶级数</h2><p>我们首先看一下这个<strong>定理:</strong> 组成三角级数的函数系<br>$$<br>\begin{aligned}<br>0(\text{sin}0x),1(\text{cos}0x),\text{sin}x,\text{cos}x,\text{sin}2x,\text{cos}2x,\dots,\text{sin}nx,\text{cos}nx<br>\end{aligned}<br>$$<br>在 $[-\pi,\pi]$ 上正交，即其中任意两个<strong>不同</strong>的函数之积在 $[-\pi,\pi]$ 上的积分等于0，<strong>证明见附录1。</strong></p>
+<p>我们可以先记住这个结论，就是从上面的那组三角函数中随便选两个<strong>不同</strong>的三角函数，将他们的乘起来，然后在 $[-\pi,\pi]$ 下做积分，结果一定是0。</p>
+<p>并且在三角函数系中两个<strong>相同</strong>的函数的乘积在 $[-\pi,\pi]$ 上的积分不等于0，且有：<br>$$<br>\begin{aligned}<br>\int_{-\pi}^{\pi} \text{cos}nx·\text{cos}mx\text{dx} &amp;&#x3D; \int_{-\pi}^{\pi} \text{cos}^2nx\text{dx} \<br>&amp;&#x3D;\int_{-\pi}^{\pi} \frac{1}{2}\left(1 +\text{cos}2nx\right)\text{dx} \<br>&amp;&#x3D;\frac{1}{2} \left[\int_{-\pi}^{\pi}1\text{dx} + \int_{-\pi}^{\pi}\text{cos}2nx\text{dx}\right] \<br>&amp;&#x3D;\pi \<br>\end{aligned}<br>$$<br>$$<br>\begin{aligned}<br>\int_{-\pi}^{\pi} \text{sin}^2nx\text{dx} &#x3D;\pi \</p>
+<p>\int_{-\pi}^{\pi} 1·1\text{dx}&#x3D;2\pi<br>\end{aligned}<br>$$</p>
+<p>我们知道简单的周期运动可写作：$y&#x3D;A\text{sin}(\omega t+\varphi)$ ，其中$A$ 为振幅，$\omega$ 为角频率，$\varphi$ 为初相。下图为 $\sin\left(x+\pi\right)$：</p>
+<img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/From-FourierSeries-to-FourierTransform/image-20210108152839620.png" alt="简单周期函数" style="zoom:70%;">
+
+<p>复杂的周期运动 $f(t)$ 可以看作简单周期运动的叠加。</p>
+<p>下图为：$\sin\left(x+\pi\right)+\frac{1}{3}\sin\left(3x+\pi\right)+\frac{1}{5}\sin\left(5x+\pi\right)+\frac{1}{7}\sin\left(7x+\pi\right)+\frac{1}{9}\sin\left(9x+\pi\right)$</p>
+<img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/From-FourierSeries-to-FourierTransform/image-20210108161017058.png" alt="image-20210108161017058" style="zoom:70%;">
+
+<p>当累加的足够多，也就形成了一个周期性的方波。</p>
+<p>因此周期函数 $f(t)$ 的表达式可写作：<br>$$<br>\begin{aligned}<br>f(t)&amp;&#x3D;\sum_{n&#x3D;0}^{\infty}A_n\text{sin}{(n\omega t+\varphi_n)} \<br>&amp;&#x3D;A_0\text{sin}{\varphi_0}+\sum_{n&#x3D;1}^{\infty}A_n\text{sin}{(n\omega t+\varphi_n)} \<br>&amp;&#x3D;A_0\text{sin}{\varphi_0}+\sum_{n&#x3D;1}^{\infty}\left[A_n\text{sin}{n\omega t}\text{cos}{\varphi_n} + A_n\text{cos}{n\omega t}\text{sin}{\varphi_n}\right]<br>\end{aligned}<br>$$<br>我们令 $a_n&#x3D;A_n\text{sin}{\varphi_n}$ ， $b_n&#x3D;A_n\text{cos}{\varphi_n}$， $\omega t&#x3D;x$（这里我们<strong>假设周期为 $2\pi$，</strong>即$\omega&#x3D;1$），代换后的周期函数表达式如下:<br>$$<br>\begin{aligned}<br>f(x)&amp;&#x3D;A_0\text{sin}{\varphi_0}+\sum_{n&#x3D;1}^{\infty}A_n\text{sin}{(n\omega t+\varphi_n)} \<br>&amp;&#x3D;a_0+\sum_{n&#x3D;1}^{\infty}(a_n\text{cos}{nx}+b_n\text{sin}{nx}) \<br>\end{aligned} \tag{1}<br>$$<br>实际上，(1)式只是一个猜想式，我们需要找到 $a_0$、$a_n$ 和 $b_n$ 式该表达式成立。</p>
+<p>首先求 $a_n$的表达式，可将(1)式两边同时乘以 $cosmx$，然后两边同时在 $[-\pi,\pi]$ 做积分，得到：<br>$$<br>\begin{aligned}<br>\int_{-\pi}^{\pi}f(x)\text{cos}mx\text{dx}&amp;&#x3D;\int_{-\pi}^{\pi}a_0\text{cos}mx\text{dx}+\int_{-\pi}^{\pi}\sum_{n&#x3D;1}^{\infty}a_n\text{cos}{nx}\text{cos}mx\text{dx}+\int_{-\pi}^{\pi}\sum_{n&#x3D;1}^{\infty}b_n\text{sin}{nx}\text{cos}mx\text{dx} \<br>&amp;&#x3D;a_0\int_{-\pi}^{\pi}\text{cos}mx\text{dx}+a_n\int_{-\pi}^{\pi}\sum_{n&#x3D;1}^{\infty}\text{cos}{nx}\text{cos}mx\text{dx}+b_n\int_{-\pi}^{\pi}\sum_{n&#x3D;1}^{\infty}\text{sin}{nx}\text{cos}mx \text{dx}<br>\end{aligned} \tag{2}<br>$$<br>由前面证明的三角函数正交性可得：<br>$$<br>\begin{aligned}<br>&amp;\int_{-\pi}^{\pi}\text{cos}mx\text{dx}&#x3D;\int_{-\pi}^{\pi}\text{cos}mx\text{sin}0x\text{dx}&#x3D;0 \<br>&amp;\int_{-\pi}^{\pi}\sum_{n&#x3D;1}^{\infty}\text{sin}{nx}\text{cos}mx \text{dx}&#x3D;0 \<br>&amp;\int_{-\pi}^{\pi}\sum_{n&#x3D;1}^{\infty}\text{cos}{nx}\text{cos}mx\text{dx}&#x3D;0(n\neq m) \<br>&amp;\int_{-\pi}^{\pi}\sum_{n&#x3D;1}^{\infty}\text{cos}{nx}\text{cos}mx\text{dx}&#x3D;\pi(n&#x3D;m)<br>\end{aligned}<br>$$<br>因此 (2) 式可以写作如下形式$(n&#x3D;m)$：<br>$$<br>\begin{aligned}<br>\int_{-\pi}^{\pi}f(x)\text{cos}mx\text{dx}&amp;&#x3D;\int_{-\pi}^{\pi}f(x)\text{cos}nx\text{dx} \<br>&amp;&#x3D;a_n\int_{-\pi}^{\pi}\sum_{n&#x3D;1}^{\infty}\text{cos}{nx}\text{cos}mx\text{dx}\<br>&amp;&#x3D;a_n\pi \<br>\end{aligned} \tag{3}<br>$$<br>可以求得：<br>$$<br>\begin{aligned}<br>a_n&#x3D;\frac{1}{\pi}\int_{-\pi}^{\pi}f(x)\text{cos}nx\text{dx}<br>\end{aligned} \tag{4}<br>$$<br>同理，我们将(1)式两边同时乘以 $sinmx$，然后两边同时在 $[-\pi,\pi]$ 做积分，可以求得：<br>$$<br>\begin{aligned}<br>b_n&#x3D;\frac{1}{\pi}\int_{-\pi}^{\pi}f(x)\text{sin}nx\text{dx}<br>\end{aligned} \tag{5}<br>$$<br>同理，对(1)式两边同时在 $[-\pi,\pi]$ 做积分，可以求得：<br>$$<br>\begin{aligned}<br>a_0&#x3D;\frac{1}{2\pi}\int_{-\pi}^{\pi}f(x)\text{dx}<br>\end{aligned} \tag{6}<br>$$<br>对比(4)式和(6)式，不难看出当(4)式的 $n&#x3D;0$ 时，它和 $a_0$ 只差了一个 $\frac{1}{2}$，因此为了将它们统一在一个表达式中，通常将(1)式写作如下的形式：<br>$$<br>\begin{aligned}<br>f(x)&amp;&#x3D;\frac{a_0}{2}+\sum_{n&#x3D;1}^{\infty}(a_n\text{cos}{nx}+b_n\text{sin}{nx}) \<br>\end{aligned} \tag{7}<br>$$<br>最终得到的 (7) 式，就是三角级数的表示形式。当 $a_n$ 和 $b_n$ 由上面的 (4)(5) 式确定时，(7) 式即为 $f(x)$ 的<strong>傅里叶级数</strong>，称此时的 $a_n$ 和 $b_n$ 为<strong>傅里叶系数</strong>。（这里 $f(x)$ 周期为$2\pi$）</p>
+<h2 id="0x02-傅里叶级数的三角形式"><a href="#0x02-傅里叶级数的三角形式" class="headerlink" title="0x02 傅里叶级数的三角形式"></a>0x02 傅里叶级数的三角形式</h2><p>上面我们推导傅里叶级数时，假设了周期为 $2\pi$ ，得到了如下形式的傅里叶级数：<br>$$<br>\begin{aligned}<br>f(x)&amp;&#x3D;\frac{a_0}{2}+\sum_{n&#x3D;1}^{\infty}(a_n\text{cos}{nx}+b_n\text{sin}{nx}) \<br>&amp;\left{\begin{array}{ll}<br>a_n&#x3D;\frac{1}{\pi}\int_{-\pi}^{\pi}f(x)\text{cos}nx\text{dx} \<br>b_n&#x3D;\frac{1}{\pi}\int_{-\pi}^{\pi}f(x)\text{sin}nx\text{dx}<br>\end{array}\right.<br>\end{aligned} \tag {8}<br>$$<br>现在可以进一步推广至周期为 $T$，即 $f(t)&#x3D;f(t+T)$，我们进行换元 $x&#x3D;\frac{2\pi}{T}t$，$t&#x3D;\frac{T}{2\pi}x$，然后令 $f(t)&#x3D;f(\frac{2L}{\pi}x):&#x3D; g(x)$，则有 $g(x)&#x3D;g(x+2\pi)$。</p>
+<p>所以可以将 $g(x)$ 用 (8) 式傅里叶级数展开：<br>$$<br>\begin{aligned}<br>g(x)&amp;&#x3D;\frac{a_0}{2}+\sum_{n&#x3D;1}^{\infty}(a_n\text{cos}{nx}+b_n\text{sin}{nx}) \<br>&amp;\left{\begin{array}{ll}<br>a_n&#x3D;\frac{1}{\pi}\int_{-\pi}^{\pi}g(x)\text{cos}nx\text{dx} \<br>b_n&#x3D;\frac{1}{\pi}\int_{-\pi}^{\pi}g(x)\text{sin}nx\text{dx}<br>\end{array}\right.<br>\end{aligned} \tag {9}<br>$$<br>然后对 (9) 式再进行一次换元 $x&#x3D;\frac{2\pi}{T}t$，得到：<br>$$<br>\begin{aligned}<br>f(t)&amp;&#x3D;\frac{a_0}{2}+\sum_{n&#x3D;1}^{\infty}(a_n\text{cos}{n\frac{2\pi}{L}t}+b_n\text{sin}{n\frac{2\pi}{L}t}) \<br>&amp;&#x3D;\frac{a_0}{2}+\sum_{n&#x3D;1}^{\infty}(a_n\text{cos}{n \omega t}+b_n\text{sin}{n \omega t})<br>\end{aligned} \tag{10}<br>$$<br>同理对 $a_n$ 和 $b_n$ 进行换元得到：<br>$$<br>\begin{aligned}<br>a_n&amp;&#x3D;\frac{1}{\pi}\int_{-\pi}^{\pi}g(x)\text{cos}nx\text{dx} \<br>&amp;&#x3D; \frac{1}{\pi}\int_{-\frac{T}{2}}^{\frac{T}{2}}f(t)\text{cos}{n\frac{2\pi}{T}t}\text{d}\frac{2\pi}{T}t \<br>&amp;&#x3D;\frac{1}{\pi}\frac{2\pi}{T}\int_{-\frac{T}{2}}^{\frac{T}{2}}f(t)\text{cos}{n\frac{2\pi}{T}t}\text{dt} \<br>&amp;&#x3D;\frac{2}{T}\int_{0}^{T}f(t)\text{cos}{n \omega t}\text{dt}<br>\end{aligned} \tag {11}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>b_n&amp;&#x3D;\frac{2}{T}\int_{0}^{T}f(t)\text{sin}{n \omega t}\text{dt}<br>\end{aligned} \tag {12}<br>$$</p>
+<p>综上，也就说明了<strong>任何周期函数都能用傅里叶级数来表示为三角函数的形式</strong>。对于周期函数 $f(t)$，周期为 $T$ ，角频率为$\omega_0&#x3D;2\pi f_0&#x3D;\frac{2\pi}{T}$，其<strong>三角形式的傅里叶级数</strong>如下：<br>$$<br>\begin{aligned}<br>f(t)&amp;&#x3D;\frac{a_0}{2}+\sum_{n&#x3D;1}^{\infty}(a_n\text{cos}{n \omega_0 t}+b_n\text{sin}{n \omega_0 t})  \<br>&amp;\left{\begin{array}{ll}<br>a_n&#x3D;\frac{2}{T}\int_{0}^{T}f(t)\text{cos}{n \omega_0 t}\text{dt} \<br>b_n&#x3D;\frac{2}{T}\int_{0}^{T}f(t)\text{sin}{n \omega_0 t}\text{dt}<br>\end{array}\right.<br>\end{aligned} \tag {13}<br>$$</p>
+<h2 id="0x03-傅里叶级数的复指数形式"><a href="#0x03-傅里叶级数的复指数形式" class="headerlink" title="0x03 傅里叶级数的复指数形式"></a>0x03 傅里叶级数的复指数形式</h2><p>上一节我们推导了三角形式的傅里叶级数，其物理含义明确；但是实际操作上，指数形式的傅里叶级会更加便于数学处理，而且很容易与后面介绍的傅里叶变换统一起来。因此这一节我们就用<strong>欧拉公式</strong>将 (13) 式的傅里叶级数表示为复指数的形式。（<strong>欧拉公式的证明可见附录2</strong>）</p>
+<p>首先，由欧拉公式 $e^{i\theta}&#x3D;\text{cos}{\theta}+i\text{sin}{\theta}$ ，分别将 $\theta$ 和 $-\theta$ 代入其中再消元，得到三角函数的复指数形式如下：<br>$$<br>\begin{aligned}<br>\text{cos}{\theta} &#x3D; \frac{1}{2}\left(e^{i\theta}+e^{-i\theta}\right) \<br>\text{sin}{\theta} &#x3D; -\frac{1}{2}i\left(e^{i\theta}-e^{-i\theta}\right)<br>\end{aligned} \tag {14}<br>$$<br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/From-FourierSeries-to-FourierTransform/image-20210109120317490.png" alt="image-20210109120317490" style="zoom:50%;"></p>
+<p>将 (14) 式的代入 (13) 式的傅里叶级数中得到：<br>$$<br>\begin{aligned}<br>f(t)&amp;&#x3D;\frac{a_0}{2}+\sum_{n&#x3D;1}^{\infty}\left[a_n\frac{1}{2}\left(e^{in \omega t}+e^{-in \omega t}\right)-b_n\frac{1}{2}i\left(e^{in \omega t}-e^{-in \omega t}\right)\right]  \<br>&amp;&#x3D;\frac{a_0}{2}+\sum_{n&#x3D;1}^{\infty}\left(\frac{a_n-ib_n}{2}e^{in \omega t}+\frac{a_n+ib_n}{2}e^{-in \omega t}\right) \<br>&amp;&#x3D;\frac{a_0}{2} +\sum_{n&#x3D;1}^{\infty}\frac{a_n-ib_n}{2}e^{in \omega t} +\sum_{n&#x3D;1}^{\infty}\frac{a_n+ib_n}{2}e^{-in \omega t} \<br>&amp;&#x3D;\sum_{n&#x3D;0}^{0}\frac{a_0}{2}e^{0·i \omega t}+\sum_{n&#x3D;1}^{\infty}\frac{a_n-ib_n}{2}e^{in \omega t} +\sum_{n&#x3D;-1}^{-\infty}\frac{a_{-n} +ib_{-n}}{2}e^{in \omega t} \<br>&amp;&#x3D;\sum_{n&#x3D;-\infty}^{\infty} C_n e^{in \omega t}<br>\</p>
+<p>where \space C_n&#x3D;&amp;\left{\begin{array}{ll}<br>\frac{a_0}{2},n&#x3D;0 \<br>\frac{a_n-ib_n}{2},n&#x3D;1,2,3,\dots \<br>\frac{a_{-n}+ib_{-n}}{2},n&#x3D;-1,-2,-3,\dots<br>\end{array}\right.<br>\end{aligned} \tag {15}<br>$$<br>上面第 4 个等号第三项将 $n$ 换元为 $-n$，并将第一项写成单个累和的形式($e^{0·i \omega t}&#x3D;1$)；最后一个等号，可以看到三项的累和已经从$-\infty$ 加到了 $+\infty$，我们将 $e^{in \omega t}$ 提出来， 剩余项项用 $C_n$ 表示。</p>
+<p>进一步计算 $C_n$ 的形式，将 (13) 式的傅里叶系数代入 $C_n$ 中得到：</p>
+<p>（1）当 $n&#x3D;0$ 时：<br>$$<br>\begin{aligned}<br>C_n&#x3D;\frac{a_0}{2}&amp;&#x3D;\frac{1}{2}\frac{2}{T}\int_{0}^{T}f(t)\text{dt} \<br>&amp;&#x3D;\frac{1}{T}\int_{0}^{T}f(t)\text{dt} \<br>&amp;&#x3D;\frac{1}{T}\int_{0}^{T}f(t)e^{-in \omega t}\text{dt}<br>\end{aligned} \tag{16}<br>$$<br>上面的最后一个等号，因为在此情况下 $n&#x3D;0$，所以加上 $e^{-in \omega t}$ 不改变结果。</p>
+<p>（2）当 $n&#x3D;1,2,3,\dots$ 时：<br>$$<br>\begin{aligned}<br>C_n&amp;&#x3D;\frac{a_n-ib_n}{2}\<br>&amp;&#x3D;\frac{1}{2}\left(\frac{2}{T}\int_{0}^{T}f(t)\text{cos}{n \omega t}\text{dt}-i\frac{2}{T}\int_{0}^{T}f(t)\text{sin}{n \omega t}\text{dt}\right) \<br>&amp;&#x3D;\frac{1}{T}\int_{0}^{T}f(t) \left(\text{cos}{n \omega t}-i\text{sin}{n \omega t}\right)\text{dt} \<br>&amp;&#x3D;\frac{1}{T}\int_{0}^{T}f(t)e^{-in \omega t}\text{dt} \<br>\end{aligned} \tag{17}<br>$$<br>上面第3个等式可由欧拉公式得到： $\text{cos}{n \omega t}-i\text{sin}{n \omega t}&#x3D;\text{cos}{(-n \omega t)}+i\text{sin}{(-n \omega t)}&#x3D;e^{-in \omega t}$</p>
+<p> （3）当 $n&#x3D;-1,-2,-3,\dots$ 时：<br>$$<br>\begin{aligned}<br>C_n&amp;&#x3D;\frac{a_{-n}+ib_{-n}}{2}\<br>&amp;&#x3D;\frac{1}{2}\left(\frac{2}{T}\int_{0}^{T}f(t)\text{cos}{(-n \omega t)}\text{dt}+i\frac{2}{T}\int_{0}^{T}f(t)\text{sin}{(-n \omega t)}\text{dt}\right) \<br>&amp;&#x3D;\frac{1}{2}\left(\frac{2}{T}\int_{0}^{T}f(t)\text{cos}{n \omega t}\text{dt}-i\frac{2}{T}\int_{0}^{T}f(t)\text{sin}{n \omega t}\text{dt}\right) \<br>&amp;&#x3D;\frac{1}{T}\int_{0}^{T}f(t) \left(\text{cos}{n \omega t}-i\text{sin}{n \omega t}\right)\text{dt} \<br>&amp;&#x3D;\frac{1}{T}\int_{0}^{T}f(t)e^{-in \omega t}\text{dt} \<br>\end{aligned} \tag{18}<br>$$<br>观察 (16)(17)(18) 式，可以看到三个情况的最终<strong>结果竟然统一了</strong>！也就是对于 $ \forall n&#x3D;0,±1,±2,±3,\dots$，有：<br>$$<br>\begin{aligned}<br>C_n&#x3D;\frac{1}{T}\int_{0}^{T}f(t)e^{-in \omega t}\text{dt}<br>\end{aligned} \tag{19}<br>$$<br>综上，对于周期函数 $f(t)$，周期为 $T$，角频率为$w_0&#x3D;2\pi f_0&#x3D;\frac{2\pi}{T}$，其<strong>复指数形式的傅里叶级数</strong>为：<br>$$<br>\begin{aligned}<br>&amp;f(t)&#x3D;\sum_{n&#x3D;-\infty}^{\infty} C_n e^{in \omega_0 t}, \<br>&amp;C_n&#x3D;\frac{1}{T}\int_{0}^{T}f(t)e^{-in \omega_0 t}\text{dt},n&#x3D;0,±1,±2,±3,\dots<br>\end{aligned} \tag {20}<br>$$</p>
+<h2 id="0x04-傅里叶变换"><a href="#0x04-傅里叶变换" class="headerlink" title="0x04 傅里叶变换"></a>0x04 傅里叶变换</h2><p>傅里叶变换实际上就是对傅里叶级数的进一步扩展，即不再要求 $f(t)$ 为周期函数，换句话也就是设周期 $T$ 趋于 $\infty$。</p>
+<p>现在假设有一个周期为 $T$ 的函数 $f_T(t)&#x3D;f_T(t+T)$，我们用复指数形式的傅里叶级数将其展开得到：<br>$$<br>\begin{aligned}<br>&amp;f_T(t)&#x3D;\sum_{n&#x3D;-\infty}^{\infty} C_n e^{in \omega_0 t}, \<br>&amp;C_n&#x3D;\frac{1}{T}\int_{0}^{T}f_T(t)e^{-in \omega_0 t}\text{dt},n&#x3D;0,±1,±2,±3,\dots<br>\end{aligned} \tag {21}<br>$$<br>其中 $\omega_0&#x3D;\frac{2 \pi}{T}$ 称为基频率。可以看到，实际上是由 $C_n$ 区分不同函数的，因为对于任意的傅里叶变换都是 $C_n$ 乘对应的复指数，再累和。假设 $f_T(t)$ 的<strong>时域图像</strong>如下：</p>
+<img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/From-FourierSeries-to-FourierTransform/image-20210108205517655.png" alt="image-20210108205517655" style="zoom:40%;">
+
+<p>我们画出它在复平面上的<strong>频域图像</strong>如下：</p>
+<img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/From-FourierSeries-to-FourierTransform/image-20210108210120596.png" alt="image-20210108210120596" style="zoom:44%;">
+
+<p>如果觉得上面这张三维复平面下的频域图不好理解，可以参考下面这张图（来自<a target="_blank" rel="noopener" href="https://www.zhihu.com/people/li-ze-guang-26">@李泽光</a>一个相关回答里的图，图中 $X_n$ 与这里的 $C_n$ 含义类似）：</p>
+<img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/From-FourierSeries-to-FourierTransform/image-20210108215533233.png" alt="image-20210108215533233" style="zoom:67%;">
+
+<p>所谓傅里叶级数就是将时域下的<strong>周期连续函数</strong>（上图），转换为频域上的<strong>非周期离散函数</strong>（下图），也就是说对于频域图像做运算： $\dots,C_{-2}e^{-2i \omega_0t}+C_{-1}e^{-i \omega_0t}+C_{0}e^{0}+C_{1}e^{ i\omega_0t}+C_{2}e^{2i \omega_0t},\dots$  也就能得到时域下的函数图像。</p>
+<p>而傅里叶变换要做的就是将时域下的<strong>非周期连续函数</strong>转换到频域上的<strong>非周期连续函数</strong>。</p>
+<img src="https://pic1.zhimg.com/80/419cd0b2e965aca25d5f8a5a6362d728_720w.jpg" alt="img" style="zoom:65%;">
+
+<p>前面说了非周期函数可以将其看作周期无限大（$T→\infty$），也就是 $\lim_{T→\infty}f_T(t)&#x3D;f(t)$</p>
+<p>我们令频域图像上的间隔为 $\Delta \omega&#x3D;(n+1)\omega_0-n\omega_0&#x3D;\omega_0&#x3D;\frac{2\pi}{T}$，当 $T→+\infty$ 时，$\Delta→-\infty$。从图像上看也就意味着每个 $C_i$ 之间的距离越来越来小，极限情况频域图像每个 $C_i$ 就挨在一起了，也就变成了连续的形式；并且离散情况下的横轴 $n\omega_0$，在连续的情况下就可以用一个连续的变量 $\omega$ 表示。</p>
+<p>进一步推导，将 (19) 式中的 $C_n$ 代入 $f_T(t)$ ，且 $T&#x3D;\frac{2\pi}{\Delta \omega}$：<br>$$<br>\begin{aligned}<br>f(t)&amp;&#x3D;\sum_{n&#x3D;-\infty}^{\infty} \frac{1}{T}\int_{0}^{T}f(t)e^{-in \omega_0 t}\text{dt} e^{in \omega_0 t} \<br>&amp;&#x3D;\sum_{n&#x3D;-\infty}^{\infty} \frac{\Delta \omega}{2\pi}\int_{0}^{T}f_T(t)e^{-in \omega_0 t}\text{dt} e^{in \omega_0 t}<br>\end{aligned} \tag {22}<br>$$<br>对于 (22) 式，当我们令 $T→\infty$ 时，相应的有 $\int_{0}^{T}dt→\int_{-\infty}^{+\infty}$，$n\omega_0→\omega$，$\sum_{n&#x3D;-\infty}^{\infty}\Delta\omega→\int_{-\infty}^{+\infty}d\omega$，得到：<br>$$<br>\begin{aligned}<br>f(t)&amp;&#x3D;\frac{1}{2\pi}\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}f(t)e^{-i \omega t}\text{dt} e^{i \omega t}\text{d}\omega<br>\end{aligned} \tag {23}<br>$$<br>最后，我们令上面 (23) 式的中间部分为为 $F(\omega)$ 如下:<br>$$<br>\begin{aligned}<br>F(w)&amp;&#x3D;\int_{-\infty}^{\infty}f(t)e^{-i \omega t}\text{dt}<br>\end{aligned} \tag {24}<br>$$<br>得到的 (24) 式即为<strong>傅里叶变换</strong>，而原来的 (23) 式即为<strong>傅里叶逆变换</strong>，可写成如下形式：<br>$$<br>\begin{aligned}<br>f(t)&amp;&#x3D;\frac{1}{2\pi}\int_{-\infty}^{\infty}F(\omega) e^{i \omega t}\text{d}\omega<br>\end{aligned} \tag {25}<br>$$</p>
+<h2 id="附录1：三角函数正交性证明"><a href="#附录1：三角函数正交性证明" class="headerlink" title="附录1：三角函数正交性证明"></a>附录1：三角函数正交性证明</h2><p>当 $n≠m$时，由积化和差及牛顿莱布尼茨公式得：<br>$$<br>\begin{aligned}<br>\int_{-\pi}^{\pi} \text{cos}nx·\text{cos}mx\text{dx} &amp;&#x3D; \int_{-\pi}^{\pi} \frac{1}{2}\left[\text{cos}(nx-mx) + \text{cos}(nx+mx)\right]dx \<br>&amp;&#x3D;\frac{1}{2} \left[\int_{-\pi}^{\pi}\text{cos}(n-m)x\text{dx} + \int_{-\pi}^{\pi}\text{cos}(n+m)x\text{dx}\right] \<br>&amp;&#x3D;\frac{1}{2} \left[\frac{1}{n-m}\text{sin}(n-m)x\bigg|<em>{-\pi}^{\pi}+ \frac{1}{n+m}\text{sin}(n+m)x\bigg|</em>{-\pi}^{\pi} \right] \<br>&amp;&#x3D;0<br>\end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>\int_{-\pi}^{\pi} \text{cos}nx·\text{sin}mx\text{dx} &amp;&#x3D; \int_{-\pi}^{\pi} \frac{1}{2}\left[\text{sin}(nx+mx) - \text{sin}(nx-mx)\right]dx \<br>&amp;&#x3D;\frac{1}{2} \left[\int_{-\pi}^{\pi}\text{sin}(n+m)x\text{dx} + \int_{-\pi}^{\pi}\text{sin}(n-m)x\text{dx}\right] \<br>&amp;&#x3D;0<br>\end{aligned}<br>$$</p>
+<p>同理：<br>$$<br>\begin{aligned}<br>\int_{-\pi}^{\pi} \text{sin}nx·\text{cos}mx\text{dx} &amp;&#x3D; 0 \<br>\int_{-\pi}^{\pi} \text{sin}nx·\text{sin}mx\text{dx} &amp;&#x3D; 0<br>\end{aligned}<br>$$<br>当 $n&#x3D;m$ 时，<br>$$<br>\begin{aligned}<br>\int_{-\pi}^{\pi} \text{cos}nx·\text{sin}mx\text{dx} &amp;&#x3D; \int_{-\pi}^{\pi} \text{sin}nx·\text{cos}mx\text{dx} \<br>&amp;&#x3D;\int_{-\pi}^{\pi} \text{sin}nx·\text{cos}nx\text{dx} \<br>&amp;&#x3D;\int_{-\pi}^{\pi} \frac{1}{2}\left[\text{sin}2nx+sin0x\right]\text{dx} \<br>&amp;&#x3D;\frac{1}{2}\int_{-\pi}^{\pi}\text{sin}2nx\text{dx} \<br>&amp;&#x3D;0<br>\end{aligned}<br>$$</p>
+<h2 id="附录2：欧拉公式的证明"><a href="#附录2：欧拉公式的证明" class="headerlink" title="附录2：欧拉公式的证明"></a>附录2：欧拉公式的证明</h2><p>欧拉公式：$e^{i\theta}&#x3D;\text{cos}{\theta}+i\text{sin}{\theta}$</p>
+<p>证明：</p>
+<p>首先，令<br>$$<br>\begin{aligned}<br>f(\theta)&#x3D;\frac{e^{i\theta}}{\text{cos}{\theta}+i\text{sin}{\theta}}<br>\end{aligned}<br>$$<br>对上式进行求导得到：<br>$$<br>\begin{aligned}<br>f’(\theta)&amp;&#x3D;\frac{ie^{i\theta}(\text{cos}{\theta}+i\text{sin}{\theta})-e^{i\theta}(-\text{sin}{\theta}+i\text{cos}{\theta})}{(\text{cos}{\theta}+i\text{sin}{\theta})^2} \<br>&amp;&#x3D;\frac{ie^{i\theta}\text{cos}{\theta}-e^{i\theta}\text{sin}{\theta}+e^{i\theta}\text{sin}{\theta}-ie^{i\theta}\text{cos}{\theta}}{(\text{cos}{\theta}+i\text{sin}{\theta})^2} \<br>&amp;&#x3D;0<br>\end{aligned}<br>$$<br>因为 $f’(\theta)&#x3D;0$，说明 $f(\theta)$ 为一个常数，不妨设 $\theta&#x3D;0$，则：<br>$$<br>\begin{aligned}<br>f(\theta)&#x3D;f(0)&#x3D;\frac{e^{i0}}{\text{cos}{0}+i\text{sin}{0}}&#x3D;1<br>\end{aligned}<br>$$<br>所以得证：<br>$$<br>\begin{aligned}<br>&amp;f(\theta)&#x3D;\frac{e^{i\theta}}{\text{cos}{\theta}+i\text{sin}{\theta}}&#x3D;1 \<br>&amp;e^{i\theta}&#x3D;\text{cos}{\theta}+i\text{sin}{\theta}<br>\end{aligned}<br>$$</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://lethe.site/2021/01/10/From-FourierSeries-to-FourierTransform/">https://lethe.site/2021/01/10/From-FourierSeries-to-FourierTransform/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Math/"># Math</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/12/29/Fer2013-Facial-Emotion-Recognition-Pytorch/">Fer2013表情识别——将课设做成SOTA?</a>
+            
+            
+            <a class="next" rel="next" href="/2020/12/25/NCE-and-InfoNCE/">Noise Contrastive Estimation 前世今生——从 NCE 到 InfoNCE</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>Life is a struggle.</span>
+        <!-- <span>© Lethe | 2019 - 2022</span> -->
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
