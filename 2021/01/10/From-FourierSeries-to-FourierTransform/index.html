@@ -301,8 +301,99 @@ $$
 <img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/From-FourierSeries-to-FourierTransform/image-20210108161017058.png" alt="image-20210108161017058" style="zoom:70%;">
 
 <p>当累加的足够多，也就形成了一个周期性的方波。</p>
-<p>因此周期函数 $f(t)$ 的表达式可写作：<br>$$<br>\begin{aligned}<br>f(t)&amp;&#x3D;\sum_{n&#x3D;0}^{\infty}A_n\text{sin}{(n\omega t+\varphi_n)} \<br>&amp;&#x3D;A_0\text{sin}{\varphi_0}+\sum_{n&#x3D;1}^{\infty}A_n\text{sin}{(n\omega t+\varphi_n)} \<br>&amp;&#x3D;A_0\text{sin}{\varphi_0}+\sum_{n&#x3D;1}^{\infty}\left[A_n\text{sin}{n\omega t}\text{cos}{\varphi_n} + A_n\text{cos}{n\omega t}\text{sin}{\varphi_n}\right]<br>\end{aligned}<br>$$<br>我们令 $a_n&#x3D;A_n\text{sin}{\varphi_n}$ ， $b_n&#x3D;A_n\text{cos}{\varphi_n}$， $\omega t&#x3D;x$（这里我们<strong>假设周期为 $2\pi$，</strong>即$\omega&#x3D;1$），代换后的周期函数表达式如下:<br>$$<br>\begin{aligned}<br>f(x)&amp;&#x3D;A_0\text{sin}{\varphi_0}+\sum_{n&#x3D;1}^{\infty}A_n\text{sin}{(n\omega t+\varphi_n)} \<br>&amp;&#x3D;a_0+\sum_{n&#x3D;1}^{\infty}(a_n\text{cos}{nx}+b_n\text{sin}{nx}) \<br>\end{aligned} \tag{1}<br>$$<br>实际上，(1)式只是一个猜想式，我们需要找到 $a_0$、$a_n$ 和 $b_n$ 式该表达式成立。</p>
-<p>首先求 $a_n$的表达式，可将(1)式两边同时乘以 $cosmx$，然后两边同时在 $[-\pi,\pi]$ 做积分，得到：<br>$$<br>\begin{aligned}<br>\int_{-\pi}^{\pi}f(x)\text{cos}mx\text{dx}&amp;&#x3D;\int_{-\pi}^{\pi}a_0\text{cos}mx\text{dx}+\int_{-\pi}^{\pi}\sum_{n&#x3D;1}^{\infty}a_n\text{cos}{nx}\text{cos}mx\text{dx}+\int_{-\pi}^{\pi}\sum_{n&#x3D;1}^{\infty}b_n\text{sin}{nx}\text{cos}mx\text{dx} \<br>&amp;&#x3D;a_0\int_{-\pi}^{\pi}\text{cos}mx\text{dx}+a_n\int_{-\pi}^{\pi}\sum_{n&#x3D;1}^{\infty}\text{cos}{nx}\text{cos}mx\text{dx}+b_n\int_{-\pi}^{\pi}\sum_{n&#x3D;1}^{\infty}\text{sin}{nx}\text{cos}mx \text{dx}<br>\end{aligned} \tag{2}<br>$$<br>由前面证明的三角函数正交性可得：<br>$$<br>\begin{aligned}<br>&amp;\int_{-\pi}^{\pi}\text{cos}mx\text{dx}&#x3D;\int_{-\pi}^{\pi}\text{cos}mx\text{sin}0x\text{dx}&#x3D;0 \<br>&amp;\int_{-\pi}^{\pi}\sum_{n&#x3D;1}^{\infty}\text{sin}{nx}\text{cos}mx \text{dx}&#x3D;0 \<br>&amp;\int_{-\pi}^{\pi}\sum_{n&#x3D;1}^{\infty}\text{cos}{nx}\text{cos}mx\text{dx}&#x3D;0(n\neq m) \<br>&amp;\int_{-\pi}^{\pi}\sum_{n&#x3D;1}^{\infty}\text{cos}{nx}\text{cos}mx\text{dx}&#x3D;\pi(n&#x3D;m)<br>\end{aligned}<br>$$<br>因此 (2) 式可以写作如下形式$(n&#x3D;m)$：<br>$$<br>\begin{aligned}<br>\int_{-\pi}^{\pi}f(x)\text{cos}mx\text{dx}&amp;&#x3D;\int_{-\pi}^{\pi}f(x)\text{cos}nx\text{dx} \<br>&amp;&#x3D;a_n\int_{-\pi}^{\pi}\sum_{n&#x3D;1}^{\infty}\text{cos}{nx}\text{cos}mx\text{dx}\<br>&amp;&#x3D;a_n\pi \<br>\end{aligned} \tag{3}<br>$$<br>可以求得：<br>$$<br>\begin{aligned}<br>a_n&#x3D;\frac{1}{\pi}\int_{-\pi}^{\pi}f(x)\text{cos}nx\text{dx}<br>\end{aligned} \tag{4}<br>$$<br>同理，我们将(1)式两边同时乘以 $sinmx$，然后两边同时在 $[-\pi,\pi]$ 做积分，可以求得：<br>$$<br>\begin{aligned}<br>b_n&#x3D;\frac{1}{\pi}\int_{-\pi}^{\pi}f(x)\text{sin}nx\text{dx}<br>\end{aligned} \tag{5}<br>$$<br>同理，对(1)式两边同时在 $[-\pi,\pi]$ 做积分，可以求得：<br>$$<br>\begin{aligned}<br>a_0&#x3D;\frac{1}{2\pi}\int_{-\pi}^{\pi}f(x)\text{dx}<br>\end{aligned} \tag{6}<br>$$<br>对比(4)式和(6)式，不难看出当(4)式的 $n&#x3D;0$ 时，它和 $a_0$ 只差了一个 $\frac{1}{2}$，因此为了将它们统一在一个表达式中，通常将(1)式写作如下的形式：<br>$$<br>\begin{aligned}<br>f(x)&amp;&#x3D;\frac{a_0}{2}+\sum_{n&#x3D;1}^{\infty}(a_n\text{cos}{nx}+b_n\text{sin}{nx}) \<br>\end{aligned} \tag{7}<br>$$<br>最终得到的 (7) 式，就是三角级数的表示形式。当 $a_n$ 和 $b_n$ 由上面的 (4)(5) 式确定时，(7) 式即为 $f(x)$ 的<strong>傅里叶级数</strong>，称此时的 $a_n$ 和 $b_n$ 为<strong>傅里叶系数</strong>。（这里 $f(x)$ 周期为$2\pi$）</p>
+<p>因此周期函数 $f(t)$ 的表达式可写作：</p>
+
+$$
+\begin{aligned}
+f(t)&=\sum_{n=0}^{\infty}A_n\text{sin}{(n\omega t+\varphi_n)} \\
+&=A_0\text{sin}{\varphi_0}+\sum_{n=1}^{\infty}A_n\text{sin}{(n\omega t+\varphi_n)} \\
+&=A_0\text{sin}{\varphi_0}+\sum_{n=1}^{\infty}\left[A_n\text{sin}{n\omega t}\text{cos}{\varphi_n} + A_n\text{cos}{n\omega t}\text{sin}{\varphi_n}\right]
+\end{aligned}
+$$
+
+
+<p>我们令 $a_n&#x3D;A_n\text{sin}{\varphi_n}$ ， $b_n&#x3D;A_n\text{cos}{\varphi_n}$， $\omega t&#x3D;x$（这里我们<strong>假设周期为 $2\pi$，</strong>即$\omega&#x3D;1$），代换后的周期函数表达式如下:</p>
+
+$$
+\begin{aligned}
+f(x)&=A_0\text{sin}{\varphi_0}+\sum_{n=1}^{\infty}A_n\text{sin}{(n\omega t+\varphi_n)} \\
+&=a_0+\sum_{n=1}^{\infty}(a_n\text{cos}{nx}+b_n\text{sin}{nx}) \\
+\end{aligned} \tag{1}
+$$
+
+
+<p>实际上，(1)式只是一个猜想式，我们需要找到 $a_0$、$a_n$ 和 $b_n$ 式该表达式成立。</p>
+<p>首先求 $a_n$的表达式，可将(1)式两边同时乘以 $cosmx$，然后两边同时在 $[-\pi,\pi]$ 做积分，得到：</p>
+
+$$
+\begin{aligned}
+\int_{-\pi}^{\pi}f(x)\text{cos}mx\text{dx}&=\int_{-\pi}^{\pi}a_0\text{cos}mx\text{dx}+\int_{-\pi}^{\pi}\sum_{n=1}^{\infty}a_n\text{cos}{nx}\text{cos}mx\text{dx}+\int_{-\pi}^{\pi}\sum_{n=1}^{\infty}b_n\text{sin}{nx}\text{cos}mx\text{dx} \\
+&=a_0\int_{-\pi}^{\pi}\text{cos}mx\text{dx}+a_n\int_{-\pi}^{\pi}\sum_{n=1}^{\infty}\text{cos}{nx}\text{cos}mx\text{dx}+b_n\int_{-\pi}^{\pi}\sum_{n=1}^{\infty}\text{sin}{nx}\text{cos}mx \text{dx}
+\end{aligned} \tag{2}
+$$
+
+
+<p>由前面证明的三角函数正交性可得：</p>
+
+$$
+\begin{aligned}
+&\int_{-\pi}^{\pi}\text{cos}mx\text{dx}=\int_{-\pi}^{\pi}\text{cos}mx\text{sin}0x\text{dx}=0 \\
+&\int_{-\pi}^{\pi}\sum_{n=1}^{\infty}\text{sin}{nx}\text{cos}mx \text{dx}=0 \\
+&\int_{-\pi}^{\pi}\sum_{n=1}^{\infty}\text{cos}{nx}\text{cos}mx\text{dx}=0(n\neq m) \\
+&\int_{-\pi}^{\pi}\sum_{n=1}^{\infty}\text{cos}{nx}\text{cos}mx\text{dx}=\pi(n=m)
+\end{aligned}
+$$
+
+
+<p>因此 (2) 式可以写作如下形式$(n&#x3D;m)$：</p>
+
+$$
+\begin{aligned}
+\int_{-\pi}^{\pi}f(x)\text{cos}mx\text{dx}&=\int_{-\pi}^{\pi}f(x)\text{cos}nx\text{dx} \\
+&=a_n\int_{-\pi}^{\pi}\sum_{n=1}^{\infty}\text{cos}{nx}\text{cos}mx\text{dx}\\
+&=a_n\pi \\
+\end{aligned} \tag{3}
+$$
+
+
+<p>可以求得：</p>
+
+$$
+\begin{aligned}
+a_n=\frac{1}{\pi}\int_{-\pi}^{\pi}f(x)\text{cos}nx\text{dx}
+\end{aligned} \tag{4}
+$$
+
+
+<p>同理，我们将(1)式两边同时乘以 $sinmx$，然后两边同时在 $[-\pi,\pi]$ 做积分，可以求得：</p>
+
+$$
+\begin{aligned}
+b_n=\frac{1}{\pi}\int_{-\pi}^{\pi}f(x)\text{sin}nx\text{dx}
+\end{aligned} \tag{5}
+$$
+
+
+
+<p>同理，对(1)式两边同时在 $[-\pi,\pi]$ 做积分，可以求得：</p>
+
+$$
+\begin{aligned}
+a_0=\frac{1}{2\pi}\int_{-\pi}^{\pi}f(x)\text{dx}
+\end{aligned} \tag{6}
+$$
+
+
+<p>对比(4)式和(6)式，不难看出当(4)式的 $n&#x3D;0$ 时，它和 $a_0$ 只差了一个 $\frac{1}{2}$，因此为了将它们统一在一个表达式中，通常将(1)式写作如下的形式：</p>
+
+$$
+\begin{aligned}
+f(x)&=\frac{a_0}{2}+\sum_{n=1}^{\infty}(a_n\text{cos}{nx}+b_n\text{sin}{nx}) \\
+\end{aligned} \tag{7}
+$$
+
+
+<p>最终得到的 (7) 式，就是三角级数的表示形式。当 $a_n$ 和 $b_n$ 由上面的 (4)(5) 式确定时，(7) 式即为 $f(x)$ 的<strong>傅里叶级数</strong>，称此时的 $a_n$ 和 $b_n$ 为<strong>傅里叶系数</strong>。（这里 $f(x)$ 周期为$2\pi$）</p>
 <h2 id="0x02-傅里叶级数的三角形式"><a href="#0x02-傅里叶级数的三角形式" class="headerlink" title="0x02 傅里叶级数的三角形式"></a>0x02 傅里叶级数的三角形式</h2><p>上面我们推导傅里叶级数时，假设了周期为 $2\pi$ ，得到了如下形式的傅里叶级数：</p>
 
 $$
