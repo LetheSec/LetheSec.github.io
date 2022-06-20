@@ -270,8 +270,18 @@
 <p><img src="https://raw.githubusercontent.com/LetheSec/oss/master/uPic/tU6DRf.png" alt="tU6DRf"></p>
 <h3 id="2-1-Stage-1"><a href="#2-1-Stage-1" class="headerlink" title="2.1 Stage-1"></a>2.1 Stage-1</h3><p>第一阶段的主要作用是生成候选框，作者直接将原始点云数据输入到PointNet++中得到Point-wise feature vector（每个点的特征向量）。</p>
 <p>作者在Backbone后面加了两个分支，分别用于前景点的分割（上图蓝色框Foreground Point Segmentation）和生成3D候选框（上图黄色框Bin-based 3D Box Generation）。</p>
-<p><strong>（1）前景点分割(Foreground Point Segmentation)：</strong>假设目标类别为Car，那么Car中的点就属于前景点，其余属于背景点。那么就可以通过PointNet++生成的特征来预测每一个点属于前景点的概率，此时分割的label来自于训练集中的先验知识，即标注好的3D bounding box中的点为前景点。由于前景点相对于背景点的数量很少，因此作者使用了focal loss来进行类别不均衡的前景点的分割任务。<br>$$<br>\begin{aligned}<br>&amp;\mathcal{L}<em>{\text {focal }}\left(p</em>{t}\right)&#x3D;-\alpha_{t}\left(1-p_{t}\right)^{\gamma} \log \left(p_{t}\right) \</p>
-<p>&amp;\text{where} \space p_{t}&#x3D; \begin{cases}p &amp; \text { for forground point } \ 1-p &amp; \text { otherwise }\end{cases}<br>\end{aligned}<br>$$<br>**（2）3D候选框生成(in-based 3D Box Generation)**：同时对于每个前景点会预测一个3D proposal候选框(如下图所示，四个不同颜色的点分别生成了一个粗糙的3D候选框)。</p>
+<p><strong>（1）前景点分割(Foreground Point Segmentation)：</strong>假设目标类别为Car，那么Car中的点就属于前景点，其余属于背景点。那么就可以通过PointNet++生成的特征来预测每一个点属于前景点的概率，此时分割的label来自于训练集中的先验知识，即标注好的3D bounding box中的点为前景点。由于前景点相对于背景点的数量很少，因此作者使用了focal loss来进行类别不均衡的前景点的分割任务。</p>
+
+$$
+\begin{aligned}
+&\mathcal{L}_{\text {focal }}\left(p_{t}\right)=-\alpha_{t}\left(1-p_{t}\right)^{\gamma} \log \left(p_{t}\right) \\
+
+&\text{where} \space p_{t}= \begin{cases}p & \text { for forground point } \\ 1-p & \text { otherwise }\end{cases}
+\end{aligned}
+$$
+
+
+<p>**（2）3D候选框生成(in-based 3D Box Generation)**：同时对于每个前景点会预测一个3D proposal候选框(如下图所示，四个不同颜色的点分别生成了一个粗糙的3D候选框)。</p>
 <img src="https://raw.githubusercontent.com/LetheSec/oss/master/uPic/guzbFr.png" alt="guzbFr" style="zoom: 33%;">
 
 <p>候选框产生的方式为预测每个点bounding box的中心点、朝向角度以及长宽高，同时在这篇文章中提出了一种<strong>Bin-Based的3D box生成方式</strong>，如下图：</p>
