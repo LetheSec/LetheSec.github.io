@@ -329,7 +329,7 @@
 <p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/YXJCMS/6822ea256d8405278381209d3ee585b1.png"></p>
 <p>可以看到使用include语句进行文件包含时，没有进行任何的过滤与限制，导致$file变量可控，攻击者可以通过传入该变量的值任意包含文件。</p>
 <h2 id="2-2-SSRF"><a href="#2-2-SSRF" class="headerlink" title="2.2 SSRF"></a>2.2 SSRF</h2><h3 id="2-2-1-漏洞复现"><a href="#2-2-1-漏洞复现" class="headerlink" title="2.2.1 漏洞复现"></a>2.2.1 漏洞复现</h3><p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/YXJCMS/c033397c2c9d1bdd4b380700cce42780.png"></p>
-<p>在关于我们页面中点击“作者博客”，可以看到链接中加入了url参数，如下：?url&#x3D;<a target="_blank" rel="noopener" href="https://lethe.site/about/%EF%BC%8C%E5%B9%B6%E4%B8%94%E6%98%BE%E7%A4%BA%E4%BA%86%E8%AF%A5%E7%BD%91%E5%9D%80%E7%9A%84%E5%86%85%E5%AE%B9%E3%80%82">https://lethe.site/about/，并且显示了该网址的内容。</a></p>
+<p>在关于我们页面中点击“作者博客”，可以看到链接中加入了url参数，如下：?url&#x3D;<a href="https://lethe.site/about/%EF%BC%8C%E5%B9%B6%E4%B8%94%E6%98%BE%E7%A4%BA%E4%BA%86%E8%AF%A5%E7%BD%91%E5%9D%80%E7%9A%84%E5%86%85%E5%AE%B9%E3%80%82">https://lethe.site/about/，并且显示了该网址的内容。</a></p>
 <p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/YXJCMS/5ee993daf148c0e2b492dadc7559cb29.png"></p>
 <p>可以初步判断存在SSRF，即服务端会请求url中传递的链接。但是攻击者在利用时除了http协议，可以使用file协议读取服务器上的任意文件，如使用如下payload：?url&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd</p>
 <p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/YXJCMS/b0436d25e37a36045bc7d56e4fb850f6.png"></p>
@@ -510,7 +510,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://lethesec.github.io/blog/2020/0609/YXJCMS/">https://lethesec.github.io/blog/2020/0609/YXJCMS/</a></span>
+                        <span><a href="https://lethe.site/blog/2020/0609/YXJCMS/">https://lethe.site/blog/2020/0609/YXJCMS/</a></span>
                     </p>
                 
                 

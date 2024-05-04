@@ -305,7 +305,7 @@
 <p>一般来说，insert可以使用延时注入，update可以使用bool盲注和延时盲注，但是如果更新后的数据是可见的话，那么就可能存在二次注入，在insert的时候拼接注入语句，将要查询的数据转化为10进制一起插入数据库中，这样实际上我们要查询的数据就已经在数据库里了，再在回显时就可以拿到数据了。</p>
 <p>下面放几张图理解一下：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/RoarCTF-Web-Writeup/2019102120290699.png" alt="在这里插入图片描述"><br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/RoarCTF-Web-Writeup/20191021202915427.png" alt="在这里插入图片描述"><br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/RoarCTF-Web-Writeup/20191021202925425.png" alt="在这里插入图片描述"></p>
-<p>这一题刚好可以这么操作，类似的可以参考<code>upload（RCTF 2015）</code>一题，在<a target="_blank" rel="noopener" href="https://lethe.site/2019/05/21/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CWeb/">这篇文章</a>里我写了这题的wp。</p>
+<p>这一题刚好可以这么操作，类似的可以参考<code>upload（RCTF 2015）</code>一题，在<a href="https://lethe.site/2019/05/21/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CWeb/">这篇文章</a>里我写了这题的wp。</p>
 <p>下面进行验证，我们首先构造XXF为：<code>0&#39;+conv(hex(substr((select database()),1,5)),16,10)+&#39;0</code></p>
 <p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/RoarCTF-Web-Writeup/20191021212946337.png" alt="在这里插入图片描述"></p>
 <p>然后随意更换XXF，重新发包2次，第二次发包后我们可以看到成功回显了数据：<br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/RoarCTF-Web-Writeup/20191021212958163.png" alt="在这里插入图片描述"></p>
@@ -328,7 +328,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://lethesec.github.io/blog/2019/1021/RoarCTF-Web-Writeup/">https://lethesec.github.io/blog/2019/1021/RoarCTF-Web-Writeup/</a></span>
+                        <span><a href="https://lethe.site/blog/2019/1021/RoarCTF-Web-Writeup/">https://lethe.site/blog/2019/1021/RoarCTF-Web-Writeup/</a></span>
                     </p>
                 
                 

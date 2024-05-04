@@ -370,7 +370,7 @@
 <p>提交之后等待管理员点击即可，密码就是flag:<br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/GXYCTF2019-GWCTF2019-Writeup/20200303183645844.png" alt="在这里插入图片描述"><br><br></p>
 <h3 id="blog"><a href="#blog" class="headerlink" title="blog"></a>blog</h3><p>进入页面后，首先注册并登录进去，只有一个上传功能，我们看到url中有 <code>page=index</code>参数，于是尝试一下文件包含，但是提示不是admin：<br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/GXYCTF2019-GWCTF2019-Writeup/20200303192230409.png" alt="在这里插入图片描述"><br>于是我们来看这个上传功能，虽然可以上传php文件，但是并没有给出路径，而且上传后会回显文件名，和RCTF 2015 upload一题很类似，于是我们尝试利用文件名进行二次注入。</p>
 <p>首先测试一下过滤了哪些东西，随便上传一个文件然后抓包改文件名：<br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/GXYCTF2019-GWCTF2019-Writeup/20200303193417110.png" alt="在这里插入图片描述"><br>从文件名可以看到除了or以外都被替换为空了：<br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/GXYCTF2019-GWCTF2019-Writeup/20200303193446781.png" alt="在这里插入图片描述"><br>除此之外还过滤了一些其他关键词，不过经测试都可以用双写来绕过的，空格用嵌套括号绕过。</p>
-<p>于是我们先构造一个payload如下，原理可以参考我RCTF那道题的<a target="_blank" rel="noopener" href="https://lethe.site/2019/05/21/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CWeb/#upload%EF%BC%88rctf-2015%EF%BC%89">Writeup</a>。</p>
+<p>于是我们先构造一个payload如下，原理可以参考我RCTF那道题的<a href="https://lethe.site/2019/05/21/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CWeb/#upload%EF%BC%88rctf-2015%EF%BC%89">Writeup</a>。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;+(selselectect(conv(hex(substr(database(),1,5)),16,10)))+&#x27;</span><br></pre></td></tr></table></figure>
 <p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/GXYCTF2019-GWCTF2019-Writeup/20200303200441384.png" alt="在这里插入图片描述"><br>可以看到文件名返回了一串10进制，转16进制再转字符得到：<code>bytect</code>。<br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/GXYCTF2019-GWCTF2019-Writeup/20200303200520665.png" alt="在这里插入图片描述"><br>然后修改substr截取的位置，得到数据库名：<code>bytectf</code>。<br>（之所以要一段一段读是因为如果一次读太多的话会用科学计数法表示，就无法转回字符串了。）</p>
 <p>用上述思路，我们可以一步步注入出管理员的密码：</p>
@@ -402,7 +402,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://lethesec.github.io/blog/2020/0303/GXYCTF2019-GWCTF2019-Writeup/">https://lethesec.github.io/blog/2020/0303/GXYCTF2019-GWCTF2019-Writeup/</a></span>
+                        <span><a href="https://lethe.site/blog/2020/0303/GXYCTF2019-GWCTF2019-Writeup/">https://lethe.site/blog/2020/0303/GXYCTF2019-GWCTF2019-Writeup/</a></span>
                     </p>
                 
                 
