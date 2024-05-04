@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Lethe">
+
+
+    <meta name="subtitle" content="Life is a struggle">
+
+
+    <meta name="description" content="Lethe's Blog">
+
+
+    <meta name="keywords" content="Lethe's Blog">
+
+
+<title>PointRCNN:3D Object Proposal Generation and Detection from Point Cloud | Lethe&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="https://s2.ax1x.com/2019/10/30/K5JenU.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/blog/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/blog/js/script.js"></script>
+    
+    <script src="/blog/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/blog/">Lethe&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/blog/archives">Posts</a>
+                
+                    <a class="menu-item" href="/blog/category">Categories</a>
+                
+                    <a class="menu-item" href="/blog/tag">Tags</a>
+                
+                    <a class="menu-item" href="/blog/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/blog/">Lethe&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/blog/archives">Posts</a>
+                
+                    <a class="menu-item" href="/blog/category">Categories</a>
+                
+                    <a class="menu-item" href="/blog/tag">Tags</a>
+                
+                    <a class="menu-item" href="/blog/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">PointRCNN:3D Object Proposal Generation and Detection from Point Cloud</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Lethe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 17, 2022&nbsp;&nbsp;16:57:16</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/blog/categories/PaperNote/">PaperNote</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="PointRCNN"><a href="#PointRCNN" class="headerlink" title="PointRCNN"></a>PointRCNN</h1><p>paper：PointRCNN: 3D Object Proposal Generation and Detection from Point Cloud，CVPR2019</p>
+<p>link：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1812.04244">https://arxiv.org/abs/1812.04244</a></p>
+<p>code：<a target="_blank" rel="noopener" href="https://github.com/sshaoshuai/PointRCNN">https://github.com/sshaoshuai/PointRCNN</a></p>
+<p>vedio：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1cE411L7mL">https://www.bilibili.com/video/BV1cE411L7mL</a></p>
+<h2 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1 介绍"></a>1 介绍</h2><p>PointRCNN是第一个直接基于点云数据的2-state的3D物体检测算法，可以直接从3D点云数据生成候选框，不需要额外的图像输入。</p>
+<h2 id="2-方法"><a href="#2-方法" class="headerlink" title="2 方法"></a>2 方法</h2><p>整个PointRCNN的框架分为两个部分，上面为stage-1，下面为state-2.</p>
+<p><img src="https://raw.githubusercontent.com/LetheSec/oss/master/uPic/tU6DRf.png" alt="tU6DRf"></p>
+<h3 id="2-1-Stage-1"><a href="#2-1-Stage-1" class="headerlink" title="2.1 Stage-1"></a>2.1 Stage-1</h3><p>第一阶段的主要作用是生成候选框，作者直接将原始点云数据输入到PointNet++中得到Point-wise feature vector（每个点的特征向量）。</p>
+<p>作者在Backbone后面加了两个分支，分别用于前景点的分割（上图蓝色框Foreground Point Segmentation）和生成3D候选框（上图黄色框Bin-based 3D Box Generation）。</p>
+<p><strong>（1）前景点分割(Foreground Point Segmentation)：</strong>假设目标类别为Car，那么Car中的点就属于前景点，其余属于背景点。那么就可以通过PointNet++生成的特征来预测每一个点属于前景点的概率，此时分割的label来自于训练集中的先验知识，即标注好的3D bounding box中的点为前景点。由于前景点相对于背景点的数量很少，因此作者使用了focal loss来进行类别不均衡的前景点的分割任务。</p>
+
+$$
+\begin{aligned}
+&\mathcal{L}_{\text {focal }}\left(p_{t}\right)=-\alpha_{t}\left(1-p_{t}\right)^{\gamma} \log \left(p_{t}\right) \\
+
+&\text{where} \space p_{t}= \begin{cases}p & \text { for forground point } \\ 1-p & \text { otherwise }\end{cases}
+\end{aligned}
+$$
+
+
+<p>**（2）3D候选框生成(in-based 3D Box Generation)**：同时对于每个前景点会预测一个3D proposal候选框(如下图所示，四个不同颜色的点分别生成了一个粗糙的3D候选框)。</p>
+<img src="https://raw.githubusercontent.com/LetheSec/oss/master/uPic/guzbFr.png" alt="guzbFr" style="zoom: 33%;">
+
+<p>候选框产生的方式为预测每个点bounding box的中心点、朝向角度以及长宽高，同时在这篇文章中提出了一种<strong>Bin-Based的3D box生成方式</strong>，如下图：</p>
+<ul>
+<li>这里对每一个前景点生成了一个候选框，传统方法的是对于每个前景点，直接对中心点(黄色三角)的位置做一个回归问题。但是可以看到“车头位置的点”与“车侧面的点”离中心点的距离差异较大，导致了方差是比较大。</li>
+<li>因此这里提出了Bin-Based 的方法：<ul>
+<li>作者首先在俯视图上将object的区域沿轴切分成了一个个的bin(下图紫色标轴每一个线段代表一个bin)</li>
+<li>然后预测中心点(黄色三角)相对于每个前景点(紫色点)属于哪一个bin的范围内，这是一个分类问题。</li>
+<li>最后在每一个bin内再做回归问题来确定中心点的具体位置。</li>
+</ul>
+</li>
+<li>这样Bin-based的方法，将一个“回归问题”转变成了“分类+回归的问题”，实验证明可以更快的收敛。另外，作者只是对x轴和z轴上的中线点位置使用了bin-based的方法，y轴(垂直于地面)及长宽高直接用回归进行预测。</li>
+</ul>
+<img src="https://raw.githubusercontent.com/LetheSec/oss/master/uPic/LZIa8H.png" alt="LZIa8H" style="zoom: 50%;">
+
+<ul>
+<li>除此之外，对于旋转角度的预测，作者也适用bin-based的方法，也就是将2$\pi$先分为若干个bin，然后做分类+回归问题。</li>
+</ul>
+<p>具体的损失如下：</p>
+<img src="https://raw.githubusercontent.com/LetheSec/oss/master/uPic/RkKG4R.png" alt="RkKG4R" style="zoom:40%;">
+
+<img src="https://raw.githubusercontent.com/LetheSec/oss/master/uPic/rHEyY8.png" alt="rHEyY8" style="zoom:40%;">
+
+<p>在为每个前景点得到3D Box之后，还需要使用NMS来减少最终proposal bounding box的数量，最终作者选取了300个bounding box作为stage-1阶段生成的候选框。</p>
+<h3 id="2-2-Stage-2"><a href="#2-2-Stage-2" class="headerlink" title="2.2 Stage-2"></a>2.2 Stage-2</h3><p>第二阶段主要是对第一阶段生成的候选框进行更加精确的打分以及refine：</p>
+<p><img src="https://raw.githubusercontent.com/LetheSec/oss/master/uPic/HwVFVw.png" alt="HwVFVw"></p>
+<p>Stage-2的backbone输入来自两部分：</p>
+<p>（1）Semantic Feature(上图绿色框)来自于Stage-1的backbone提取的point-wise feature vector，通过stage-1的学习，此时的每个点的特征是包含了一定上下文的信息。</p>
+<p>（2）Local Spatial Points(上图紫色框)则是包含了点本身的一些信息，如每个点的坐标位置$(x^{(p)},y^{(p)},z^{(p)})\in \mathbb{R}^3$，每个点的激光反射强度$r^{(p)\in \mathbb{R}}$、第一部中得到的分割信息(即是否为前景点)$m^{(p)}\in {0,1}$。</p>
+<ul>
+<li><p>然后作者提出将这些特征做一个Canonical Transformation(上图红色框)，如下图所示，也就是对于stage-1生成的每个3d box进行一个坐标系的变换，将不同的候选框变换到统一个坐标系下，具体操作上就是将车头方向都转向同一个方向(如x轴方向)，并且以bbox(bounding box)的中心作为坐标轴的原点。</p>
+</li>
+<li><p>但是这样做很明显会丢失bbox的深度信息，因此作者又在local spatial points加上了每个bbox距离传感器的距离$d^{(p)}&#x3D;\sqrt{(x^{(p)})^2+(y^{(p)})^2+(z^{(p)})^2}$ </p>
+</li>
+<li><p>最终，作者将Transformation后的Local Spatial Points经过一个MLP升维到与Semantic Features相同的维度，然后进行concat（对于每一个前景点都有一个semantic的feature以及一个local spatial的feature），得到最终的Merged Features(上图灰色框)。</p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/LetheSec/oss/master/uPic/QpU6S9.png" alt="QpU6S9"></p>
+<p>Stage-2依然使用PointNet++作为Backbone，在得到Merged Features后输入到PointNet++的encoder中，编码成单个特征向量，表征了bbox里所有的信息。</p>
+<p>然后再经过两个分支：</p>
+<ul>
+<li>Confidence Prediction根据当前表征来对候选框进行一个质量的打分。</li>
+<li>Bin-based 3D box Refinemeant则对该候选bbox进行进一步的refine（再调整一下位置、长宽高之类的），方式与stage-1中的类似，只不过更加精细。</li>
+</ul>
+<p>最终，再进行一次NMS将每个object冗余的bbox去掉，只保留一个bbox，得到最终的结果。</p>
+<h2 id="3-实验结果"><a href="#3-实验结果" class="headerlink" title="3 实验结果"></a>3 实验结果</h2><p><img src="https://raw.githubusercontent.com/LetheSec/oss/master/uPic/eQv01V.png" alt="eQv01V"></p>
+<ul>
+<li><p>第二列表示使用的输入数据信息，在使用纯LiDAR的方法里有很大提升</p>
+</li>
+<li><p>第三列表示对于Car类的检测结果(PointRCNN主要是对Car类进行的调参)</p>
+<ul>
+<li>IoU&#x3D;0.7表示，当预测的bbox与target bbox的IoU大于0.7就表示预测正确，因此越低表示越容易。</li>
+<li>Easy、Moderate、Hard分别是KITTI划分的难度的子集（如有些object被遮挡或截断，就提高了难度）。</li>
+</ul>
+</li>
+</ul>
+<p>PointRCNN在测试集上的预测结果：</p>
+<p><img src="https://raw.githubusercontent.com/LetheSec/oss/master/uPic/ZB7Hic.png" alt="ZB7Hic"></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Lethe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://lethesec.github.io/blog/2022/0317/PointRCNN/">https://lethesec.github.io/blog/2022/0317/PointRCNN/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/blog/tags/3D%E7%82%B9%E4%BA%91-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/"># 3D点云,目标检测</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/blog/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/blog/2022/0320/algorithm_course/">算法分析与设计(USTC 2022春)</a>
+            
+            
+            <a class="next" rel="next" href="/blog/2021/1229/Fer2013-Facial-Emotion-Recognition-Pytorch/">Fer2013表情识别——将课设做成SOTA?</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>Life is a struggle.</span>
+        <!-- <span>© Lethe | 2019 - 2022</span> -->
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
