@@ -1,0 +1,11 @@
+@ARTICLE{10669119,
+  author={Zhao, Jiawei and Chen, Kejiang and Yuan, Xiaojian and Qi, Yuang and Zhang, Weiming and Yu, Nenghai},
+  journal={IEEE Transactions on Information Forensics and Security}, 
+  title={Silent Guardian: Protecting Text From Malicious Exploitation by Large Language Models}, 
+  year={2024},
+  volume={19},
+  number={},
+  pages={8600-8615},
+  keywords={Protection;Privacy;Computational modeling;Watermarking;Optical character recognition;Large language models;Homomorphic encryption;Text protection;silent guardian;truncation protection example;large language model},
+  doi={10.1109/TIFS.2024.3455775}
+}
